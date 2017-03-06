@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.ConfirmOrderActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
+import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
 import com.qx.mstarstoreapp.activity.ProductionListActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
@@ -45,7 +46,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class FragOrderList extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
+public class FragOrderListFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
     private List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> listData;
     private ListViewAdapter adapter;
     private PullToRefreshView oullRefreshView;
@@ -64,7 +65,7 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
     private final int SENDING_CODE = 3;
     private final int FINISHED_CODE = 4;
 
-    public FragOrderList(int fragType) {
+    public FragOrderListFragment(int fragType) {
         this.fragType = fragType;
     }
 
@@ -113,11 +114,7 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
                         startActivity(intent);
                         break;
                     case SENDING_CODE:
-                        intent = new Intent(getActivity(), ProductionListActivity.class);
-                        bundle = new Bundle();
-                        bundle.putInt("type", fragType);
-                        bundle.putString("orderNum", listData.get(i).getOrderNum());
-                        intent.putExtras(bundle);
+                        intent = new Intent(getActivity(), DeliveryTableActivity.class);
                         startActivity(intent);
                         break;
 
@@ -182,8 +179,7 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
                 // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
                 break;
             case SENDING_CODE:
-                url = AppURL.URL_ORDER_MODEL_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
-                // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
+                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
                 break;
         }
 

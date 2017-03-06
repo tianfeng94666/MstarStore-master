@@ -69,6 +69,7 @@
                 android:id="@+id/tv_delivery_item_product_inf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:text="手寸：11  毛重：3g  净金重：3.15g  损耗：0.85g 主石 石号：2156  数量：1  重量：1.35  金额：881.5  基本工费：70.0  附加工费：30.0"
                 android:textColor="@color/text_color" />
 
@@ -92,13 +93,16 @@
     <TextView
         android:id="@+id/tv_delivery_item_less"
         android:textColor="@color/text_color"
-        android:text="手寸：11  毛重：3g  净金重：3.15g  s损耗：0.85g"
+        android:layout_marginRight="24dp"
+        android:text="手寸：11  毛重：3g  净金重：3.15g 损耗：0.85g"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ImageButton
         android:id="@+id/ib_delivery_detail"
+        android:padding="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/common_filter_arrow_down"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
 </RelativeLayout>

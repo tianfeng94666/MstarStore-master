@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
-import com.qx.mstarstoreapp.fragment.FragOrderList;
+import com.qx.mstarstoreapp.fragment.FragOrderListFragment;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.IndicatorView;
 
@@ -30,11 +30,11 @@ import butterknife.ButterKnife;
  * @version    成品订单
  *
  */
-public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener,FragOrderList.OnOderNumberChange {
+public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener,FragOrderListFragment.OnOderNumberChange {
 
     IndicatorView indicatorView;
     ViewPager viewPager;
-    public  List<FragOrderList> fragmentList = new ArrayList<>();
+    public  List<FragOrderListFragment> fragmentList = new ArrayList<>();
     private static int SCREENWIDTH;
     List<TextView> tabTextViews = new ArrayList<>();
 
@@ -42,10 +42,10 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    private FragOrderList checkingFrament; //待审核
-    private FragOrderList productingFragment;//生产中
-    private FragOrderList sendingFragment;//已发货
-    private FragOrderList finishedFragment;//已完成
+    private FragOrderListFragment checkingFrament; //待审核
+    private FragOrderListFragment productingFragment;//生产中
+    private FragOrderListFragment sendingFragment;//已发货
+    private FragOrderListFragment finishedFragment;//已完成
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +68,15 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     static  List<BadgeView> list=new ArrayList<>();
     protected void initView() {
         titleText.setText("成品订单");
-        checkingFrament = new FragOrderList(1);
+        checkingFrament = new FragOrderListFragment(1);
         fragmentList.add(checkingFrament);
-         productingFragment = new FragOrderList(2);
+         productingFragment = new FragOrderListFragment(2);
         fragmentList.add(productingFragment);
-         sendingFragment = new FragOrderList(3);
+         sendingFragment = new FragOrderListFragment(3);
         fragmentList.add(sendingFragment);
-         finishedFragment = new FragOrderList(4);
+         finishedFragment = new FragOrderListFragment(4);
         fragmentList.add(finishedFragment);
-        for (FragOrderList f : fragmentList) {
+        for (FragOrderListFragment f : fragmentList) {
             f.setOnOderNumberChange(this);
         }
 

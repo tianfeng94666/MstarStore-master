@@ -89,9 +89,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="@color/color_line"/>
+        android:background="#f2f2f7"/>
     <ListView
         android:id="@+id/lv_products"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="match_parent"></ListView>
 </LinearLayout>

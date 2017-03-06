@@ -61,11 +61,13 @@ public class DeliveryAdapter extends BaseAdapter {
                 if(list.get(i)){
                     finalViewHolder.llPriductMore.setVisibility(View.GONE);
                     finalViewHolder.tvDeliveryItemLess.setVisibility(View.VISIBLE);
+                    finalViewHolder.ibDeliveryDetail.setImageResource(R.drawable.common_filter_arrow_down);
                     list.set(i,!list.get(i));
                 }else {
                     finalViewHolder.llPriductMore.setVisibility(View.VISIBLE);
                     finalViewHolder.tvDeliveryItemLess.setVisibility(View.GONE);
                     list.set(i,!list.get(i));
+                    finalViewHolder.ibDeliveryDetail.setImageResource(R.drawable.common_filter_arrow_up);
                 }
             }
         });

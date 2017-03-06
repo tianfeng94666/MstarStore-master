@@ -38,7 +38,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class FragProduction extends BaseFragment {
+public class FragProductionFragment extends BaseFragment {
 
     List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> listData = new ArrayList<>();
     ListViewAdapter adapter;
