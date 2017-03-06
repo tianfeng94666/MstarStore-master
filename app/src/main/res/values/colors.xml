@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="theme_back">#444</color>
+
+    <color name="white">#ffffff</color>
+    <color name="awesome_red">#CBAC6B</color>
+    <color name="awesome_gray">#FDFDFD</color>
+    <color name="color_grey_st">#BABABA</color>
+    <color name="black">#000</color>
+    
+    <color name="color_line">#dadada</color>
+    <color name="color_text">#999999</color>
+    <color name="theme_red">#f12b31</color>
+    <color name="theme_bg">#f0eff5</color>
+    <color name="theme_yell">#FFEF8C01</color>
+    <color name="theme_text">#666666</color>
+    <color name="theme_red_down">#f15f51</color>
+
+    <color name="color_filter_text">#444444</color>
+
+    <color name="color_gold_nor">#CBAC6B</color>
+    <color name="color_gold_down">#BD9F61</color>
+    <color name="color_black_st">#323232</color>
+    <color name="color_down">#cccccc</color>
+    <color name="color_bar">#f5f5f7</color>
+    <color name="transparent">#0000</color>
+    <color name="color_light_grey">#969696</color>
+    <color name="color_detach_line">#CFCFD1</color>
+
+    <color name="color_check_bg">#F8CDCF</color>
+    <!-- 天蓝色 -->
+    <color name="gray">#808080</color>
+
+    <color name="transparent_background">#00ffffff</color>
+
+    <color name="green">#FF7CB108</color>
+
+    <!--xlistview-->
+    <color name="background">#F7F4F0</color>
+    <color name="title_color">#333333</color>
+</resources>

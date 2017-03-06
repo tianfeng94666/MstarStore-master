@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+              android:id="@id/specifiction_content"
+    >
+
+    <com.qx.mstarstoreapp.viewutils.PullToRefreshView
+        android:id="@+id/pull_refresh_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/id_rel_title"
+        android:layout_marginTop="1dp"
+        android:orientation="vertical"
+
+        >
+
+
+        <!--android:divider="@android:color/transparent"-->
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:dividerHeight="10dp"
+            android:scrollbars="none"
+            android:descendantFocusability="blocksDescendants"
+            />
+
+    </com.qx.mstarstoreapp.viewutils.PullToRefreshView>
+</LinearLayout>

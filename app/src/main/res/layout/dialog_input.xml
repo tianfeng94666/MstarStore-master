@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dip">
+
+        <TextView
+            android:id="@+id/titleName"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:background="@color/awesome_gray"
+            android:gravity="center_vertical"
+            android:text="当前选择："
+            android:textSize="15dip"/>
+
+        <EditText
+            android:background="@drawable/edit_for_line_bg"
+            android:gravity="center"
+            android:layout_below="@id/titleName"
+            android:id="@+id/specTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:hint="请输入合法规格"
+            android:inputType="textEmailAddress"/>
+
+        <View
+            android:id="@+id/id_view_line"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_below="@id/id_listview"
+            android:background="@color/color_line"/>
+
+        <Button
+            android:id="@+id/id_cancle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="1dip"
+            android:background="@drawable/cancel_nor_down"
+            android:text="确 认"/>
+
+    </RelativeLayout>
+</RelativeLayout>

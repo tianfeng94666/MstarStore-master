@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_margin="@dimen/margin15"
+        android:layout_width="match_parent"
+        android:layout_height="40dip">
+
+        <EditText
+            android:paddingLeft="@dimen/margin5"
+            android:id="@+id/id_et_seach"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:singleLine="true"
+            />
+
+        <View
+            android:id="@+id/id_view_line"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dip"
+            android:background="@color/color_line"></View>
+
+        <ImageView
+            android:id="@+id/ig_btn_seach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_search" />
+
+    </RelativeLayout>
+
+    <ListView
+
+        android:id="@+id/id_lv_custom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dip">
+
+        <TextView
+            android:id="@+id/titleName"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:background="@color/awesome_gray"
+            android:gravity="center_vertical"
+            android:text="当前选择："
+            android:textSize="15dip" />
+
+        <ListView
+            android:id="@+id/id_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titleName" />
+
+        <View
+            android:id="@+id/id_view_line"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_below="@id/id_listview"
+            android:background="@color/color_line" />
+
+        <Button
+            android:id="@+id/id_cancle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="1dip"
+            android:background="@drawable/cancel_nor_down"
+            android:text="确 认" />
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+
+    <Button
+        android:gravity="center"
+        android:id="@+id/tv_item_goods_type"
+        android:layout_margin="3dip"
+        android:button="@null"
+        android:background="@drawable/check_border"
+        android:layout_width="80dip"
+        android:layout_height="33dip"
+        android:textSize="12sp"
+        android:textColor="@color/theme_red"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        />
+
+
+</LinearLayout>

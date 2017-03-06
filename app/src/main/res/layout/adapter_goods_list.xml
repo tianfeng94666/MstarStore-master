@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+              android:background="@color/white"
+    >
+
+    <com.qx.mstarstoreapp.viewutils.SquareImageView
+        android:id="@+id/product_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_gravity="center"
+        android:id="@+id/img_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="3"
+        android:layout_marginLeft="@dimen/margin5"
+        android:text="黄金金条投资足金金砖" />
+
+    <!--风格线-->
+    <View
+        android:id="@+id/menu_line"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:layout_above="@+id/name"
+        android:layout_marginTop="@dimen/margin5"
+        android:background="@color/theme_bg" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin5"
+        android:layout_marginLeft="@dimen/margin5"
+        android:gravity="center"
+        android:background="@color/white"
+        >
+        <TextView
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¥ :  "
+            android:textColor="@color/theme_red" />
+
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="849.90"/>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
