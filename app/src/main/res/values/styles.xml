@@ -94,4 +94,16 @@
         <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
     </style>
 
+    <style name="padding_parent">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <style name="text_tow_oneraw">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+    </style>
+
 </resources>

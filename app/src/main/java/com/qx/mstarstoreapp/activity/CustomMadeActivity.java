@@ -42,6 +42,10 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
+    private FragOrderList checkingFrament; //待审核
+    private FragOrderList productingFragment;//生产中
+    private FragOrderList sendingFragment;//已发货
+    private FragOrderList finishedFragment;//已完成
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +68,14 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     static  List<BadgeView> list=new ArrayList<>();
     protected void initView() {
         titleText.setText("成品订单");
-        FragOrderList fragOrderList = new FragOrderList(1);
-        fragmentList.add(fragOrderList);
-        FragOrderList fragOrderList1 = new FragOrderList(2);
-        fragmentList.add(fragOrderList1);
-        FragOrderList fragOrderList2 = new FragOrderList(3);
-        fragmentList.add(fragOrderList2);
-        FragOrderList fragOrderList3 = new FragOrderList(4);
-        fragmentList.add(fragOrderList3);
+        checkingFrament = new FragOrderList(1);
+        fragmentList.add(checkingFrament);
+         productingFragment = new FragOrderList(2);
+        fragmentList.add(productingFragment);
+         sendingFragment = new FragOrderList(3);
+        fragmentList.add(sendingFragment);
+         finishedFragment = new FragOrderList(4);
+        fragmentList.add(finishedFragment);
         for (FragOrderList f : fragmentList) {
             f.setOnOderNumberChange(this);
         }
@@ -179,6 +183,9 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
                 break;
             case R.id.id_fr2:
                 viewPager.setCurrentItem(2);
+                break;
+            case R.id.id_fr3:
+                viewPager.setCurrentItem(3);
                 break;
         }
     }

@@ -42,4 +42,6 @@
     <!--xlistview-->
     <color name="background">#F7F4F0</color>
     <color name="title_color">#333333</color>
+
+    <color name="text_color">#444</color>
 </resources>

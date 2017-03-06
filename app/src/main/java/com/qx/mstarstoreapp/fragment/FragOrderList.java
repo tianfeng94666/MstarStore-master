@@ -59,6 +59,11 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
     private boolean isflag;
     LinearLayout spContent;
     private int imgContainerWidth;
+    private final int CHECKING_CODE = 1;
+    private final int PRODUCTING_CODE = 2;
+    private final int SENDING_CODE = 3;
+    private final int FINISHED_CODE = 4;
+
     public FragOrderList(int fragType) {
         this.fragType = fragType;
     }
@@ -69,7 +74,7 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_list_layout, null);
         initView(view);
-        cpage=1;
+        cpage = 1;
         loadNetData();
         return view;
     }
@@ -89,21 +94,33 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 L.e("listView.setOnItemClickListener");
                 Intent intent = null;
-                if (fragType == 1) {
-                    intent = new Intent(getActivity(), ConfirmOrderActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 2);
-                    bundle.putString("itemId", listData.get(i).getId());
-                    intent.putExtras(bundle);
-                    startActivityForResult(intent,11);
-                }
-                if (fragType == 2) {
-                    intent = new Intent(getActivity(), ProductionListActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", fragType);
-                    bundle.putString("orderNum", listData.get(i).getOrderNum());
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                Bundle bundle = null;
+                switch (fragType) {
+                    case CHECKING_CODE:
+                        intent = new Intent(getActivity(), ConfirmOrderActivity.class);
+                        bundle = new Bundle();
+                        bundle.putInt("type", 2);
+                        bundle.putString("itemId", listData.get(i).getId());
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, 11);
+                        break;
+                    case PRODUCTING_CODE:
+                        intent = new Intent(getActivity(), ProductionListActivity.class);
+                        bundle = new Bundle();
+                        bundle.putInt("type", fragType);
+                        bundle.putString("orderNum", listData.get(i).getOrderNum());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        break;
+                    case SENDING_CODE:
+                        intent = new Intent(getActivity(), ProductionListActivity.class);
+                        bundle = new Bundle();
+                        bundle.putInt("type", fragType);
+                        bundle.putString("orderNum", listData.get(i).getOrderNum());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        break;
+
                 }
 
             }
@@ -112,7 +129,7 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==11){
+        if (requestCode == 11) {
             loadNetData();
         }
     }
@@ -156,14 +173,21 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
 
     private void loadNetData() {
         String url = "";
-        if (fragType == 2) {
-            url = AppURL.URL_ORDER_MODEL_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
-            // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
+        switch (fragType){
+            case CHECKING_CODE:
+                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
+                break;
+            case PRODUCTING_CODE:
+                url = AppURL.URL_ORDER_MODEL_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
+                // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
+                break;
+            case SENDING_CODE:
+                url = AppURL.URL_ORDER_MODEL_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
+                // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
+                break;
         }
-        if (fragType == 1) {
-            url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
-        }
-        if (StringUtils.isEmpty(url)){
+
+        if (StringUtils.isEmpty(url)) {
             return;
         }
         L.e("获取地址" + url);
@@ -177,15 +201,21 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
                     OrderWaitResult orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
                     OrderWaitResult.DataEntity.OrderListEntity orderList = orderWaitResult.getData().getOrderList();
                     List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> list = orderList.getList();
-                    if (cpage == 1 ) {
+                    if (cpage == 1) {
                         listCount = Integer.valueOf(orderList.getList_count());
-                        L.e("fragType "+fragType+"listCount "+listCount);
-                        if (fragType==1){
-                            onOderNumberChange.onFragOrderCount(listCount);
+                        L.e("fragType " + fragType + "listCount " + listCount);
+                        switch (fragType){
+                            case CHECKING_CODE:
+                                onOderNumberChange.onFragOrderCount(listCount);
+                                break;
+                            case PRODUCTING_CODE:
+                                onOderNumberChange.onFragProduCount(listCount);
+                                break;
+                            case SENDING_CODE:
+                                onOderNumberChange.onFragProduCount(listCount);
+                                break;
                         }
-                        if (fragType==2){
-                            onOderNumberChange.onFragProduCount(listCount);
-                        }
+
                     }
                     if (pullStatus != PULL_LOAD) {
                         listData.clear();
@@ -211,8 +241,10 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
     }
 
     OnOderNumberChange onOderNumberChange;
+
     public interface OnOderNumberChange {
         void onFragOrderCount(int payNum);
+
         void onFragProduCount(int deliverNum);
     }
 
@@ -290,10 +322,10 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
             viewHolder.idStartDate.setText(listEntity.getOrderDate());
 
 
-            if (fragType==1){
+            if (fragType == 1) {
                 //修改日期
                 viewHolder.idEndDate.setText(listEntity.getModifyDate());
-            }else  if (fragType==2){
+            } else if (fragType == 2) {
                 //审核日期
                 viewHolder.idEndDate.setText(listEntity.getConfirmDate());
             }
@@ -302,11 +334,11 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
             viewHolder.idTvNeed.setText("定金 " + listEntity.getNeedPayPrice());
 
 
-            L.e(listEntity.getPicsEntity().size()+"size()");
+            L.e(listEntity.getPicsEntity().size() + "size()");
 
             viewHolder.layImages.removeAllViews();
-            if (listEntity.getPicsEntity()!=null&&listEntity.getPicsEntity().size()!=0){
-                addMenuLayout(listEntity.getPicsEntity(),viewHolder.layImages);
+            if (listEntity.getPicsEntity() != null && listEntity.getPicsEntity().size() != 0) {
+                addMenuLayout(listEntity.getPicsEntity(), viewHolder.layImages);
             }
 
 //
@@ -329,16 +361,16 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
                 ll.setGravity(Gravity.CENTER_HORIZONTAL);
                 ll.setOrientation(LinearLayout.VERTICAL);
                 final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                final ImageView img = new ImageView(getActivity()){
+                final ImageView img = new ImageView(getActivity()) {
                     @Override
                     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        int widthSize=(UIUtils.getWindowWidth()-40*3+20)/4;
+                        int widthSize = (UIUtils.getWindowWidth() - 40 * 3 + 20) / 4;
                         setMeasuredDimension(widthSize, widthSize);
                     }
                 };
                 ImageLoader.getInstance().displayImage(images.get(i), img, ImageLoadOptions.getOptions());
                 img.setBackgroundResource(R.drawable.gv_selector);
-                if (StringUtils.isEmpty(images.get(i))){
+                if (StringUtils.isEmpty(images.get(i))) {
                     L.e(images.get(i));
                     break;
                 }
@@ -348,7 +380,7 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
         }
 
 
-        public ImageView  getImageView(String pic){
+        public ImageView getImageView(String pic) {
             ImageView imageView = new ImageView(getActivity());
             imageView.setBackgroundColor(Color.WHITE);
             int padding = UIUtils.dip2px(15);
@@ -387,6 +419,7 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
             @Bind(R.id.id_lay_images)
             LinearLayout layImages;
             CustomTypeListViewAdapter customListViewAdapter;
+
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
@@ -397,9 +430,10 @@ public class FragOrderList extends BaseFragment implements PullToRefreshView.OnH
 
             private List<String> imgFiles;
             private CustomGridView mCustomGridView;
-            public CustomTypeListViewAdapter(List<String> pic,CustomGridView customGridView) {
+
+            public CustomTypeListViewAdapter(List<String> pic, CustomGridView customGridView) {
                 this.imgFiles = pic;
-                this.mCustomGridView=customGridView;
+                this.mCustomGridView = customGridView;
             }
 
 
