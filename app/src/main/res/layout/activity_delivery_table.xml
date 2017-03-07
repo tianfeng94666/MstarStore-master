@@ -89,7 +89,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#f2f2f7"/>
+        android:background="@color/view_background"/>
     <ListView
         android:id="@+id/lv_products"
         android:layout_width="match_parent"

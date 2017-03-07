@@ -84,8 +84,6 @@
                     android:layout_marginRight="32dp"
                     android:text="备注："
                     android:textColor="@color/text_color" />
-
-
             </RelativeLayout>
 
         </LinearLayout>
@@ -99,7 +97,7 @@
         android:layout_height="wrap_content" />
     <ImageButton
         android:id="@+id/ib_delivery_detail"
-        android:padding="2dp "
+        android:padding="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/common_filter_arrow_down"

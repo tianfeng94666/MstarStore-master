@@ -75,8 +75,6 @@
     </style>
 
 
-
-
     <!-- 自定义Dialog风格 -->
     <style name="Theme_dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/dia_sytle</item>
@@ -104,6 +102,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
+    </style>
+
+    <style name="linearLayout_one_weitght">
+
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">80dp
+        </item>
     </style>
 
 </resources>

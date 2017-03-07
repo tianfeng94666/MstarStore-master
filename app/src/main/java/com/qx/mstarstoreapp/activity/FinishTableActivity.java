@@ -1,5 +1,8 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.os.Bundle;
+
+import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
 
 /**
@@ -7,6 +10,12 @@ import com.qx.mstarstoreapp.base.BaseActivity;
  */
 
 public class FinishTableActivity extends BaseActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_finish_table);
+    }
+
     @Override
     public void loadNetData() {
 
