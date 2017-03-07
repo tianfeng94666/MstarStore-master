@@ -2,7 +2,6 @@
     <string name="app_name">MstarStoreApp</string>
 
 
-
     <string name="pull_to_refresh_pull_label">下拉刷新</string>
 
     <string name="recent_updates">最近更新:</string>
@@ -54,5 +53,8 @@
     <string name="header_hint_refresh_time">Time：</string>
     <string name="footer_hint_load_normal">Load more</string>
     <string name="footer_hint_load_ready">Release to load more</string>
-
+    <string name="android_download">
+<a href="https://www.pgyer.com/IGab">网页下载点这里</a></string>
+    <string name="ios_download">
+<a href="https://www.pgyer.com/IGab">网页下载点这里</a></string>
 </resources>

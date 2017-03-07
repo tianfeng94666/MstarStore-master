@@ -49,6 +49,11 @@ public class LoginActivity extends BaseActivity {
         if(!StringUtils.isEmpty(token)){
             BaseApplication.setToken(token);
             openActivity(MainActivity.class, null);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             finish();
             return;
         }

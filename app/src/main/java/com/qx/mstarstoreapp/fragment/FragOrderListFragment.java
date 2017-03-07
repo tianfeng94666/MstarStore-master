@@ -114,8 +114,8 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                         startActivity(intent);
                         break;
                     case SENDING_CODE:
-                        intent = new Intent(getActivity(), DeliveryTableActivity.class);
-                        startActivity(intent);
+//                        intent = new Intent(getActivity(), DeliveryTableActivity.class);
+//                        startActivity(intent);
                         break;
 
                 }
@@ -179,7 +179,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
                 break;
             case SENDING_CODE:
-                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
+//                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
                 break;
         }
 
@@ -208,7 +208,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                                 onOderNumberChange.onFragProduCount(listCount);
                                 break;
                             case SENDING_CODE:
-                                onOderNumberChange.onFragProduCount(listCount);
+//                                onOderNumberChange.onFragProduCount(listCount);
                                 break;
                         }
 
