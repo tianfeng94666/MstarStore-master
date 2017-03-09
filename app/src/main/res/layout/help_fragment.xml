@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="安卓最新版本二维码以及下载地址"
+                android:text="安卓下载地址"
                 android:textColor="@color/black" />
 
             <TextView
@@ -64,7 +64,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="IOS最新版本二维码以及下载地址"
+                android:text="IOS下载地址"
                 android:textColor="@color/black" />
 
             <TextView

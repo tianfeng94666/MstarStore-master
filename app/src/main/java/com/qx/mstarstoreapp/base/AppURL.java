@@ -6,6 +6,8 @@ package com.qx.mstarstoreapp.base;
 public class AppURL {
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi.fanerweb.com/api/aproxy/";
+    //测试 http://appapi1.fanerweb.com/api/Aproxy/
+    private static String baseUrl1 = "http://appapi1.fanerweb.com/api/aproxy/";
     // private static String baseUrl="http://192.168.1.240:9112/api/Aproxy/";
     public static String URL_LOGIN = baseUrl + "userLoginDo?";
 
@@ -183,8 +185,18 @@ public class AppURL {
     public static String URL_USER_FORGETPWD= baseUrl + "userForgetPasswordDo?";
 
     //http://appapi.fanerweb.com/api/Aproxy/GetForgetPasswordVerifyCodeDo?phone=xxxxx  忘记密码获取验证码
-    public static String URL_CODE_FORGETPWD= baseUrl + "GetForgetPasswordVerifyCodeDo?";
+    public static String URL_CODE_FORGETPWD= baseUrl1 + "GetForgetPasswordVerifyCodeDo?";
 
+    //结算单
+    public static String URL_CODE_FINISH= baseUrl1 + "ModelFinishBillList?";
+
+    //结算单详情
+    public static String URL_CODE_FINISH_DETAIL= baseUrl1 + "ModelBillFinishDetailRec?";
+
+    //已货单列表 http://appapi1.fanerweb.com/api/Aproxy/ModelBillList?cpage=3&tokenKey=7cdcf3a6a47904dbff1e7da86b8ef225
+    public static String URL_CODE_SENDING= baseUrl1 + "ModelBillList?";
+    //已货单详情
+    public static String URL_CODE_SENDING_DETAIL= baseUrl1 + "ModelArriveBillMo?";
 }
 
 

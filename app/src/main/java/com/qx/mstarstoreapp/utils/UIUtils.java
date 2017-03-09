@@ -157,6 +157,22 @@ public class UIUtils {
 	public static ColorStateList getColorStateList(int resId) {
 		return getResources().getColorStateList(resId);
 	}
+
+	private static long lastClickTime;
+
+	/**
+	 * 避免按键连续点击
+	 * @return
+	 */
+	public static boolean isFastDoubleClick() {
+		long time = System.currentTimeMillis();
+		long timeD = time - lastClickTime;
+		if ( 0 < timeD && timeD < 1000) {
+			return true;
+		}
+		lastClickTime = time;
+		return false;
+	}
 	//判断当前的线程是不是在主线程 
 	public static boolean isRunInMainThread() {
 		return android.os.Process.myTid() == getMainThreadId();

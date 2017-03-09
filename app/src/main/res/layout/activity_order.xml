@@ -101,6 +101,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="25dip"
             android:layout_marginTop="@dimen/margin10"
+            android:visibility="gone"
             android:gravity="center"
             android:orientation="horizontal">
 

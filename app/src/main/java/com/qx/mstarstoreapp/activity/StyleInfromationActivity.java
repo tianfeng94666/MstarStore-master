@@ -422,7 +422,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             if (pics == null) {
                 return mList.get(position);
             }
-            ImageLoader.getInstance().displayImage(pics.get(position).getPicb(), image, ImageLoadOptions.getOptions());
+            ImageLoader.getInstance().displayImage(pics.get(position).getPicm(), image, ImageLoadOptions.getOptions());
             image.getHeight();
             image.setOnClickListener(new View.OnClickListener() {
                 @Override

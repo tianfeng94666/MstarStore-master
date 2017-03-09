@@ -8,7 +8,7 @@ import android.widget.GridView;
  * @author jayqiu
  *
  */
-public class MyGridView extends GridView {
+public class  MyGridView extends GridView {
 	public MyGridView(android.content.Context context,
 			android.util.AttributeSet attrs) {
 		super(context, attrs);

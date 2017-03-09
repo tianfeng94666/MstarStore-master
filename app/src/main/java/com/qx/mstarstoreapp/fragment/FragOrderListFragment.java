@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -27,10 +28,12 @@ import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
 import com.qx.mstarstoreapp.activity.ProductionListActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
+import com.qx.mstarstoreapp.adapter.SendingListAdater;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.BaseFragment;
 import com.qx.mstarstoreapp.json.OrderWaitResult;
+import com.qx.mstarstoreapp.json.SendingResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
@@ -48,7 +51,7 @@ import butterknife.ButterKnife;
 
 public class FragOrderListFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
     private List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> listData;
-    private ListViewAdapter adapter;
+    private BaseAdapter adapter;
     private PullToRefreshView oullRefreshView;
     private static final int PULL_REFRESH = 1;
     private static final int PULL_LOAD = 2;
@@ -64,6 +67,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private final int PRODUCTING_CODE = 2;
     private final int SENDING_CODE = 3;
     private final int FINISHED_CODE = 4;
+    private List<SendingResult.DataBean.OrderListBean> sendinglist;
+    private String tokenKey;
+    private ListView listView;
 
     public FragOrderListFragment(int fragType) {
         this.fragType = fragType;
@@ -81,15 +87,28 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     }
 
     private void initView(View view) {
-        ListView listView = (ListView) view.findViewById(R.id.listview);
+    listView = (ListView) view.findViewById(R.id.listview);
         oullRefreshView = (PullToRefreshView) view.findViewById(R.id.pull_refresh_view);
         spContent = (LinearLayout) view.findViewById(R.id.specifiction_content);
 
         oullRefreshView.setOnHeaderRefreshListener(this);
         oullRefreshView.setOnFooterRefreshListener(this);
         listData = new ArrayList<>();
-        adapter = new ListViewAdapter();
-        listView.setAdapter(adapter);
+        switch (fragType) {
+            case CHECKING_CODE:
+            case PRODUCTING_CODE:
+                adapter = new ListViewAdapter();
+                listView.setAdapter(adapter);
+                break;
+            case SENDING_CODE:
+                if(sendinglist!=null){
+                    adapter = new SendingListAdater(getActivity(), sendinglist);
+                    listView.setAdapter(adapter);
+                }
+                break;
+
+        }
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -170,16 +189,17 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
     private void loadNetData() {
         String url = "";
-        switch (fragType){
+        tokenKey = BaseApplication.getToken();
+        switch (fragType) {
             case CHECKING_CODE:
-                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
+                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" +tokenKey  + "&cpage=" + cpage;
                 break;
             case PRODUCTING_CODE:
-                url = AppURL.URL_ORDER_MODEL_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
+                url = AppURL.URL_ORDER_MODEL_LIST + "tokenKey=" + tokenKey + "&cpage=" + cpage;
                 // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
                 break;
             case SENDING_CODE:
-//                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + cpage;
+                url = AppURL.URL_CODE_SENDING + "tokenKey=" + tokenKey+ "&cpage=" + cpage;
                 break;
         }
 
@@ -193,25 +213,40 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 L.e("loadNetData  " + result);
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
+                //待审核及生产中 返回结果
+                OrderWaitResult orderWaitResult;
+                OrderWaitResult.DataEntity.OrderListEntity orderList = null;
+                List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> list = null;
+                //已发货
+                SendingResult sendingResult;
+                SendingResult.DataBean.OrderListBean orderListBean = null;
+                sendinglist = null;
                 if (error.equals("0")) {
-                    OrderWaitResult orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
-                    OrderWaitResult.DataEntity.OrderListEntity orderList = orderWaitResult.getData().getOrderList();
-                    List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> list = orderList.getList();
+                    switch (fragType) {
+                        case CHECKING_CODE:
+                        case PRODUCTING_CODE:
+                            orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
+                            orderList = orderWaitResult.getData().getOrderList();
+                            list = orderList.getList();
+                            onOderNumberChange.onFragOrderCount(listCount);
+                            break;
+                        case SENDING_CODE:
+                            sendingResult = new Gson().fromJson(result, SendingResult.class);
+                            sendinglist = sendingResult.getData().getOrderList();
+                            onOderNumberChange.onFragProduCount(listCount);
+                            adapter = new SendingListAdater(getActivity(), sendinglist);
+                            listView.setAdapter(adapter);
+                            break;
+                    }
+
                     if (cpage == 1) {
-                        listCount = Integer.valueOf(orderList.getList_count());
-                        L.e("fragType " + fragType + "listCount " + listCount);
-                        switch (fragType){
-                            case CHECKING_CODE:
-                                onOderNumberChange.onFragOrderCount(listCount);
-                                break;
-                            case PRODUCTING_CODE:
-                                onOderNumberChange.onFragProduCount(listCount);
-                                break;
-                            case SENDING_CODE:
-//                                onOderNumberChange.onFragProduCount(listCount);
-                                break;
+                        if (fragType == CHECKING_CODE || fragType == PRODUCTING_CODE) {
+                            listCount = Integer.valueOf(orderList.getList_count());
+                        } else if (fragType == SENDING_CODE) {
+                            listCount = Integer.valueOf(sendinglist.size());
                         }
 
+                        L.e("fragType " + fragType + "listCount " + listCount);
                     }
                     if (pullStatus != PULL_LOAD) {
                         listData.clear();

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -65,7 +68,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private GridViewWithHeaderAndFooter mCustomGridView;
     private TextView tvCclassify, tvCurentOrder, id_tv_select;
     private Context context;
-    private ImageView igNor,igNor1;
+    private ImageView igNor, igNor1;
     private RelativeLayout layout2, root_view;
     private SideFilterDialog filterDialog;
     private ListMenuDialog listMenuDialog;
@@ -91,17 +94,17 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     TextView idTvHisOrder;
     @Bind(R.id.id_classify)
     TextView idTvClassify;
-
-
     @Bind(R.id.id_tv_curorder)
     TextView idTvCurOrder;
-
+    @Bind(R.id.iv_delete)
+    ImageView ivDelete;
     /*搜索过的多选历史记录*/
-    public static  List<TypeFiler> multiselectKey =new ArrayList<>();
+    public static List<TypeFiler> multiselectKey = new ArrayList<>();
     /*搜索过的单选历史记录*/
-    public static List<SearchValue> singleKey =new ArrayList<>();
+    public static List<SearchValue> singleKey = new ArrayList<>();
 
     private int waitOrderCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,10 +117,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
 
-    private  void remind(int count) {
-        boolean isVisible=false;
-        if (count!=0){
-            isVisible=true;
+    private void remind(int count) {
+        boolean isVisible = false;
+        if (count != 0) {
+            isVisible = true;
         }
         //BadgeView的具体使用
         badge.setText(count + ""); // 需要显示的提醒类容
@@ -134,15 +137,18 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             badge.hide();//影藏显示
         }
     }
-    public void onBack(View view){
+
+    public void onBack(View view) {
         finish();
     }
-    private String getInitUrl(){
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken()+ "&cpage=" + curpage;
+
+    private String getInitUrl() {
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage;
         return url;
     }
+
     private void initListMenuDialog(List<ModeListResult.DataEntity.CustomList> customList) {
-        listMenuDialog = new ListMenuDialog(OrderActivity.this,customList);
+        listMenuDialog = new ListMenuDialog(OrderActivity.this, customList);
         listMenuDialog.setOnListMenuSelectCloseClick(new ListMenuDialog.OnListMenuSelectCloseClick() {
             @Override
             public void onClose() {
@@ -150,15 +156,16 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 backgroundAlpha(1f);
                 igNor.setImageResource(R.drawable.icon_list_nor);
             }
+
             @Override
             public void onSelect(final ModeListResult.DataEntity.CustomList select) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         id_tv_select.setText(StringUtils.idgui(select.getTitle()));
-                        mcategory=select.getId()+"";
-                        String url=getInitUrl();
-                        url+="&category="+mcategory;
+                        mcategory = select.getId() + "";
+                        String url = getInitUrl();
+                        url += "&category=" + mcategory;
                         loadNetData(url);
                     }
                 });
@@ -168,7 +175,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
 
     private void initFilterDialog(List<ClassTypeFilerEntity> typeList) {
-        filterDialog = new SideFilterDialog(context, typeList, MyAction.filterDialogAction,getStatusBarHeight());
+        filterDialog = new SideFilterDialog(context, typeList, MyAction.filterDialogAction, getStatusBarHeight());
          /*筛选界面      关闭事件*/
         filterDialog.setOnListMenuSelectCloseClick(new SideFilterDialog.OnListMenuSelectCloseClick() {
             @Override
@@ -182,11 +189,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         filterDialog.setOnSeachListener(new ClassifyOnSeachListener() {
             @Override
             public void onSeach(String action) {
-                myAction=action;
-                curpage=1;
-                String url=getInitUrl();
-                url+= getCheckBoxUrl();
-                url+=getRadioGroupUrl();
+                myAction = action;
+                curpage = 1;
+                String url = getInitUrl();
+                url += getCheckBoxUrl();
+                url += getRadioGroupUrl();
                 loadNetData(url);
             }
         });
@@ -194,6 +201,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     LoadingWaitDialog dialog;
+
     public void showWatiNetDialog() {
         dialog = new LoadingWaitDialog(this);
         dialog.show();
@@ -206,63 +214,64 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             dialog = null;
         }
     }
+
     @Override
-    public void loadNetData(){
+    public void loadNetData() {
 
     }
 
     private void loadNetData(String url) {
         showWatiNetDialog();
-        L.e("开启搜索"+url);
+        L.e("开启搜索" + url);
         // 进行登录请求
-        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
                 dismissWatiNetDialog();
-                L.e("loadNetData  "+result);
+                L.e("loadNetData  " + result);
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                String error=jsonResult.get("error").getAsString();
+                String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     ModeListResult modeListResult = new Gson().fromJson(result, ModeListResult.class);
                     ModeListResult.DataEntity dataEntity = modeListResult.getData();
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
-                    if (curpage==1){
+                    if (curpage == 1) {
                           /*搜索过的单选历史记录*/
-                        ClassifyActivity.singleKey=dataEntity.getSearchKeyword();
+                        ClassifyActivity.singleKey = dataEntity.getSearchKeyword();
                         singleKey = dataEntity.getSearchKeyword();
                         /*搜索过的多选历史记录*/
                         multiselectKey = dataEntity.getCategoryFiler();
-                        waitOrderCount=Integer.valueOf(dataEntity.getWaitOrderCount());
-                        if (waitOrderCount!=0){
+                        waitOrderCount = Integer.valueOf(dataEntity.getWaitOrderCount());
+                        if (waitOrderCount != 0) {
                             remind(waitOrderCount);
                         }
                     }
                     //下啦分类筛选
                     List<ModeListResult.DataEntity.CustomList> customList = dataEntity.getCustomList();
-                    if (customList!=null&&customList.size()!=0){
+                    if (customList != null && customList.size() != 0) {
                         initListMenuDialog(customList);
                     }
 
                     List<ClassTypeFilerEntity> typeList = dataEntity.getTypeList();
-                    if (typeList!=null&&typeList.size()!=0){
+                    if (typeList != null && typeList.size() != 0) {
                         initFilterDialog(typeList);
                     }
                     if (pullState != PULL_LOAD) {
                         data.clear();
                     }
                     list_count = Integer.valueOf(modeEntity.getList_count());
-                    if (list_count==0){
+                    if (list_count == 0) {
                         data.clear();
-                    }else {
+                    } else {
                         List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> modelList = modeEntity.getModelList();
                         data.addAll(modelList);
                     }
                     endNetRequest();
-                }else if (error.equals("2")) {
+                } else if (error.equals("2")) {
                     L.e("重新登录");
                     ToastManager.showToastReal(jsonResult.get("message").getAsString());
                     loginToServer(OrderActivity.class);
-                }else {
+                } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
                     ToastManager.showToastReal(message);
@@ -321,85 +330,117 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
         badge = new BadgeView(OrderActivity.this, idTvCurOrder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         //remind(1,badge,true);
+
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                idEtSeach.setText("");
+            }
+        });
+        idEtSeach.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+
+
+
+            @Override
+            public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
+                // TODO Auto-generated method stub
+                if(arg1 == EditorInfo.IME_ACTION_SEARCH)
+                {
+                    curpage = 1;
+                    String url = getInitUrl();
+                    url += getkeyWordUrl();
+                    loadNetData(url);
+                    // search pressed and perform your functionality.
+                }
+                return false;
+            }
+
+        });
     }
 
     BadgeView badge;
 
     String mcategory;   /*下啦筛选关键字*/
     String myAction;   /*判断是哪个页面的action*/
-    public String getCheckBoxUrl(){
+
+    public String getCheckBoxUrl() {
         List<TypeFiler> filterList;
-        if (myAction.equals(MyAction.classifyActivityAction)){
-            filterList=ClassifyActivity.hisCategoryFilterList;
-        }else {
-            filterList=OrderActivity.multiselectKey;
+        if (myAction.equals(MyAction.classifyActivityAction)) {
+            filterList = ClassifyActivity.hisCategoryFilterList;
+        } else {
+            filterList = OrderActivity.multiselectKey;
         }
-        List<String> list=new ArrayList<>();
-        int count=filterList.size();
-        for (int i=0;i<count;i++){
+        List<String> list = new ArrayList<>();
+        int count = filterList.size();
+        for (int i = 0; i < count; i++) {
             TypeFiler typeFiler = filterList.get(i);
             list.add(typeFiler.getGroupKey());
             // L.e(""+typeFiler.toString());
         }
         HashSet<String> hs = new HashSet<>(list); //此时已经去掉重复的数据保存在hashset中
-        Iterator<String> iterator=hs.iterator();
-        StringBuffer sbbuf=new StringBuffer();
-        while(iterator.hasNext()){
-            StringBuffer sb=new StringBuffer();
-            String tag=iterator.next();
-            sb.append("&"+ tag+"=");
-            for (int i=0;i<count;i++){
+        Iterator<String> iterator = hs.iterator();
+        StringBuffer sbbuf = new StringBuffer();
+        while (iterator.hasNext()) {
+            StringBuffer sb = new StringBuffer();
+            String tag = iterator.next();
+            sb.append("&" + tag + "=");
+            for (int i = 0; i < count; i++) {
                 TypeFiler typeFiler = filterList.get(i);
-                if (typeFiler.getGroupKey().equals(tag)){
-                    sb.append(typeFiler.getValue()+"|");
+                if (typeFiler.getGroupKey().equals(tag)) {
+                    sb.append(typeFiler.getValue() + "|");
                 }
             }
             sb.deleteCharAt(sb.length() - 1);
             sbbuf.append(sb.toString());
         }
-        L.e("typeFiler  check"+sbbuf.toString());
+        L.e("typeFiler  check" + sbbuf.toString());
         return sbbuf.toString();
     }
 
-    public String getRadioGroupUrl(){
+    public String getRadioGroupUrl() {
         List<SearchValue> keywordList;
-        if (myAction.equals(MyAction.classifyActivityAction)){
-            keywordList=ClassifyActivity.singleKey;
-        }else {
-            keywordList=singleKey;
+        if (myAction.equals(MyAction.classifyActivityAction)) {
+            keywordList = ClassifyActivity.singleKey;
+        } else {
+            keywordList = singleKey;
         }
-        String low,hig;
+        String low, hig;
         StringBuilder sbPrice = new StringBuilder();
-        if (keywordList!=null&&keywordList.size()!=0) {
+        if (keywordList != null && keywordList.size() != 0) {
             for (SearchValue hisKey : keywordList) {
                 if (!StringUtils.isEmpty(hisKey.getValue())) {
                     sbPrice.append("&" + hisKey.getName() + "=" + hisKey.getValue());
-                }else {
-                    low=hisKey.getLow();  hig=hisKey.getHig();
-                    if (!StringUtils.isEmpty(low)&&!StringUtils.isEmpty(hig)){
-                        sbPrice.append("&" + hisKey.getName()  + "=" + low+"|"+hig);
-                    }else if (!StringUtils.isEmpty(low)&&StringUtils.isEmpty(hig)){
-                        sbPrice.append("&" + hisKey.getName()  + "=" + low+"|");
-                    }else if (StringUtils.isEmpty(low)&&!StringUtils.isEmpty(hig)){
-                        sbPrice.append("&" + hisKey.getName()  + "=" +"|"+hig);
+                } else {
+                    low = hisKey.getLow();
+                    hig = hisKey.getHig();
+                    if (!StringUtils.isEmpty(low) && !StringUtils.isEmpty(hig)) {
+                        sbPrice.append("&" + hisKey.getName() + "=" + low + "|" + hig);
+                    } else if (!StringUtils.isEmpty(low) && StringUtils.isEmpty(hig)) {
+                        sbPrice.append("&" + hisKey.getName() + "=" + low + "|");
+                    } else if (StringUtils.isEmpty(low) && !StringUtils.isEmpty(hig)) {
+                        sbPrice.append("&" + hisKey.getName() + "=" + "|" + hig);
                     }
                 }
             }
             L.e(sbPrice.toString());
         }
-        L.e("typeFiler  radio"+sbPrice.toString());
+        L.e("typeFiler  radio" + sbPrice.toString());
         return sbPrice.toString();
     }
 
-    public String getkeyWordUrl(){
-        String url="";
+    /**
+     * 关键字
+     * @return
+     */
+    public String getkeyWordUrl() {
+        String url = "";
         String keyWord = idEtSeach.getText().toString();
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = StringUtils.removeSpacesUrl(keyWord);
             idTvFilter.setVisibility(View.VISIBLE);
             idTvFilter.setText(keyWord);
         }
-        url=  "&keyword=" + keyWord;
+        url = "&keyword=" + keyWord;
         return url;
     }
 
@@ -409,11 +450,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         ClassifyActivity.setOnClassifySeachListener(new ClassifyOnSeachListener() {
             @Override
             public void onSeach(String action) {
-                myAction=action;
-                curpage=1;
-                String url=getInitUrl();
-                url+= getCheckBoxUrl();
-                url+=getRadioGroupUrl();
+                myAction = action;
+                curpage = 1;
+                String url = getInitUrl();
+                url += getCheckBoxUrl();
+                url += getRadioGroupUrl();
                 loadNetData(url);
             }
         });
@@ -422,9 +463,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         layFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (filterDialog!=null){
+                if (filterDialog != null) {
                     backgroundAlpha(0.7f);
-                    filterDialog.showAsDropDown(root_view,getStatusBarHeight());
+                    filterDialog.showAsDropDown(root_view, getStatusBarHeight());
                 }
 
             }
@@ -435,7 +476,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         layAllOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listMenuDialog!=null){
+                if (listMenuDialog != null) {
                     backgroundAlpha(0.7f);
                     listMenuDialog.showAsDropDown(layout1);
                     igNor.setImageResource(R.drawable.icon_list);
@@ -448,15 +489,15 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 data.get(position).getId();
-                Intent  intent=new Intent(OrderActivity.this,StyleInfromationActivity.class);
-                Bundle pBundle=new Bundle();
-                L.e("itemId"+data.get(position).getId());
-                pBundle.putString("itemId",data.get(position).getId());
+                Intent intent = new Intent(OrderActivity.this, StyleInfromationActivity.class);
+                Bundle pBundle = new Bundle();
+                L.e("itemId" + data.get(position).getId());
+                pBundle.putString("itemId", data.get(position).getId());
                 pBundle.putInt("type", 0);
                 pBundle.putInt("waitOrderCount", waitOrderCount);
                 intent.putExtras(pBundle);
-               // openActivity(StyleInfromationActivity.class, pBundle);
-                startActivityForResult(intent,10);
+                // openActivity(StyleInfromationActivity.class, pBundle);
+                startActivityForResult(intent, 10);
             }
         });
 
@@ -495,8 +536,8 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 gridMenuDialog.setOnSeachListener(new OnSeachListener() {
                     @Override
                     public void onSeach(String seachUrl) {
-                        String url=getInitUrl();
-                        url+=seachUrl;
+                        String url = getInitUrl();
+                        url += seachUrl;
                         loadNetData(url);
                     }
                 });
@@ -511,9 +552,13 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idIgSeach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                curpage=1;
-                String url=getInitUrl();
-                url+=getkeyWordUrl();
+                if(idEtSeach.getText().toString().equals("")){
+                    ToastManager.showToastReal("搜索内容为空！");
+                    return;
+                }
+                curpage = 1;
+                String url = getInitUrl();
+                url += getkeyWordUrl();
                 loadNetData(url);
             }
         });
@@ -535,9 +580,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idTvHisOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // intent = new Intent(getActivity(), CustomMadeActivity.class);
-               // startActivity(intent);
-                openActivity(CustomMadeActivity.class,null);
+                // intent = new Intent(getActivity(), CustomMadeActivity.class);
+                // startActivity(intent);
+                openActivity(CustomMadeActivity.class, null);
             }
         });
 
@@ -546,7 +591,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OrderActivity.this, ConfirmOrderActivity.class);
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putInt("waitOrderCount", waitOrderCount);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 10);
@@ -557,12 +602,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idTvClassify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity(ClassifyActivity.class,null);
+                openActivity(ClassifyActivity.class, null);
             }
         });
 
     }
-
 
 
     private BaseAdapter mGvAdapter = new BaseAdapter() {
@@ -595,7 +639,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-           // holder.ig.setImageResource(R.drawable.no_image);
+            // holder.ig.setImageResource(R.drawable.no_image);
             holder.tv.setText(data.get(position).getTitle());
             holder.tvPrice.setText(data.get(position).getPrice());
             if (!data.get(position).getPic().equals(holder.ig.getTag())) {
@@ -639,31 +683,29 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
 
-
-
     /*扫描二维码页面*/
-    public void scan(View view){
-        Intent inten=new Intent(OrderActivity.this, CaptureActivity.class);
-        startActivityForResult(inten,0);
+    public void scan(View view) {
+        Intent inten = new Intent(OrderActivity.this, CaptureActivity.class);
+        startActivityForResult(inten, 0);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        L.e(requestCode+"");
-        if (requestCode==0&&data!=null){
-            Bundle bundle=data.getExtras();
-            String result=bundle.getString("result");
+        L.e(requestCode + "");
+        if (requestCode == 0 && data != null) {
+            Bundle bundle = data.getExtras();
+            String result = bundle.getString("result");
             idEtSeach.setText(result);
-            String url=getInitUrl();
-            url+=getkeyWordUrl();
+            String url = getInitUrl();
+            url += getkeyWordUrl();
             loadNetData(url);
-            L.e("onActivityResult result"+result);
+            L.e("onActivityResult result" + result);
         }
 
-        if (requestCode==10&&data!=null){
-            Bundle bundle=data.getExtras();
-            waitOrderCount=bundle.getInt("waitOrderCount");
+        if (requestCode == 10 && data != null) {
+            Bundle bundle = data.getExtras();
+            waitOrderCount = bundle.getInt("waitOrderCount");
             remind(waitOrderCount);
             L.e("waitOrderCount");
         }

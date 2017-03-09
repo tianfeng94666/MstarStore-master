@@ -42,6 +42,7 @@ import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
 import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
 
@@ -403,7 +404,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         igBtnSeach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                seachCustom("");
+                boolean isFast = UIUtils.isFastDoubleClick();
+                if(!isFast){
+                    seachCustom("");
+                }
             }
         });
 
