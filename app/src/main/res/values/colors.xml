@@ -42,10 +42,13 @@
     <!--xlistview-->
     <color name="background">#F7F4F0</color>
     <color name="title_color">#333333</color>
-<!--文字颜色-->
+    <!--文字颜色-->
     <color name="text_color">#444</color>
+    <!--深一点灰字体颜色-->
+    <color name="text_deep_color">#585859</color>
     <!--间隔view颜色-->
     <color name="view_background">#f2f2f7</color>
     <!--textview浅灰色背景-->
     <color name="textview_background">#F4F5F7</color>
+    <color name="finish_item_bg">#F9F9F9</color>
 </resources>

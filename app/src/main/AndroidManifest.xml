@@ -238,7 +238,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden"
             />
         <activity
-            android:name=".activity.FinishTableActivity"
+            android:name=".activity.FinishTableMoreActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"

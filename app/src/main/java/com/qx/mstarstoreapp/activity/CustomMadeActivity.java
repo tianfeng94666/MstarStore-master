@@ -114,6 +114,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         id_fl_tab.setOnClickListener(this);
         id_fl_tab1.setOnClickListener(this);
         id_fl_tab2.setOnClickListener(this);
+        id_fl_tab3.setOnClickListener(this);
         CommentListPagerAdapter adapter = new CommentListPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOnPageChangeListener(this);

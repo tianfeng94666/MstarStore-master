@@ -9,11 +9,11 @@ import com.qx.mstarstoreapp.base.BaseActivity;
  * Created by Administrator on 2017/3/6 0006.
  */
 
-public class FinishTableActivity extends BaseActivity {
+public class FinishTableMoreActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finish_table);
+        setContentView(R.layout.activity_finish_table_more);
     }
 
     @Override
