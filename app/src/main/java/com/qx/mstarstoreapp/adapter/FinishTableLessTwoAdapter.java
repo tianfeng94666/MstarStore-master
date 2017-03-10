@@ -1,13 +1,17 @@
 package com.qx.mstarstoreapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
+import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
 import com.qx.mstarstoreapp.json.FinishTableLessResult;
 
 import java.util.List;
@@ -46,7 +50,7 @@ public class FinishTableLessTwoAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder = null;
-        FinishTableLessResult.DataBean.RecListBean.MoListBean bean = list.get(i);
+        final FinishTableLessResult.DataBean.RecListBean.MoListBean bean = list.get(i);
         if (view == null) {
             view = View.inflate(context, R.layout.item_finished_less, null);
             viewHolder = new ViewHolder(view);
@@ -58,10 +62,20 @@ public class FinishTableLessTwoAdapter extends BaseAdapter {
         viewHolder.tvItemFinishDeliveryDate.setText("出库日期:"+bean.getMoDate());
         viewHolder.tvItemFinishDeliveryPrice.setText("价格："+bean.getTotalPrice()+"");
         viewHolder.tvItemFinishDeliveryAmount.setText("数量："+bean.getNumber());
+        viewHolder.rlGotoDeliveryTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DeliveryTableActivity.class);
+                intent.putExtra("momNumber",bean.getMoNum()+"");
+                ( (FinishTableLessActivity)context).startActivity(intent);
+            }
+        });
         return view;
     }
 
     static class ViewHolder {
+        @Bind(R.id.rl_goto_delivery_table)
+        RelativeLayout rlGotoDeliveryTable;
         @Bind(R.id.tv_item_finish_delivery_number)
         TextView tvItemFinishDeliveryNumber;
         @Bind(R.id.tv_item_finish_delivery_date)

@@ -1,14 +1,20 @@
 package com.qx.mstarstoreapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
+import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
+import com.qx.mstarstoreapp.activity.FinishTableMoreActivity;
 import com.qx.mstarstoreapp.json.FinishTableLessResult;
 
 import java.util.List;
@@ -46,8 +52,8 @@ public class FinishTableLessAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-       ViewHolder  viewHolder = null;
-        FinishTableLessResult.DataBean.RecListBean recListBean = list.get(i);
+        ViewHolder viewHolder = null;
+        final FinishTableLessResult.DataBean.RecListBean recListBean = list.get(i);
         if (view == null) {
             view = View.inflate(context, R.layout.item_finish_table_one, null);
             viewHolder = new ViewHolder(view);
@@ -55,24 +61,34 @@ public class FinishTableLessAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.tvFinishNumber.setText("结算单号："+recListBean.getRecNum());
-        viewHolder.tvFinishCustomerName.setText("客户名称："+recListBean.getCustomerName());
-        viewHolder.tvFinishDate.setText("下单日期："+recListBean.getRecDate());
-        viewHolder.tvFinishQuality.setText("成色："+recListBean.getPurityName());
-        viewHolder.tvFinishAmount.setText("数量："+recListBean.getNumber());
-        viewHolder.tvFinisShSumMoney.setText("¥"+recListBean.getTotalPrice());
+        viewHolder.tvFinishNumber.setText("结算单号：" + recListBean.getRecNum());
+        viewHolder.tvFinishCustomerName.setText("客户名称：" + recListBean.getCustomerName());
+        viewHolder.tvFinishDate.setText("下单日期：" + recListBean.getRecDate());
+        viewHolder.tvFinishQuality.setText("成色：" + recListBean.getPurityName());
+        viewHolder.tvFinishAmount.setText("数量：" + recListBean.getNumber());
+        viewHolder.tvFinisShSumMoney.setText("¥" + recListBean.getTotalPrice());
 
-        FinishTableLessTwoAdapter finishTableLessTwoAdapter = new FinishTableLessTwoAdapter(context,recListBean.getMoList());
+        FinishTableLessTwoAdapter finishTableLessTwoAdapter = new FinishTableLessTwoAdapter(context, recListBean.getMoList());
         viewHolder.lvSendingTables.setAdapter(finishTableLessTwoAdapter);
+        viewHolder.rlGotoFinishMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FinishTableMoreActivity.class);
+                intent.putExtra("recNumber", recListBean.getRecNum() + "");
+                ((FinishTableLessActivity) context).startActivity(intent);
+            }
+        });
         return view;
 
     }
 
-     class ViewHolder {
+    class ViewHolder {
+        @Bind(R.id.rl_goto_finish_more)
+        RelativeLayout rlGotoFinishMore;
         @Bind(R.id.tv_finish_number)
         TextView tvFinishNumber;
         @Bind(R.id.ib_right)
-        ImageButton ibRight;
+        ImageView ivRight;
         @Bind(R.id.tv_finish_customer_name)
         TextView tvFinishCustomerName;
         @Bind(R.id.tv_number)

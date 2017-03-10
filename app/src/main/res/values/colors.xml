@@ -13,11 +13,11 @@
     <color name="black">#000</color>
     
     <color name="color_line">#dadada</color>
-    <color name="color_text">#999999</color>
+
     <color name="theme_red">#f12b31</color>
     <color name="theme_bg">#f0eff5</color>
     <color name="theme_yell">#FFEF8C01</color>
-    <color name="theme_text">#666666</color>
+
     <color name="theme_red_down">#f15f51</color>
 
     <color name="color_filter_text">#444444</color>
@@ -43,7 +43,10 @@
     <color name="background">#F7F4F0</color>
     <color name="title_color">#333333</color>
     <!--文字颜色-->
-    <color name="text_color">#444</color>
+    <color name="text_color">#444444</color>
+    <color name="text_color2">#666666</color>
+    <color name="text_color3">#999999</color>
+
     <!--深一点灰字体颜色-->
     <color name="text_deep_color">#585859</color>
     <!--间隔view颜色-->

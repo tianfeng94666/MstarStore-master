@@ -32,7 +32,7 @@
             android:background="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
     </RelativeLayout>
@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:text="手机号码"
             android:gravity="center_vertical"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
         <EditText
@@ -85,7 +85,7 @@
 
 
         <TextView
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             android:gravity="center_vertical"
             android:id="@+id/id_tv_address"
             android:layout_marginLeft="25dp"
@@ -123,7 +123,7 @@
             android:background="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
     </RelativeLayout>

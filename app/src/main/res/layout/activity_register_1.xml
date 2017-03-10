@@ -31,7 +31,7 @@
             android:background="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
     </LinearLayout>
@@ -61,7 +61,7 @@
             android:background="@null"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
     </LinearLayout>
@@ -88,7 +88,7 @@
             android:background="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
     </LinearLayout>
@@ -114,7 +114,7 @@
             android:background="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
     </LinearLayout>
@@ -139,7 +139,7 @@
             android:background="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
     </LinearLayout>
@@ -168,7 +168,7 @@
             android:background="@null"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/color_text"
+            android:textColor="@color/text_color3"
             />
 
         <Button

@@ -98,9 +98,10 @@
     </style>
 
     <style name="text_tow_oneraw">
-        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textColor">@color/text_color2</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:layout_width">0dp</item>
     </style>
 

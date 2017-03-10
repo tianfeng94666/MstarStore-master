@@ -2,6 +2,7 @@ package com.qx.mstarstoreapp.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -48,10 +49,19 @@ public class FinishTableLessActivity extends BaseActivity {
         setContentView(R.layout.activity_finish_table_less);
         ButterKnife.bind(this);
         context =this;
+        init();
         getDate();
         loadNetData();
     }
-
+    private void init() {
+        titleText.setText("结算单");
+        idIgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
     private void getDate() {
         orderNumber = getIntent().getStringExtra("orderNumber");
     }

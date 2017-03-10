@@ -166,9 +166,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         igHome.setImageResource(R.drawable.icon_home_nor);
         igInformaction.setImageResource(R.drawable.icon_infromation_nor);
         igHelp.setImageResource(R.drawable.icon_help_nor);
-        tvHome.setTextColor(getResources().getColor(R.color.color_text));
-        tvInformaction.setTextColor(getResources().getColor(R.color.color_text));
-        tvHelp.setTextColor(getResources().getColor(R.color.color_text));
+        tvHome.setTextColor(getResources().getColor(R.color.text_color3));
+        tvInformaction.setTextColor(getResources().getColor(R.color.text_color3));
+        tvHelp.setTextColor(getResources().getColor(R.color.text_color3));
     }
 
     private void hideAllFragments(FragmentTransaction fragTrans) {

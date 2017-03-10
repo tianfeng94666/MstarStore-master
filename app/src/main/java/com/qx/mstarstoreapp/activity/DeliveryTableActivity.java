@@ -1,16 +1,30 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.DeliveryAdapter;
+import com.qx.mstarstoreapp.adapter.FinishTableLessAdapter;
+import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
+import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.json.DeliveryTableResult;
+import com.qx.mstarstoreapp.json.FinishTableLessResult;
+import com.qx.mstarstoreapp.net.VolleyRequestUtils;
+import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.StringUtils;
+import com.qx.mstarstoreapp.utils.ToastManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,24 +58,85 @@ public class DeliveryTableActivity extends BaseActivity {
     @Bind(R.id.lv_products)
     ListView lvProducts;
 
+    String momNumber;//出库单号
+    List<DeliveryTableResult.DataBean.ModelListBean> list;//出货单详情列表
+    DeliveryTableResult deliveryTableResult;
+    DeliveryTableResult.DataBean.MoItemBean moItemBean;
+    private DeliveryAdapter deliveryAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_table);
         ButterKnife.bind(this);
-        initView();
+        init();
+        getDate();
+        loadNetData();
+    }
+
+    private void init() {
+        titleText.setText("出货单");
+        idIgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+
+    private void getDate() {
+        momNumber = getIntent().getStringExtra("momNumber");
     }
 
     private void initView() {
-        ArrayList<Boolean> list = new ArrayList<>();
-        list.add(true);
-        list.add(false);
-        DeliveryAdapter deliveryAdapter = new DeliveryAdapter(this,list);
+        tvCustomerName.setText("客户："+moItemBean.getCustomerName());
+        tvDeliveryOrderNumber.setText("订单编号："+moItemBean.getOrderNum());
+        tvDeliveryGoldPrice.setText("金价："+moItemBean.getGoldPrice());
+        tvDeliveryNumber.setText("出库单号："+moItemBean.getMoNum());
+        tvDeliveryAmount.setText("件数："+moItemBean.getNumber());
+        tvDeliveryQuality.setText("成色："+moItemBean.getPurityName());
+        tvDeliverySumMoney.setText("总价："+moItemBean.getTotalPrice());
+        if(list!=null){
+             deliveryAdapter = new DeliveryAdapter(this, list);
+        }
         lvProducts.setAdapter(deliveryAdapter);
     }
 
     @Override
     public void loadNetData() {
+        String url = "";
+        url = AppURL.URL_CODE_SENDING_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&moNum=" + momNumber;
+        if (StringUtils.isEmpty(url)) {
+            return;
+        }
+        L.e("获取地址" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+                    deliveryTableResult = new Gson().fromJson(result, DeliveryTableResult.class);
+                    moItemBean = deliveryTableResult.getData().getMoItem();
+                    list = deliveryTableResult.getData().getModelList();
+                    if(moItemBean!=null){
+                        initView();
+                    }
 
+                } else if (error.equals("2")) {
+                    loginToServer(CustomMadeActivity.class);
+                } else {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastWhendebug(message);
+                    L.e(message);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+            }
+
+        });
     }
 }

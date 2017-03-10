@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 <RelativeLayout
+    android:id="@+id/rl_goto_delivery_table"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginBottom="16dp"
@@ -51,14 +52,14 @@
     </LinearLayout>
   <TextView
       android:text="查看出库单"
-      android:layout_marginLeft="8dp"
+      android:layout_marginLeft="16dp"
       android:layout_centerVertical="true"
      android:layout_toLeftOf="@+id/iv_item_goto_delivery"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content" />
     <ImageView
         android:id="@+id/iv_item_goto_delivery"
-        android:padding="5dp"
+        android:padding="10dp"
         android:layout_marginRight="8dp"
         android:src="@drawable/icon_right"
         android:layout_alignParentRight="true"

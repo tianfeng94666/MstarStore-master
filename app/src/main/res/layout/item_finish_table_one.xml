@@ -4,6 +4,7 @@
     android:background="@color/white"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:id="@+id/rl_goto_finish_more"
         style="@style/padding_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,8 +27,9 @@
             android:layout_toLeftOf="@+id/ib_right"
             android:text="查看结算单" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ib_right"
+            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

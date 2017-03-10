@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="类型"
-                    android:textColor="@color/color_text"
+                    android:textColor="@color/text_color3"
                     android:textSize="12sp" />
 
                 <com.qx.mstarstoreapp.viewutils.CustomSelectButton
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="件   数:"
-                    android:textColor="@color/color_text"
+                    android:textColor="@color/text_color3"
                     android:textSize="16sp" />
 
                 <EditText
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="手   寸:"
-                    android:textColor="@color/color_text"
+                    android:textColor="@color/text_color3"
                     android:textSize="16sp" />
 
 
@@ -523,7 +523,7 @@
                     android:layout_height="50dip"
                     android:layout_marginTop="@dimen/margin15"
                     android:text="备注"
-                    android:textColor="@color/color_text"
+                    android:textColor="@color/text_color3"
                     android:textSize="16sp" />
 
                 <com.qx.mstarstoreapp.viewutils.CustomSelectButton

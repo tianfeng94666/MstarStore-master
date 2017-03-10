@@ -87,7 +87,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="生产中"
-                        android:textColor="@color/theme_text" />
+                        android:textColor="@color/text_color2" />
 
                 </LinearLayout>
 
@@ -133,7 +133,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="已发货"
-                        android:textColor="@color/theme_text" />
+                        android:textColor="@color/text_color2" />
 
 
                 </LinearLayout>
@@ -181,7 +181,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="已完成"
-                        android:textColor="@color/theme_text" />
+                        android:textColor="@color/text_color2" />
 
                 </LinearLayout>
 

@@ -28,66 +28,65 @@
                     android:id="@+id/tv_customer_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="客户：千禧"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/tv_finish_quality"
                         style="@style/text_tow_oneraw"
-                        android:text="成色:pt950" />
+                       />
 
                     <TextView
                         android:id="@+id/tv_finish_date"
                         style="@style/text_tow_oneraw"
-                        android:paddingLeft="16dp"
-                        android:text="结算日期:2016-11-10" />
+                        android:paddingLeft="8dp"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/tv_finish_number"
                         style="@style/text_tow_oneraw"
-                        android:text="订单编号:1654120001" />
+                         />
 
                     <TextView
                         android:id="@+id/tv_finish_table_number"
                         style="@style/text_tow_oneraw"
-                        android:paddingLeft="16dp"
-                        android:text="帐套号:201611" />
+                        android:paddingLeft="8dp"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/tv_finish_order_date"
                         style="@style/text_tow_oneraw"
-                        android:text="下单日期：2016-11-09" />
+                       />
 
                     <TextView
                         android:id="@+id/tv_finish_order_number"
                         style="@style/text_tow_oneraw"
-                        android:paddingLeft="16dp"
-                        android:text="结算单号：161110041" />
+                        android:paddingLeft="8dp"
+                        />
 
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
+                android:layout_height="12dp"
                 android:background="@color/view_background" />
 
             <LinearLayout
@@ -137,15 +136,10 @@
 
                     <LinearLayout
                         android:id="@+id/ll_material_product_name"
-                        style="@style/linearLayout_one_weitght">
+                        style="@style/linearLayout_one_weitght"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/textview_background"
-                            android:gravity="center"
-                            android:text="品名"
-                            android:textColor="@color/text_color" />
+
                     </LinearLayout>
 
                     <HorizontalScrollView
@@ -154,74 +148,11 @@
                         android:scrollbars="none">
 
                         <LinearLayout
+                            android:id="@+id/ll_material"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/textview_background">
+                            android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/ll_material_gold_weight"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="净金重"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_material_lose"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="损耗"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_material_gold_price"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="金价"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_material_null"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text=""
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_material_sum_money"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="金额"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
                         </LinearLayout>
                     </HorizontalScrollView>
 
@@ -248,7 +179,7 @@
 
 
                     <TextView
-                        android:id="@+id/tv_work"
+                        android:id="@+id/tv_work_cost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/tv_delivery_item_number"
@@ -259,17 +190,19 @@
                         android:id="@+id/tv_work_money_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@+id/tv_work_money"
+                        android:layout_toLeftOf="@+id/tv_work_cost_money"
                         android:text="金额："
                         android:textColor="@color/text_color" />
 
                     <TextView
-                        android:id="@+id/tv_work_money"
+                        android:id="@+id/tv_work_cost_money"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:text="¥ 881.5"
-                        android:textColor="@color/theme_red" />
+                        android:textColor="@color/theme_red"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -280,15 +213,9 @@
 
                     <LinearLayout
                         android:id="@+id/ll_work_name"
-                        style="@style/linearLayout_one_weitght">
+                        style="@style/linearLayout_one_weitght"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/textview_background"
-                            android:gravity="center"
-                            android:text="品名"
-                            android:textColor="@color/text_color" />
                     </LinearLayout>
 
                     <HorizontalScrollView
@@ -297,75 +224,11 @@
                         android:scrollbars="none">
 
                         <LinearLayout
+                            android:id="@+id/ll_work_cost"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/textview_background">
+                            android:orientation="vertical" />
 
-                            <LinearLayout
-                                android:id="@+id/ll_work_amount"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="件数"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_work_cost_single"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="单件工费"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_work_extern_cost"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="超额工费"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_work_start_cost"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="起版费"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_work_sum_money"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="金额"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-                        </LinearLayout>
                     </HorizontalScrollView>
 
                 </LinearLayout>
@@ -422,16 +285,11 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/tv_other_cost_name"
-                        style="@style/linearLayout_one_weitght">
+                        android:id="@+id/ll_other_cost_name"
+                        style="@style/linearLayout_one_weitght"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/textview_background"
-                            android:gravity="center"
-                            android:text="品名"
-                            android:textColor="@color/text_color" />
+
                     </LinearLayout>
 
                     <HorizontalScrollView
@@ -440,76 +298,10 @@
                         android:scrollbars="none">
 
                         <LinearLayout
+                            android:id="@+id/ll_other_work_cost"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/textview_background">
-
-                            <LinearLayout
-                                android:id="@+id/ll_other_work_cost_amount"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:id="@+id/textView"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="数量"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_other_work_cost"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="工费"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_other_work_cost_null"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text=""
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_other_work_cost_null2"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text=""
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_other_work_cost_money"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="金额"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-                        </LinearLayout>
+                            android:orientation="vertical" />
                     </HorizontalScrollView>
 
                 </LinearLayout>
@@ -535,7 +327,7 @@
 
 
                     <TextView
-                        android:id="@+id/tv_delivery_item_name"
+                        android:id="@+id/tv_stone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/tv_delivery_item_number"
@@ -567,15 +359,10 @@
 
                     <LinearLayout
                         android:id="@+id/ll_stone_product_name"
-                        style="@style/linearLayout_one_weitght">
+                        style="@style/linearLayout_one_weitght"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/textview_background"
-                            android:gravity="center"
-                            android:text="品名"
-                            android:textColor="@color/text_color" />
+
                     </LinearLayout>
 
                     <HorizontalScrollView
@@ -584,90 +371,10 @@
                         android:scrollbars="none">
 
                         <LinearLayout
+                            android:id="@+id/ll_stone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/textview_background">
-
-                            <LinearLayout
-                                android:id="@+id/ll_stone_resource"
-                                android:layout_width="160dp"
-                                android:layout_height="wrap_content">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="来源"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_stone_number"
-                                android:layout_width="160dp"
-                                android:layout_height="wrap_content">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="编号"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_stone_money"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="金额"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_stone_amount"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="数量"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_stone_weight"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="重量"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/ll_stone_price"
-                                style="@style/linearLayout_one_weitght">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/textview_background"
-                                    android:gravity="center"
-                                    android:text="单价"
-                                    android:textColor="@color/text_color" />
-                            </LinearLayout>
-                        </LinearLayout>
+                            android:orientation="vertical" />
                     </HorizontalScrollView>
 
                 </LinearLayout>
@@ -692,17 +399,18 @@
 
                 <TextView
                     android:id="@+id/tv_amount"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:text="2件"
                     android:textColor="@color/text_color" />
             </RelativeLayout>
+
             <RelativeLayout
                 style="@style/padding_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp">
+                android:paddingTop="4dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -712,17 +420,19 @@
 
                 <TextView
                     android:id="@+id/tv_money"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:text="¥18880.0"
                     android:textColor="@color/theme_red" />
             </RelativeLayout>
+
             <RelativeLayout
                 style="@style/padding_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp">
+                android:layout_marginBottom="16dp"
+                android:paddingTop="4dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -732,9 +442,9 @@
 
                 <TextView
                     android:id="@+id/tv_member"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:text="田"
                     android:textColor="@color/text_color" />
             </RelativeLayout>

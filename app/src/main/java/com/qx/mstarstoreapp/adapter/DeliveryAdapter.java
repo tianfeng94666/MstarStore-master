@@ -4,13 +4,16 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.json.DeliveryTableResult;
+import com.qx.mstarstoreapp.net.ImageLoadOptions;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,9 +24,9 @@ import butterknife.ButterKnife;
 
 public class DeliveryAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<Boolean> list;
+    private List<DeliveryTableResult.DataBean.ModelListBean> list;
 
-    public DeliveryAdapter(Context context, ArrayList<Boolean> list) {
+    public DeliveryAdapter(Context context, List<DeliveryTableResult.DataBean.ModelListBean> list) {
         this.context = context;
         this.list = list;
     }
@@ -46,40 +49,50 @@ public class DeliveryAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder = null;
+        final DeliveryTableResult.DataBean.ModelListBean bean = list.get(i);
         if (view == null) {
             view = View.inflate(context, R.layout.item_delivery_product, null);
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
-        }else {
+        } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
+        viewHolder.tvDeliveryItemNumber.setText(i+1 + "");
+        viewHolder.tvDeliveryItemName.setText(bean.getTypeName() + " " + bean.getModelNum());
+        viewHolder.tvDeliveryItemCost.setText("成本：" + bean.getUnitPrice());
+        ImageLoader.getInstance().displayImage(bean.getPic(), viewHolder.ivProduct, ImageLoadOptions.getOptions());
+        viewHolder.tvDeliveryItemLess.setText(bean.getSInfo());
+        viewHolder.tvDeliveryItemLess2.setText(bean.getSInfo());
+        viewHolder.tvDeliveryItemProductInf.setText(bean.getDInfo());
+        viewHolder.tvDeliveryItemRemark.setText(bean.getRemark());
         final ViewHolder finalViewHolder = viewHolder;
-        viewHolder.ibDeliveryDetail.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ivDeliveryDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(list.get(i)){
+                bean.setChoose(!bean.isChoose());
+                if(!bean.isChoose()){
                     finalViewHolder.llPriductMore.setVisibility(View.GONE);
                     finalViewHolder.tvDeliveryItemLess.setVisibility(View.VISIBLE);
-                    finalViewHolder.ibDeliveryDetail.setImageResource(R.drawable.common_filter_arrow_down);
-                    list.set(i,!list.get(i));
+                    finalViewHolder.ivDeliveryDetail.setImageResource(R.drawable.icon_fliter_down);
                 }else {
                     finalViewHolder.llPriductMore.setVisibility(View.VISIBLE);
                     finalViewHolder.tvDeliveryItemLess.setVisibility(View.GONE);
-                    list.set(i,!list.get(i));
-                    finalViewHolder.ibDeliveryDetail.setImageResource(R.drawable.common_filter_arrow_up);
+                    finalViewHolder.ivDeliveryDetail.setImageResource(R.drawable.icon_fliter_up);
                 }
             }
         });
+
         return view;
     }
 
 
 
-    class ViewHolder {
+
+     class ViewHolder {
         @Bind(R.id.tv_delivery_item_number)
         TextView tvDeliveryItemNumber;
-        @Bind(R.id.tv_delivery_item_name)
+        @Bind(R.id.tv_stone)
         TextView tvDeliveryItemName;
         @Bind(R.id.tv_delivery_item_cost_tv)
         TextView tvDeliveryItemCostTv;
@@ -94,10 +107,17 @@ public class DeliveryAdapter extends BaseAdapter {
         @Bind(R.id.tv_delivery_item_less)
         TextView tvDeliveryItemLess;
         @Bind(R.id.ib_delivery_detail)
-        ImageButton ibDeliveryDetail;
+        ImageView ivDeliveryDetail;
+        @Bind(R.id.tv_delivery_item_less2)
+        TextView tvDeliveryItemLess2;
+        @Bind(R.id.iv_product)
+        ImageView ivProduct;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
+
+
 }
