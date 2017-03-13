@@ -329,7 +329,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         mCustomGridView.setAdapter(mGvAdapter);
 
         badge = new BadgeView(OrderActivity.this, idTvCurOrder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
-        //remind(1,badge,true);
+        //remind(1,badge1,true);
 
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override

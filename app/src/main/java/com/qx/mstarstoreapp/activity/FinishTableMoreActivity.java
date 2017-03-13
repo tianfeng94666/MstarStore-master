@@ -163,6 +163,7 @@ public class FinishTableMoreActivity extends BaseActivity {
     }
 
     private void initView() {
+
         //材料列表
         FinishTableMoreResult.DataBean.RecMaterialsBean recMaterialsBean = finishTableMoreResult.getData().getRecMaterials();
         List<FinishTableMoreResult.DataBean.RecMaterialsBean.ListBean> materialList = recMaterialsBean.getList();
@@ -268,6 +269,9 @@ public class FinishTableMoreActivity extends BaseActivity {
      * @param textColor
      */
     private void setStoneLl(LinearLayout ll, FinishTableMoreResult.DataBean.RecStonesBean.ListBeanXXX bean, int textBackgroundColor, int textColor) {
+        if(UIUtils.isTabletDevice(this)){
+            ll.addView(setText2(bean.getStoneTypeName(), textColor, textBackgroundColor));
+        }
         ll.addView(setText2(bean.getComeFrom(), textColor, textBackgroundColor));
         ll.addView(setText2(bean.getRecSStoneSN(), textColor, textBackgroundColor));
         ll.addView(setText(bean.getRecSMoney(), textColor, textBackgroundColor));
@@ -285,6 +289,9 @@ public class FinishTableMoreActivity extends BaseActivity {
      * @param textColor
      */
     private void setOtherWrokCostLl(LinearLayout ll, FinishTableMoreResult.DataBean.RecOtherProcessExpensesesBean.ListBeanX bean, int textBackgroundColor, int textColor) {
+        if(UIUtils.isTabletDevice(this)){
+            ll.addView(setText2(bean.getEnChase(), textColor, textBackgroundColor));
+        }
         ll.addView(setText(bean.getRecOQuantity(), textColor, textBackgroundColor));
         ll.addView(setText(bean.getRecOUPrice(), textColor, textBackgroundColor));
         ll.addView(setText("", textColor, textBackgroundColor));
@@ -301,6 +308,9 @@ public class FinishTableMoreActivity extends BaseActivity {
      * @param textColor
      */
     private void setWrokCostLl(LinearLayout ll, FinishTableMoreResult.DataBean.RecProcessExpensesesBean.ListBeanXX bean, int textBackgroundColor, int textColor) {
+        if(UIUtils.isTabletDevice(this)){
+            ll.addView(setText2(bean.getTypeName(), textColor, textBackgroundColor));
+        }
         ll.addView(setText(bean.getRecPQuantity(), textColor, textBackgroundColor));
         ll.addView(setText(bean.getRecPUPrice(), textColor, textBackgroundColor));
         ll.addView(setText(bean.getRecPFeeAddTotal(), textColor, textBackgroundColor));
@@ -315,6 +325,9 @@ public class FinishTableMoreActivity extends BaseActivity {
      * @param bean
      */
     private void setMaterialLl(LinearLayout ll, FinishTableMoreResult.DataBean.RecMaterialsBean.ListBean bean, int textBackgroundColor, int textColor) {
+        if(UIUtils.isTabletDevice(this)){
+            ll.addView(setText2(bean.getTypeName(), textColor, textBackgroundColor));
+        }
         ll.addView(setText(bean.getRecMWeight(), textColor, textBackgroundColor));
         ll.addView(setText(bean.getRecMRatio(), textColor, textBackgroundColor));
         ll.addView(setText(bean.getRecGoldPrice(), textColor, textBackgroundColor));
@@ -333,7 +346,13 @@ public class FinishTableMoreActivity extends BaseActivity {
     private TextView setText(String st, int textcolor, int bgcolor) {
         TextView tv = new TextView(this);
         tv.setText(st);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(UIUtils.dip2px(80), ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params;
+        if(UIUtils.isTabletDevice(this)){
+            params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT,1);
+        }else {
+           params = new LinearLayout.LayoutParams(UIUtils.dip2px(80), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
         tv.setTextColor(getResources().getColor(textcolor));
         tv.setBackgroundResource(bgcolor);
         tv.setLayoutParams(params);
@@ -345,7 +364,12 @@ public class FinishTableMoreActivity extends BaseActivity {
     private TextView setText2(String st, int textcolor, int bgcolor) {
         TextView tv = new TextView(this);
         tv.setText(st);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(UIUtils.dip2px(160), ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params;
+        if(UIUtils.isTabletDevice(this)){
+            params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT,2);
+        }else {
+            params = new LinearLayout.LayoutParams(UIUtils.dip2px(160), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
         tv.setTextColor(getResources().getColor(textcolor));
         tv.setBackgroundResource(bgcolor);
         tv.setLayoutParams(params);

@@ -1,7 +1,10 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +47,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_1);
         ButterKnife.bind(this);
+        isNeedUpdate();
         getBackIntent();
         String token=BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
         if(!StringUtils.isEmpty(token)){
@@ -83,6 +87,20 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void isNeedUpdate() {
+        System.out.println("verCode ="+getVerCode(this)+"");
+    }
+    public  int getVerCode(Context context) {
+        int verCode = -1;
+        try {
+            verCode = context.getPackageManager().getPackageInfo(
+                    "com.qx.mstarstoreapp", 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("tage", e.getMessage());
+        }
+        return verCode;
     }
 
     /*得到没登陆前的实例*/

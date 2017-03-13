@@ -2,6 +2,7 @@ package com.qx.mstarstoreapp.utils;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -185,6 +186,16 @@ public class UIUtils {
 		} else {
 			post(runnable);
 		}
+	}
+
+	/**
+	 * 判断是否平板设备
+	 * @param context
+	 * @return true:平板,false:手机
+	 */
+	public static boolean isTabletDevice(Context context) {
+		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
+				Configuration.SCREENLAYOUT_SIZE_LARGE;
 	}
 }
 

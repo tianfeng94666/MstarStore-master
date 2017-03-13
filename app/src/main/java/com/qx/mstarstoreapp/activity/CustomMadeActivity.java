@@ -30,11 +30,11 @@ import butterknife.ButterKnife;
  * @version    成品订单
  *
  */
-public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener,FragOrderListFragment.OnOderNumberChange {
+public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, FragOrderListFragment.OnOderNumberChange {
 
     IndicatorView indicatorView;
     ViewPager viewPager;
-    public  List<FragOrderListFragment> fragmentList = new ArrayList<>();
+    public List<FragOrderListFragment> fragmentList = new ArrayList<>();
     private static int SCREENWIDTH;
     List<TextView> tabTextViews = new ArrayList<>();
 
@@ -64,17 +64,19 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     public void onBack(View view) {
         finish();
     }
-    BadgeView  badge,badge1,badge2,badge3;
-    static  List<BadgeView> list=new ArrayList<>();
+
+    BadgeView badge1, badge2, badge3, badge4;
+    static List<BadgeView> list = new ArrayList<>();
+
     protected void initView() {
         titleText.setText("成品订单");
         checkingFrament = new FragOrderListFragment(1);
         fragmentList.add(checkingFrament);
-         productingFragment = new FragOrderListFragment(2);
+        productingFragment = new FragOrderListFragment(2);
         fragmentList.add(productingFragment);
-         sendingFragment = new FragOrderListFragment(3);
+        sendingFragment = new FragOrderListFragment(3);
         fragmentList.add(sendingFragment);
-         finishedFragment = new FragOrderListFragment(4);
+        finishedFragment = new FragOrderListFragment(4);
         fragmentList.add(finishedFragment);
         for (FragOrderListFragment f : fragmentList) {
             f.setOnOderNumberChange(this);
@@ -83,29 +85,26 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         SCREENWIDTH = getScreenWidth();
         indicatorView = (IndicatorView) findViewById(R.id.id_indicatorview);
         viewPager = (ViewPager) findViewById(R.id.order_viewpager);
-        TextView  tab = (TextView) findViewById(R.id.tab);
-        TextView  tab1 = (TextView) findViewById(R.id.tab1);
-        TextView  tab2 = (TextView) findViewById(R.id.tab2);
-        TextView  tab3 = (TextView) findViewById(R.id.tab3);
+        TextView tab = (TextView) findViewById(R.id.tab);
+        TextView tab1 = (TextView) findViewById(R.id.tab1);
+        TextView tab2 = (TextView) findViewById(R.id.tab2);
+        TextView tab3 = (TextView) findViewById(R.id.tab3);
 
-        TextView  tv = (TextView) findViewById(R.id.tv);
-        TextView  tv1 = (TextView) findViewById(R.id.tv1);
-        TextView  tv2 = (TextView) findViewById(R.id.tv2);
-        TextView  tv3 = (TextView) findViewById(R.id.tv3);
+        TextView tv = (TextView) findViewById(R.id.tv);
+        TextView tv1 = (TextView) findViewById(R.id.tv1);
+        TextView tv2 = (TextView) findViewById(R.id.tv2);
+        TextView tv3 = (TextView) findViewById(R.id.tv3);
 
         FrameLayout id_fl_tab = (FrameLayout) findViewById(R.id.id_fr);
         FrameLayout id_fl_tab1 = (FrameLayout) findViewById(R.id.id_fr1);
         FrameLayout id_fl_tab2 = (FrameLayout) findViewById(R.id.id_fr2);
         FrameLayout id_fl_tab3 = (FrameLayout) findViewById(R.id.id_fr3);
 
-        badge = new BadgeView(CustomMadeActivity.this, tab);// 创建一个BadgeView对象，view为你需要显示提醒的控件
-        badge1 = new BadgeView(CustomMadeActivity.this, tab1);// 创建一个BadgeView对象，view为你需要显示提醒的控件
-        badge2 = new BadgeView(CustomMadeActivity.this, tab2);// 创建一个BadgeView对象，view为你需要显示提醒的控件
-        badge3 = new BadgeView(CustomMadeActivity.this, tab3);// 创建一个BadgeView对象，view为你需要显示提醒的控件
-//        remind(102, badge, true);
-//        remind(2, badge1, true);
-//        remind(2, badge2, true);
-//        remind(2, badge3, true);
+        badge1 = new BadgeView(CustomMadeActivity.this, tab);// 创建一个BadgeView对象，view为你需要显示提醒的控件
+        badge2 = new BadgeView(CustomMadeActivity.this, tab1);// 创建一个BadgeView对象，view为你需要显示提醒的控件
+        badge3 = new BadgeView(CustomMadeActivity.this, tab2);// 创建一个BadgeView对象，view为你需要显示提醒的控件
+        badge4 = new BadgeView(CustomMadeActivity.this, tab3);// 创建一个BadgeView对象，view为你需要显示提醒的控件
+
 
         tabTextViews.add(tv);
         tabTextViews.add(tv1);
@@ -118,16 +117,17 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         CommentListPagerAdapter adapter = new CommentListPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOnPageChangeListener(this);
+        viewPager.setOffscreenPageLimit(2);
 
         //显示第几个Fragment
-        int pagerNumber=getIntent().getIntExtra("pageNumber",0);
+        int pagerNumber = getIntent().getIntExtra("pageNumber", 0);
         viewPager.setCurrentItem(pagerNumber);
     }
 
 
-
     private static void remind(int count, BadgeView badge, boolean isVisible) {
         //BadgeView的具体使用
+        System.out.println("count="+count+",badge="+badge);
         badge.setText(count + ""); // 需要显示的提醒类容
         badge.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);// 显示的位置.右上角,BadgeView.POSITION_BOTTOM_LEFT,下左，还有其他几个属性
         badge.setTextColor(Color.WHITE); // 文本颜色
@@ -161,7 +161,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
 
     public void setTxtColor(TextView textView) {
         for (int i = 0; i < tabTextViews.size(); i++) {
-           tabTextViews.get(i).setTextColor(getResources().getColor(R.color.text_color2));
+            tabTextViews.get(i).setTextColor(getResources().getColor(R.color.text_color2));
         }
         textView.setTextColor(getResources().getColor(R.color.theme_red));
     }
@@ -192,20 +192,39 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     @Override
-    public void onFragOrderCount(int payNum) {
-        if (payNum!=0){
+    public void  onFragOrderCount(int payNum, int type) {
+        System.out.println("payNum="+payNum+",type="+type);
+        switch (type) {
+            case 1:
+                setBadge(payNum, badge1);
+                break;
+            case 2:
+                setBadge(payNum, badge2);
+                break;
+            case 3:
+                setBadge(payNum, badge3);
+                break;
+            case 4:
+                setBadge(payNum, badge4);
+                break;
+        }
+
+    }
+
+    public void setBadge(int payNum, BadgeView badge) {
+        if (payNum != 0) {
             remind(Integer.valueOf(payNum), badge, true);
-        }else {
+        } else {
             remind(Integer.valueOf(payNum), badge, false);
         }
     }
 
     @Override
     public void onFragProduCount(int deliverNum) {
-        if (deliverNum!=0){
-            remind(Integer.valueOf(deliverNum), badge1, true);
-        }else {
-            remind(Integer.valueOf(deliverNum), badge1, false);
+        if (deliverNum != 0) {
+            remind(Integer.valueOf(deliverNum), badge2, true);
+        } else {
+            remind(Integer.valueOf(deliverNum), badge2, false);
         }
     }
 

@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.qx.mstarstoreapp">
+    package="com.qx.mstarstoreapp"
+    android:versionName="1.0.0"
+    android:versionCode="1">
 
     <!-- 增加访问网络的权限 -->
 
-    <uses-permission android:name="android.permission.READ_SMS"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- 增加文件存储和访问摄像头的权限 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!--扫描二维码-->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true"
-        android:xlargeScreens="true"/>
+        android:xlargeScreens="true" />
 
 
     <application
@@ -55,16 +57,15 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/SplashTheme"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            >
+            android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!--android:launchMode="singleTask"-->
@@ -74,190 +75,162 @@
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.RegisterActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.UpdatePassWordActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CustomMadeActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <!--弹出软键盘不会顶起底部-->
         <activity
             android:name=".activity.ConfirmOrderActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.CustommadeInformationActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.EndProducActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SelectCityActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddAddressActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ModifyDataActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddressListActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UpdatePhoneNumber"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <!--弹出软键盘顶起底部-->
         <activity
             android:name=".activity.StyleInfromationActivity"
             android:alwaysRetainTaskState="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.ClassifyActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.CustomersListActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name="zxing.activity.CaptureActivity"
             android:alwaysRetainTaskState="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
-            />
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
 
         <activity
             android:name=".activity.ShopingAddressActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.ModeOfPaymentActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.PaySuccessActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.ProductionListActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.ReceiptActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".activity.ImageBrowserActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".activity.FrogetPwdActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.DeliveryTableActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.FinishTableMoreActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.DownloadActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.FinishTableLessActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>

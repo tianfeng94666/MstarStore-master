@@ -67,7 +67,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private final int PRODUCTING_CODE = 2;
     private final int SENDING_CODE = 3;
     private final int FINISHED_CODE = 4;
-    private List<SendingResult.DataBean.OrderListBean> sendinglist;
+    private List<SendingResult.DataBean.OrderListBean> sendinglist =new ArrayList<>();
     private String tokenKey;
     private ListView listView;
 
@@ -220,34 +220,46 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 //已发货
                 SendingResult sendingResult;
                 SendingResult.DataBean.OrderListBean orderListBean = null;
-                sendinglist = null;
+
                 if (error.equals("0")) {
                     switch (fragType) {
                         case CHECKING_CODE:
+                            orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
+                            orderList = orderWaitResult.getData().getOrderList();
+                            list = orderList.getList();
+                            if(list!=null){
+                                listCount = Integer.valueOf(orderList.getList_count());
+                                setBadge(listCount,1);
+                            }
+                            break;
                         case PRODUCTING_CODE:
                             orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
                             orderList = orderWaitResult.getData().getOrderList();
                             list = orderList.getList();
-                            onOderNumberChange.onFragOrderCount(listCount);
+                            if(list!=null){
+                                listCount = Integer.valueOf(orderList.getList_count());
+                                System.out.println("listCount="+listCount+",type=2");
+                                setBadge(listCount,2);
+                            }
                             break;
                         case SENDING_CODE:
                             sendingResult = new Gson().fromJson(result, SendingResult.class);
-                            sendinglist = sendingResult.getData().getOrderList();
+                            if(sendingResult.getData()!=null){
+                                List<SendingResult.DataBean.OrderListBean> templist = sendingResult.getData().getOrderList();
+                                sendinglist.addAll(templist);
+                            }else {
+                                break;
+                            }
                             onOderNumberChange.onFragProduCount(listCount);
                             adapter = new SendingListAdater(getActivity(), sendinglist);
                             listView.setAdapter(adapter);
+                            if(sendinglist!=null){
+                                listCount = Integer.valueOf(sendingResult.getData().getList_count());
+                                setBadge(listCount,3);
+                            }
                             break;
                     }
 
-                    if (cpage == 1) {
-                        if (fragType == CHECKING_CODE || fragType == PRODUCTING_CODE) {
-                            listCount = Integer.valueOf(orderList.getList_count());
-                        } else if (fragType == SENDING_CODE) {
-                            listCount = Integer.valueOf(sendinglist.size());
-                        }
-
-                        L.e("fragType " + fragType + "listCount " + listCount);
-                    }
                     if (pullStatus != PULL_LOAD) {
                         listData.clear();
                     }
@@ -255,6 +267,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                         listData.addAll(list);
                     }
                     endNetRequest();
+
                 } else if (error.equals("2")) {
                     loginToServer(CustomMadeActivity.class);
                 } else {
@@ -271,10 +284,26 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         });
     }
 
+    private void setBadge(int count,int fragType) {
+        if (cpage == 1) {
+            switch (fragType) {
+                case CHECKING_CODE:
+                    onOderNumberChange.onFragOrderCount(count,1);
+                    break;
+                case PRODUCTING_CODE:
+                    onOderNumberChange.onFragOrderCount(count,2);
+                    break;
+                case SENDING_CODE:
+                    onOderNumberChange.onFragOrderCount(count,3);
+                    break;
+            }
+        }
+    }
+
     OnOderNumberChange onOderNumberChange;
 
     public interface OnOderNumberChange {
-        void onFragOrderCount(int payNum);
+        void onFragOrderCount(int payNum,int type);
 
         void onFragProduCount(int deliverNum);
     }
@@ -285,7 +314,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
 
     public void endNetRequest() {
-        adapter.notifyDataSetChanged();
+        if(adapter!=null){
+            adapter.notifyDataSetChanged();
+        }
         tempCurpage = cpage;
         if (pullStatus == PULL_LOAD) {
             oullRefreshView.onFooterRefreshComplete();

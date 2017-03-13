@@ -58,7 +58,7 @@ public class DeliveryAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.tvDeliveryItemNumber.setText(i+1 + "");
+        viewHolder.tvDeliveryItemNumber.setText(i + 1 + "");
         viewHolder.tvDeliveryItemName.setText(bean.getTypeName() + " " + bean.getModelNum());
         viewHolder.tvDeliveryItemCost.setText("成本：" + bean.getUnitPrice());
         ImageLoader.getInstance().displayImage(bean.getPic(), viewHolder.ivProduct, ImageLoadOptions.getOptions());
@@ -67,15 +67,15 @@ public class DeliveryAdapter extends BaseAdapter {
         viewHolder.tvDeliveryItemProductInf.setText(bean.getDInfo());
         viewHolder.tvDeliveryItemRemark.setText(bean.getRemark());
         final ViewHolder finalViewHolder = viewHolder;
-        viewHolder.ivDeliveryDetail.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llItemDelivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bean.setChoose(!bean.isChoose());
-                if(!bean.isChoose()){
+                if (!bean.isChoose()) {
                     finalViewHolder.llPriductMore.setVisibility(View.GONE);
                     finalViewHolder.tvDeliveryItemLess.setVisibility(View.VISIBLE);
                     finalViewHolder.ivDeliveryDetail.setImageResource(R.drawable.icon_fliter_down);
-                }else {
+                } else {
                     finalViewHolder.llPriductMore.setVisibility(View.VISIBLE);
                     finalViewHolder.tvDeliveryItemLess.setVisibility(View.GONE);
                     finalViewHolder.ivDeliveryDetail.setImageResource(R.drawable.icon_fliter_up);
@@ -85,8 +85,6 @@ public class DeliveryAdapter extends BaseAdapter {
 
         return view;
     }
-
-
 
 
      class ViewHolder {
@@ -112,6 +110,8 @@ public class DeliveryAdapter extends BaseAdapter {
         TextView tvDeliveryItemLess2;
         @Bind(R.id.iv_product)
         ImageView ivProduct;
+        @Bind(R.id.ll_item_delivery)
+        LinearLayout llItemDelivery;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

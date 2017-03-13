@@ -147,7 +147,7 @@ public class ProgressDialog {
             helper.setText(R.id.product_price,item.getNumber()+"");
             helper.setImageByUrl(R.id.product_img,item.getPic());
             linearlayout.removeAllViews();
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,UIUtils.dip2px(10));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             lp.setMargins(10,10,10,10);
             List<ProgressResult.DataEntity.OrderlListEntity.ProgressEntity> progressList=null;
             if (item!=null){

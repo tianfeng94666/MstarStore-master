@@ -7,24 +7,25 @@ import java.util.List;
  */
 
 public class DeliveryTableResult {
+
     /**
-     * response :
+     * data : {"moItem":{"customerName":"世爵百年KD3999-BJ","goldPrice":225.4,"moDate":"2017-03-12 15:51:06","moNum":1703120051,"number":4,"orderNum":"AP170302298","purityName":"PT950","totalPrice":2924.03},"modelList":[{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"Y07326-10","pic":"http://124.172.169.117:9888/220X220/Module/Image1/90/Y07326-10.jpg","remark":"备注:","sInfo":"手寸:13  毛重:2.87 净金重:2.85 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.1;金额:0.00"],"typeName":"女戒","unitPrice":755.05},{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"Y07326-10","pic":"http://124.172.169.117:9888/220X220/Module/Image1/90/Y07326-10.jpg","remark":"备注:","sInfo":"手寸:9  毛重:2.70 净金重:2.68 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.1;金额:0.00"],"typeName":"女戒","unitPrice":712.52},{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"A43367","pic":"http://124.172.169.117:9888/220X220/Module/Image1/6/A43367.JPG","remark":"备注:","sInfo":"手寸:14  毛重:2.52 净金重:2.48 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.177;金额:0.00"],"typeName":"女戒","unitPrice":663.63},{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"A32155","pic":"http://124.172.169.117:9888/220X220/Module/Image1/9/A32155.jpg","remark":"备注:","sInfo":"手寸:10  毛重:3.03 净金重:3.00 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.145;金额:0.00"],"typeName":"女戒","unitPrice":792.83}]}
      * error : 0
      * message :
-     * data : {"moItem":{"moNum":1702220025,"orderNum":"AP170216110","purityName":"Au750白","goldPrice":208.1,"number":1,"moDate":"2017-02-22 17:21:48","customerName":"世爵百年KD3767-ZZ","totalPrice":612.63},"modelList":[{"modelNum":"QY0134-30","typeName":"女戒","unitPrice":612.63,"pic":"http://124.172.169.117:9888/220X220/Module/Image1/2/QY0134-30.jpg","sInfo":"手寸:11 毛重:2.61 净金重:2.5496 损耗:1.1","dInfo":"基本费用:29 附加费用:0 其他费用:0 起版费:0 单价成本:612.63","remark":"备注:"}]}
+     * response :
      */
 
-    private String response;
+    private DataBean data;
     private int error;
     private String message;
-    private DataBean data;
+    private String response;
 
-    public String getResponse() {
-        return response;
+    public DataBean getData() {
+        return data;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setData(DataBean data) {
+        this.data = data;
     }
 
     public int getError() {
@@ -43,18 +44,18 @@ public class DeliveryTableResult {
         this.message = message;
     }
 
-    public DataBean getData() {
-        return data;
+    public String getResponse() {
+        return response;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setResponse(String response) {
+        this.response = response;
     }
 
     public static class DataBean {
         /**
-         * moItem : {"moNum":1702220025,"orderNum":"AP170216110","purityName":"Au750白","goldPrice":208.1,"number":1,"moDate":"2017-02-22 17:21:48","customerName":"世爵百年KD3767-ZZ","totalPrice":612.63}
-         * modelList : [{"modelNum":"QY0134-30","typeName":"女戒","unitPrice":612.63,"pic":"http://124.172.169.117:9888/220X220/Module/Image1/2/QY0134-30.jpg","sInfo":"手寸:11 毛重:2.61 净金重:2.5496 损耗:1.1","dInfo":"基本费用:29 附加费用:0 其他费用:0 起版费:0 单价成本:612.63","remark":"备注:"}]
+         * moItem : {"customerName":"世爵百年KD3999-BJ","goldPrice":225.4,"moDate":"2017-03-12 15:51:06","moNum":1703120051,"number":4,"orderNum":"AP170302298","purityName":"PT950","totalPrice":2924.03}
+         * modelList : [{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"Y07326-10","pic":"http://124.172.169.117:9888/220X220/Module/Image1/90/Y07326-10.jpg","remark":"备注:","sInfo":"手寸:13  毛重:2.87 净金重:2.85 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.1;金额:0.00"],"typeName":"女戒","unitPrice":755.05},{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"Y07326-10","pic":"http://124.172.169.117:9888/220X220/Module/Image1/90/Y07326-10.jpg","remark":"备注:","sInfo":"手寸:9  毛重:2.70 净金重:2.68 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.1;金额:0.00"],"typeName":"女戒","unitPrice":712.52},{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"A43367","pic":"http://124.172.169.117:9888/220X220/Module/Image1/6/A43367.JPG","remark":"备注:","sInfo":"手寸:14  毛重:2.52 净金重:2.48 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.177;金额:0.00"],"typeName":"女戒","unitPrice":663.63},{"dInfo":"基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00","modelNum":"A32155","pic":"http://124.172.169.117:9888/220X220/Module/Image1/9/A32155.jpg","remark":"备注:","sInfo":"手寸:10  毛重:3.03 净金重:3.00 损耗:1.11","stInfo":["[主石]石号:SKL0302;数量:1;重量:0.145;金额:0.00"],"typeName":"女戒","unitPrice":792.83}]
          */
 
         private MoItemBean moItem;
@@ -78,24 +79,48 @@ public class DeliveryTableResult {
 
         public static class MoItemBean {
             /**
-             * moNum : 1702220025
-             * orderNum : AP170216110
-             * purityName : Au750白
-             * goldPrice : 208.1
-             * number : 1
-             * moDate : 2017-02-22 17:21:48
-             * customerName : 世爵百年KD3767-ZZ
-             * totalPrice : 612.63
+             * customerName : 世爵百年KD3999-BJ
+             * goldPrice : 225.4
+             * moDate : 2017-03-12 15:51:06
+             * moNum : 1703120051
+             * number : 4
+             * orderNum : AP170302298
+             * purityName : PT950
+             * totalPrice : 2924.03
              */
 
+            private String customerName;
+            private double goldPrice;
+            private String moDate;
             private int moNum;
+            private int number;
             private String orderNum;
             private String purityName;
-            private double goldPrice;
-            private int number;
-            private String moDate;
-            private String customerName;
             private double totalPrice;
+
+            public String getCustomerName() {
+                return customerName;
+            }
+
+            public void setCustomerName(String customerName) {
+                this.customerName = customerName;
+            }
+
+            public double getGoldPrice() {
+                return goldPrice;
+            }
+
+            public void setGoldPrice(double goldPrice) {
+                this.goldPrice = goldPrice;
+            }
+
+            public String getMoDate() {
+                return moDate;
+            }
+
+            public void setMoDate(String moDate) {
+                this.moDate = moDate;
+            }
 
             public int getMoNum() {
                 return moNum;
@@ -103,6 +128,14 @@ public class DeliveryTableResult {
 
             public void setMoNum(int moNum) {
                 this.moNum = moNum;
+            }
+
+            public int getNumber() {
+                return number;
+            }
+
+            public void setNumber(int number) {
+                this.number = number;
             }
 
             public String getOrderNum() {
@@ -121,38 +154,6 @@ public class DeliveryTableResult {
                 this.purityName = purityName;
             }
 
-            public double getGoldPrice() {
-                return goldPrice;
-            }
-
-            public void setGoldPrice(double goldPrice) {
-                this.goldPrice = goldPrice;
-            }
-
-            public int getNumber() {
-                return number;
-            }
-
-            public void setNumber(int number) {
-                this.number = number;
-            }
-
-            public String getMoDate() {
-                return moDate;
-            }
-
-            public void setMoDate(String moDate) {
-                this.moDate = moDate;
-            }
-
-            public String getCustomerName() {
-                return customerName;
-            }
-
-            public void setCustomerName(String customerName) {
-                this.customerName = customerName;
-            }
-
             public double getTotalPrice() {
                 return totalPrice;
             }
@@ -164,22 +165,24 @@ public class DeliveryTableResult {
 
         public static class ModelListBean {
             /**
-             * modelNum : QY0134-30
-             * typeName : 女戒
-             * unitPrice : 612.63
-             * pic : http://124.172.169.117:9888/220X220/Module/Image1/2/QY0134-30.jpg
-             * sInfo : 手寸:11 毛重:2.61 净金重:2.5496 损耗:1.1
-             * dInfo : 基本费用:29 附加费用:0 其他费用:0 起版费:0 单价成本:612.63
+             * dInfo : 基本费用:42.00 附加费用:0.00 其他费用:0.00 起版费:0.00
+             * modelNum : Y07326-10
+             * pic : http://124.172.169.117:9888/220X220/Module/Image1/90/Y07326-10.jpg
              * remark : 备注:
+             * sInfo : 手寸:13  毛重:2.87 净金重:2.85 损耗:1.11
+             * stInfo : ["[主石]石号:SKL0302;数量:1;重量:0.1;金额:0.00"]
+             * typeName : 女戒
+             * unitPrice : 755.05
              */
 
+            private String dInfo;
             private String modelNum;
+            private String pic;
+            private String remark;
+            private String sInfo;
             private String typeName;
             private double unitPrice;
-            private String pic;
-            private String sInfo;
-            private String dInfo;
-            private String remark;
+            private List<String> stInfo;
             private boolean isChoose;
 
             public boolean isChoose() {
@@ -189,6 +192,13 @@ public class DeliveryTableResult {
             public void setChoose(boolean choose) {
                 isChoose = choose;
             }
+            public String getDInfo() {
+                return dInfo;
+            }
+
+            public void setDInfo(String dInfo) {
+                this.dInfo = dInfo;
+            }
 
             public String getModelNum() {
                 return modelNum;
@@ -196,6 +206,30 @@ public class DeliveryTableResult {
 
             public void setModelNum(String modelNum) {
                 this.modelNum = modelNum;
+            }
+
+            public String getPic() {
+                return pic;
+            }
+
+            public void setPic(String pic) {
+                this.pic = pic;
+            }
+
+            public String getRemark() {
+                return remark;
+            }
+
+            public void setRemark(String remark) {
+                this.remark = remark;
+            }
+
+            public String getSInfo() {
+                return sInfo;
+            }
+
+            public void setSInfo(String sInfo) {
+                this.sInfo = sInfo;
             }
 
             public String getTypeName() {
@@ -214,36 +248,12 @@ public class DeliveryTableResult {
                 this.unitPrice = unitPrice;
             }
 
-            public String getPic() {
-                return pic;
+            public List<String> getStInfo() {
+                return stInfo;
             }
 
-            public void setPic(String pic) {
-                this.pic = pic;
-            }
-
-            public String getSInfo() {
-                return sInfo;
-            }
-
-            public void setSInfo(String sInfo) {
-                this.sInfo = sInfo;
-            }
-
-            public String getDInfo() {
-                return dInfo;
-            }
-
-            public void setDInfo(String dInfo) {
-                this.dInfo = dInfo;
-            }
-
-            public String getRemark() {
-                return remark;
-            }
-
-            public void setRemark(String remark) {
-                this.remark = remark;
+            public void setStInfo(List<String> stInfo) {
+                this.stInfo = stInfo;
             }
         }
     }

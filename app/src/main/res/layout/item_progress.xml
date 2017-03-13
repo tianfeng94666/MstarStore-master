@@ -53,6 +53,7 @@
                         android:id="@+id/product_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:lines="2"
                         android:text="千禧之星裸"
                         android:textColor="@color/black"
@@ -121,18 +122,8 @@
         android:layout_below="@+id/id_view_line"
         android:orientation="vertical"
         android:background="@color/white"
-        android:layout_margin="@dimen/margin15"
-        >
 
-    <!--    <com.qx.mstarstoreapp.dialog.MyProgress
-            android:id="@+id/my_progress"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:max="100"
-            android:progress="40"
-            android:progressDrawable="@drawable/progressbar_color"
-            />-->
+        >
 
     </LinearLayout>
 
