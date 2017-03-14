@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MstarStoreApp</string>
-
+    <string name="app_version">1.0</string>
+    <string name="version">1</string>
 
     <string name="pull_to_refresh_pull_label">下拉刷新</string>
 
@@ -57,4 +58,12 @@
 <a href="https://www.pgyer.com/IGab">网页下载点这里</a></string>
     <string name="ios_download">
 <a href="https://www.pgyer.com/IGab">网页下载点这里</a></string>
+
+    <string name="soft_update_no">已经是最新版本</string>
+    <string name="soft_update_title">软件更新</string>
+    <string name="soft_update_info">检测到新版本，请更新</string>
+    <string name="soft_update_updatebtn">更新</string>
+    <string name="soft_update_later">稍后更新</string>
+    <string name="soft_updating">正在更新</string>
+    <string name="soft_update_cancel">取消</string>
 </resources>

@@ -1,12 +1,19 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,10 +22,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.fragment.HelpFragment;
 import com.qx.mstarstoreapp.fragment.HomeFragment;
 import com.qx.mstarstoreapp.fragment.InfromationFragment;
+import com.qx.mstarstoreapp.json.VersionResult;
+import com.qx.mstarstoreapp.net.VolleyRequestUtils;
+import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 
@@ -41,6 +54,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     ImageView igHome, igInformaction, igHelp;
     TextView tvHome, tvInformaction, tvHelp;
     private int nowId;
+    private String version;
+    private VersionResult versionResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +65,70 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         initView();
         setChioceFragment(0);
+        isNeedUpdate();
+    }
+    private void isNeedUpdate() {
+        String lgUrl = AppURL.URL_CODE_VERSION + "device=" + "android";
+        L.e("netLogin" + lgUrl);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+                     versionResult = new Gson().fromJson(result, VersionResult.class);
+                    version = versionResult.getData().getVersion();
+                    if (!version.equals(R.string.app_version)) {
+                     showNoticeDialog() ;
+                    }
+                } else if (error.equals("2")) {
+
+                } else {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastWhendebug(message);
+                    L.e(message);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+
+
+        });
+
+    }
+    /**
+     * 显示软件更新对话框
+     */
+    private void showNoticeDialog() {
+        // 构造对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.soft_update_title);
+        builder.setMessage(R.string.soft_update_info);
+        // 更新
+        builder.setPositiveButton(R.string.soft_update_updatebtn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionResult.getData().getUrl()));
+                startActivity(intent);
+            }
+        });
+
+        Dialog noticeDialog = builder.create();
+        noticeDialog.setCanceledOnTouchOutside(false);
+        noticeDialog.show();
+    }
+    public int getVerCode(Context context) {
+        int verCode = -1;
+        try {
+            verCode = context.getPackageManager().getPackageInfo(
+                    "com.qx.mstarstoreapp", 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("tage", e.getMessage());
+        }
+        return verCode;
     }
 
     private void initView() {

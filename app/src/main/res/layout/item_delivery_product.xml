@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item_delivery"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-android:id="@+id/ll_item_delivery"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -47,10 +47,10 @@ android:id="@+id/ll_item_delivery"
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
         <LinearLayout
             android:id="@+id/ll_priduct_more"
@@ -61,14 +61,12 @@ android:id="@+id/ll_item_delivery"
 
             <ImageView
                 android:id="@+id/iv_product"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="0.2" />
+                android:layout_width="70dp"
+                android:layout_height="70dp" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.8"
                 android:orientation="vertical"
                 android:paddingLeft="8dp">
 
@@ -80,13 +78,22 @@ android:id="@+id/ll_item_delivery"
                     android:text="手寸：11  毛重：3g  净金重：3.15g 损耗：0.85g"
                     android:textColor="@color/text_color" />
 
-                <TextView
-                    android:id="@+id/tv_delivery_item_product_inf"
+                <LinearLayout
+                    android:id="@+id/ll_stone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="8dp"
-                    android:text="主石 石号：2156  数量：1  重量：1.35  金额：881.5  基本工费：70.0  附加工费：30.0"
-                    android:textColor="@color/text_color" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_delivery_item_product_inf"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="8dp"
+                        android:text="主石 石号：2156  数量：1  重量：1.35  金额：881.5  基本工费：70.0  附加工费：30.0"
+                        android:textColor="@color/text_color" />
+                </LinearLayout>
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -96,8 +103,8 @@ android:id="@+id/ll_item_delivery"
                         android:id="@+id/tv_delivery_item_remark"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
                         android:layout_marginRight="24dp"
+                        android:paddingLeft="8dp"
                         android:text="备注："
                         android:textColor="@color/text_color" />
                 </RelativeLayout>
@@ -108,10 +115,10 @@ android:id="@+id/ll_item_delivery"
         <TextView
             android:id="@+id/tv_delivery_item_less"
             android:layout_width="wrap_content"
-            android:visibility="visible"
             android:layout_height="wrap_content"
             android:text="手寸：11  毛重：3g  净金重：3.15g 损耗：0.85g"
-            android:textColor="@color/text_color" />
+            android:textColor="@color/text_color"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/ib_delivery_detail"

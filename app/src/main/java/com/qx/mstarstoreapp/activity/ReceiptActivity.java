@@ -118,9 +118,9 @@ public class ReceiptActivity extends BaseActivity {
     public void loadNetData(){
         String   url = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
 //        if (INVOICE_TYPE==UPDATE_INVOICE){
-//            url = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
+//            path = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
 //        }if (INVOICE_TYPE==SET_INVOICE){
-//            url = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
+//            path = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
 //        }
         L.e(url);
         // 进行登录请求

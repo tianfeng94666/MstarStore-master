@@ -10,7 +10,7 @@
         android:id="@+id/id_ig_back"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dip"
+        android:layout_marginLeft="16dip"
         android:layout_marginTop="5dip"
         android:layout_marginBottom="5dip"
         android:onClick="onBack"
@@ -25,5 +25,16 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="我是标题栏" />
+    <ImageView
+        android:id="@+id/iv_right"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:padding="10dip"
+        android:src="@drawable/icon_search"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

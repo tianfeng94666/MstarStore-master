@@ -109,12 +109,12 @@ public class VolleyRequestUtils {
 				callBack.onFail(error.toString());
 
 				//使用缓存数据
-//				if(BaseApplication.requestQueue.getCache().get(url)!=null){
-//					callBack.onSuccess(new String(BaseApplication.requestQueue.getCache().get(url).data).toString());
+//				if(BaseApplication.requestQueue.getCache().get(path)!=null){
+//					callBack.onSuccess(new String(BaseApplication.requestQueue.getCache().get(path).data).toString());
 //				}else{
 //					//callBack.onFail(error.toString());
 //				}
-//				callBack.onSuccess(new String(BaseApplication.requestQueue.getCache().get(url).data).toString());
+//				callBack.onSuccess(new String(BaseApplication.requestQueue.getCache().get(path).data).toString());
 			}
 		});
 		jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,

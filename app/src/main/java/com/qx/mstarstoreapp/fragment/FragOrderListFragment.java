@@ -25,6 +25,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.ConfirmOrderActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
 import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
+import com.qx.mstarstoreapp.activity.MainActivity;
 import com.qx.mstarstoreapp.activity.ProductionListActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
@@ -96,6 +97,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         listData = new ArrayList<>();
         switch (fragType) {
             case CHECKING_CODE:
+                adapter = new ListViewAdapter();
+                listView.setAdapter(adapter);
+                break;
             case PRODUCTING_CODE:
                 adapter = new ListViewAdapter();
                 listView.setAdapter(adapter);
@@ -119,7 +123,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                     case CHECKING_CODE:
                         intent = new Intent(getActivity(), ConfirmOrderActivity.class);
                         bundle = new Bundle();
-                        bundle.putInt("type", 2);
+                        bundle.putInt("type", fragType);
                         bundle.putString("itemId", listData.get(i).getId());
                         intent.putExtras(bundle);
                         startActivityForResult(intent, 11);
@@ -250,7 +254,6 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                             }else {
                                 break;
                             }
-                            onOderNumberChange.onFragProduCount(listCount);
                             adapter = new SendingListAdater(getActivity(), sendinglist);
                             listView.setAdapter(adapter);
                             if(sendinglist!=null){
@@ -288,13 +291,16 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         if (cpage == 1) {
             switch (fragType) {
                 case CHECKING_CODE:
-                    onOderNumberChange.onFragOrderCount(count,1);
+                    System.out.println("badge1="+((CustomMadeActivity) getActivity()).badge1);
+                    ((CustomMadeActivity)getActivity()).setBadge(count,((CustomMadeActivity) getActivity()).badge1);
                     break;
                 case PRODUCTING_CODE:
-                    onOderNumberChange.onFragOrderCount(count,2);
+                    System.out.println("badge2="+((CustomMadeActivity) getActivity()).badge2);
+                    ((CustomMadeActivity)getActivity()).setBadge(count,((CustomMadeActivity) getActivity()).badge2);
                     break;
                 case SENDING_CODE:
-                    onOderNumberChange.onFragOrderCount(count,3);
+                    System.out.println("badge3="+((CustomMadeActivity) getActivity()).badge3);
+                    ((CustomMadeActivity)getActivity()).setBadge(count,((CustomMadeActivity) getActivity()).badge3);
                     break;
             }
         }
@@ -344,10 +350,10 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
     @Override
     public void onHeaderRefresh(PullToRefreshView pullToFootRefreshView) {
-        tempCurpage = cpage;
-        cpage = 1;
-        pullStatus = PULL_REFRESH;
-        loadNetData();
+//        tempCurpage = cpage;
+//        cpage = 1;
+//        pullStatus = PULL_REFRESH;
+//        loadNetData();
     }
 
 

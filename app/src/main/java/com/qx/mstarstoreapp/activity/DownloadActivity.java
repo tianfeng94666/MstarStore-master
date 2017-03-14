@@ -3,8 +3,6 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +25,8 @@ public class DownloadActivity extends BaseActivity {
     @Bind(R.id.tv_websit)
     TextView tvWebsit;
     String type;
+    @Bind(R.id.iv_back)
+    ImageView ivBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class DownloadActivity extends BaseActivity {
             tvDownloadName.setText("安卓最新版");
 //            SpannableString ss = new SpannableString("");
             tvWebsit.setText(R.string.android_download);
-         st = "https://www.pgyer.com/IGab";
+            st = "https://www.pgyer.com/IGab";
             ivDownlaoad.setImageResource(R.drawable.android_download);
         } else {
             tvDownloadName.setText("IOS最新版");
@@ -63,6 +63,12 @@ public class DownloadActivity extends BaseActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(st));
                 startActivity(intent);
+            }
+        });
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

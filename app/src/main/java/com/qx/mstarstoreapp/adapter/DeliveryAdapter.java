@@ -12,6 +12,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.json.DeliveryTableResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
+import com.qx.mstarstoreapp.utils.UIUtils;
+import com.qx.mstarstoreapp.viewutils.FlowLayout;
 
 import java.util.List;
 
@@ -64,7 +66,17 @@ public class DeliveryAdapter extends BaseAdapter {
         ImageLoader.getInstance().displayImage(bean.getPic(), viewHolder.ivProduct, ImageLoadOptions.getOptions());
         viewHolder.tvDeliveryItemLess.setText(bean.getSInfo());
         viewHolder.tvDeliveryItemLess2.setText(bean.getSInfo());
-        viewHolder.tvDeliveryItemProductInf.setText(bean.getDInfo());
+        for(int j =0 ;j<bean.getStInfo().size();j++){
+            TextView tv = new TextView(context);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(UIUtils.dip2px(8),0,0,0);
+            tv.setLayoutParams(params);
+            tv.setText(bean.getStInfo().get(j));
+            tv.setTextColor(context.getResources().getColor(R.color.text_color));
+
+            viewHolder.llStone.addView(tv);
+        }
+//        viewHolder.tvDeliveryItemProductInf.setText(bean.getDInfo());
         viewHolder.tvDeliveryItemRemark.setText(bean.getRemark());
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.llItemDelivery.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +99,7 @@ public class DeliveryAdapter extends BaseAdapter {
     }
 
 
-     class ViewHolder {
+    static class ViewHolder {
         @Bind(R.id.tv_delivery_item_number)
         TextView tvDeliveryItemNumber;
         @Bind(R.id.tv_stone)
@@ -112,6 +124,8 @@ public class DeliveryAdapter extends BaseAdapter {
         ImageView ivProduct;
         @Bind(R.id.ll_item_delivery)
         LinearLayout llItemDelivery;
+        @Bind(R.id.ll_stone)
+        LinearLayout llStone;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

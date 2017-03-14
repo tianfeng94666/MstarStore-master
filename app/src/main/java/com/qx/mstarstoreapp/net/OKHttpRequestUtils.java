@@ -89,13 +89,13 @@ public class OKHttpRequestUtils {
 //                .cookieJar(new CookieJar() {
 //                    private final HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();
 //                    @Override
-//                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-//                        cookieStore.put(url, cookies);
+//                    public void saveFromResponse(HttpUrl path, List<Cookie> cookies) {
+//                        cookieStore.put(path, cookies);
 //                    }
 //
 //                    @Override
-//                    public List<Cookie> loadForRequest(HttpUrl url) {
-//                        List<Cookie> cookies = cookieStore.get(url);
+//                    public List<Cookie> loadForRequest(HttpUrl path) {
+//                        List<Cookie> cookies = cookieStore.get(path);
 //                        return cookies != null ? cookies : new ArrayList<Cookie>();
 //                    }
 //                })
@@ -160,9 +160,9 @@ public class OKHttpRequestUtils {
         call.cancel();
     }
 
-//    public void getJson(final String url, final OKHttpCallBack callBack){
-//        L.e("URL    "+url);
-//        final Request request=new Request.Builder().url(url).build();
+//    public void getJson(final String path, final OKHttpCallBack callBack){
+//        L.e("URL    "+path);
+//        final Request request=new Request.Builder().path(path).build();
 //        mOkHttpClient.newCall(request).enqueue(new Callback() {
 //            @Override
 //            public void onFailure(Call call, IOException e) {

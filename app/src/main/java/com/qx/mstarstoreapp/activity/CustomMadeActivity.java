@@ -42,6 +42,8 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
+    @Bind(R.id.iv_right)
+    ImageView ivRight;
     private FragOrderListFragment checkingFrament; //待审核
     private FragOrderListFragment productingFragment;//生产中
     private FragOrderListFragment sendingFragment;//已发货
@@ -65,7 +67,9 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         finish();
     }
 
-    BadgeView badge1, badge2, badge3, badge4;
+    public BadgeView badge1, badge2, badge3, badge4;
+
+
     static List<BadgeView> list = new ArrayList<>();
 
     protected void initView() {
@@ -122,12 +126,14 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         //显示第几个Fragment
         int pagerNumber = getIntent().getIntExtra("pageNumber", 0);
         viewPager.setCurrentItem(pagerNumber);
+//        ivRight.setVisibility(View.VISIBLE);
+//        ivRight.setOnClickListener(this );
     }
 
 
     private static void remind(int count, BadgeView badge, boolean isVisible) {
         //BadgeView的具体使用
-        System.out.println("count="+count+",badge="+badge);
+        System.out.println("count=" + count + ",badge=" + badge);
         badge.setText(count + ""); // 需要显示的提醒类容
         badge.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);// 显示的位置.右上角,BadgeView.POSITION_BOTTOM_LEFT,下左，还有其他几个属性
         badge.setTextColor(Color.WHITE); // 文本颜色
@@ -188,12 +194,19 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
             case R.id.id_fr3:
                 viewPager.setCurrentItem(3);
                 break;
+            case R.id.iv_right:
+                search();
+                break;
         }
     }
 
+    private void search() {
+        openActivity(SearchOrderActivity.class,null);
+    }
+
     @Override
-    public void  onFragOrderCount(int payNum, int type) {
-        System.out.println("payNum="+payNum+",type="+type);
+    public void onFragOrderCount(int payNum, int type) {
+        System.out.println("payNum=" + payNum + ",type=" + type);
         switch (type) {
             case 1:
                 setBadge(payNum, badge1);
@@ -221,11 +234,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
 
     @Override
     public void onFragProduCount(int deliverNum) {
-        if (deliverNum != 0) {
-            remind(Integer.valueOf(deliverNum), badge2, true);
-        } else {
-            remind(Integer.valueOf(deliverNum), badge2, false);
-        }
+
     }
 
     public class CommentListPagerAdapter extends FragmentPagerAdapter {
@@ -246,4 +255,6 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
             return fragments.size();
         }
     }
+
+
 }

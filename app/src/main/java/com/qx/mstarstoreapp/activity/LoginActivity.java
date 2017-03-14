@@ -16,12 +16,15 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.json.DeliveryTableResult;
+import com.qx.mstarstoreapp.json.VersionResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.utils.UpdateManager;
 import com.qx.mstarstoreapp.viewutils.CountTimerButton;
 
 import butterknife.Bind;
@@ -42,15 +45,23 @@ public class LoginActivity extends BaseActivity {
     EditText idEdCode;
     String name, pwd, phone, code;
     CountTimerButton mCountDownTimerUtils;
+    private String version;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_1);
         ButterKnife.bind(this);
-        isNeedUpdate();
+//        isNeedUpdate();
         getBackIntent();
-        String token=BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
-        if(!StringUtils.isEmpty(token)){
+        initView();
+
+
+    }
+
+    private void initView() {
+        String token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
+        if (!StringUtils.isEmpty(token)) {
             BaseApplication.setToken(token);
             openActivity(MainActivity.class, null);
             try {
@@ -61,11 +72,12 @@ public class LoginActivity extends BaseActivity {
             finish();
             return;
         }
-        name=BaseApplication.spUtils.getString(SpUtils.key_username);
-        pwd=BaseApplication.spUtils.getString(SpUtils.key_password);
-        if(!StringUtils.isEmpty(name)){
+        name = BaseApplication.spUtils.getString(SpUtils.key_username);
+        pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
+        if (!StringUtils.isEmpty(name)) {
             idEdName.setText(name);
-        } if(!StringUtils.isEmpty(pwd)){
+        }
+        if (!StringUtils.isEmpty(pwd)) {
             idEdPassword.setText(pwd);
         }
 
@@ -77,7 +89,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        Button  textView= (Button) findViewById(R.id.tv_get_auth_code);
+        Button textView = (Button) findViewById(R.id.tv_get_auth_code);
         mCountDownTimerUtils = new CountTimerButton(textView, 60000, 1000);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,13 +98,44 @@ public class LoginActivity extends BaseActivity {
                 getNetCode();
             }
         });
-
     }
 
     private void isNeedUpdate() {
-        System.out.println("verCode ="+getVerCode(this)+"");
+        String lgUrl = AppURL.URL_CODE_VERSION + "device=" + "android";
+        L.e("netLogin" + lgUrl);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+                    VersionResult versionResult = new Gson().fromJson(result, VersionResult.class);
+                    version = versionResult.getData().getVersion();
+                    if (!version.equals(R.string.app_version)) {
+//                        new UpdateManager(context).Update(versionResult.getData().getUrl());
+                    } else {
+                        initView();
+                    }
+                } else if (error.equals("2")) {
+
+                } else {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastWhendebug(message);
+                    L.e(message);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+
+
+        });
+
     }
-    public  int getVerCode(Context context) {
+
+    public int getVerCode(Context context) {
         int verCode = -1;
         try {
             verCode = context.getPackageManager().getPackageInfo(
@@ -139,9 +182,9 @@ public class LoginActivity extends BaseActivity {
                 if (error == 0) {
                     String token = new Gson().fromJson(result, JsonObject.class).getAsJsonObject("data").get("tokenKey").getAsString();
                     L.e("成功" + token);
-                    BaseApplication.spUtils.saveString(SpUtils.key_tokenKey,token);
-                    BaseApplication.spUtils.saveString(SpUtils.key_username,name);
-                    BaseApplication.spUtils.saveString(SpUtils.key_password,pwd);
+                    BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, token);
+                    BaseApplication.spUtils.saveString(SpUtils.key_username, name);
+                    BaseApplication.spUtils.saveString(SpUtils.key_password, pwd);
                     BaseApplication.setToken(token);
                     openActivity(MainActivity.class, null);
                     finish();
@@ -155,7 +198,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 if (error == 2) {
                     L.e("重新登录");
-                   // netLogin();
+                    // netLogin();
                 }
                 if (error == 3) {
                     L.e("未审核");
@@ -169,32 +212,7 @@ public class LoginActivity extends BaseActivity {
 
 
         });
-//        OKHttpRequestUtils.getmInstance().requestData(lgUrl, this, new OKHttpRequestUtils.OKHttpFinallCallBack() {
-//            @Override
-//            public void onSuccess(String result) {
-//                L.e("OKHttpRequestUtils" + result);
-//                baseHideWatLoading();
-//                String token = new Gson().fromJson(result, JsonObject.class).getAsJsonObject("data").get("tokenKey").getAsString();
-//                L.e("成功" + token);
-//                BaseApplication.spUtils.saveString(SpUtils.key_tokenKey,token);
-//                BaseApplication.setToken(token);
-//                openActivity(MainActivity.class, null);
-//                return;
-//                //loginSuccess();
-//            }
-//
-//            @Override
-//            public void onReLogin() {
-//                baseHideWatLoading();
-//                L.e("重新登录");
-//            }
-//
-//            @Override
-//            public void onErrorMsg(String msg) {
-//                baseHideWatLoading();
-//                L.e(msg);
-//            }
-//        });
+
     }
 
 
@@ -219,7 +237,7 @@ public class LoginActivity extends BaseActivity {
         //
     }
 
-    public void getNetCode(){
+    public void getNetCode() {
         name = idEdName.getText().toString();
         pwd = idEdPassword.getText().toString();
         if (StringUtils.isEmpty(name)) {
@@ -251,6 +269,7 @@ public class LoginActivity extends BaseActivity {
                     L.e("未审核");
                 }
             }
+
             @Override
             public void onFail(String fail) {
 
@@ -280,7 +299,7 @@ public class LoginActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (System.currentTimeMillis() - exitTime > 2000) {
                 ToastManager.showToastReal("再按一次退出程序");
-                exitTime= System.currentTimeMillis();
+                exitTime = System.currentTimeMillis();
             } else {
                 moveTaskToBack(true);
             }

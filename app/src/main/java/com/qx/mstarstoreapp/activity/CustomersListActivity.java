@@ -114,7 +114,7 @@ public class CustomersListActivity extends BaseActivity {
         //GetCustomerList?keyword=湖南|益阳&cpage=1&tokenKey=944df2f27ffce557042887589986c193
         String url = AppURL.URL_CUSTOMER_LIST + "tokenKey=" + BaseApplication.getToken() + "&keyword=" + StringUtils.replaceBlank(keyWord) + "&cpage=" + page;
         L.e("CustomersListActivity" + url);
-//        VolleyRequestUtils.GetCookieRequest(CustomersListActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+//        VolleyRequestUtils.GetCookieRequest(CustomersListActivity.this, path, new VolleyRequestUtils.HttpStringRequsetCallBack() {
 //            @Override
 //            public void onSuccess(String result) {
 //                L.e(result);

@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="16- 6- 1" />
+                android:text="" />
         </RelativeLayout>
 
         <TextView
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="16- 6- 1" />
+                android:text="" />
         </RelativeLayout>
 
         <TextView

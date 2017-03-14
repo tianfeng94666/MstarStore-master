@@ -493,7 +493,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             url = AppURL.URL_ORDER_PRICE + "tokenKey=" + BaseApplication.getToken() + "&purityId=" + purityId +
                     "&qualityId=" + qualityId + "&cpage=" + curpage;
         }
-        L.e("url");
+        L.e("path");
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
@@ -936,7 +936,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     public boolean canScrollVertically(int direction) {
         boolean isSroll = (lv_list != null && lv_list.canScrollVertically(direction));
         if (isSroll) {
-            tabs.setImageView(R.drawable.icon_down);
+            tabs.setImageView(R.drawable.icon_downp2x);
         } else {
             tabs.setImageView(R.drawable.icon_up);
         }
