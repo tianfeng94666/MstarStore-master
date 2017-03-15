@@ -250,7 +250,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                             sendingResult = new Gson().fromJson(result, SendingResult.class);
                             if(sendingResult.getData()!=null){
                                 List<SendingResult.DataBean.OrderListBean> templist = sendingResult.getData().getOrderList();
-                                sendinglist.addAll(templist);
+                                if(templist !=null){
+                                    sendinglist.addAll(templist);
+                                }
                             }else {
                                 break;
                             }

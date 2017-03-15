@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +54,9 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_custom_made);
         ButterKnife.bind(this);
         initView();
@@ -126,8 +130,8 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         //显示第几个Fragment
         int pagerNumber = getIntent().getIntExtra("pageNumber", 0);
         viewPager.setCurrentItem(pagerNumber);
-//        ivRight.setVisibility(View.VISIBLE);
-//        ivRight.setOnClickListener(this );
+        ivRight.setVisibility(View.VISIBLE);
+        ivRight.setOnClickListener(this );
     }
 
 

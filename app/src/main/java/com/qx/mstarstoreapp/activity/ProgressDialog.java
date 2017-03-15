@@ -144,7 +144,7 @@ public class ProgressDialog {
             LinearLayout linearlayout = helper.getView(R.id.id_list_porgress);
             helper.setText(R.id.product_name,item.getTitle());
             helper.setText(R.id.product_norms,item.getModelInfo());
-            helper.setText(R.id.product_price,item.getNumber()+"");
+            helper.setText(R.id.product_price,item.getNumber()+"件");
             helper.setImageByUrl(R.id.product_img,item.getPic());
             linearlayout.removeAllViews();
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

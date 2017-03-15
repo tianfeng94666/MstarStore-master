@@ -60,9 +60,9 @@ public class DeliveryAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.tvDeliveryItemNumber.setText(i + 1 + "");
+        viewHolder.tvDeliveryItemNumber.setText(bean.getModNum());
         viewHolder.tvDeliveryItemName.setText(bean.getTypeName() + " " + bean.getModelNum());
-        viewHolder.tvDeliveryItemCost.setText("成本：" + bean.getUnitPrice());
+        viewHolder.tvDeliveryItemCost.setText(  bean.getUnitPrice());
         ImageLoader.getInstance().displayImage(bean.getPic(), viewHolder.ivProduct, ImageLoadOptions.getOptions());
         viewHolder.tvDeliveryItemLess.setText(bean.getSInfo());
         viewHolder.tvDeliveryItemLess2.setText(bean.getSInfo());

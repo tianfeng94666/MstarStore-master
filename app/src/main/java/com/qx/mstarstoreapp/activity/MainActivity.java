@@ -16,6 +16,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,6 +62,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.show_main_lay);
         ButterKnife.bind(this);
 
@@ -67,6 +72,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setChioceFragment(0);
         isNeedUpdate();
     }
+
+
+
     private void isNeedUpdate() {
         String lgUrl = AppURL.URL_CODE_VERSION + "device=" + "android";
         L.e("netLogin" + lgUrl);
@@ -76,10 +84,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
-                     versionResult = new Gson().fromJson(result, VersionResult.class);
+                    versionResult = new Gson().fromJson(result, VersionResult.class);
                     version = versionResult.getData().getVersion();
-                    if (!version.equals(R.string.app_version)) {
-                     showNoticeDialog() ;
+                    if (!version.equals(getString(R.string.app_version))) {
+                        showNoticeDialog();
                     }
                 } else if (error.equals("2")) {
 
@@ -99,6 +107,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
 
     }
+
     /**
      * 显示软件更新对话框
      */
@@ -111,7 +120,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         builder.setPositiveButton(R.string.soft_update_updatebtn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionResult.getData().getUrl()));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionResult.getData().getUrl()));
                 startActivity(intent);
             }
         });
@@ -120,6 +129,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         noticeDialog.setCanceledOnTouchOutside(false);
         noticeDialog.show();
     }
+
     public int getVerCode(Context context) {
         int verCode = -1;
         try {
@@ -224,6 +234,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     fragTrans.show(informationFragment);
                 }
+                titleText.setText("消息");
                 break;
             case 2:
                 tvHelp.setTextColor(getResources().getColor(R.color.theme_red));
@@ -234,9 +245,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     fragTrans.show(helpFragment);
                 }
+                titleText.setText("帮助");
                 break;
         }
-        nowId=index;
+        nowId = index;
         fragTrans.commit();
 
     }
@@ -305,8 +317,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (System.currentTimeMillis() - exitTime > 2000) {
-               ToastManager.showToastReal("再按一次退出程序");
-                exitTime= System.currentTimeMillis();
+                ToastManager.showToastReal("再按一次退出程序");
+                exitTime = System.currentTimeMillis();
             } else {
                 moveTaskToBack(true);
             }

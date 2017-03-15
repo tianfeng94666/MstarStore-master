@@ -88,12 +88,21 @@ public class SendingResult {
              */
 
             private String customerName;
-            private int moNum;
-            private int number;
+            private String moNum;
+            private String number;
             private String orderDate;
             private String orderNum;
             private String purityName;
-            private int recNum;
+            private String recNum;
+            private String recBillNum;
+
+            public String getRecBillNum() {
+                return recBillNum;
+            }
+
+            public void setRecBillNum(String recBillNum) {
+                this.recBillNum = recBillNum;
+            }
 
             public String getCustomerName() {
                 return customerName;
@@ -103,19 +112,19 @@ public class SendingResult {
                 this.customerName = customerName;
             }
 
-            public int getMoNum() {
+            public String getMoNum() {
                 return moNum;
             }
 
-            public void setMoNum(int moNum) {
+            public void setMoNum(String moNum) {
                 this.moNum = moNum;
             }
 
-            public int getNumber() {
+            public String getNumber() {
                 return number;
             }
 
-            public void setNumber(int number) {
+            public void setNumber(String number) {
                 this.number = number;
             }
 
@@ -143,11 +152,11 @@ public class SendingResult {
                 this.purityName = purityName;
             }
 
-            public int getRecNum() {
+            public String getRecNum() {
                 return recNum;
             }
 
-            public void setRecNum(int recNum) {
+            public void setRecNum(String recNum) {
                 this.recNum = recNum;
             }
         }

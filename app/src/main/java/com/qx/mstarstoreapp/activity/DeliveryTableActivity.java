@@ -3,6 +3,8 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -67,6 +69,9 @@ public class DeliveryTableActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_delivery_table);
         ButterKnife.bind(this);
         init();
@@ -96,7 +101,7 @@ public class DeliveryTableActivity extends BaseActivity {
         tvDeliveryNumber.setText("出库单号："+moItemBean.getMoNum());
         tvDeliveryAmount.setText("件数："+moItemBean.getNumber());
         tvDeliveryQuality.setText("成色："+moItemBean.getPurityName());
-        tvDeliverySumMoney.setText("总价："+moItemBean.getTotalPrice());
+        tvDeliverySumMoney.setText(moItemBean.getTotalPrice());
         if(list!=null){
              deliveryAdapter = new DeliveryAdapter(this, list);
         }

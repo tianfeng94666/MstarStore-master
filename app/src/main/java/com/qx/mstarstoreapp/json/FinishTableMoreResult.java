@@ -123,14 +123,14 @@ public class FinishTableMoreResult {
 
             private String accountID;
             private String customerName;
-            private int number;
+            private String number;
             private String orderDate;
             private String orderNum;
             private String purityName;
             private String recDate;
-            private int recNum;
+            private String recNum;
             private String recOperator;
-            private double totalPrice;
+            private String totalPrice;
 
             public String getAccountID() {
                 return accountID;
@@ -148,11 +148,11 @@ public class FinishTableMoreResult {
                 this.customerName = customerName;
             }
 
-            public int getNumber() {
+            public String getNumber() {
                 return number;
             }
 
-            public void setNumber(int number) {
+            public void setNumber(String number) {
                 this.number = number;
             }
 
@@ -188,11 +188,11 @@ public class FinishTableMoreResult {
                 this.recDate = recDate;
             }
 
-            public int getRecNum() {
+            public String getRecNum() {
                 return recNum;
             }
 
-            public void setRecNum(int recNum) {
+            public void setRecNum(String recNum) {
                 this.recNum = recNum;
             }
 
@@ -204,11 +204,11 @@ public class FinishTableMoreResult {
                 this.recOperator = recOperator;
             }
 
-            public double getTotalPrice() {
+            public String getTotalPrice() {
                 return totalPrice;
             }
 
-            public void setTotalPrice(double totalPrice) {
+            public void setTotalPrice(String totalPrice) {
                 this.totalPrice = totalPrice;
             }
         }
@@ -394,15 +394,15 @@ public class FinishTableMoreResult {
              * title : 加工费
              */
 
-            private int moneySum;
+            private String moneySum;
             private String title;
             private List<ListBeanXX> list;
 
-            public int getMoneySum() {
+            public String getMoneySum() {
                 return moneySum;
             }
 
-            public void setMoneySum(int moneySum) {
+            public void setMoneySum(String moneySum) {
                 this.moneySum = moneySum;
             }
 
@@ -496,15 +496,15 @@ public class FinishTableMoreResult {
              * title : 宝石
              */
 
-            private int moneySum;
+            private String moneySum;
             private String title;
             private List<ListBeanXXX> list;
 
-            public int getMoneySum() {
+            public String getMoneySum() {
                 return moneySum;
             }
 
-            public void setMoneySum(int moneySum) {
+            public void setMoneySum(String moneySum) {
                 this.moneySum = moneySum;
             }
 

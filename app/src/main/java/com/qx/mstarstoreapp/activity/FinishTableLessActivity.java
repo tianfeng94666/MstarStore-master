@@ -3,6 +3,8 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -46,13 +48,16 @@ public class FinishTableLessActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finish_table_less);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
         context =this;
         init();
         getDate();
         loadNetData();
     }
+
     private void init() {
         titleText.setText("结算单");
         idIgBack.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +87,12 @@ public class FinishTableLessActivity extends BaseActivity {
                 if (error.equals("0")) {
                     FinishTableLessResult finishTableLessResult = new Gson().fromJson(result,FinishTableLessResult.class);
                     List<FinishTableLessResult.DataBean.RecListBean>  list = finishTableLessResult.getData().getRecList();
-                    finishTableLessAdapter = new FinishTableLessAdapter(context,list);
-                    lvSendingTables.setAdapter(finishTableLessAdapter);
+                    if(list !=null){
+                        finishTableLessAdapter = new FinishTableLessAdapter(context,list);
+                        lvSendingTables.setAdapter(finishTableLessAdapter);
+                    }
                 } else if (error.equals("2")) {
-                    loginToServer(CustomMadeActivity.class);
+                    loginToServer(FinishTableLessActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     ToastManager.showToastWhendebug(message);

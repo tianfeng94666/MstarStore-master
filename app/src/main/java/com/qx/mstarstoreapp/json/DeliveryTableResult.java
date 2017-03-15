@@ -88,15 +88,14 @@ public class DeliveryTableResult {
              * purityName : PT950
              * totalPrice : 2924.03
              */
-
             private String customerName;
-            private double goldPrice;
+            private String goldPrice;
             private String moDate;
-            private int moNum;
-            private int number;
+            private String moNum;
+            private String number;
             private String orderNum;
             private String purityName;
-            private double totalPrice;
+            private String totalPrice;
 
             public String getCustomerName() {
                 return customerName;
@@ -106,11 +105,11 @@ public class DeliveryTableResult {
                 this.customerName = customerName;
             }
 
-            public double getGoldPrice() {
+            public String getGoldPrice() {
                 return goldPrice;
             }
 
-            public void setGoldPrice(double goldPrice) {
+            public void setGoldPrice(String goldPrice) {
                 this.goldPrice = goldPrice;
             }
 
@@ -122,19 +121,19 @@ public class DeliveryTableResult {
                 this.moDate = moDate;
             }
 
-            public int getMoNum() {
+            public String getMoNum() {
                 return moNum;
             }
 
-            public void setMoNum(int moNum) {
+            public void setMoNum(String moNum) {
                 this.moNum = moNum;
             }
 
-            public int getNumber() {
+            public String getNumber() {
                 return number;
             }
 
-            public void setNumber(int number) {
+            public void setNumber(String number) {
                 this.number = number;
             }
 
@@ -154,11 +153,11 @@ public class DeliveryTableResult {
                 this.purityName = purityName;
             }
 
-            public double getTotalPrice() {
+            public String getTotalPrice() {
                 return totalPrice;
             }
 
-            public void setTotalPrice(double totalPrice) {
+            public void setTotalPrice(String totalPrice) {
                 this.totalPrice = totalPrice;
             }
         }
@@ -181,9 +180,18 @@ public class DeliveryTableResult {
             private String remark;
             private String sInfo;
             private String typeName;
-            private double unitPrice;
+            private String unitPrice;
             private List<String> stInfo;
             private boolean isChoose;
+            private String modNum;
+
+            public String getModNum() {
+                return modNum;
+            }
+
+            public void setModNum(String modNum) {
+                this.modNum = modNum;
+            }
 
             public boolean isChoose() {
                 return isChoose;
@@ -240,11 +248,11 @@ public class DeliveryTableResult {
                 this.typeName = typeName;
             }
 
-            public double getUnitPrice() {
+            public String getUnitPrice() {
                 return unitPrice;
             }
 
-            public void setUnitPrice(double unitPrice) {
+            public void setUnitPrice(String unitPrice) {
                 this.unitPrice = unitPrice;
             }
 
