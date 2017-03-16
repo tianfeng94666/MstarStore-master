@@ -83,8 +83,19 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         View view = inflater.inflate(R.layout.frag_list_layout, null);
         initView(view);
         cpage = 1;
-        loadNetData();
+//        loadNetData();
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //相当于Fragment的onResume
+            loadNetData();
+        } else {
+            //相当于Fragment的onPause
+        }
     }
 
     private void initView(View view) {

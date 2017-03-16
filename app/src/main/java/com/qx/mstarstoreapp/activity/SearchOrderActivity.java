@@ -1,24 +1,44 @@
 package com.qx.mstarstoreapp.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
+import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.json.AddressEntity;
+import com.qx.mstarstoreapp.json.CustomerEntity;
+import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
+import com.qx.mstarstoreapp.net.VolleyRequestUtils;
+import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.StringUtils;
+import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.utils.UIUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -54,6 +74,17 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     RadioButton rbMyGroupOrders;
     @Bind(R.id.ll_search_type)
     LinearLayout llSearchType;
+    @Bind(R.id.iv_search_type)
+    ImageView ivSearchType;
+    @Bind(R.id.id_et_seach)
+    EditText idEtSeach;
+    @Bind(R.id.id_view_line)
+    View idViewLine;
+    @Bind(R.id.ig_btn_seach)
+    ImageView igBtnSeach;
+    @Bind(R.id.id_rl1)
+    RelativeLayout idRl1;
+
 
     private DatePicker datePicker;
     private int year;
@@ -62,7 +93,8 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     private int hour;
     private int minute;
     private PopupWindow popupWindow;
-
+    private String choosetype;
+    CustomerEntity isDefaultCustomer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +112,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         ivLeft.setOnClickListener(this);
         ivRight.setOnClickListener(this);
         llSearchType.setOnClickListener(this);
+        igBtnSeach.setOnClickListener(this);
         tvStartDate.setText(getCurrentDate());
         tvEndDate.setText(getCurrentDate());
     }
@@ -108,12 +141,60 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
             case R.id.ll_search_type:
                 showPopWindow(view);
                 break;
+            case R.id.ig_btn_seach:
+                boolean isFast = UIUtils.isFastDoubleClick();
+                if(!isFast){
+                    seachCustom("");
+                }
+                break;
         }
     }
+    /*
+        * @version  搜索时候有客户
+        */
+    private void seachCustom(final String keyWord) {
+        String url = AppURL.URL_HAVE_CUSTOMER + "tokenKey=" + BaseApplication.getToken() + "&keyword=" + keyWord;
+        //keyword=广西|平果&tokenKey=944df2f27ffce557042887589986c193
+        L.e("seachCustom" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){
+            @Override
+            public void onSuccess(String result) {
+                L.e(result);
+                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+                if (error == 0) {
+                    JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                    JsonObject jsonObject = jsonResult.get("data").getAsJsonObject();
+                    int state = jsonObject.get("state").getAsInt();
+                    if (state == 0) {
+                        ToastManager.showToastReal("没有此客户");
+                        isDefaultCustomer.setCustomerID(-1);
+                    }
+                    if (state == 1) {
+                        ToastManager.showToastReal("有此客户");
 
+                    }
+                    if (state == 2) {
+                        Intent intent = new Intent(SearchOrderActivity.this, CustomersListActivity.class);
+                        intent.putExtra("keyWord", keyWord);
+                        startActivityForResult(intent, 11);
+                    }
+                }
+                else if (error == 2) {
+                    loginToServer(OrderActivity.class);
+                }else {
+                    ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+        });
+    }
     private void showPopWindow(View view) {
         getPopupWindow();
-        popupWindow.showAtLocation(view, Gravity.BOTTOM,0,0);
+        popupWindow.showAsDropDown(view);
     }
 
 
@@ -133,7 +214,44 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
      * 创建popuWindow
      */
     private void initPopuptWindow() {
-
+        // TODO Auto-generated method stub
+        // 获取自定义布局文件activity_popupwindow_left.xml的视图
+        View popupWindowView = getLayoutInflater().inflate(R.layout.popupwindow_search_type, null,
+                false);
+        ListView listView = (ListView) popupWindowView.findViewById(R.id.lv_seach_type);
+        final List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", "订单号");
+        list.add(map);
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("type", "款号");
+        list.add(map1);
+        Map<String, Object> map2 = new HashMap<>();
+        map2.put("type", "客户名称");
+        list.add(map2);
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, list, R.layout.item_popupwinow_type, new String[]{"type"}, new int[]{R.id.tv_item_type});
+        listView.setAdapter(simpleAdapter);
+        // 创建PopupWindow实例,200,LayoutParams.MATCH_PARENT分别是宽度和高度
+        popupWindow = new PopupWindow(popupWindowView, UIUtils.dip2px(100), UIUtils.dip2px(116), true);
+        // 点击其他地方消失
+        popupWindowView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+                return false;
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                choosetype = (String) list.get(position).get("type");
+                tvSearchType.setText(choosetype);
+            }
+        });
     }
 
     public void initData(final String type) {
@@ -158,6 +276,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 获得格式2015-09-01类似的String
+     *
      * @param mYear
      * @param mMonth
      * @param mDay
@@ -173,6 +292,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 获得当前日期
+     *
      * @return
      */
     private String getCurrentDate() {
@@ -182,6 +302,24 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
         return getDate(year, month, day);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        L.e("onActivityResult" + requestCode);
+        if (data == null) {
+            return;
+        }
+        if (requestCode == 11) {
+            String customerName = data.getStringExtra("CustomerName");
+            int customerID = data.getIntExtra("CustomerID", -1);
+            idEtSeach.setText(customerName);
+            if (isDefaultCustomer == null) {
+                isDefaultCustomer = new CustomerEntity();
+            }
+            isDefaultCustomer.setCustomerID(customerID);
+
+        }
+
+
     }
 
 }

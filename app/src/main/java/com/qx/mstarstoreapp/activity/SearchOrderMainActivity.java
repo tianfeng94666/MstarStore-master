@@ -33,14 +33,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/*
- * 创建人：Yangshao
- * 创建时间：2016/10/25 15:44
- * @version  客户列表
- *
+/**
+ * Created by Administrator on 2017/3/16 0016.
  */
-public class CustomersListActivity extends BaseActivity {
 
+public class SearchOrderMainActivity extends BaseActivity {
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
     @Bind(R.id.id_view_line)
@@ -50,7 +47,7 @@ public class CustomersListActivity extends BaseActivity {
     @Bind(R.id.id_lv_custom)
     ListView idLvCustom;
     String keyWord = "";
-    CustomersListAdapter customersListAdapter;
+    SearchOrderMainActivity.CustomersListAdapter customersListAdapter;
     List<CustomerListRestult.DataEntity.ListEntity> madata;
     @Bind(R.id.iv_left)
     ImageView ivLeft;
@@ -70,7 +67,7 @@ public class CustomersListActivity extends BaseActivity {
     private void initView() {
         keyWord = getIntent().getStringExtra("keyWord");
         madata = new ArrayList<>();
-        customersListAdapter = new CustomersListAdapter();
+        customersListAdapter = new SearchOrderMainActivity.CustomersListAdapter();
         idLvCustom.setAdapter(customersListAdapter);
         idLvCustom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -123,24 +120,6 @@ public class CustomersListActivity extends BaseActivity {
         //GetCustomerList?keyword=湖南|益阳&cpage=1&tokenKey=944df2f27ffce557042887589986c193
         String url = AppURL.URL_CUSTOMER_LIST + "tokenKey=" + BaseApplication.getToken() + "&keyword=" + StringUtils.replaceBlank(keyWord) + "&cpage=" + page;
         L.e("CustomersListActivity" + url);
-//        VolleyRequestUtils.GetCookieRequest(CustomersListActivity.this, path, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-//            @Override
-//            public void onSuccess(String result) {
-//                L.e(result);
-//                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-//                if(jsonResult.get("error").getAsString().equals("0")){
-//                    CustomerListRestult customerListRestult = new Gson().fromJson(result, CustomerListRestult.class);
-//                    madata = customerListRestult.getData().getList();
-//                    customersListAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onFail(String error) {
-//
-//            }
-//        });
-
 
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -191,7 +170,7 @@ public class CustomersListActivity extends BaseActivity {
 
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
-            TextView txt = new TextView(CustomersListActivity.this);
+            TextView txt = new TextView(SearchOrderMainActivity.this);
             txt.setBackgroundColor(Color.WHITE);
             int padding = UIUtils.dip2px(15);
             txt.setPadding(padding, padding, padding, padding);
@@ -200,5 +179,4 @@ public class CustomersListActivity extends BaseActivity {
             return txt;
         }
     }
-
 }

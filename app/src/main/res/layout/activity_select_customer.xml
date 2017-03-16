@@ -10,15 +10,27 @@
         android:layout_margin="@dimen/margin15"
         android:layout_width="match_parent"
         android:layout_height="40dip">
+        <ImageView
+            android:id="@+id/iv_left"
+            android:padding="5dp"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
 
+
+            android:src="@drawable/icon_return" />
         <EditText
             android:paddingLeft="@dimen/margin5"
+          android:layout_marginLeft="36dp"
             android:id="@+id/id_et_seach"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
             android:singleLine="true"
-            />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <View
             android:id="@+id/id_view_line"
