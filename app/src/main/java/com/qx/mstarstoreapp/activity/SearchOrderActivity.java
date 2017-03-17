@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -25,20 +27,16 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
-import com.qx.mstarstoreapp.json.AddressEntity;
 import com.qx.mstarstoreapp.json.CustomerEntity;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
-import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
+import com.qx.mstarstoreapp.viewutils.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -84,6 +82,8 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     ImageView igBtnSeach;
     @Bind(R.id.id_rl1)
     RelativeLayout idRl1;
+    @Bind(R.id.rg_orders)
+    RadioGroup rgOrders;
 
 
     private DatePicker datePicker;
@@ -95,6 +95,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     private PopupWindow popupWindow;
     private String choosetype;
     CustomerEntity isDefaultCustomer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +116,17 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         igBtnSeach.setOnClickListener(this);
         tvStartDate.setText(getCurrentDate());
         tvEndDate.setText(getCurrentDate());
+        initRadioGroup();
+    }
+
+    private void initRadioGroup() {
+        RadioButton rb = new RadioButton(this);
+        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(UIUtils.dip2px(32),0,0,0);
+        rb.setLayoutParams(params);
+        rb.setButtonDrawable(R.drawable.selector_radio);
+        rb.setText("nihao");
+        rgOrders.addView(rb);
     }
 
 
@@ -143,12 +155,13 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.ig_btn_seach:
                 boolean isFast = UIUtils.isFastDoubleClick();
-                if(!isFast){
+                if (!isFast) {
                     seachCustom("");
                 }
                 break;
         }
     }
+
     /*
         * @version  搜索时候有客户
         */
@@ -156,7 +169,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         String url = AppURL.URL_HAVE_CUSTOMER + "tokenKey=" + BaseApplication.getToken() + "&keyword=" + keyWord;
         //keyword=广西|平果&tokenKey=944df2f27ffce557042887589986c193
         L.e("seachCustom" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
                 L.e(result);
@@ -178,10 +191,9 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                         intent.putExtra("keyWord", keyWord);
                         startActivityForResult(intent, 11);
                     }
-                }
-                else if (error == 2) {
+                } else if (error == 2) {
                     loginToServer(OrderActivity.class);
-                }else {
+                } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
             }
@@ -192,6 +204,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
             }
         });
     }
+
     private void showPopWindow(View view) {
         getPopupWindow();
         popupWindow.showAsDropDown(view);
@@ -219,20 +232,14 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         View popupWindowView = getLayoutInflater().inflate(R.layout.popupwindow_search_type, null,
                 false);
         ListView listView = (ListView) popupWindowView.findViewById(R.id.lv_seach_type);
-        final List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("type", "订单号");
-        list.add(map);
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("type", "款号");
-        list.add(map1);
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("type", "客户名称");
-        list.add(map2);
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, list, R.layout.item_popupwinow_type, new String[]{"type"}, new int[]{R.id.tv_item_type});
+        final ArrayList<String> list = new ArrayList<>();
+        list.add("订单号");
+        list.add("订单号");
+        list.add("订单号");
+        SearchTypeAdapter simpleAdapter = new SearchTypeAdapter(list);
         listView.setAdapter(simpleAdapter);
         // 创建PopupWindow实例,200,LayoutParams.MATCH_PARENT分别是宽度和高度
-        popupWindow = new PopupWindow(popupWindowView, UIUtils.dip2px(100), UIUtils.dip2px(116), true);
+        popupWindow = new PopupWindow(popupWindowView, UIUtils.dip2px(100), UIUtils.dip2px(28 + list.size() * 20), true);
         // 点击其他地方消失
         popupWindowView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -248,7 +255,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                choosetype = (String) list.get(position).get("type");
+                choosetype = (String) list.get(position);
                 tvSearchType.setText(choosetype);
             }
         });
@@ -303,6 +310,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
         return getDate(year, month, day);
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         L.e("onActivityResult" + requestCode);
         if (data == null) {
@@ -320,6 +328,55 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         }
 
 
+    }
+
+    class SearchTypeAdapter extends BaseAdapter {
+        ArrayList<String> list = new ArrayList<>();
+
+        public SearchTypeAdapter(ArrayList<String> list) {
+            this.list = list;
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent) {
+            ViewHolder viewHolder = null;
+
+            if (view == null) {
+                view = View.inflate(context, R.layout.item_popupwinow_type, null);
+                System.out.println("height=" + view.getMeasuredHeightAndState());
+                viewHolder = new ViewHolder(view);
+                view.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) view.getTag();
+            }
+            viewHolder.tvItemType.setText(list.get(position));
+
+            return view;
+        }
+
+        class ViewHolder {
+            @Bind(R.id.tv_item_type)
+            TextView tvItemType;
+
+            ViewHolder(View view) {
+                ButterKnife.bind(this, view);
+            }
+        }
     }
 
 }

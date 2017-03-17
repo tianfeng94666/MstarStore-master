@@ -7,7 +7,7 @@
     android:orientation="vertical"
     >
 
-    <ScrollView
+    <com.qx.mstarstoreapp.viewutils.MyScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginBottom="50dip"
@@ -164,7 +164,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </com.qx.mstarstoreapp.viewutils.MyScrollView>
 
 
     <LinearLayout
