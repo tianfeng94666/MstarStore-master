@@ -42,7 +42,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:paddingRight="4dp"
-                    android:text="订单号"
+                    android:text=""
                     android:textColor="@color/text_color" />
 
                 <ImageView
@@ -233,23 +233,6 @@
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/rb_my_orders"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/selector_radio"
-                android:checked="true"
-                android:text="我的订单"
-                android:textColor="@color/text_color" />
-
-            <RadioButton
-                android:id="@+id/rb_my_group_orders"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/selector_radio"
-                android:layout_marginLeft="32dp"
-                android:text="我的群组订单"
-                android:textColor="@color/text_color" />
         </RadioGroup>
     </LinearLayout>
 

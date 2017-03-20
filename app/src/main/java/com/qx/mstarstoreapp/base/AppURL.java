@@ -189,16 +189,27 @@ public class AppURL {
 
     //结算单
     public static String URL_CODE_FINISH= baseUrl + "ModelFinishBillList?";
-
     //结算单详情
     public static String URL_CODE_FINISH_DETAIL= baseUrl + "ModelBillFinishDetailRec?";
-
     //已货单列表 http://appapi1.fanerweb.com/api/Aproxy/ModelBillList?cpage=3&tokenKey=7cdcf3a6a47904dbff1e7da86b8ef225
     public static String URL_CODE_SENDING= baseUrl + "ModelBillList?";
     //已货单详情
     public static String URL_CODE_SENDING_DETAIL= baseUrl + "ModelArriveBillMo?";
     //获得版本信息
     public static String URL_CODE_VERSION = baseUrl + "currentVersion?";
+
+    //订单搜索页面
+    public static String URL_CODE_ORDER_SEARCH = baseUrl1 + "ModelUserOrderSearchPage?";
+    //搜索订单列表页
+    public static String URL_CODE_ORDER_SEARCH_LIST = baseUrl1 + "ModelOrderSearch?";
+    //搜索详情页
+    public static String URL_CODE_ORDER_SEARCH_DETAIL = baseUrl1 + "ModelOrderSearchDetail?";
+    //搜索结算详情页
+    public static String URL_CODE_SEARCH_FINSIH_DETAIL = baseUrl1 + "ModelBillFinishDetailRecForSearch?";
+    //搜索出库详情页
+    public static String URL_CODE_SEARCH_DELIVERY_DETAIL = baseUrl1 + "ModelArriveBillMoForSearch?";
+
+
 }
 
 

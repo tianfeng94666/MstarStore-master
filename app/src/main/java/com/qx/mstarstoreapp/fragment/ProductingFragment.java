@@ -160,8 +160,8 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         titleText.setText("生产中");
 
 
-        pullRefreshView.setOnFooterRefreshListener(this);
-        pullToRefreshView.setOnHeaderRefreshListener(this);
+//        pullRefreshView.setOnFooterRefreshListener(this);
+//        pullToRefreshView.setOnHeaderRefreshListener(this);
         orderlList = new ArrayList<>();
         adapter = new ProductionAdapter(orderlList, R.layout.layout_order);
         idPdLv.setAdapter(adapter);

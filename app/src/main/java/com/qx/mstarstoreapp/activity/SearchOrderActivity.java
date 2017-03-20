@@ -3,11 +3,14 @@ package com.qx.mstarstoreapp.activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
@@ -27,7 +30,9 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.bean.OrderSearchBean;
 import com.qx.mstarstoreapp.json.CustomerEntity;
+import com.qx.mstarstoreapp.json.SearchOrderResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
@@ -37,6 +42,7 @@ import com.qx.mstarstoreapp.viewutils.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,10 +72,6 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     TextView tvEndDate;
     @Bind(R.id.rl_end_date)
     RelativeLayout rlEndDate;
-    @Bind(R.id.rb_my_orders)
-    RadioButton rbMyOrders;
-    @Bind(R.id.rb_my_group_orders)
-    RadioButton rbMyGroupOrders;
     @Bind(R.id.ll_search_type)
     LinearLayout llSearchType;
     @Bind(R.id.iv_search_type)
@@ -95,6 +97,11 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     private PopupWindow popupWindow;
     private String choosetype;
     CustomerEntity isDefaultCustomer;
+    List<SearchOrderResult.DataBean.SearchKeywordBean> list;
+    private SearchTypeAdapter simpleAdapter;
+    private List<SearchOrderResult.DataBean.SearchScopeBean> searchScopeBeenlist;
+    private OrderSearchBean orderSearchBean = new OrderSearchBean();//搜索数据类
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +112,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_search_order);
         ButterKnife.bind(this);
         initView();
+        loadNetData();
     }
 
     private void initView() {
@@ -114,24 +122,135 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         ivRight.setOnClickListener(this);
         llSearchType.setOnClickListener(this);
         igBtnSeach.setOnClickListener(this);
-        tvStartDate.setText(getCurrentDate());
-        tvEndDate.setText(getCurrentDate());
-        initRadioGroup();
+        //监听radiogroup
+        rgOrders.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                RadioButton radiobutton = (RadioButton) SearchOrderActivity.this.findViewById(group.getCheckedRadioButtonId());
+                if (radiobutton != null) {
+                    orderSearchBean.setSscopeid(getSscopeId(radiobutton.getText().toString()));
+                }
+            }
+        });
+
+
+
+        etSearchKey.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+
+            @Override
+            public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
+                // TODO Auto-generated method stub
+                if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
+                    goToSearchResultActivity();
+
+                }
+                return false;
+            }
+
+        });
     }
 
-    private void initRadioGroup() {
+    /**
+     * 跳转到搜索结果页面
+     */
+    private void goToSearchResultActivity() {
+        orderSearchBean.setKeyword(etSearchKey.getText().toString());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("searchData", orderSearchBean);
+        openActivity(SearchResultActivity.class, bundle);
+    }
+
+    /**
+     * 获得搜索范围id
+     *
+     * @param s
+     * @return
+     */
+    private int getSscopeId(String s) {
+        if (searchScopeBeenlist != null) {
+            for (int i = 0; i < searchScopeBeenlist.size(); i++) {
+                if (searchScopeBeenlist.get(i).getTitle().equals(s)) {
+                    return searchScopeBeenlist.get(i).getId();
+                }
+            }
+        }
+        return searchScopeBeenlist.get(0).getId();
+    }
+
+    /**
+     * 动态生成radiobutton控件
+     * @param st
+     * @param marginLeft
+     * @param isChoose
+     */
+    private void initRadioGroup(String st, int marginLeft, boolean isChoose) {
         RadioButton rb = new RadioButton(this);
         RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(UIUtils.dip2px(32),0,0,0);
+        params.setMargins(UIUtils.dip2px(marginLeft), 0, 0, 0);
         rb.setLayoutParams(params);
         rb.setButtonDrawable(R.drawable.selector_radio);
-        rb.setText("nihao");
+        rb.setText(st);
+        rb.setSelected(isChoose);
         rgOrders.addView(rb);
     }
 
-
+    /**
+     * 获取搜索界面最初信息
+     */
     @Override
     public void loadNetData() {
+        String url = AppURL.URL_CODE_ORDER_SEARCH + "tokenKey=" + BaseApplication.getToken();
+        L.e("url" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                L.e(result);
+                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+                if (error == 0) {
+                    SearchOrderResult searchOrderResult = new Gson().fromJson(result, SearchOrderResult.class);
+                    tvStartDate.setText(searchOrderResult.getData().getStartDate());
+                    tvEndDate.setText(searchOrderResult.getData().getEndDate());
+                    list = searchOrderResult.getData().getSearchKeyword();
+                    if (list != null) {
+                        tvSearchType.setText(list.get(0).getTitle());
+                        orderSearchBean.setSkeyid(list.get(0).getId());
+                        orderSearchBean.setKeyword(tvSearchType.getText().toString());
+                    }
+                    searchScopeBeenlist = searchOrderResult.getData().getSearchScope();
+                    setRadioGroup();
+                    orderSearchBean.setCustomerID(-1);
+                } else if (error == 2) {
+                    loginToServer(SearchOrderActivity.class);
+                } else {
+                    ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+        });
+    }
+
+    /**
+     * 设置RadioGroup，动态添加RadioButton和默认第一个选中
+     */
+    private void setRadioGroup() {
+        if (searchScopeBeenlist != null) {
+            for (int i = 0; i < searchScopeBeenlist.size(); i++) {
+                if (i == 0) {
+                    initRadioGroup(searchScopeBeenlist.get(i).getTitle(), 0, true);
+                } else {
+                    initRadioGroup(searchScopeBeenlist.get(i).getTitle(), 32, false);
+                }
+
+            }
+            RadioButton radioButton = (RadioButton) rgOrders.getChildAt(0);
+            radioButton.setChecked(true);
+            orderSearchBean.setSscopeid(searchScopeBeenlist.get(0).getId());
+        }
 
     }
 
@@ -148,7 +267,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.iv_right:
-                loadNetData();
+                goToSearchResultActivity();
                 break;
             case R.id.ll_search_type:
                 showPopWindow(view);
@@ -181,9 +300,11 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                     if (state == 0) {
                         ToastManager.showToastReal("没有此客户");
                         isDefaultCustomer.setCustomerID(-1);
+                        orderSearchBean.setCustomerID(-1);
                     }
                     if (state == 1) {
                         ToastManager.showToastReal("有此客户");
+                        orderSearchBean.setCustomerID(isDefaultCustomer.getCustomerID());
 
                     }
                     if (state == 2) {
@@ -232,11 +353,9 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         View popupWindowView = getLayoutInflater().inflate(R.layout.popupwindow_search_type, null,
                 false);
         ListView listView = (ListView) popupWindowView.findViewById(R.id.lv_seach_type);
-        final ArrayList<String> list = new ArrayList<>();
-        list.add("订单号");
-        list.add("订单号");
-        list.add("订单号");
-        SearchTypeAdapter simpleAdapter = new SearchTypeAdapter(list);
+        if (list != null) {
+            simpleAdapter = new SearchTypeAdapter(list);
+        }
         listView.setAdapter(simpleAdapter);
         // 创建PopupWindow实例,200,LayoutParams.MATCH_PARENT分别是宽度和高度
         popupWindow = new PopupWindow(popupWindowView, UIUtils.dip2px(100), UIUtils.dip2px(28 + list.size() * 20), true);
@@ -255,7 +374,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                choosetype = (String) list.get(position);
+                choosetype = list.get(position).getTitle();
                 tvSearchType.setText(choosetype);
             }
         });
@@ -269,10 +388,13 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
+                String s = getDate(mYear, mMonth, mDay);
                 if (type.equals("start")) {
-                    SearchOrderActivity.this.tvStartDate.setText(getDate(mYear, mMonth, mDay));
+                    SearchOrderActivity.this.tvStartDate.setText(s);
+                    orderSearchBean.setSdate(s);
                 } else {
-                    SearchOrderActivity.this.tvEndDate.setText(getDate(mYear, mMonth, mDay));
+                    SearchOrderActivity.this.tvEndDate.setText(s);
+                    orderSearchBean.setEdate(s);
                 }
             }
         }, year, month, day);
@@ -324,16 +446,16 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                 isDefaultCustomer = new CustomerEntity();
             }
             isDefaultCustomer.setCustomerID(customerID);
-
+            orderSearchBean.setCustomerID(customerID);
         }
 
 
     }
 
     class SearchTypeAdapter extends BaseAdapter {
-        ArrayList<String> list = new ArrayList<>();
+        List<SearchOrderResult.DataBean.SearchKeywordBean> list = new ArrayList<>();
 
-        public SearchTypeAdapter(ArrayList<String> list) {
+        public SearchTypeAdapter(List<SearchOrderResult.DataBean.SearchKeywordBean> list) {
             this.list = list;
         }
 
@@ -364,7 +486,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-            viewHolder.tvItemType.setText(list.get(position));
+            viewHolder.tvItemType.setText(list.get(position).getTitle());
 
             return view;
         }

@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linear_container_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="16dp"
     >
 
     <com.qx.mstarstoreapp.viewutils.MyLinearLayout
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="成色："
+                android:text="件数："
                 android:textColor="@color/theme_back"
                 />
 
