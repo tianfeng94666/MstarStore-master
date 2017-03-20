@@ -804,7 +804,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
     /*选中显示*/
     public void isCheckVisable(final ViewHolder viewHolder,final StoneEntity stoneEntity){
-        if (stoneEntity.isChecked()){
+        if (!stoneEntity.isChecked()){
             viewHolder.idStoreType.setDefaultText("类型");
             viewHolder.idStoreNorm.setDefaultText("规格");
             viewHolder.idStoreShape.setDefaultText("形状");
