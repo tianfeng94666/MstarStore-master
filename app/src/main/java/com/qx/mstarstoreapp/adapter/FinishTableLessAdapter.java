@@ -1,5 +1,6 @@
 package com.qx.mstarstoreapp.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
 import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
 import com.qx.mstarstoreapp.activity.FinishTableMoreActivity;
 import com.qx.mstarstoreapp.json.FinishTableLessResult;
+import com.qx.mstarstoreapp.json.RecListBean;
 
 import java.util.List;
 
@@ -27,12 +29,14 @@ import butterknife.ButterKnife;
  */
 
 public class FinishTableLessAdapter extends BaseAdapter {
+    private final String type;
     Context context;
-    List<FinishTableLessResult.DataBean.RecListBean> list;
+    List<RecListBean> list;
 
-    public FinishTableLessAdapter(Context context, List<FinishTableLessResult.DataBean.RecListBean> list) {
+    public FinishTableLessAdapter(Context context, List<RecListBean> list,String type) {
         this.context = context;
         this.list = list;
+        this.type = type;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class FinishTableLessAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder = null;
-        final FinishTableLessResult.DataBean.RecListBean recListBean = list.get(i);
+        final RecListBean recListBean = list.get(i);
         if (view == null) {
             view = View.inflate(context, R.layout.item_finish_table_one, null);
             viewHolder = new ViewHolder(view);
@@ -68,14 +72,15 @@ public class FinishTableLessAdapter extends BaseAdapter {
         viewHolder.tvFinishAmount.setText("数量：" + recListBean.getNumber());
         viewHolder.tvFinisShSumMoney.setText("¥" + recListBean.getTotalPrice());
 
-        FinishTableLessTwoAdapter finishTableLessTwoAdapter = new FinishTableLessTwoAdapter(context, recListBean.getMoList());
+        FinishTableLessTwoAdapter finishTableLessTwoAdapter = new FinishTableLessTwoAdapter(context, recListBean.getMoList(),type);
         viewHolder.lvSendingTables.setAdapter(finishTableLessTwoAdapter);
         viewHolder.rlGotoFinishMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, FinishTableMoreActivity.class);
                 intent.putExtra("recNumber", recListBean.getRecNum() + "");
-                ((FinishTableLessActivity) context).startActivity(intent);
+                intent.putExtra("type",type);
+                ((Activity) context).startActivity(intent);
             }
         });
         return view;

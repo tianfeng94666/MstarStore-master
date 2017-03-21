@@ -31,21 +31,25 @@ import com.qx.mstarstoreapp.utils.UIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.type;
+
 /**
  * Created by Administrator on 2016/12/20.
  */
 public class ProgressDialog {
 
 
+    private final int type;
     ListView mListView;
     private PopupWindow mPopupWindow;
     private Context mContext;
     String mOrderNumber;
     ProgressResult.DataEntity.OrderInfoEntity mOrderInfo;
     List<ProgressResult.DataEntity.OrderlListEntity> morderlList=new ArrayList<>();
-    public ProgressDialog(Context context,String orderNum) {
+    public ProgressDialog(Context context,String orderNum,int type) {
         this.mContext = context;
         this.mOrderNumber=orderNum;
+        this.type = type;
         initView();
         loadNetData();
 
@@ -54,7 +58,12 @@ public class ProgressDialog {
     //总进度
     int mFlowTotalCount;
     private void loadNetData() {
-        String url= AppURL.URL_MODELPRODUCE_PROGRESS+"tokenKey="+ BaseApplication.getToken()+"&orderNum="+mOrderNumber;
+        String url=null;
+        if(type==1){
+             url= AppURL.URL_MODELPRODUCE_PROGRESS+"tokenKey="+ BaseApplication.getToken()+"&orderNum="+mOrderNumber;
+        }else if(type==2){
+             url= AppURL.URL_MODELPRODUCE_PROGRESS2+"tokenKey="+ BaseApplication.getToken()+"&orderNum="+mOrderNumber;
+        }
         L.e("开启搜索"+url);
         // 进行登录请求
         VolleyRequestUtils.getInstance().getCookieRequest(mContext, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){

@@ -61,5 +61,8 @@
         <attr name="scrollable_autoMaxScrollViewId" format="reference" />
     </declare-styleable>
 
-
+    <attr name="indicatorView_amount" format="integer"/>
+    <declare-styleable name="IndicatorView">
+        <attr name="indicatorView_amount"/>
+    </declare-styleable>
 </resources>

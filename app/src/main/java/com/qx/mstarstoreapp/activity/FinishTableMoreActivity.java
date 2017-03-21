@@ -107,6 +107,7 @@ public class FinishTableMoreActivity extends BaseActivity {
     TextView tvMember;
 
     private FinishTableMoreResult finishTableMoreResult;
+    private String type;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,12 +134,18 @@ public class FinishTableMoreActivity extends BaseActivity {
 
     private void getDate() {
         recNumber = getIntent().getStringExtra("recNumber");
+        type =getIntent().getStringExtra("type");
     }
 
     @Override
     public void loadNetData() {
         String url = "";
-        url = AppURL.URL_CODE_FINISH_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&recNum=" + recNumber;
+        if(type.equals("1")){
+            url = AppURL.URL_CODE_FINISH_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&recNum=" + recNumber;
+        }else if(type.equals("2")){
+            url = AppURL.URL_CODE_SEARCH_FINSIH_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&recNum=" + recNumber;
+        }
+
         if (StringUtils.isEmpty(url)) {
             return;
         }

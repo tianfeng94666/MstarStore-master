@@ -16,14 +16,17 @@ import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.AddressListActivity;
-import com.qx.mstarstoreapp.activity.ProductionListActivity;
 import com.qx.mstarstoreapp.activity.ProgressDialog;
+import com.qx.mstarstoreapp.activity.SearchOrderMainActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.BaseFragment;
+import com.qx.mstarstoreapp.json.ModelListEntity;
+import com.qx.mstarstoreapp.json.OrderInfoEntity;
 import com.qx.mstarstoreapp.json.ProductListResult;
+import com.qx.mstarstoreapp.json.SearchOrderMainResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -77,6 +80,11 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     LinearLayout lnyLoadingLayout;
     @Bind(R.id.root_view)
     RelativeLayout rootView;
+    private SearchOrderMainResult.DataBean.OrderProduceBean bean;
+    private OrderInfoEntity orderInfoBean;
+    private String orderNum;
+    private List<ModelListEntity> modelListBeen;
+    private List<ModelListEntity> orderlList;
 
 
     @Nullable
@@ -85,14 +93,13 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         View view = View.inflate(getActivity(), R.layout.activity_production, null);
         ButterKnife.bind(this, view);
         idRelTitle.setVisibility(View.GONE);
-        lnyLoadingLayout.setVisibility(View.VISIBLE);
+
         getIntentData();
         initView();
-        loadNetData();
+        getData();
 
         return view;
     }
-
 
 
     public void getIntentData() {
@@ -101,51 +108,34 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     }
 
 
-    List<ProductListResult.DataEntity.ModelListEntity> orderlList;
-    String orderNum;
-    ProductListResult.DataEntity.OrderInfoEntity orderInfo;
-
-
-    public void loadNetData() {
-        String url = AppURL.URL_PD_ORDER_DETAIL + "orderNum=" + orderNum + "&tokenKey=" + BaseApplication.getToken();
-        L.e("ProductionListActivity" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-            @Override
-            public void onSuccess(String result) {
-                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
-                if (error == 0) {
-                    lnyLoadingLayout.setVisibility(View.GONE);
-                    ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
-                    ProductListResult.DataEntity productListResultData = productListResult.getData();
-                    List<ProductListResult.DataEntity.ModelListEntity> modelList = productListResultData.getModelList();
-                    orderInfo = productListResultData.getOrderInfo();
-                    initViewData(modelList);
-                }
-                if (error == 1) {
-                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    L.e(message);
-                    ToastManager.showToastReal(message);
-                }
-                if (error == 2) {
-                    loginToServer(AddressListActivity.class);
-                }
-
+    public void getData() {
+        bean = ((SearchOrderMainActivity) getActivity()).getOrderProduceBean();
+        if (bean != null) {
+            modelListBeen = bean.getModelList();
+            orderInfoBean = bean.getOrderInfo();
+            if (orderInfoBean != null) {
+                initViewData(modelListBeen,orderInfoBean);
             }
+        }
 
-            @Override
-            public void onFail(String fail) {
-
-            }
-        });
     }
 
-    private void initViewData(List<ProductListResult.DataEntity.ModelListEntity> modelList) {
-        idOrderNum.setText("订单编号：" + orderInfo.getOrderNum() + "");
-        idOrderDate.setText("下单日期：" + orderInfo.getOrderDate());
-        idUpdateDate.setText("审核日期：" + orderInfo.getConfirmDate());
-        idTvInvo.setText("发票： " + "类型：" + orderInfo.getInvoiceType() + " 抬头：" + orderInfo.getInvoiceTitle());
-        idTvPrice.setText("价格：" + orderInfo.getNeedPayPrice());
-        idTvDetail.setText(orderInfo.getOtherInfo());
+    public String isEmpty(String st) {
+
+        if (st == null || st.equals("") || st.equals("null")) {
+            return "暂无数据";
+        } else {
+            return st;
+        }
+    }
+
+    private void initViewData(List<ModelListEntity> modelList,OrderInfoEntity orderInfoBean) {
+        idOrderNum.setText("订单编号：" + isEmpty(orderInfoBean.getOrderNum() + ""));
+        idOrderDate.setText("下单日期：" + isEmpty(orderInfoBean.getOrderDate()));
+        idUpdateDate.setText("审核日期：" + isEmpty(orderInfoBean.getConfirmDate()));
+        idTvInvo.setText("发票： " + "类型：" + isEmpty(orderInfoBean.getInvoiceType() + "") + " 抬头：" + isEmpty(orderInfoBean.getInvoiceTitle() + ""));
+        idTvPrice.setText("价格：" + isEmpty(orderInfoBean.getNeedPayPrice()));
+        idTvDetail.setText(isEmpty(orderInfoBean.getOtherInfo()));
         if (pullStauts != PULL_LOAD) {
             orderlList.clear();
         }
@@ -168,8 +158,47 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         idTvShowdialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProgressDialog progressDialog = new ProgressDialog(getActivity(), orderInfo.getOrderNum());
+                ProgressDialog progressDialog = new ProgressDialog(getActivity(), orderInfoBean.getOrderNum(), 2);
                 progressDialog.showAsDropDown(rootView);
+            }
+        });
+        idTvConfirfilterr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetData();
+            }
+        });
+    }
+
+    public void loadNetData() {
+        String url = AppURL.URL_PD_ORDER_DETAIL2 + "orderNum=" + orderNum + "&tokenKey=" + BaseApplication.getToken();
+        L.e("ProductionListActivity" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+                if (error == 0) {
+                    lnyLoadingLayout.setVisibility(View.GONE);
+                    ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
+                    ProductListResult.DataEntity productListResultData = productListResult.getData();
+                    List<ModelListEntity> modelList = productListResultData.getModelList();
+                    OrderInfoEntity orderInfo = productListResultData.getOrderInfo();
+                    initViewData(modelList,orderInfo);
+                }
+                if (error == 1) {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    L.e(message);
+                    ToastManager.showToastReal(message);
+                }
+                if (error == 2) {
+                    loginToServer(AddressListActivity.class);
+                }
+
+            }
+
+            @Override
+            public void onFail(String fail) {
+
             }
         });
     }
@@ -199,7 +228,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
             tempCurpage = cupage;
             cupage++;
             pullStauts = PULL_LOAD;
-            loadNetData();
+
         } else {
             ToastManager.showToastReal("没有更多数据");
             pullToRefreshView.onFooterRefreshComplete();
@@ -212,7 +241,6 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         tempCurpage = cupage;
         cupage = 1;
         pullStauts = PULL_REFRESH;
-        loadNetData();
     }
 
     @Override
@@ -221,14 +249,14 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         ButterKnife.unbind(this);
     }
 
-    public class ProductionAdapter extends CommonAdapter<ProductListResult.DataEntity.ModelListEntity> {
-        public ProductionAdapter(List<ProductListResult.DataEntity.ModelListEntity> mDatas, int itemLayoutId) {
+    public class ProductionAdapter extends CommonAdapter<ModelListEntity> {
+        public ProductionAdapter(List<ModelListEntity> mDatas, int itemLayoutId) {
             super(mDatas, itemLayoutId);
             L.e("ProductionAdapter");
         }
 
         @Override
-        public void convert(int position, BaseViewHolder helper, ProductListResult.DataEntity.ModelListEntity item) {
+        public void convert(int position, BaseViewHolder helper, ModelListEntity item) {
             RelativeLayout reView = helper.getView(R.id.item_button_layout);
             ImageView productImg = helper.getView(R.id.product_img);
             reView.setVisibility(View.GONE);

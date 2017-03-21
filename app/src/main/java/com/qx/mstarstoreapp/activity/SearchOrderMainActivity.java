@@ -9,22 +9,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
-import com.qx.mstarstoreapp.adapter.SearchResultAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
@@ -32,15 +25,11 @@ import com.qx.mstarstoreapp.fragment.DeliveryFragment;
 import com.qx.mstarstoreapp.fragment.FinishFragment;
 import com.qx.mstarstoreapp.fragment.FragOrderListFragment;
 import com.qx.mstarstoreapp.fragment.ProductingFragment;
-import com.qx.mstarstoreapp.json.CustomerListRestult;
 import com.qx.mstarstoreapp.json.SearchOrderMainResult;
-import com.qx.mstarstoreapp.json.SearchResultResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
-import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
-import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.IndicatorView;
 
@@ -67,10 +56,37 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
     TextView titleText;
     @Bind(R.id.iv_right)
     ImageView ivRight;
+    @Bind(R.id.ll_waiting_check)
+    LinearLayout llWaitingCheck;
+    @Bind(R.id.tv1)
+    TextView tv1;
+    @Bind(R.id.tab1)
+    TextView tab1;
+    @Bind(R.id.id_fr1)
+    FrameLayout idFr1;
+    @Bind(R.id.tv2)
+    TextView tv2;
+    @Bind(R.id.tab2)
+    TextView tab2;
+    @Bind(R.id.id_fr2)
+    FrameLayout idFr2;
+    @Bind(R.id.tv3)
+    TextView tv3;
+    @Bind(R.id.tab3)
+    TextView tab3;
+    @Bind(R.id.id_fr3)
+    FrameLayout idFr3;
+    @Bind(R.id.id_indicatorview)
+    IndicatorView idIndicatorview;
+    @Bind(R.id.order_viewpager)
+    ViewPager orderViewpager;
     private ProductingFragment productingFragment;//生产中
     private DeliveryFragment sendingFragment;//已发货
     private FinishFragment finishedFragment;//已完成
-    String orderNum ;
+    String orderNum;
+    private SearchOrderMainResult.DataBean.OrderProduceBean orderProduceBean;
+    private SearchOrderMainResult.DataBean.OrderSendedBean orderSendedBean;
+    public BadgeView badge1, badge2, badge3, badge4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +94,12 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_custom_made);
+        setContentView(R.layout.activity_search_main);
         ButterKnife.bind(this);
+        llWaitingCheck.setVisibility(View.GONE);
         getData();
         loadNetData();
-        initView();
+
     }
 
     private void getData() {
@@ -93,6 +110,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
     @Override
     public void loadNetData() {
         String url = AppURL.URL_CODE_ORDER_SEARCH_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&orderNum=" + orderNum;
+//        String url ="http://appapi1.fanerweb.com/api/aproxy/ModelOrderSearchDetail?tokenKey=7cdcf3a6a47904dbff1e7da86b8ef225&orderNum=AP170310360";
         L.e("url" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -100,9 +118,10 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
-                    SearchOrderMainResult searchOrderMainResult = new Gson().fromJson(result,SearchOrderMainResult.class);
-                    SearchOrderMainResult.DataBean.OrderProduceBean orderProduceBean = searchOrderMainResult.getData().getOrderProduce();
-                    SearchOrderMainResult.DataBean.OrderSendedBean orderSendedBean = searchOrderMainResult.getData().getOrderSended();
+                    SearchOrderMainResult searchOrderMainResult = new Gson().fromJson(result, SearchOrderMainResult.class);
+                    orderProduceBean = searchOrderMainResult.getData().getOrderProduce();
+                    orderSendedBean = searchOrderMainResult.getData().getOrderSended();
+                    initView();
                 } else if (error == 2) {
                     loginToServer(SearchResultActivity.class);
                 } else {
@@ -121,8 +140,6 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         finish();
     }
 
-    public BadgeView badge1, badge2, badge3, badge4;
-
 
     static List<BadgeView> list = new ArrayList<>();
 
@@ -139,46 +156,53 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
 
         SCREENWIDTH = getScreenWidth();
         indicatorView = (IndicatorView) findViewById(R.id.id_indicatorview);
+       indicatorView.setNum(3);
         viewPager = (ViewPager) findViewById(R.id.order_viewpager);
-        TextView tab = (TextView) findViewById(R.id.tab);
+
         TextView tab1 = (TextView) findViewById(R.id.tab1);
         TextView tab2 = (TextView) findViewById(R.id.tab2);
         TextView tab3 = (TextView) findViewById(R.id.tab3);
 
-        TextView tv = (TextView) findViewById(R.id.tv);
         TextView tv1 = (TextView) findViewById(R.id.tv1);
         TextView tv2 = (TextView) findViewById(R.id.tv2);
         TextView tv3 = (TextView) findViewById(R.id.tv3);
 
         FrameLayout id_fl_tab = (FrameLayout) findViewById(R.id.id_fr);
+        id_fl_tab.setVisibility(View.GONE);
         FrameLayout id_fl_tab1 = (FrameLayout) findViewById(R.id.id_fr1);
         FrameLayout id_fl_tab2 = (FrameLayout) findViewById(R.id.id_fr2);
         FrameLayout id_fl_tab3 = (FrameLayout) findViewById(R.id.id_fr3);
 
-        badge1 = new BadgeView(SearchOrderMainActivity.this, tab);// 创建一个BadgeView对象，view为你需要显示提醒的控件
+
         badge2 = new BadgeView(SearchOrderMainActivity.this, tab1);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         badge3 = new BadgeView(SearchOrderMainActivity.this, tab2);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         badge4 = new BadgeView(SearchOrderMainActivity.this, tab3);// 创建一个BadgeView对象，view为你需要显示提醒的控件
 
 
-        tabTextViews.add(tv);
+
         tabTextViews.add(tv1);
         tabTextViews.add(tv2);
         tabTextViews.add(tv3);
-        id_fl_tab.setOnClickListener(this);
+
         id_fl_tab1.setOnClickListener(this);
         id_fl_tab2.setOnClickListener(this);
         id_fl_tab3.setOnClickListener(this);
         CommentListPagerAdapter adapter = new CommentListPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOnPageChangeListener(this);
-        viewPager.setOffscreenPageLimit(2);
-
+        viewPager.setOffscreenPageLimit(1);
+        int pagerNumber;
         //显示第几个Fragment
-        int pagerNumber = getIntent().getIntExtra("pageNumber", 0);
+        if(orderProduceBean.getModelList()!=null){
+            pagerNumber = getIntent().getIntExtra("pageNumber", 0);
+        }else if(orderProduceBean.getModelList()==null&&orderSendedBean!=null){
+            pagerNumber = getIntent().getIntExtra("pageNumber", 1);
+        }else {
+            pagerNumber = getIntent().getIntExtra("pageNumber", 0);
+        }
         viewPager.setCurrentItem(pagerNumber);
-        ivRight.setVisibility(View.VISIBLE);
-        ivRight.setOnClickListener(this);
+//        ivRight.setVisibility(View.VISIBLE);
+//        ivRight.setOnClickListener(this);
     }
 
 
@@ -202,12 +226,12 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        indicatorView.setX(SCREENWIDTH / 4 * (position + positionOffset));
+        indicatorView.setX(SCREENWIDTH / 3 * (position + positionOffset));
     }
 
     @Override
     public void onPageSelected(int position) {
-        indicatorView.setX(SCREENWIDTH / 4 * position);
+        indicatorView.setX(SCREENWIDTH / 3 * position);
         setTxtColor(tabTextViews.get(position));
     }
 
@@ -233,17 +257,15 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.id_fr:
+
+            case R.id.id_fr1:
                 viewPager.setCurrentItem(0);
                 break;
-            case R.id.id_fr1:
+            case R.id.id_fr2:
                 viewPager.setCurrentItem(1);
                 break;
-            case R.id.id_fr2:
-                viewPager.setCurrentItem(2);
-                break;
             case R.id.id_fr3:
-                viewPager.setCurrentItem(3);
+                viewPager.setCurrentItem(2);
                 break;
             case R.id.iv_right:
                 search();
@@ -307,4 +329,19 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         }
     }
 
+    public SearchOrderMainResult.DataBean.OrderProduceBean getOrderProduceBean() {
+        return orderProduceBean;
+    }
+
+    public void setOrderProduceBean(SearchOrderMainResult.DataBean.OrderProduceBean orderProduceBean) {
+        this.orderProduceBean = orderProduceBean;
+    }
+
+    public SearchOrderMainResult.DataBean.OrderSendedBean getOrderSendedBean() {
+        return orderSendedBean;
+    }
+
+    public void setOrderSendedBean(SearchOrderMainResult.DataBean.OrderSendedBean orderSendedBean) {
+        this.orderSendedBean = orderSendedBean;
+    }
 }

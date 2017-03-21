@@ -65,6 +65,7 @@ public class DeliveryTableActivity extends BaseActivity {
     DeliveryTableResult deliveryTableResult;
     DeliveryTableResult.DataBean.MoItemBean moItemBean;
     private DeliveryAdapter deliveryAdapter;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class DeliveryTableActivity extends BaseActivity {
 
     private void getDate() {
         momNumber = getIntent().getStringExtra("momNumber");
+        type = getIntent().getStringExtra("type");
     }
 
     private void initView() {
@@ -111,7 +113,11 @@ public class DeliveryTableActivity extends BaseActivity {
     @Override
     public void loadNetData() {
         String url = "";
-        url = AppURL.URL_CODE_SENDING_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&moNum=" + momNumber;
+        if(type.equals("1")){
+            url = AppURL.URL_CODE_SENDING_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&moNum=" + momNumber;
+        }else if(type.equals("2")){
+            url = AppURL.URL_CODE_SEARCH_DELIVERY_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&moNum=" + momNumber;
+        }
         if (StringUtils.isEmpty(url)) {
             return;
         }

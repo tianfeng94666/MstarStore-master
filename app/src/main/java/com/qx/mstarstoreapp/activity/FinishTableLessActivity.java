@@ -18,6 +18,7 @@ import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.json.FinishTableLessResult;
+import com.qx.mstarstoreapp.json.RecListBean;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
@@ -44,6 +45,7 @@ public class FinishTableLessActivity extends BaseActivity {
     private String orderNumber;
     private FinishTableLessAdapter finishTableLessAdapter;
     private Context context;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class FinishTableLessActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_finish_table_less);
         ButterKnife.bind(this);
         context =this;
         init();
@@ -69,6 +72,7 @@ public class FinishTableLessActivity extends BaseActivity {
     }
     private void getDate() {
         orderNumber = getIntent().getStringExtra("orderNumber");
+        type = getIntent().getStringExtra("type");
     }
 
     @Override
@@ -86,9 +90,9 @@ public class FinishTableLessActivity extends BaseActivity {
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     FinishTableLessResult finishTableLessResult = new Gson().fromJson(result,FinishTableLessResult.class);
-                    List<FinishTableLessResult.DataBean.RecListBean>  list = finishTableLessResult.getData().getRecList();
+                    List<RecListBean>  list = finishTableLessResult.getData().getRecList();
                     if(list !=null){
-                        finishTableLessAdapter = new FinishTableLessAdapter(context,list);
+                        finishTableLessAdapter = new FinishTableLessAdapter(context,list,type);
                         lvSendingTables.setAdapter(finishTableLessAdapter);
                     }
                 } else if (error.equals("2")) {

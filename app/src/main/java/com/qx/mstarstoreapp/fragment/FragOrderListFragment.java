@@ -253,7 +253,6 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                             list = orderList.getList();
                             if(list!=null){
                                 listCount = Integer.valueOf(orderList.getList_count());
-                                System.out.println("listCount="+listCount+",type=2");
                                 setBadge(listCount,2);
                             }
                             break;
@@ -305,15 +304,15 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
             switch (fragType) {
                 case CHECKING_CODE:
                     System.out.println("badge1="+((CustomMadeActivity) getActivity()).badge1);
-                    ((CustomMadeActivity)getActivity()).setBadge(count,((CustomMadeActivity) getActivity()).badge1);
+                    ((CustomMadeActivity)getActivity()).onFragOrderCount(count,1);
                     break;
                 case PRODUCTING_CODE:
                     System.out.println("badge2="+((CustomMadeActivity) getActivity()).badge2);
-                    ((CustomMadeActivity)getActivity()).setBadge(count,((CustomMadeActivity) getActivity()).badge2);
+                    ((CustomMadeActivity)getActivity()).onFragOrderCount(count,2);
                     break;
                 case SENDING_CODE:
                     System.out.println("badge3="+((CustomMadeActivity) getActivity()).badge3);
-                    ((CustomMadeActivity)getActivity()).setBadge(count,((CustomMadeActivity) getActivity()).badge3);
+                    ((CustomMadeActivity)getActivity()).onFragOrderCount(count,3);
                     break;
             }
         }

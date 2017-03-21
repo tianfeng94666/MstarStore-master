@@ -1,15 +1,28 @@
 package com.qx.mstarstoreapp.viewutils;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.qx.mstarstoreapp.R;
+
 public class IndicatorView extends View {
 
     private Context mContext;
     private int num;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+        invalidate();
+    }
+
     public IndicatorView(Context context) {
         super(context);
         init(context);
@@ -17,13 +30,17 @@ public class IndicatorView extends View {
 
     public IndicatorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        num = attrs.getAttributeIntValue(null, "num", 4);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.IndicatorView);
+       num= typedArray.getInt(R.styleable.IndicatorView_indicatorView_amount,4);
+       typedArray.recycle();
         init(context);
     }
 
     public IndicatorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        num = attrs.getAttributeIntValue(null, "num", 4);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.IndicatorView);
+        num= typedArray.getInt(R.styleable.IndicatorView_indicatorView_amount,4);
+        typedArray.recycle();
         init(context);
     }
 

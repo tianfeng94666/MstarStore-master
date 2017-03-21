@@ -1,5 +1,6 @@
 package com.qx.mstarstoreapp.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
 import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
 import com.qx.mstarstoreapp.json.FinishTableLessResult;
+import com.qx.mstarstoreapp.json.RecListBean;
 
 import java.util.List;
 
@@ -24,12 +26,14 @@ import butterknife.ButterKnife;
  */
 
 public class FinishTableLessTwoAdapter extends BaseAdapter {
+    private final String type;
     private Context context;
-    private List<FinishTableLessResult.DataBean.RecListBean.MoListBean> list;
+    private List<RecListBean.MoListBean> list;
 
-    public FinishTableLessTwoAdapter(Context context, List<FinishTableLessResult.DataBean.RecListBean.MoListBean> list) {
+    public FinishTableLessTwoAdapter(Context context, List<RecListBean.MoListBean> list,String type) {
         this.list = list;
         this.context = context;
+        this.type = type;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class FinishTableLessTwoAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder = null;
-        final FinishTableLessResult.DataBean.RecListBean.MoListBean bean = list.get(i);
+        final RecListBean.MoListBean bean = list.get(i);
         if (view == null) {
             view = View.inflate(context, R.layout.item_finished_less, null);
             viewHolder = new ViewHolder(view);
@@ -67,7 +71,8 @@ public class FinishTableLessTwoAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Intent intent = new Intent(context, DeliveryTableActivity.class);
                 intent.putExtra("momNumber",bean.getMoNum()+"");
-                ( (FinishTableLessActivity)context).startActivity(intent);
+                intent.putExtra("type",type);
+                ( (Activity)context).startActivity(intent);
             }
         });
         return view;

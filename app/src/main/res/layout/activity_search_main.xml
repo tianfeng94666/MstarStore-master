@@ -219,7 +219,7 @@
             android:id="@+id/id_indicatorview"
             android:layout_width="wrap_content"
             android:layout_height="4dp"
-            app:indicatorView_amount="4"
+            app:indicatorView_amount="3"
             android:layout_alignParentBottom="true"
             android:background="@color/theme_red" />
     </RelativeLayout>

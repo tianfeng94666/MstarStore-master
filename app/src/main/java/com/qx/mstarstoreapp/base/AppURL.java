@@ -188,15 +188,15 @@ public class AppURL {
     public static String URL_CODE_FORGETPWD= baseUrl + "GetForgetPasswordVerifyCodeDo?";
 
     //结算单
-    public static String URL_CODE_FINISH= baseUrl + "ModelFinishBillList?";
+    public static String URL_CODE_FINISH= baseUrl1 + "ModelFinishBillList?";
     //结算单详情
-    public static String URL_CODE_FINISH_DETAIL= baseUrl + "ModelBillFinishDetailRec?";
+    public static String URL_CODE_FINISH_DETAIL= baseUrl1 + "ModelBillFinishDetailRec?";
     //已货单列表 http://appapi1.fanerweb.com/api/Aproxy/ModelBillList?cpage=3&tokenKey=7cdcf3a6a47904dbff1e7da86b8ef225
-    public static String URL_CODE_SENDING= baseUrl + "ModelBillList?";
+    public static String URL_CODE_SENDING= baseUrl1 + "ModelBillList?";
     //已货单详情
-    public static String URL_CODE_SENDING_DETAIL= baseUrl + "ModelArriveBillMo?";
+    public static String URL_CODE_SENDING_DETAIL= baseUrl1 + "ModelArriveBillMo?";
     //获得版本信息
-    public static String URL_CODE_VERSION = baseUrl + "currentVersion?";
+    public static String URL_CODE_VERSION = baseUrl1 + "currentVersion?";
 
     //订单搜索页面
     public static String URL_CODE_ORDER_SEARCH = baseUrl1 + "ModelUserOrderSearchPage?";
@@ -208,7 +208,10 @@ public class AppURL {
     public static String URL_CODE_SEARCH_FINSIH_DETAIL = baseUrl1 + "ModelBillFinishDetailRecForSearch?";
     //搜索出库详情页
     public static String URL_CODE_SEARCH_DELIVERY_DETAIL = baseUrl1 + "ModelArriveBillMoForSearch?";
-
+    /*1.1.2.4搜索页面的生产进度*/
+    public static String URL_MODELPRODUCE_PROGRESS2=baseUrl1+"ModelOrderProduceDetailShowRateProgressPageForSearch?";
+    /*订单 详情  ModelOrderProduceDetailPage?  */
+    public static String URL_PD_ORDER_DETAIL2 = baseUrl1 + "ModelOrderProduceDetailHistoryPageForSearch?";
 
 }
 

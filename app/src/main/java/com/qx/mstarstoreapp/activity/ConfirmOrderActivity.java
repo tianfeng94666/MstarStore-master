@@ -676,7 +676,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 //                        startActivity(intent);
                        // "orderNum":"AP2017021316476
                         String  orderNum=jsonObject.get("orderNum").getAsString();
-                        ProgressDialog progressDialog=new ProgressDialog(ConfirmOrderActivity.this,orderNum);
+                        ProgressDialog progressDialog=new ProgressDialog(ConfirmOrderActivity.this,orderNum,1);
                         progressDialog.showAsDropDown(rootView);
                        // intent.putExtra("pageNumber",1);
                     }else {

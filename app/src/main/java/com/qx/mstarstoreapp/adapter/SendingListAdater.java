@@ -68,6 +68,7 @@ public class SendingListAdater extends BaseAdapter {
             public void onClick(View view) {
                 Intent intent = new Intent(context, FinishTableLessActivity.class);
                 intent.putExtra("orderNumber",orderListBean.getOrderNum());
+                intent.putExtra("type","1");
                 context.startActivity(intent);
             }
         });
