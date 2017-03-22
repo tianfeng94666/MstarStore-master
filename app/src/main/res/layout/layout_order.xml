@@ -175,7 +175,7 @@
 
     <TextView
         android:textSize="@dimen/text_size_small_medium"
-        android:textColor="@color/black"
+        android:textColor="@color/text_color"
         android:id="@+id/id_tv_information"
         android:layout_marginLeft="@dimen/margin10"
         android:layout_marginRight="@dimen/margin10"

@@ -76,6 +76,9 @@ public class ProgressDialog {
                     mLnyLoadingLayout.setVisibility(View.GONE);
                     ProgressResult progressResult = new Gson().fromJson(result, ProgressResult.class);
                     ProgressResult.DataEntity dataEntity = progressResult.getData();
+                    if(dataEntity==null){
+                        return;
+                    }
                     mOrderInfo   = dataEntity.getOrderInfo();
                     mFlowTotalCount=dataEntity.getFlowTotalCount();
                     morderlList = dataEntity.getOrderlList();

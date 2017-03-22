@@ -93,7 +93,9 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     SearchResultResult searchResultResult = new Gson().fromJson(result, SearchResultResult.class);
-                    list = searchResultResult.getData().getOrderList();
+                    if(searchResultResult.getData()!=null){
+                        list = searchResultResult.getData().getOrderList();
+                    }
                     if (list != null) {
                         searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, list);
                         lvResults.setAdapter(searchResultAdapter);

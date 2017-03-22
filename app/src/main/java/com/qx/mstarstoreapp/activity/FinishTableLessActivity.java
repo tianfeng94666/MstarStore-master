@@ -90,10 +90,12 @@ public class FinishTableLessActivity extends BaseActivity {
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     FinishTableLessResult finishTableLessResult = new Gson().fromJson(result,FinishTableLessResult.class);
-                    List<RecListBean>  list = finishTableLessResult.getData().getRecList();
-                    if(list !=null){
-                        finishTableLessAdapter = new FinishTableLessAdapter(context,list,type);
-                        lvSendingTables.setAdapter(finishTableLessAdapter);
+                    if(finishTableLessResult.getData()!=null){
+                        List<RecListBean>  list = finishTableLessResult.getData().getRecList();
+                        if(list !=null){
+                            finishTableLessAdapter = new FinishTableLessAdapter(context,list,type);
+                            lvSendingTables.setAdapter(finishTableLessAdapter);
+                        }
                     }
                 } else if (error.equals("2")) {
                     loginToServer(FinishTableLessActivity.class);

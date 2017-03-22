@@ -2,6 +2,8 @@ package com.qx.mstarstoreapp.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -78,7 +80,9 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_production);
         ButterKnife.bind(this);
         lnyLoadingLayout.setVisibility(View.VISIBLE);
@@ -113,6 +117,9 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
                 if (error == 0) {
                     lnyLoadingLayout.setVisibility(View.GONE);
                     ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
+                    if(productListResult.getData()==null){
+                        return;
+                    }
                     ProductListResult.DataEntity productListResultData = productListResult.getData();
                     List<ModelListEntity> modelList = productListResultData.getModelList();
                     orderInfo = productListResultData.getOrderInfo();

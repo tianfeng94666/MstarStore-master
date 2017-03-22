@@ -7,6 +7,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -63,6 +65,9 @@ public class AddressListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_add_adress);
         ButterKnife.bind(this);
         type = getIntent().getIntExtra("type",1);
@@ -87,24 +92,25 @@ public class AddressListActivity extends BaseActivity {
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     AddressListResult address = new Gson().fromJson(result, AddressListResult.class);
-                    addressList.clear();
-                    addressList .addAll(address.getData().getAddressList());
-                    if (type==ADDRESS_MANAGER){
-                        adapter.notifyDataSetChanged();
-                    } if (type==ADDRESS_ORDER) {
-                        orderSelectAdressAdapter.notifyDataSetChanged();
-                    }
-                    for (int i=0;i<addressList.size();i++){
-                        if(addressList.get(i).getIsDefault().equals("1")){
-                            L.e("手动设置默认地址");
-                            idDefaultAddressListEntity.setIsDefault("1");
-                            idDefaultAddressListEntity.setAddr(addressList.get(i).getAddr());
-                            idDefaultAddressListEntity.setId(addressList.get(i).getId());
-                            idDefaultAddressListEntity.setName(addressList.get(i).getName());
-                            idDefaultAddressListEntity.setPhone(addressList.get(i).getPhone());
+                    if(address.getData()!=null){
+                        addressList.clear();
+                        addressList .addAll(address.getData().getAddressList());
+                        if (type==ADDRESS_MANAGER){
+                            adapter.notifyDataSetChanged();
+                        } if (type==ADDRESS_ORDER) {
+                            orderSelectAdressAdapter.notifyDataSetChanged();
+                        }
+                        for (int i=0;i<addressList.size();i++){
+                            if(addressList.get(i).getIsDefault().equals("1")){
+                                L.e("手动设置默认地址");
+                                idDefaultAddressListEntity.setIsDefault("1");
+                                idDefaultAddressListEntity.setAddr(addressList.get(i).getAddr());
+                                idDefaultAddressListEntity.setId(addressList.get(i).getId());
+                                idDefaultAddressListEntity.setName(addressList.get(i).getName());
+                                idDefaultAddressListEntity.setPhone(addressList.get(i).getPhone());
+                            }
                         }
                     }
-
                 }
                 else if (error == 2) {
                     loginToServer(AddressListActivity.class);

@@ -189,6 +189,9 @@ public class HomeFragment extends BaseFragment {
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     homeResult = new Gson().fromJson(result, HomeResult.class);
+                    if(homeResult.getData()==null){
+                        return;
+                    }
                     functionsList = homeResult.getData().getFunctionsList();
                     initView(view);
                 }

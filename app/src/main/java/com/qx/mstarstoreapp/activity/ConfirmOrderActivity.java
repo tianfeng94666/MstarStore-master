@@ -7,6 +7,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -154,6 +156,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_confirmorder);
         ButterKnife.bind(this);
         getActivityType();
@@ -193,88 +198,91 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 if (error == 0) {
                     OrderListResult orderListResult = new Gson().fromJson(result, OrderListResult.class);
                     OrderListResult.DataEntity dataEntity = orderListResult.getData();
-                    OrderListResult.DataEntity.CurrentOrderlListEntity currentOrderlList = dataEntity.getCurrentOrderlList();
-                    List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> list = currentOrderlList.getList();
-                    isDefaultAddress = dataEntity.getAddress();
-                    if (pullState != PULL_LOAD) {
-                        confirOrderAdapter.cancelAll();
-                        listData.clear();
-                    }
-                    list_count = Integer.valueOf(currentOrderlList.getList_count());
-                    if (curpage == 1) {
-                        modelColorItme = dataEntity.getModelColor();
-                        modelQualityItem = dataEntity.getModelQuality();
-                    }
-                    if (list_count == 0) {
-                        ToastManager.showToastReal("没有数据");
-                    } else {
-                        listData.addAll(list);
-                    }
-                    if (isDefaultAddress != null) {
-                        idTvName.setText(isDefaultAddress.getName());
-                        idTvAddress.setText(isDefaultAddress.getAddr());
-                        phoneTv.setText(isDefaultAddress.getPhone());
-                    }
-                    if (isFirst) {
-                        if (type == 2) {
-                            OrderListResult.DataEntity.OrderInfoEntity orderInfo  = dataEntity.getOrderInfo();
-                            Double totalPrice = dataEntity.getTotalPrice();
-                            Double totalNeedPayPrice = dataEntity.getTotalNeedPayPrice();
-                            L.e("orderInfo" + orderInfo.toString() + "totalPrice:" + totalPrice + "totalNeedPayPrice:" + totalNeedPayPrice);
-                            idCsColor.setTextName(orderInfo.getPurityName());
-                            idCsMass.setTextName(orderInfo.getQualityName());
-                            idEdWord.setText(orderInfo.getWord());
-                            idEdRemarks.setText(orderInfo.getOrderNote());
-                            idEtSeach.setText(orderInfo.getCustomerName());
-                            tvTotalPrice.setText(totalNeedPayPrice + "--定金   " + totalPrice + "(合计)");
-                            idTvNeedPrice.setText("定金 :" + totalNeedPayPrice);
-                            idTvTotalPrice.setText("合计 :" + totalPrice);
-                            setListHeadView(orderInfo);
-                            invTitle =  orderInfo.getInvoiceTitle();
-                            invType =  orderInfo.getInvoiceType();
-                            if (!StringUtils.isEmpty(orderInfo.getInvoiceTitle())&&!StringUtils.isEmpty(invType)){
-                                idReceipt.setText("类型："+invType+"     抬头："+invTitle);
-                                L.e("类型："+invTitle+"     抬头："+invTitle);
-                            }
-
-                        } else {
-                            isDefaultCustomer = dataEntity.getCustomer();
-                            if (isDefaultCustomer != null) {
-                                idEtSeach.setText(isDefaultCustomer.getCustomerName());
-                            }
+                    if(dataEntity!=null){
+                        OrderListResult.DataEntity.CurrentOrderlListEntity currentOrderlList = dataEntity.getCurrentOrderlList();
+                        List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> list = currentOrderlList.getList();
+                        isDefaultAddress = dataEntity.getAddress();
+                        if (pullState != PULL_LOAD) {
+                            confirOrderAdapter.cancelAll();
+                            listData.clear();
                         }
-                        isFirst = false;
-                    }
-                    if (priceList != null && priceList.size() != 0) {
-                        for (int i = 0; i < priceList.size(); i++) {
-                            for (int j = 0; j < listData.size(); j++) {
-                                if (listData.get(j).getId().equals(priceList.get(i).getId())) {
-                                    listData.get(j).setPrice(priceList.get(i).getPrice() + "");
+                        list_count = Integer.valueOf(currentOrderlList.getList_count());
+                        if (curpage == 1) {
+                            modelColorItme = dataEntity.getModelColor();
+                            modelQualityItem = dataEntity.getModelQuality();
+                        }
+                        if (list_count == 0) {
+                            ToastManager.showToastReal("没有数据");
+                        } else {
+                            listData.addAll(list);
+                        }
+                        if (isDefaultAddress != null) {
+                            idTvName.setText(isDefaultAddress.getName());
+                            idTvAddress.setText(isDefaultAddress.getAddr());
+                            phoneTv.setText(isDefaultAddress.getPhone());
+                        }
+                        if (isFirst) {
+                            if (type == 2) {
+                                OrderListResult.DataEntity.OrderInfoEntity orderInfo  = dataEntity.getOrderInfo();
+                                Double totalPrice = dataEntity.getTotalPrice();
+                                Double totalNeedPayPrice = dataEntity.getTotalNeedPayPrice();
+                                L.e("orderInfo" + orderInfo.toString() + "totalPrice:" + totalPrice + "totalNeedPayPrice:" + totalNeedPayPrice);
+                                idCsColor.setTextName(orderInfo.getPurityName());
+                                idCsMass.setTextName(orderInfo.getQualityName());
+                                idEdWord.setText(orderInfo.getWord());
+                                idEdRemarks.setText(orderInfo.getOrderNote());
+                                idEtSeach.setText(orderInfo.getCustomerName());
+                                tvTotalPrice.setText(totalNeedPayPrice + "--定金   " + totalPrice + "(合计)");
+                                idTvNeedPrice.setText("定金 :" + totalNeedPayPrice);
+                                idTvTotalPrice.setText("合计 :" + totalPrice);
+                                setListHeadView(orderInfo);
+                                invTitle =  orderInfo.getInvoiceTitle();
+                                invType =  orderInfo.getInvoiceType();
+                                if (!StringUtils.isEmpty(orderInfo.getInvoiceTitle())&&!StringUtils.isEmpty(invType)){
+                                    idReceipt.setText("类型："+invType+"     抬头："+invTitle);
+                                    L.e("类型："+invTitle+"     抬头："+invTitle);
+                                }
+
+                            } else {
+                                isDefaultCustomer = dataEntity.getCustomer();
+                                if (isDefaultCustomer != null) {
+                                    idEtSeach.setText(isDefaultCustomer.getCustomerName());
+                                }
+                            }
+                            isFirst = false;
+                        }
+                        if (priceList != null && priceList.size() != 0) {
+                            for (int i = 0; i < priceList.size(); i++) {
+                                for (int j = 0; j < listData.size(); j++) {
+                                    if (listData.get(j).getId().equals(priceList.get(i).getId())) {
+                                        listData.get(j).setPrice(priceList.get(i).getPrice() + "");
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (type==2){
-                        btGoPay.setVisibility(View.INVISIBLE);
-                        idLayOrderDetail.setVisibility(View.VISIBLE);
-                        idLayPrice1.setVisibility(View.INVISIBLE);
-                        idLayPrice2.setVisibility(View.VISIBLE);
-                    }else {
-                        btGoPay.setVisibility(View.VISIBLE);
-                        idLayOrderDetail.setVisibility(View.INVISIBLE);
-                        idLayPrice1.setVisibility(View.VISIBLE);
-                        idLayPrice2.setVisibility(View.INVISIBLE);
-                    }
-                    L.e("解析成功");
-                    endNetRequest();
-                    initListener();
-                    L.e("mchecked" + mchecked.size());
-                    Set<Map.Entry<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity>> entries = mchecked.entrySet();
+                        if (type==2){
+                            btGoPay.setVisibility(View.INVISIBLE);
+                            idLayOrderDetail.setVisibility(View.VISIBLE);
+                            idLayPrice1.setVisibility(View.INVISIBLE);
+                            idLayPrice2.setVisibility(View.VISIBLE);
+                        }else {
+                            btGoPay.setVisibility(View.VISIBLE);
+                            idLayOrderDetail.setVisibility(View.INVISIBLE);
+                            idLayPrice1.setVisibility(View.VISIBLE);
+                            idLayPrice2.setVisibility(View.INVISIBLE);
+                        }
+                        L.e("解析成功");
+                        endNetRequest();
+                        initListener();
+                        L.e("mchecked" + mchecked.size());
+                        Set<Map.Entry<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity>> entries = mchecked.entrySet();
 //                    for (Map.Entry<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> entry : entries) {
 //                        OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity entity = entry.getValue();
 //                        L.e(entity.toString());
 //                    }
-                    changeState(mchecked);
+                        changeState(mchecked);
+                    }
+
                 }
                 if (error == 2) {
                     loginToServer(OrderActivity.class);

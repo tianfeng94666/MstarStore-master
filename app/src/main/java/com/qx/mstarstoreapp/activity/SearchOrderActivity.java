@@ -156,6 +156,8 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
      */
     private void goToSearchResultActivity() {
         orderSearchBean.setKeyword(etSearchKey.getText().toString());
+        orderSearchBean.setSdate(tvStartDate.getText().toString());
+        orderSearchBean.setEdate(tvEndDate.getText().toString());
         Bundle bundle = new Bundle();
         bundle.putSerializable("searchData", orderSearchBean);
         openActivity(SearchResultActivity.class, bundle);
@@ -209,6 +211,9 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     SearchOrderResult searchOrderResult = new Gson().fromJson(result, SearchOrderResult.class);
+                    if(searchOrderResult.getData()==null){
+                        return;
+                    }
                     tvStartDate.setText(searchOrderResult.getData().getStartDate());
                     tvEndDate.setText(searchOrderResult.getData().getEndDate());
                     list = searchOrderResult.getData().getSearchKeyword();

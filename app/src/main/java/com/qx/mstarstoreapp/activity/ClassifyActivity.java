@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ExpandableListView;
@@ -54,6 +56,9 @@ public class ClassifyActivity extends BaseFilterData{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_classify);
         ButterKnife.bind(this);
         initParameter();
@@ -143,7 +148,7 @@ public class ClassifyActivity extends BaseFilterData{
                 try {
                     L.e("解析" + result);
                     ClasssifyResult classsifyResult = new Gson().fromJson(result, ClasssifyResult.class);
-                    if (classsifyResult.getError() == 0) {
+                    if (classsifyResult.getError() == 0&&classsifyResult.getData()!=null) {
                         ClasssifyResult.DataEntity dataEntity = classsifyResult.getData();
                         mTypeListData = dataEntity.getTypeFiler();//分类数据
                         typeList = dataEntity.getTypeList();//分类列表

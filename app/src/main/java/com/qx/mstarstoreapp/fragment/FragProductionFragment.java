@@ -85,6 +85,9 @@ public class FragProductionFragment extends BaseFragment {
                 String error=jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     OrderWaitResult orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
+                    if(orderWaitResult.getData()==null){
+                        return;
+                    }
                     OrderWaitResult.DataEntity.OrderListEntity orderList = orderWaitResult.getData().getOrderList();
                     listData = orderList.getList();
                     if(listData==null){

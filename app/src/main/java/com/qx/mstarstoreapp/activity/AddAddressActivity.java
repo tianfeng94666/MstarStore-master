@@ -3,6 +3,8 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,6 +68,9 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.update_address);
         ButterKnife.bind(this);
         getIntentData();
@@ -104,15 +109,18 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     AddressItmeResult addressItme = new Gson().fromJson(result, AddressItmeResult.class);
-                    idTvName.setText(addressItme.getData().getAddress().getName());
-                    idEdPhone.setText(addressItme.getData().getAddress().getPhone());
-                    provinceId = addressItme.getData().getAddress().getProvince_id();
-                    cityId = addressItme.getData().getAddress().getCity_id();
-                    areaId = addressItme.getData().getAddress().getArea_id();
-                    L.e("provinceId" + provinceId + "cityId" + cityId + "areaId" + areaId);
-                    adress = addressItme.getData().getAddress().getAddr();
-                    idTvAddress.setText(addressItme.getData().getAddress().getPlace());
-                    idEdAdress.setText(addressItme.getData().getAddress().getAddr());
+                    if(addressItme.getData()!=null){
+                        idTvName.setText(addressItme.getData().getAddress().getName());
+                        idEdPhone.setText(addressItme.getData().getAddress().getPhone());
+                        provinceId = addressItme.getData().getAddress().getProvince_id();
+                        cityId = addressItme.getData().getAddress().getCity_id();
+                        areaId = addressItme.getData().getAddress().getArea_id();
+                        L.e("provinceId" + provinceId + "cityId" + cityId + "areaId" + areaId);
+                        adress = addressItme.getData().getAddress().getAddr();
+                        idTvAddress.setText(addressItme.getData().getAddress().getPlace());
+                        idEdAdress.setText(addressItme.getData().getAddress().getAddr());
+                    }
+
                 }
                 if (error == 1) {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();

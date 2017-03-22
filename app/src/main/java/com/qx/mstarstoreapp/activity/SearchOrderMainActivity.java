@@ -119,8 +119,10 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     SearchOrderMainResult searchOrderMainResult = new Gson().fromJson(result, SearchOrderMainResult.class);
-                    orderProduceBean = searchOrderMainResult.getData().getOrderProduce();
-                    orderSendedBean = searchOrderMainResult.getData().getOrderSended();
+                    if(searchOrderMainResult.getData()!=null){
+                        orderProduceBean = searchOrderMainResult.getData().getOrderProduce();
+                        orderSendedBean = searchOrderMainResult.getData().getOrderSended();
+                    }
                     initView();
                 } else if (error == 2) {
                     loginToServer(SearchResultActivity.class);

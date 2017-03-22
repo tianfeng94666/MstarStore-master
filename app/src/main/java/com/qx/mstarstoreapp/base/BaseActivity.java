@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.debug.hv.ViewServer;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.LoginActivity;
 import com.qx.mstarstoreapp.utils.L;
@@ -43,6 +44,7 @@ public abstract class BaseActivity extends FragmentActivity  implements HttpCycl
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		context = this;
+//		ViewServer.get(this).addWindow(this);
 	}
 
 	public   abstract  void  loadNetData();
@@ -197,8 +199,14 @@ public abstract class BaseActivity extends FragmentActivity  implements HttpCycl
 		super.onDestroy();
 		//BaseApplication.requestQueue.cancelAll(HTTP_TASK_KEY);
 		HttpTaskHandler.getInstance().removeTask(HTTP_TASK_KEY);
+//		ViewServer.get(this).removeWindow(this);
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+//		ViewServer.get(this).setFocusedWindow(this);
+	}
 //	private long exitTime = 0;
 //	@Override
 //	public boolean onKeyDown(int keyCode, KeyEvent event) {

@@ -8,6 +8,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -18,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.debug.hv.ViewServer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -108,14 +111,27 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
         context = this;
         initView();
         initListener();
         loadNetData(getInitUrl());
+
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     private void remind(int count) {
         boolean isVisible = false;
@@ -234,6 +250,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 if (error.equals("0")) {
                     ModeListResult modeListResult = new Gson().fromJson(result, ModeListResult.class);
                     ModeListResult.DataEntity dataEntity = modeListResult.getData();
+                    if(dataEntity==null){
+                        return;
+                    }
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
                     if (curpage == 1) {
                           /*搜索过的单选历史记录*/

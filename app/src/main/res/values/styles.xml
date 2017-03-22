@@ -118,4 +118,11 @@
         <!-- 或者是将主题设置成透明，虽然点击图标会有点小小的卡顿，但是用户体验不影响 -->
         <!-- <item name="android:windowIsTranslucent">true</item> --> <!-- 透明背景不要了 -->
     </style>
+    <!--activity-->
+    <style name="activity">
+        <item name="android:alwaysRetainTaskState">true</item>
+        <item name="android:configChanges">orientation|keyboardHidden</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:theme">@android:style/Theme.NoTitleBar.Fullscreen</item>
+    </style>
 </resources>

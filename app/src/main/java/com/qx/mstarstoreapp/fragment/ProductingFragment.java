@@ -180,6 +180,9 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
                 if (error == 0) {
                     lnyLoadingLayout.setVisibility(View.GONE);
                     ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
+                    if(productListResult.getData()==null){
+                        return;
+                    }
                     ProductListResult.DataEntity productListResultData = productListResult.getData();
                     List<ModelListEntity> modelList = productListResultData.getModelList();
                     OrderInfoEntity orderInfo = productListResultData.getOrderInfo();

@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.debug.hv.ViewServer;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.fragment.FragOrderListFragment;

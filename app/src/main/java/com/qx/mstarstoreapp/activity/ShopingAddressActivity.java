@@ -78,6 +78,9 @@ public class ShopingAddressActivity extends BaseActivity implements OnClickListe
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     AddressListResult address = new Gson().fromJson(result, AddressListResult.class);
+                    if(address.getData()==null){
+                        return;
+                    }
                     mdata = address.getData().getAddressList();
                     adapter.notifyDataSetChanged();
                 }

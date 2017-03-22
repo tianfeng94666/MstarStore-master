@@ -122,6 +122,9 @@ public class SelectCityActivity extends BaseActivity {
                 if (error.equals("0")) {
                     if (state == 0) {
                         AddressResult cityResult = new Gson().fromJson(result, AddressResult.class);
+                        if(cityResult==null){
+                            return;
+                        }
                         provinceList = cityResult.getData().getProvinceList();
                     }
                     if (state == 1 || state == 2) {

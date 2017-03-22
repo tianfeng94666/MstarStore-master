@@ -132,6 +132,9 @@ public class ReceiptActivity extends BaseActivity {
                 if (error == 0) {
                     InvocieResult invocieResult = new Gson().fromJson(result, InvocieResult.class);
                     InvocieResult.DataEntity data = invocieResult.getData();
+                    if(data==null){
+                        return;
+                    }
                     mData = data.getInvoiceType();
                     mAdapter.setListData(mData);
                 }

@@ -129,12 +129,13 @@ public class DeliveryTableActivity extends BaseActivity {
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     deliveryTableResult = new Gson().fromJson(result, DeliveryTableResult.class);
-                    moItemBean = deliveryTableResult.getData().getMoItem();
-                    list = deliveryTableResult.getData().getModelList();
-                    if(moItemBean!=null){
-                        initView();
+                    if(deliveryTableResult.getData()!=null){
+                        moItemBean = deliveryTableResult.getData().getMoItem();
+                        list = deliveryTableResult.getData().getModelList();
+                        if(moItemBean!=null){
+                            initView();
+                        }
                     }
-
                 } else if (error.equals("2")) {
                     loginToServer(CustomMadeActivity.class);
                 } else {

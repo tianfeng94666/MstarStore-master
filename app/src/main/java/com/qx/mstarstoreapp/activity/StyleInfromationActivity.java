@@ -237,6 +237,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 if (error == 0) {
                     ModelDetailResult modelDetail = new Gson().fromJson(result, ModelDetailResult.class);
                     ModelDetailResult.DataEntity dataEntity = modelDetail.getData();
+                    if(dataEntity==null){
+                        return;
+                    }
                     List<ModelDetailResult.DataEntity.GoldenPriceEntity> goldenPrice = dataEntity.getGoldenPrice();
                     remarksEntity = dataEntity.getRemarks();
                     modelEntity = dataEntity.getModel();

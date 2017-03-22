@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -92,6 +94,9 @@ public class ModifyDataActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_modifydata);
         titles = new String[]{getString(R.string.updatepwd), getString(R.string.update_phone), getString(R.string.adress_manager)};
         context = this;
@@ -113,13 +118,16 @@ public class ModifyDataActivity extends BaseActivity {
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     try{
-                        JsonObject jsData = jsonResult.get("data").getAsJsonObject();
-                         userName = jsData.get("userName").getAsString();
-                         phone = jsData.get("phone").getAsString();
-                         headPic = jsData.get("headPic").getAsString();
-                         address = jsData.get("address").getAsString();
-                        L.e("userName:" + userName + "phone" + phone + "address:" + address);
-                        initContent(userName, headPic, phone, address);
+                        if(jsonResult.get("data")!=null){
+                            JsonObject jsData = jsonResult.get("data").getAsJsonObject();
+                            userName = jsData.get("userName").getAsString();
+                            phone = jsData.get("phone").getAsString();
+                            headPic = jsData.get("headPic").getAsString();
+                            address = jsData.get("address").getAsString();
+                            L.e("userName:" + userName + "phone" + phone + "address:" + address);
+                            initContent(userName, headPic, phone, address);
+                        }
+
                     }catch (Exception e){
                         initContent(userName, headPic, phone, address);
                     }

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -129,6 +131,9 @@ public class CustommadeInformationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_custom_information);
         ButterKnife.bind(this);
         Bundle extras = getIntent().getExtras();
@@ -156,26 +161,29 @@ public class CustommadeInformationActivity extends BaseActivity {
                     loginToServer(CustommadeInformationActivity.class);
                 }if (error.equals("0")){
                     ModelDetailResult.DataEntity dataEntity = modelDetail.getData();
-                    List<ModelDetailResult.DataEntity.GoldenPriceEntity> goldenPrice = dataEntity.getGoldenPrice();
-                    StringBuffer sb = new StringBuffer();
-                    for (int i = 0; i < goldenPrice.size(); i++) {
-                        sb.append(goldenPrice.get(i).getTitle() + " " + goldenPrice.get(i).getPrice());
+                    if(dataEntity!=null){
+                        List<ModelDetailResult.DataEntity.GoldenPriceEntity> goldenPrice = dataEntity.getGoldenPrice();
+                        StringBuffer sb = new StringBuffer();
+                        for (int i = 0; i < goldenPrice.size(); i++) {
+                            sb.append(goldenPrice.get(i).getTitle() + " " + goldenPrice.get(i).getPrice());
+                        }
+
+                        idStoreInformation.setText(/*"pt 335/g"*/sb);
+                        pics = dataEntity.getModel().getPics();
+                        stone = dataEntity.getModel().getStone();
+                        stoneA = dataEntity.getModel().getStoneA();
+                        stoneB = dataEntity.getModel().getStoneB();
+                        stoneC = dataEntity.getModel().getStoneC();
+
+
+                        stoneTypeItme = dataEntity.getStoneType();
+                        stoneColorItme = dataEntity.getStoneColor();
+                        stonePurityItme = dataEntity.getStonePurity();
+                        stoneSpecItme = dataEntity.getStoneSpec();
+                        stoneShapeItem = dataEntity.getStoneShape();
+                        initParameter();
                     }
 
-                    idStoreInformation.setText(/*"pt 335/g"*/sb);
-                    pics = dataEntity.getModel().getPics();
-                    stone = dataEntity.getModel().getStone();
-                    stoneA = dataEntity.getModel().getStoneA();
-                    stoneB = dataEntity.getModel().getStoneB();
-                    stoneC = dataEntity.getModel().getStoneC();
-
-
-                    stoneTypeItme = dataEntity.getStoneType();
-                    stoneColorItme = dataEntity.getStoneColor();
-                    stonePurityItme = dataEntity.getStonePurity();
-                    stoneSpecItme = dataEntity.getStoneSpec();
-                    stoneShapeItem = dataEntity.getStoneShape();
-                    initParameter();
                 }
 
 
