@@ -24,6 +24,7 @@ import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
     private OrderSearchBean orderSearchBean;
     private List<SearchResultResult.DataBean.OrderListBean> list;
     SearchResultAdapter searchResultAdapter;
+    private LoadingWaitDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,26 +76,41 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
         lvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SearchResultActivity.this,SearchOrderMainActivity.class);
-                intent.putExtra("orderNum",list.get(position).getOrderNum()+"");
+                Intent intent = new Intent(SearchResultActivity.this, SearchOrderMainActivity.class);
+                intent.putExtra("orderNum", list.get(position).getOrderNum() + "");
                 startActivity(intent);
             }
         });
     }
 
+    public void showWatiNetDialog() {
+        dialog = new LoadingWaitDialog(this);
+        dialog.show();
+    }
+
+    public void dismissWatiNetDialog() {
+        if (dialog != null) {
+            dialog.cancel();
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
+
     @Override
     public void loadNetData() {
+        showWatiNetDialog();
         String url = AppURL.URL_CODE_ORDER_SEARCH_LIST + "tokenKey=" + BaseApplication.getToken() + "&customerID=" + orderSearchBean.getCustomerID() + "&skeyid=" + orderSearchBean.getSkeyid()
                 + "&keyword=" + orderSearchBean.getKeyword() + "&sscopeid=" + orderSearchBean.getSscopeid() + "&sdate=" + orderSearchBean.getSdate() + "&edate=" + orderSearchBean.getEdate();
         L.e("url" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                dismissWatiNetDialog();
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     SearchResultResult searchResultResult = new Gson().fromJson(result, SearchResultResult.class);
-                    if(searchResultResult.getData()!=null){
+                    if (searchResultResult.getData() != null) {
                         list = searchResultResult.getData().getOrderList();
                     }
                     if (list != null) {
@@ -109,7 +126,7 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onFail(String fail) {
-
+                dismissWatiNetDialog();
             }
         });
     }

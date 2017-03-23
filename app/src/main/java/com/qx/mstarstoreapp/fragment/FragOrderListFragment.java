@@ -42,6 +42,7 @@ import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomGridView;
+import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private List<SendingResult.DataBean.OrderListBean> sendinglist =new ArrayList<>();
     private String tokenKey;
     private ListView listView;
+    private LoadingWaitDialog dialog;
 
     public FragOrderListFragment(int fragType) {
         this.fragType = fragType;
@@ -201,8 +203,19 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         //loadNetData();
     }
 
-
+    public void showWatiNetDialog() {
+        dialog = new LoadingWaitDialog(getActivity());
+        dialog.show();
+    }
+    public void dismissWatiNetDialog() {
+        if (dialog != null) {
+            dialog.cancel();
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
     private void loadNetData() {
+        showWatiNetDialog();
         String url = "";
         tokenKey = BaseApplication.getToken();
         switch (fragType) {
@@ -225,6 +238,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                dismissWatiNetDialog();
                 L.e("loadNetData  " + result);
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
@@ -294,6 +308,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
             @Override
             public void onFail(String fail) {
+                dismissWatiNetDialog();
             }
 
         });

@@ -138,6 +138,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     Button idCancleOrder;
     @Bind(R.id.root_view)
     RelativeLayout rootView;
+    @Bind(R.id.iv_delete)
+    ImageView ivDelete;
 
     protected ListView lv_list;
     private int tempCurpage = 1;
@@ -602,6 +604,12 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             @Override
             public void onrefresh() {
                 loadNetData();
+            }
+        });
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idEtSeach.setText("");
             }
         });
     }

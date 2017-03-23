@@ -36,9 +36,9 @@ import com.qx.mstarstoreapp.json.SearchOrderResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
-import com.qx.mstarstoreapp.viewutils.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,6 +86,10 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     RelativeLayout idRl1;
     @Bind(R.id.rg_orders)
     RadioGroup rgOrders;
+    @Bind(R.id.iv_delete)
+    ImageView ivDelete;
+    @Bind(R.id.iv_delete2)
+    ImageView ivDelete2;
 
 
     private DatePicker datePicker;
@@ -132,9 +136,16 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
-
-
-
+ /*搜索用户时间  失去焦点*/
+        idEtSeach.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!StringUtils.isEmpty(idEtSeach.getText().toString()))
+                        seachCustom(idEtSeach.getText().toString());
+                }
+            }
+        });
         etSearchKey.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
 
@@ -149,6 +160,8 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
             }
 
         });
+        ivDelete.setOnClickListener(this);
+        ivDelete2.setOnClickListener(this);
     }
 
     /**
@@ -182,6 +195,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 动态生成radiobutton控件
+     *
      * @param st
      * @param marginLeft
      * @param isChoose
@@ -211,7 +225,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     SearchOrderResult searchOrderResult = new Gson().fromJson(result, SearchOrderResult.class);
-                    if(searchOrderResult.getData()==null){
+                    if (searchOrderResult.getData() == null) {
                         return;
                     }
                     tvStartDate.setText(searchOrderResult.getData().getStartDate());
@@ -283,6 +297,13 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                     seachCustom("");
                 }
                 break;
+            case R.id.iv_delete:
+                etSearchKey.setText("");
+                break;
+            case R.id.iv_delete2:
+                idEtSeach.setText("");
+                orderSearchBean.setCustomerID(-1);
+                break;
         }
     }
 
@@ -304,6 +325,9 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                     int state = jsonObject.get("state").getAsInt();
                     if (state == 0) {
                         ToastManager.showToastReal("没有此客户");
+                        if (isDefaultCustomer == null) {
+                            isDefaultCustomer = new CustomerEntity();
+                        }
                         isDefaultCustomer.setCustomerID(-1);
                         orderSearchBean.setCustomerID(-1);
                     }
@@ -381,6 +405,8 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 choosetype = list.get(position).getTitle();
                 tvSearchType.setText(choosetype);
+                popupWindow.dismiss();
+                popupWindow = null;
             }
         });
     }

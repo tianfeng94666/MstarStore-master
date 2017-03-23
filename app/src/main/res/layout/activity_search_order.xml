@@ -7,8 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_height="42dp"
         android:background="@color/white">
 
         <ImageView
@@ -53,14 +52,32 @@
                     android:src="@drawable/icon_date_down_28" />
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_search_key"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:imeOptions="actionSearch"
-                android:singleLine="true" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_search_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:background="@null"
+
+                    android:imeOptions="actionSearch"
+                    android:paddingRight="40dp"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:id="@+id/iv_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_close" />
+            </RelativeLayout>
+
         </LinearLayout>
 
         <ImageView
@@ -83,9 +100,9 @@
         style="@style/padding_parent"
         android:layout_width="match_parent"
         android:layout_height="42dp"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/white"
         android:paddingBottom="8dp"
         android:paddingTop="8dp">
 
@@ -102,8 +119,8 @@
             android:id="@+id/id_rl1"
             style="@style/layout_horizontal"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="15dip"
+            android:layout_marginLeft="16dip"
+            android:layout_marginRight="24dip"
             android:layout_weight="1"
             android:background="@drawable/frame_bg_while">
 
@@ -122,14 +139,22 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dip"
                 android:background="@color/color_line"></View>
-
+            <ImageView
+                android:id="@+id/iv_delete2"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/id_view_line"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_close" />
             <ImageView
                 android:id="@+id/ig_btn_seach"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:padding="5dp"
                 android:src="@drawable/icon_search" />
         </RelativeLayout>
 

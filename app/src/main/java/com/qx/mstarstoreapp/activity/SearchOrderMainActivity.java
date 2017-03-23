@@ -32,6 +32,7 @@ import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.IndicatorView;
+import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
     private SearchOrderMainResult.DataBean.OrderProduceBean orderProduceBean;
     private SearchOrderMainResult.DataBean.OrderSendedBean orderSendedBean;
     public BadgeView badge1, badge2, badge3, badge4;
+    private LoadingWaitDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,19 +109,34 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         orderNum = intent.getStringExtra("orderNum");
     }
 
+    public void showWatiNetDialog() {
+        dialog = new LoadingWaitDialog(this);
+        dialog.show();
+    }
+
+    public void dismissWatiNetDialog() {
+        if (dialog != null) {
+            dialog.cancel();
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
+
     @Override
     public void loadNetData() {
+        showWatiNetDialog();
         String url = AppURL.URL_CODE_ORDER_SEARCH_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&orderNum=" + orderNum;
 //        String url ="http://appapi1.fanerweb.com/api/aproxy/ModelOrderSearchDetail?tokenKey=7cdcf3a6a47904dbff1e7da86b8ef225&orderNum=AP170310360";
         L.e("url" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                dismissWatiNetDialog();
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     SearchOrderMainResult searchOrderMainResult = new Gson().fromJson(result, SearchOrderMainResult.class);
-                    if(searchOrderMainResult.getData()!=null){
+                    if (searchOrderMainResult.getData() != null) {
                         orderProduceBean = searchOrderMainResult.getData().getOrderProduce();
                         orderSendedBean = searchOrderMainResult.getData().getOrderSended();
                     }
@@ -133,7 +150,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
 
             @Override
             public void onFail(String fail) {
-
+                dismissWatiNetDialog();
             }
         });
     }
@@ -158,7 +175,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
 
         SCREENWIDTH = getScreenWidth();
         indicatorView = (IndicatorView) findViewById(R.id.id_indicatorview);
-       indicatorView.setNum(3);
+        indicatorView.setNum(3);
         viewPager = (ViewPager) findViewById(R.id.order_viewpager);
 
         TextView tab1 = (TextView) findViewById(R.id.tab1);
@@ -181,7 +198,6 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         badge4 = new BadgeView(SearchOrderMainActivity.this, tab3);// 创建一个BadgeView对象，view为你需要显示提醒的控件
 
 
-
         tabTextViews.add(tv1);
         tabTextViews.add(tv2);
         tabTextViews.add(tv3);
@@ -195,11 +211,11 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         viewPager.setOffscreenPageLimit(1);
         int pagerNumber;
         //显示第几个Fragment
-        if(orderProduceBean.getModelList()!=null){
+        if (orderProduceBean.getModelList() != null) {
             pagerNumber = getIntent().getIntExtra("pageNumber", 0);
-        }else if(orderProduceBean.getModelList()==null&&orderSendedBean!=null){
+        } else if (orderProduceBean.getModelList() == null && orderSendedBean != null) {
             pagerNumber = getIntent().getIntExtra("pageNumber", 1);
-        }else {
+        } else {
             pagerNumber = getIntent().getIntExtra("pageNumber", 0);
         }
         viewPager.setCurrentItem(pagerNumber);
