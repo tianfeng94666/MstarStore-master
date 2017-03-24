@@ -58,6 +58,9 @@ public class CustomersListActivity extends BaseActivity {
     ImageView ivLeft;
     private int page = 1;
     private int visibleLastIndex;
+    private int listcount;
+    private int adapterCount;
+    private boolean isfirst= true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,19 +98,21 @@ public class CustomersListActivity extends BaseActivity {
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
 
                 int lastIndex = customersListAdapter.getCount();        //数据集最后一项的索引
-                if (visibleLastIndex == lastIndex) {
+                if (visibleLastIndex == lastIndex&&listcount>adapterCount) {
                     //如果是自动加载,可以在这里放置异步加载数据的代码
                     page++;
                     loadNetData(idEtSeach.getText().toString());
+                }
+                if(visibleLastIndex == lastIndex&&listcount==adapterCount&&isfirst){
+                    isfirst=!isfirst;
+                    ToastManager.showToastReal("数据已加载完！");
                 }
             }
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 visibleLastIndex = firstVisibleItem + visibleItemCount;
-                System.out.println("firstVisibleItem=" + firstVisibleItem);
-                System.out.println("visibleItemCount=" + visibleItemCount);
-                System.out.println("totalItemCount=" + totalItemCount);
+                adapterCount = totalItemCount;
             }
         });
         ivLeft.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +160,7 @@ public class CustomersListActivity extends BaseActivity {
                     CustomerListRestult customerListRestult = new Gson().fromJson(result, CustomerListRestult.class);
                     if(customerListRestult.getData()!=null){
                         List<CustomerListRestult.DataEntity.ListEntity> datas = customerListRestult.getData().getList();
+                        listcount=customerListRestult.getData().getList_count();
                         madata.addAll(datas);
                         customersListAdapter.notifyDataSetChanged();
                     }

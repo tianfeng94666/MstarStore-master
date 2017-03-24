@@ -25,6 +25,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.ConfirmOrderActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
 import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
+import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
 import com.qx.mstarstoreapp.activity.MainActivity;
 import com.qx.mstarstoreapp.activity.ProductionListActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
@@ -52,7 +53,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class FragOrderListFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
-    private List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> listData;
+    private List<OrderWaitResult.DataBean.OrderListBean.ListBean> listData;
     private BaseAdapter adapter;
     private PullToRefreshView oullRefreshView;
     private static final int PULL_REFRESH = 1;
@@ -150,8 +151,10 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                         startActivity(intent);
                         break;
                     case SENDING_CODE:
-//                        intent = new Intent(getActivity(), DeliveryTableActivity.class);
-//                        startActivity(intent);
+                        intent = new Intent(getActivity(), FinishTableLessActivity.class);
+                        intent.putExtra("orderNumber",sendinglist.get(i).getOrderNum());
+                        intent.putExtra("type","1");
+                        startActivity(intent);
                         break;
 
                 }
@@ -229,6 +232,10 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
             case SENDING_CODE:
                 url = AppURL.URL_CODE_SENDING + "tokenKey=" + tokenKey+ "&cpage=" + cpage;
                 break;
+            case FINISHED_CODE:
+                url="";
+                dismissWatiNetDialog();
+                break;
         }
 
         if (StringUtils.isEmpty(url)) {
@@ -244,8 +251,8 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 String error = jsonResult.get("error").getAsString();
                 //待审核及生产中 返回结果
                 OrderWaitResult orderWaitResult;
-                OrderWaitResult.DataEntity.OrderListEntity orderList = null;
-                List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> list = null;
+                OrderWaitResult.DataBean.OrderListBean orderList = null;
+                List<OrderWaitResult.DataBean.OrderListBean.ListBean> list = null;
                 //已发货
                 SendingResult sendingResult;
                 SendingResult.DataBean.OrderListBean orderListBean = null;
@@ -254,11 +261,16 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                     switch (fragType) {
                         case CHECKING_CODE:
                             orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
+                            if(orderWaitResult.getData()==null){
+                                break;
+                            }
+                           OrderWaitResult.DataBean.StatusCountBean statusCountBean = orderWaitResult.getData().getStatusCount();
+                            setBadge(statusCountBean);
                             orderList = orderWaitResult.getData().getOrderList();
+
                             list = orderList.getList();
                             if(list!=null){
                                 listCount = Integer.valueOf(orderList.getList_count());
-                                setBadge(listCount,1);
                             }
                             break;
                         case PRODUCTING_CODE:
@@ -267,7 +279,6 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                             list = orderList.getList();
                             if(list!=null){
                                 listCount = Integer.valueOf(orderList.getList_count());
-                                setBadge(listCount,2);
                             }
                             break;
                         case SENDING_CODE:
@@ -284,7 +295,6 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                             listView.setAdapter(adapter);
                             if(sendinglist!=null){
                                 listCount = Integer.valueOf(sendingResult.getData().getList_count());
-                                setBadge(listCount,3);
                             }
                             break;
                     }
@@ -314,29 +324,17 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         });
     }
 
-    private void setBadge(int count,int fragType) {
-        if (cpage == 1) {
-            switch (fragType) {
-                case CHECKING_CODE:
-                    System.out.println("badge1="+((CustomMadeActivity) getActivity()).badge1);
-                    ((CustomMadeActivity)getActivity()).onFragOrderCount(count,1);
-                    break;
-                case PRODUCTING_CODE:
-                    System.out.println("badge2="+((CustomMadeActivity) getActivity()).badge2);
-                    ((CustomMadeActivity)getActivity()).onFragOrderCount(count,2);
-                    break;
-                case SENDING_CODE:
-                    System.out.println("badge3="+((CustomMadeActivity) getActivity()).badge3);
-                    ((CustomMadeActivity)getActivity()).onFragOrderCount(count,3);
-                    break;
-            }
+    private void setBadge( OrderWaitResult.DataBean.StatusCountBean statusCountBean) {
+        if(statusCountBean!=null){
+                    ((CustomMadeActivity)getActivity()).onFragOrderCount(statusCountBean);
+
         }
     }
 
     OnOderNumberChange onOderNumberChange;
 
     public interface OnOderNumberChange {
-        void onFragOrderCount(int payNum,int type);
+        void onFragOrderCount(OrderWaitResult.DataBean.StatusCountBean statusCountBean);
 
         void onFragProduCount(int deliverNum);
     }
@@ -411,7 +409,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            OrderWaitResult.DataEntity.OrderListEntity.ListEntity listEntity = listData.get(position);
+            OrderWaitResult.DataBean.OrderListBean.ListBean listEntity = listData.get(position);
             viewHolder.tvOrderNumber.setText(listEntity.getOrderNum());
             viewHolder.idCusName.setText(listEntity.getCustomerName());
             viewHolder.idStartDate.setText(listEntity.getOrderDate());
@@ -422,18 +420,18 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 viewHolder.idEndDate.setText(listEntity.getModifyDate());
             } else if (fragType == 2) {
                 //审核日期
-                viewHolder.idEndDate.setText(listEntity.getConfirmDate());
+                viewHolder.idEndDate.setText(listEntity.getModifyDate());
             }
             viewHolder.idRemarks.setText(listEntity.getOtherInfo());
             viewHolder.tvTotalAmount.setText("参考总价 " + listEntity.getTotalPrice());
             viewHolder.idTvNeed.setText("定金 " + listEntity.getNeedPayPrice());
 
 
-            L.e(listEntity.getPicsEntity().size() + "size()");
+            L.e(listEntity.getPics().size() + "size()");
 
             viewHolder.layImages.removeAllViews();
-            if (listEntity.getPicsEntity() != null && listEntity.getPicsEntity().size() != 0) {
-                addMenuLayout(listEntity.getPicsEntity(), viewHolder.layImages);
+            if (listEntity.getPics() != null && listEntity.getPics().size() != 0) {
+                addMenuLayout(listEntity.getPics(), viewHolder.layImages);
             }
 
 //

@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/3/16 0016.
  */
 
-public class SearchOrderMainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, FragOrderListFragment.OnOderNumberChange {
+public class SearchOrderMainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     IndicatorView indicatorView;
     ViewPager viewPager;
     public List<Fragment> fragmentList = new ArrayList<>();
@@ -295,25 +295,6 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         openActivity(SearchOrderActivity.class, null);
     }
 
-    @Override
-    public void onFragOrderCount(int payNum, int type) {
-        System.out.println("payNum=" + payNum + ",type=" + type);
-        switch (type) {
-            case 1:
-                setBadge(payNum, badge1);
-                break;
-            case 2:
-                setBadge(payNum, badge2);
-                break;
-            case 3:
-                setBadge(payNum, badge3);
-                break;
-            case 4:
-                setBadge(payNum, badge4);
-                break;
-        }
-
-    }
 
     public void setBadge(int payNum, BadgeView badge) {
         if (payNum != 0) {
@@ -323,10 +304,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         }
     }
 
-    @Override
-    public void onFragProduCount(int deliverNum) {
 
-    }
 
     public class CommentListPagerAdapter extends FragmentPagerAdapter {
         private List<?> fragments;

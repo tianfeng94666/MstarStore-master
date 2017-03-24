@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
 
 public class FragProductionFragment extends BaseFragment {
 
-    List<OrderWaitResult.DataEntity.OrderListEntity.ListEntity> listData = new ArrayList<>();
+    List<OrderWaitResult.DataBean.OrderListBean.ListBean> listData = new ArrayList<>();
     ListViewAdapter adapter;
     @Nullable
     @Override
@@ -88,7 +88,7 @@ public class FragProductionFragment extends BaseFragment {
                     if(orderWaitResult.getData()==null){
                         return;
                     }
-                    OrderWaitResult.DataEntity.OrderListEntity orderList = orderWaitResult.getData().getOrderList();
+                    OrderWaitResult.DataBean.OrderListBean orderList = orderWaitResult.getData().getOrderList();
                     listData = orderList.getList();
                     if(listData==null){
                         L.e("刷新");
@@ -147,7 +147,7 @@ public class FragProductionFragment extends BaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            OrderWaitResult.DataEntity.OrderListEntity.ListEntity listEntity = listData.get(position);
+            OrderWaitResult.DataBean.OrderListBean.ListBean listEntity = listData.get(position);
             viewHolder.tvOrderNumber.setText(listEntity.getOrderNum());
             viewHolder.idCusName.setText(listEntity.getCustomerName());
             viewHolder.idStartDate.setText(listEntity.getOrderDate());
@@ -155,7 +155,7 @@ public class FragProductionFragment extends BaseFragment {
             viewHolder.idRemarks.setText(listEntity.getOtherInfo());
             viewHolder.tvTotalAmount.setText("参考总价 "+listEntity.getTotalPrice());
             viewHolder.idTvNeed.setText("定金 "+listEntity.getNeedPayPrice());
-            CustomTypeListViewAdapter customListViewAdapter = new CustomTypeListViewAdapter(listEntity.getPicsEntity());
+            CustomTypeListViewAdapter customListViewAdapter = new CustomTypeListViewAdapter(listEntity.getPics());
             viewHolder.customListView.setDividerHeight(10);
             viewHolder.customListView.setDividerWidth(10);
             viewHolder.customListView.setAdapter(customListViewAdapter);

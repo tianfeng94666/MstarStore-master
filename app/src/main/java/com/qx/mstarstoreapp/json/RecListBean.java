@@ -18,10 +18,10 @@ public  class RecListBean {
      */
 
     private String customerName;
-    private int number;
+    private String number;
     private String purityName;
     private String recDate;
-    private int recNum;
+    private String recNum;
     private double totalPrice;
     private List<MoListBean> moList;
 
@@ -33,11 +33,11 @@ public  class RecListBean {
         this.customerName = customerName;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -57,11 +57,11 @@ public  class RecListBean {
         this.recDate = recDate;
     }
 
-    public int getRecNum() {
+    public String getRecNum() {
         return recNum;
     }
 
-    public void setRecNum(int recNum) {
+    public void setRecNum(String recNum) {
         this.recNum = recNum;
     }
 
@@ -91,9 +91,9 @@ public  class RecListBean {
          */
 
         private String moDate;
-        private int moNum;
-        private int number;
-        private int recNum;
+        private String moNum;
+        private String number;
+        private String recNum;
         private double totalPrice;
 
         public String getMoDate() {
@@ -104,27 +104,27 @@ public  class RecListBean {
             this.moDate = moDate;
         }
 
-        public int getMoNum() {
+        public String getMoNum() {
             return moNum;
         }
 
-        public void setMoNum(int moNum) {
+        public void setMoNum(String moNum) {
             this.moNum = moNum;
         }
 
-        public int getNumber() {
+        public String getNumber() {
             return number;
         }
 
-        public void setNumber(int number) {
+        public void setNumber(String number) {
             this.number = number;
         }
 
-        public int getRecNum() {
+        public String getRecNum() {
             return recNum;
         }
 
-        public void setRecNum(int recNum) {
+        public void setRecNum(String recNum) {
             this.recNum = recNum;
         }
 

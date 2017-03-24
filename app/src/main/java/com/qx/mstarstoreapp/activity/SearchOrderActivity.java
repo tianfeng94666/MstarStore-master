@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,8 +60,6 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     TextView tvSearchType;
     @Bind(R.id.et_search_key)
     EditText etSearchKey;
-    @Bind(R.id.iv_right)
-    ImageView ivRight;
     @Bind(R.id.iv_start_date)
     ImageView ivStartDate;
     @Bind(R.id.tv_start_date)
@@ -90,6 +90,10 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     ImageView ivDelete;
     @Bind(R.id.iv_delete2)
     ImageView ivDelete2;
+    @Bind(R.id.ll_date_type)
+    LinearLayout llDateType;
+    @Bind(R.id.bt_confirm)
+    Button btConfirm;
 
 
     private DatePicker datePicker;
@@ -105,6 +109,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     private SearchTypeAdapter simpleAdapter;
     private List<SearchOrderResult.DataBean.SearchScopeBean> searchScopeBeenlist;
     private OrderSearchBean orderSearchBean = new OrderSearchBean();//搜索数据类
+    private List<SearchOrderResult.DataBean.SearchDateScopeBean> searchDateScopeBeen;
 
 
     @Override
@@ -123,7 +128,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         rlStartDate.setOnClickListener(this);
         rlEndDate.setOnClickListener(this);
         ivLeft.setOnClickListener(this);
-        ivRight.setOnClickListener(this);
+        btConfirm.setOnClickListener(this);
         llSearchType.setOnClickListener(this);
         igBtnSeach.setOnClickListener(this);
         //监听radiogroup
@@ -193,23 +198,6 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         return searchScopeBeenlist.get(0).getId();
     }
 
-    /**
-     * 动态生成radiobutton控件
-     *
-     * @param st
-     * @param marginLeft
-     * @param isChoose
-     */
-    private void initRadioGroup(String st, int marginLeft, boolean isChoose) {
-        RadioButton rb = new RadioButton(this);
-        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(UIUtils.dip2px(marginLeft), 0, 0, 0);
-        rb.setLayoutParams(params);
-        rb.setButtonDrawable(R.drawable.selector_radio);
-        rb.setText(st);
-        rb.setSelected(isChoose);
-        rgOrders.addView(rb);
-    }
 
     /**
      * 获取搜索界面最初信息
@@ -228,6 +216,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                     if (searchOrderResult.getData() == null) {
                         return;
                     }
+                    searchDateScopeBeen = searchOrderResult.getData().getSearchDateScope();
                     tvStartDate.setText(searchOrderResult.getData().getStartDate());
                     tvEndDate.setText(searchOrderResult.getData().getEndDate());
                     list = searchOrderResult.getData().getSearchKeyword();
@@ -238,6 +227,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                     }
                     searchScopeBeenlist = searchOrderResult.getData().getSearchScope();
                     setRadioGroup();
+                    setLlDateType();
                     orderSearchBean.setCustomerID(-1);
                 } else if (error == 2) {
                     loginToServer(SearchOrderActivity.class);
@@ -251,6 +241,79 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
+    }
+
+    private void setLlDateType() {
+        if (searchDateScopeBeen == null) {
+            return;
+        }
+        for (int i = 0; i < searchDateScopeBeen.size(); i++) {
+            initTextView(searchDateScopeBeen.get(i), i);
+        }
+    }
+
+    private void initTextView(final SearchOrderResult.DataBean.SearchDateScopeBean searchDateScopeBean, final int i) {
+        final TextView tv = new TextView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(UIUtils.dip2px(16), 0, 0, 0);
+        params.gravity = Gravity.CENTER_VERTICAL;
+        tv.setLayoutParams(params);
+        int padding1 = UIUtils.dip2px(5);
+        int padding2 = UIUtils.dip2px(10);
+        tv.setPadding(padding2, padding1, padding2, padding1);
+        tv.setText(searchDateScopeBean.getTitle());
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvEndDate.setText(searchDateScopeBean.getEdate());
+                tvStartDate.setText(searchDateScopeBean.getSdate());
+                changeIsDefault(i, 1);
+                clearLlDateType();
+            }
+        });
+        if (searchDateScopeBean.getIsDefault() == 1) {
+            tv.setTextColor(getResources().getColor(R.color.theme_red));
+            tv.setBackgroundResource(R.drawable.board_red);
+        } else {
+            tv.setTextColor(getResources().getColor(R.color.text_color3));
+            tv.setBackgroundResource(R.drawable.board_gray);
+        }
+        llDateType.addView(tv);
+
+    }
+
+    private void clearLlDateType() {
+        llDateType.removeAllViews();
+        setLlDateType();
+    }
+
+    private void changeIsDefault(int j, int type) {
+
+        for (int i = 0; i < searchDateScopeBeen.size(); i++) {
+            if (i == j) {
+                searchDateScopeBeen.get(i).setIsDefault(type);
+            } else {
+                searchDateScopeBeen.get(i).setIsDefault(0);
+            }
+        }
+    }
+
+    /**
+     * 动态生成radiobutton控件
+     *
+     * @param st
+     * @param marginLeft
+     * @param isChoose
+     */
+    private void initRadioGroup(String st, int marginLeft, boolean isChoose) {
+        RadioButton rb = new RadioButton(this);
+        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(UIUtils.dip2px(marginLeft), 0, 0, 0);
+        rb.setLayoutParams(params);
+        rb.setButtonDrawable(R.drawable.selector_radio);
+        rb.setText(st);
+        rb.setSelected(isChoose);
+        rgOrders.addView(rb);
     }
 
     /**
@@ -285,7 +348,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
             case R.id.iv_left:
                 finish();
                 break;
-            case R.id.iv_right:
+            case R.id.bt_confirm:
                 goToSearchResultActivity();
                 break;
             case R.id.ll_search_type:

@@ -89,6 +89,7 @@
             android:id="@+id/pull_refresh_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_marginBottom="50dp"
             android:layout_below="@+id/id_rel_title"
             android:layout_marginTop="1dp"
             android:background="@color/theme_bg"
@@ -98,7 +99,6 @@
                 android:id="@+id/id_pd_lv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="50dp"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="10dp"/>
         </com.qx.mstarstoreapp.viewutils.PullToRefreshView>

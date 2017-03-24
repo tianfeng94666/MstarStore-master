@@ -9,23 +9,23 @@ import java.util.List;
 public class SearchOrderResult {
 
     /**
-     * data : {"endDate":"2017-03-20","searchKeyword":[{"id":1,"title":"订单号"},{"id":2,"title":"款号"}],"searchScope":[{"id":1,"title":"我的订单"},{"id":2,"title":"所有订单"}],"startDate":"2017-02-20"}
+     * response :
      * error : 0
      * message :
-     * response :
+     * data : {"searchKeyword":[{"id":1,"title":"订单号"},{"id":2,"title":"款号"}],"searchScope":[{"id":1,"title":"我的订单"},{"id":2,"title":"所有订单"}],"searchDateScope":[{"titie":"今天","sdate":"2017-03-24","edate":"2017-03-24","isDefault":1},{"title":"昨天","sdate":"2017-03-23","edate":"2017-03-23","isDefault":0},{"title":"最近三天","sdate":"2017-03-21","edate":"2017-03-24","isDefault":0},{"title":"最近一个月","sdate":"2017-02-24","edate":"2017-03-24","isDefault":0}],"startDate":"2017-03-24","endDate":"2017-03-24"}
      */
 
-    private DataBean data;
+    private String response;
     private int error;
     private String message;
-    private String response;
+    private DataBean data;
 
-    public DataBean getData() {
-        return data;
+    public String getResponse() {
+        return response;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setResponse(String response) {
+        this.response = response;
     }
 
     public int getError() {
@@ -44,34 +44,28 @@ public class SearchOrderResult {
         this.message = message;
     }
 
-    public String getResponse() {
-        return response;
+    public DataBean getData() {
+        return data;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setData(DataBean data) {
+        this.data = data;
     }
 
     public static class DataBean {
         /**
-         * endDate : 2017-03-20
          * searchKeyword : [{"id":1,"title":"订单号"},{"id":2,"title":"款号"}]
          * searchScope : [{"id":1,"title":"我的订单"},{"id":2,"title":"所有订单"}]
-         * startDate : 2017-02-20
+         * searchDateScope : [{"titie":"今天","sdate":"2017-03-24","edate":"2017-03-24","isDefault":1},{"title":"昨天","sdate":"2017-03-23","edate":"2017-03-23","isDefault":0},{"title":"最近三天","sdate":"2017-03-21","edate":"2017-03-24","isDefault":0},{"title":"最近一个月","sdate":"2017-02-24","edate":"2017-03-24","isDefault":0}]
+         * startDate : 2017-03-24
+         * endDate : 2017-03-24
          */
 
-        private String endDate;
         private String startDate;
+        private String endDate;
         private List<SearchKeywordBean> searchKeyword;
         private List<SearchScopeBean> searchScope;
-
-        public String getEndDate() {
-            return endDate;
-        }
-
-        public void setEndDate(String endDate) {
-            this.endDate = endDate;
-        }
+        private List<SearchDateScopeBean> searchDateScope;
 
         public String getStartDate() {
             return startDate;
@@ -79,6 +73,14 @@ public class SearchOrderResult {
 
         public void setStartDate(String startDate) {
             this.startDate = startDate;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
         }
 
         public List<SearchKeywordBean> getSearchKeyword() {
@@ -95,6 +97,14 @@ public class SearchOrderResult {
 
         public void setSearchScope(List<SearchScopeBean> searchScope) {
             this.searchScope = searchScope;
+        }
+
+        public List<SearchDateScopeBean> getSearchDateScope() {
+            return searchDateScope;
+        }
+
+        public void setSearchDateScope(List<SearchDateScopeBean> searchDateScope) {
+            this.searchDateScope = searchDateScope;
         }
 
         public static class SearchKeywordBean {
@@ -138,6 +148,53 @@ public class SearchOrderResult {
 
             public void setId(int id) {
                 this.id = id;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+        }
+
+        public static class SearchDateScopeBean {
+            /**
+             * titie : 今天
+             * sdate : 2017-03-24
+             * edate : 2017-03-24
+             * isDefault : 1
+             */
+
+            private String sdate;
+            private String edate;
+            private int isDefault;
+            private String title;
+
+
+            public String getSdate() {
+                return sdate;
+            }
+
+            public void setSdate(String sdate) {
+                this.sdate = sdate;
+            }
+
+            public String getEdate() {
+                return edate;
+            }
+
+            public void setEdate(String edate) {
+                this.edate = edate;
+            }
+
+            public int getIsDefault() {
+                return isDefault;
+            }
+
+            public void setIsDefault(int isDefault) {
+                this.isDefault = isDefault;
             }
 
             public String getTitle() {

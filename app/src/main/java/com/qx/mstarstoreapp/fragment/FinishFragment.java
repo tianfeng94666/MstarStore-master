@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseFragment;
 
 /**
@@ -16,6 +17,7 @@ public class FinishFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view =View.inflate(getActivity(),R.layout.frag_list_layout,null);
+        return view;
     }
 }

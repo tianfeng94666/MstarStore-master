@@ -180,7 +180,9 @@ public class FinishTableMoreActivity extends BaseActivity {
     }
 
     private void initView() {
-        if (finishTableMoreResult.getData() != null) {
+        if (finishTableMoreResult.getData() == null) {
+            return;
+        }
             //材料列表
             FinishTableMoreResult.DataBean.RecMaterialsBean recMaterialsBean = finishTableMoreResult.getData().getRecMaterials();
             List<FinishTableMoreResult.DataBean.RecMaterialsBean.ListBean> materialList = recMaterialsBean.getList();
@@ -281,7 +283,7 @@ public class FinishTableMoreActivity extends BaseActivity {
             }
 
             otherView();
-        }
+
 
     }
 
@@ -311,7 +313,7 @@ public class FinishTableMoreActivity extends BaseActivity {
      */
     private void setStoneLl(LinearLayout ll, FinishTableMoreResult.DataBean.RecStonesBean.ListBeanXXX bean, int textBackgroundColor, int textColor) {
         if (UIUtils.isTabletDevice(this)) {
-            ll.addView(setText2(bean.getStoneTypeName(), textColor, textBackgroundColor));
+            ll.addView(setText(bean.getStoneTypeName(), textColor, textBackgroundColor));
         }
         ll.addView(setText2(bean.getComeFrom(), textColor, textBackgroundColor));
         ll.addView(setText2(bean.getRecSStoneSN(), textColor, textBackgroundColor));

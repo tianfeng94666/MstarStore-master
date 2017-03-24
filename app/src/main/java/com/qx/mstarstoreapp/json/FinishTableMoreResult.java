@@ -312,15 +312,15 @@ public class FinishTableMoreResult {
              * title : 其他加工费
              */
 
-            private int moneySum;
+            private String moneySum;
             private String title;
             private List<ListBeanX> list;
 
-            public int getMoneySum() {
+            public String getMoneySum() {
                 return moneySum;
             }
 
-            public void setMoneySum(int moneySum) {
+            public void setMoneySum(String moneySum) {
                 this.moneySum = moneySum;
             }
 

@@ -63,15 +63,15 @@ public class SendingListAdater extends BaseAdapter {
         viewHolder.tvItemDeliveryAmount.setText("已出库："+orderListBean.getMoNum());//已出库
         viewHolder.tvItemFinishAmount.setText("已结算："+orderListBean.getRecNum());
         viewHolder.tvItemFinish.setText("查看结算单（"+orderListBean.getRecBillNum()+")");
-        viewHolder.tvItemFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, FinishTableLessActivity.class);
-                intent.putExtra("orderNumber",orderListBean.getOrderNum());
-                intent.putExtra("type","1");
-                context.startActivity(intent);
-            }
-        });
+//        viewHolder.tvItemFinish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(context, FinishTableLessActivity.class);
+//                intent.putExtra("orderNumber",orderListBean.getOrderNum());
+//                intent.putExtra("type","1");
+//                context.startActivity(intent);
+//            }
+//        });
         return view;
     }
 

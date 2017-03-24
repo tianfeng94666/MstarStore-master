@@ -88,7 +88,7 @@ public class SearchResultResult {
 
             private String customerName;
             private double goldPrice;
-            private int number;
+            private String number;
             private String orderDate;
             private String orderNum;
             private String purityName;
@@ -109,11 +109,11 @@ public class SearchResultResult {
                 this.goldPrice = goldPrice;
             }
 
-            public int getNumber() {
+            public String getNumber() {
                 return number;
             }
 
-            public void setNumber(int number) {
+            public void setNumber(String number) {
                 this.number = number;
             }
 

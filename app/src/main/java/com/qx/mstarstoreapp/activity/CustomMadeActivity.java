@@ -18,6 +18,7 @@ import com.android.debug.hv.ViewServer;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.fragment.FragOrderListFragment;
+import com.qx.mstarstoreapp.json.OrderWaitResult;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.IndicatorView;
 
@@ -132,7 +133,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         int pagerNumber = getIntent().getIntExtra("pageNumber", 0);
         viewPager.setCurrentItem(pagerNumber);
         ivRight.setVisibility(View.VISIBLE);
-        ivRight.setOnClickListener(this );
+        ivRight.setOnClickListener(this);
     }
 
 
@@ -206,27 +207,15 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     private void search() {
-        openActivity(SearchOrderActivity.class,null);
+        openActivity(SearchOrderActivity.class, null);
     }
 
     @Override
-    public void onFragOrderCount(int payNum, int type) {
-        System.out.println("payNum=" + payNum + ",type=" + type);
-        switch (type) {
-            case 1:
-                setBadge(payNum, badge1);
-                break;
-            case 2:
-                setBadge(payNum, badge2);
-                break;
-            case 3:
-                setBadge(payNum, badge3);
-                break;
-            case 4:
-                setBadge(payNum, badge4);
-                break;
-        }
-
+    public void onFragOrderCount(OrderWaitResult.DataBean.StatusCountBean statusCountBean) {
+        setBadge(statusCountBean.getWaitForValidate(), badge1);
+        setBadge(statusCountBean.getProduceding(), badge2);
+        setBadge(statusCountBean.getWaitForSend(), badge3);
+        setBadge(statusCountBean.getFinished(), badge4);
     }
 
     public void setBadge(int payNum, BadgeView badge) {

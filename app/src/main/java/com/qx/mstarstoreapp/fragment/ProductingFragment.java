@@ -45,7 +45,6 @@ import butterknife.ButterKnife;
  */
 
 public class ProductingFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
-    PullToRefreshView pullToRefreshView;
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
     @Bind(R.id.title_text)
@@ -68,8 +67,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     TextView idTvPrice;
     @Bind(R.id.id_pd_lv)
     ListView idPdLv;
-    @Bind(R.id.pull_refresh_view)
-    PullToRefreshView pullRefreshView;
+
     @Bind(R.id.id_tv_confirfilterr)
     TextView idTvConfirfilterr;
     @Bind(R.id.id_tv_showdialog)
@@ -80,6 +78,8 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     LinearLayout lnyLoadingLayout;
     @Bind(R.id.root_view)
     RelativeLayout rootView;
+    @Bind(R.id.pull_refresh_view)
+    PullToRefreshView pullRefreshView;
     private SearchOrderMainResult.DataBean.OrderProduceBean bean;
     private OrderInfoEntity orderInfoBean;
     private String orderNum;
@@ -114,7 +114,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
             modelListBeen = bean.getModelList();
             orderInfoBean = bean.getOrderInfo();
             if (orderInfoBean != null) {
-                initViewData(modelListBeen,orderInfoBean);
+                initViewData(modelListBeen, orderInfoBean);
             }
         }
 
@@ -129,7 +129,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         }
     }
 
-    private void initViewData(List<ModelListEntity> modelList,OrderInfoEntity orderInfoBean) {
+    private void initViewData(List<ModelListEntity> modelList, OrderInfoEntity orderInfoBean) {
         idOrderNum.setText("订单编号：" + isEmpty(orderInfoBean.getOrderNum() + ""));
         idOrderDate.setText("下单日期：" + isEmpty(orderInfoBean.getOrderDate()));
         idUpdateDate.setText("审核日期：" + isEmpty(orderInfoBean.getConfirmDate()));
@@ -148,10 +148,8 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
 
     private void initView() {
         titleText.setText("生产中");
-
-
-//        pullRefreshView.setOnFooterRefreshListener(this);
-//        pullToRefreshView.setOnHeaderRefreshListener(this);
+        pullRefreshView.setOnFooterRefreshListener(this);
+        pullRefreshView.setOnHeaderRefreshListener(this);
         orderlList = new ArrayList<>();
         adapter = new ProductionAdapter(orderlList, R.layout.layout_order);
         idPdLv.setAdapter(adapter);
@@ -180,13 +178,14 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
                 if (error == 0) {
                     lnyLoadingLayout.setVisibility(View.GONE);
                     ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
-                    if(productListResult.getData()==null){
+                    if (productListResult.getData() == null) {
+                        endNetRequse();
                         return;
                     }
                     ProductListResult.DataEntity productListResultData = productListResult.getData();
                     List<ModelListEntity> modelList = productListResultData.getModelList();
                     OrderInfoEntity orderInfo = productListResultData.getOrderInfo();
-                    initViewData(modelList,orderInfo);
+                    initViewData(modelList, orderInfo);
                 }
                 if (error == 1) {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
@@ -201,7 +200,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
 
             @Override
             public void onFail(String fail) {
-
+                endNetRequse();
             }
         });
     }
@@ -210,10 +209,10 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     public void endNetRequse() {
         tempCurpage = cupage;
         if (pullStauts == PULL_LOAD) {
-            pullToRefreshView.onFooterRefreshComplete();
+            pullRefreshView.onFooterRefreshComplete();
         }
         if (pullStauts == PULL_REFRESH) {
-            pullToRefreshView.onHeaderRefreshComplete();
+            pullRefreshView.onHeaderRefreshComplete();
         }
         pullStauts = 0;
     }
@@ -231,10 +230,10 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
             tempCurpage = cupage;
             cupage++;
             pullStauts = PULL_LOAD;
-
+            loadNetData();
         } else {
             ToastManager.showToastReal("没有更多数据");
-            pullToRefreshView.onFooterRefreshComplete();
+            pullRefreshView.onFooterRefreshComplete();
         }
 
     }
@@ -244,6 +243,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         tempCurpage = cupage;
         cupage = 1;
         pullStauts = PULL_REFRESH;
+        loadNetData();
     }
 
     @Override
