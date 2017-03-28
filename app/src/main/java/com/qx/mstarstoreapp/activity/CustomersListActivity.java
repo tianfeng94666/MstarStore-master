@@ -3,10 +3,12 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -56,11 +58,13 @@ public class CustomersListActivity extends BaseActivity {
     List<CustomerListRestult.DataEntity.ListEntity> madata;
     @Bind(R.id.iv_left)
     ImageView ivLeft;
+    @Bind(R.id.iv_delete)
+    ImageView ivDelete;
     private int page = 1;
     private int visibleLastIndex;
     private int listcount;
     private int adapterCount;
-    private boolean isfirst= true;
+    private boolean isfirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,20 +95,20 @@ public class CustomersListActivity extends BaseActivity {
             }
         });
         if (!StringUtils.isEmpty("keyWord")) {
-            loadNetData(keyWord);
+            loadNetData(keyWord,2);
         }
         idLvCustom.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
 
                 int lastIndex = customersListAdapter.getCount();        //数据集最后一项的索引
-                if (visibleLastIndex == lastIndex&&listcount>adapterCount) {
+                if (visibleLastIndex == lastIndex && listcount > adapterCount) {
                     //如果是自动加载,可以在这里放置异步加载数据的代码
                     page++;
-                    loadNetData(idEtSeach.getText().toString());
+                    loadNetData(idEtSeach.getText().toString(),2);
                 }
-                if(visibleLastIndex == lastIndex&&listcount==adapterCount&&isfirst){
-                    isfirst=!isfirst;
+                if (visibleLastIndex == lastIndex && listcount == adapterCount && isfirst) {
+                    isfirst = !isfirst;
                     ToastManager.showToastReal("数据已加载完！");
                 }
             }
@@ -121,6 +125,28 @@ public class CustomersListActivity extends BaseActivity {
                 finish();
             }
         });
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idEtSeach.setText("");
+            }
+        });
+        idEtSeach.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+
+
+
+            @Override
+            public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
+                // TODO Auto-generated method stub
+                if(arg1 == EditorInfo.IME_ACTION_SEARCH)
+                {
+                   loadNetData(idEtSeach.getText().toString(),1);
+                    // search pressed and perform your functionality.
+                }
+                return false;
+            }
+
+        });
     }
 
     @Override
@@ -128,28 +154,10 @@ public class CustomersListActivity extends BaseActivity {
 
     }
 
-    public void loadNetData(final String keyWord) {
+    public void loadNetData(final String keyWord , final int type) {
         //GetCustomerList?keyword=湖南|益阳&cpage=1&tokenKey=944df2f27ffce557042887589986c193
         String url = AppURL.URL_CUSTOMER_LIST + "tokenKey=" + BaseApplication.getToken() + "&keyword=" + StringUtils.replaceBlank(keyWord) + "&cpage=" + page;
         L.e("CustomersListActivity" + url);
-//        VolleyRequestUtils.GetCookieRequest(CustomersListActivity.this, path, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-//            @Override
-//            public void onSuccess(String result) {
-//                L.e(result);
-//                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-//                if(jsonResult.get("error").getAsString().equals("0")){
-//                    CustomerListRestult customerListRestult = new Gson().fromJson(result, CustomerListRestult.class);
-//                    madata = customerListRestult.getData().getList();
-//                    customersListAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onFail(String error) {
-//
-//            }
-//        });
-
 
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -158,11 +166,17 @@ public class CustomersListActivity extends BaseActivity {
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     CustomerListRestult customerListRestult = new Gson().fromJson(result, CustomerListRestult.class);
-                    if(customerListRestult.getData()!=null){
+                    if (customerListRestult.getData() != null) {
                         List<CustomerListRestult.DataEntity.ListEntity> datas = customerListRestult.getData().getList();
-                        listcount=customerListRestult.getData().getList_count();
-                        madata.addAll(datas);
-                        customersListAdapter.notifyDataSetChanged();
+                        listcount = customerListRestult.getData().getList_count();
+                        if(type ==1){
+                            page=1;
+                            madata.clear();
+                        }
+                            madata.addAll(datas);
+                            customersListAdapter.notifyDataSetChanged();
+
+
                     }
 
                 }

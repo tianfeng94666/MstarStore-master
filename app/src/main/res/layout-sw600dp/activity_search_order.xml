@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="48dp"
         android:background="@color/white">
 
         <ImageView
@@ -23,10 +23,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="6dp"
             android:layout_toRightOf="@+id/iv_left"
             android:background="@drawable/frame_bg_while">
 
@@ -47,14 +47,14 @@
                 <ImageView
                     android:id="@+id/iv_search_type"
                     android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_height="36dp"
                     android:padding="5dp"
                     android:src="@drawable/icon_date_down_28" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/et_search_key"
@@ -99,7 +99,7 @@
     <LinearLayout
         style="@style/padding_parent"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="48dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -116,11 +116,12 @@
 
 
         <RelativeLayout
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:id="@+id/id_rl1"
             style="@style/layout_horizontal"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="16dip"
-            android:layout_marginRight="24dip"
             android:layout_weight="1"
             android:background="@drawable/frame_bg_while">
 
@@ -128,36 +129,31 @@
                 android:id="@+id/id_et_seach"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:hint="输入搜索"
                 android:background="@null"
                 android:singleLine="true"
                 android:textSize="@dimen/text_size_small_ultra" />
 
-            <View
-                android:id="@+id/id_view_line"
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="30dip"
-                android:background="@color/color_line"></View>
+
             <ImageView
                 android:id="@+id/iv_delete2"
-                android:padding="5dp"
+                android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_toLeftOf="@+id/id_view_line"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_close" />
-            <ImageView
-                android:id="@+id/ig_btn_seach"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:padding="5dp"
-                android:src="@drawable/icon_search" />
-        </RelativeLayout>
+                android:src="@drawable/icon_close" />
 
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/ig_btn_seach"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@drawable/icon_search" />
     </LinearLayout>
 
     <View
@@ -169,36 +165,35 @@
         android:id="@+id/ll_date_type"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="42dp">
+        android:layout_height="48dp">
 
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_line" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="48dp"
         android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="11dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:padding="5dp"
             android:text="范围日期"
             android:textColor="@color/text_color" />
 
         <RelativeLayout
             android:id="@+id/rl_start_date"
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="35dp"
             android:padding="5dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/frame_bg_while">
+            android:background="@drawable/board_gray">
 
             <ImageView
                 android:id="@+id/iv_start_date"
@@ -228,11 +223,12 @@
         <RelativeLayout
             android:id="@+id/rl_end_date"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_height="35dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:padding="5dp"
-            android:background="@drawable/frame_bg_while">
+            android:background="@drawable/board_gray">
 
             <ImageView
                 android:id="@+id/iv_end_date"
@@ -259,7 +255,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="48dp"
         android:background="@color/white">
 
         <RadioGroup
@@ -285,7 +281,7 @@
         android:textColor="@color/white"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_width="match_parent"

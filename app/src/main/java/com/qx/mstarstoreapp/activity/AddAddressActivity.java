@@ -23,6 +23,7 @@ import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -101,6 +102,7 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void loadNetData() {
+
         String url = AppURL.URL_MODIFY_ADDRESS + "tokenKey=" + BaseApplication.getToken() + "&id=" + id;
         L.e("loadNetData" + ":" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {

@@ -24,6 +24,7 @@ import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
+import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 
 import java.util.List;
 
@@ -108,6 +109,7 @@ public class FinishTableMoreActivity extends BaseActivity {
 
     private FinishTableMoreResult finishTableMoreResult;
     private String type;
+    private LoadingWaitDialog dialog;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,8 +139,10 @@ public class FinishTableMoreActivity extends BaseActivity {
         type = getIntent().getStringExtra("type");
     }
 
+
     @Override
     public void loadNetData() {
+        baseShowWatLoading();
         String url = "";
         if (type.equals("1")) {
             url = AppURL.URL_CODE_FINISH_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&recNum=" + recNumber;
@@ -153,6 +157,7 @@ public class FinishTableMoreActivity extends BaseActivity {
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                baseHideWatLoading();
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
@@ -174,6 +179,7 @@ public class FinishTableMoreActivity extends BaseActivity {
 
             @Override
             public void onFail(String fail) {
+                baseHideWatLoading();
             }
 
         });
@@ -183,106 +189,106 @@ public class FinishTableMoreActivity extends BaseActivity {
         if (finishTableMoreResult.getData() == null) {
             return;
         }
-            //材料列表
-            FinishTableMoreResult.DataBean.RecMaterialsBean recMaterialsBean = finishTableMoreResult.getData().getRecMaterials();
-            List<FinishTableMoreResult.DataBean.RecMaterialsBean.ListBean> materialList = recMaterialsBean.getList();
-            if (recMaterialsBean != null) {
-                tvMaterial.setText(recMaterialsBean.getTitle());
-                tvMaterialMoney.setText("¥" + recMaterialsBean.getMoneySum());
-            }
-            if (materialList != null) {
-                for (int i = 0; i < materialList.size(); i++) {
-                    FinishTableMoreResult.DataBean.RecMaterialsBean.ListBean bean = materialList.get(i);
-                    if (i == 0 || i == (materialList.size() - 1)) {
-                        llMaterialProductName.addView(setText(bean.getTypeName(), R.color.text_color, R.color.theme_bg));
-                        LinearLayout ll = getLinearLayout(R.color.theme_bg);
-                        setMaterialLl(ll, bean, R.color.theme_bg, R.color.text_color);
-                        llMaterial.addView(ll);
-                    } else {
-                        llMaterialProductName.addView(setText(bean.getTypeName(), R.color.text_color2, R.color.white));
-                        LinearLayout ll = getLinearLayout(R.color.white);
-                        setMaterialLl(ll, bean, R.color.white, R.color.text_color2);
-                        llMaterial.addView(ll);
-                    }
+        //材料列表
+        FinishTableMoreResult.DataBean.RecMaterialsBean recMaterialsBean = finishTableMoreResult.getData().getRecMaterials();
+        List<FinishTableMoreResult.DataBean.RecMaterialsBean.ListBean> materialList = recMaterialsBean.getList();
+        if (recMaterialsBean != null) {
+            tvMaterial.setText(recMaterialsBean.getTitle());
+            tvMaterialMoney.setText("¥" + recMaterialsBean.getMoneySum());
+        }
+        if (materialList != null) {
+            for (int i = 0; i < materialList.size(); i++) {
+                FinishTableMoreResult.DataBean.RecMaterialsBean.ListBean bean = materialList.get(i);
+                if (i == 0 || i == (materialList.size() - 1)) {
+                    llMaterialProductName.addView(setText(bean.getTypeName(), R.color.text_color, R.color.theme_bg));
+                    LinearLayout ll = getLinearLayout(R.color.theme_bg);
+                    setMaterialLl(ll, bean, R.color.theme_bg, R.color.text_color);
+                    llMaterial.addView(ll);
+                } else {
+                    llMaterialProductName.addView(setText(bean.getTypeName(), R.color.text_color2, R.color.white));
+                    LinearLayout ll = getLinearLayout(R.color.white);
+                    setMaterialLl(ll, bean, R.color.white, R.color.text_color2);
+                    llMaterial.addView(ll);
                 }
             }
+        }
 
 
-            //获得加工费列表
-            FinishTableMoreResult.DataBean.RecProcessExpensesesBean recProcessExpensesesBean = finishTableMoreResult.getData().getRecProcessExpenseses();
-            List<FinishTableMoreResult.DataBean.RecProcessExpensesesBean.ListBeanXX> workcostList = recProcessExpensesesBean.getList();
-            if (recProcessExpensesesBean != null) {
-                tvWorkCost.setText(recProcessExpensesesBean.getTitle());
-                tvWorkCostMoney.setText("¥" + recProcessExpensesesBean.getMoneySum());
-            }
-            if (workcostList != null) {
-                for (int i = 0; i < workcostList.size(); i++) {
-                    FinishTableMoreResult.DataBean.RecProcessExpensesesBean.ListBeanXX bean = workcostList.get(i);
-                    if (i == 0 || i == (workcostList.size() - 1)) {
-                        llWorkName.addView(setText(bean.getTypeName(), R.color.text_color, R.color.theme_bg));
-                        LinearLayout ll = getLinearLayout(R.color.theme_bg);
-                        setWrokCostLl(ll, bean, R.color.theme_bg, R.color.text_color);
-                        llWorkCost.addView(ll);
-                    } else {
-                        llWorkName.addView(setText(bean.getTypeName(), R.color.text_color2, R.color.white));
-                        LinearLayout ll = getLinearLayout(R.color.white);
-                        setWrokCostLl(ll, bean, R.color.white, R.color.text_color2);
-                        llWorkCost.addView(ll);
-                    }
+        //获得加工费列表
+        FinishTableMoreResult.DataBean.RecProcessExpensesesBean recProcessExpensesesBean = finishTableMoreResult.getData().getRecProcessExpenseses();
+        List<FinishTableMoreResult.DataBean.RecProcessExpensesesBean.ListBeanXX> workcostList = recProcessExpensesesBean.getList();
+        if (recProcessExpensesesBean != null) {
+            tvWorkCost.setText(recProcessExpensesesBean.getTitle());
+            tvWorkCostMoney.setText("¥" + recProcessExpensesesBean.getMoneySum());
+        }
+        if (workcostList != null) {
+            for (int i = 0; i < workcostList.size(); i++) {
+                FinishTableMoreResult.DataBean.RecProcessExpensesesBean.ListBeanXX bean = workcostList.get(i);
+                if (i == 0 || i == (workcostList.size() - 1)) {
+                    llWorkName.addView(setText(bean.getTypeName(), R.color.text_color, R.color.theme_bg));
+                    LinearLayout ll = getLinearLayout(R.color.theme_bg);
+                    setWrokCostLl(ll, bean, R.color.theme_bg, R.color.text_color);
+                    llWorkCost.addView(ll);
+                } else {
+                    llWorkName.addView(setText(bean.getTypeName(), R.color.text_color2, R.color.white));
+                    LinearLayout ll = getLinearLayout(R.color.white);
+                    setWrokCostLl(ll, bean, R.color.white, R.color.text_color2);
+                    llWorkCost.addView(ll);
                 }
             }
+        }
 
 
-            //其他加工费
-            FinishTableMoreResult.DataBean.RecOtherProcessExpensesesBean recOtherProcessExpensesesBean = finishTableMoreResult.getData().getRecOtherProcessExpenseses();
-            List<FinishTableMoreResult.DataBean.RecOtherProcessExpensesesBean.ListBeanX> otherWorkcostList = recOtherProcessExpensesesBean.getList();
-            if (recOtherProcessExpensesesBean != null) {
-                tvOtherWorkCost.setText(recOtherProcessExpensesesBean.getTitle());
-                tvOtherWorkMoney.setText("¥" + recOtherProcessExpensesesBean.getMoneySum());
-            }
-            if (otherWorkcostList != null) {
-                for (int i = 0; i < otherWorkcostList.size(); i++) {
-                    FinishTableMoreResult.DataBean.RecOtherProcessExpensesesBean.ListBeanX bean = otherWorkcostList.get(i);
-                    if (i == 0 || i == (otherWorkcostList.size() - 1)) {
-                        llOtherCostName.addView(setText(bean.getEnChase(), R.color.text_color, R.color.theme_bg));
-                        LinearLayout ll = getLinearLayout(R.color.theme_bg);
-                        setOtherWrokCostLl(ll, bean, R.color.theme_bg, R.color.text_color);
-                        llOtherWorkCost.addView(ll);
-                    } else {
-                        llOtherCostName.addView(setText(bean.getEnChase(), R.color.text_color2, R.color.white));
-                        LinearLayout ll = getLinearLayout(R.color.white);
-                        setOtherWrokCostLl(ll, bean, R.color.white, R.color.text_color2);
-                        llOtherWorkCost.addView(ll);
-                    }
+        //其他加工费
+        FinishTableMoreResult.DataBean.RecOtherProcessExpensesesBean recOtherProcessExpensesesBean = finishTableMoreResult.getData().getRecOtherProcessExpenseses();
+        List<FinishTableMoreResult.DataBean.RecOtherProcessExpensesesBean.ListBeanX> otherWorkcostList = recOtherProcessExpensesesBean.getList();
+        if (recOtherProcessExpensesesBean != null) {
+            tvOtherWorkCost.setText(recOtherProcessExpensesesBean.getTitle());
+            tvOtherWorkMoney.setText("¥" + recOtherProcessExpensesesBean.getMoneySum());
+        }
+        if (otherWorkcostList != null) {
+            for (int i = 0; i < otherWorkcostList.size(); i++) {
+                FinishTableMoreResult.DataBean.RecOtherProcessExpensesesBean.ListBeanX bean = otherWorkcostList.get(i);
+                if (i == 0 || i == (otherWorkcostList.size() - 1)) {
+                    llOtherCostName.addView(setText(bean.getEnChase(), R.color.text_color, R.color.theme_bg));
+                    LinearLayout ll = getLinearLayout(R.color.theme_bg);
+                    setOtherWrokCostLl(ll, bean, R.color.theme_bg, R.color.text_color);
+                    llOtherWorkCost.addView(ll);
+                } else {
+                    llOtherCostName.addView(setText(bean.getEnChase(), R.color.text_color2, R.color.white));
+                    LinearLayout ll = getLinearLayout(R.color.white);
+                    setOtherWrokCostLl(ll, bean, R.color.white, R.color.text_color2);
+                    llOtherWorkCost.addView(ll);
                 }
             }
+        }
 
 
-            //宝石
-            FinishTableMoreResult.DataBean.RecStonesBean recStonesBean = finishTableMoreResult.getData().getRecStones();
-            List<FinishTableMoreResult.DataBean.RecStonesBean.ListBeanXXX> stoneList = recStonesBean.getList();
-            if (finishTableMoreResult != null) {
-                tvStone.setText(recStonesBean.getTitle());
-                tvStoneMoney.setText("¥" + recStonesBean.getMoneySum());
-            }
-            if (stoneList != null) {
-                for (int i = 0; i < stoneList.size(); i++) {
-                    FinishTableMoreResult.DataBean.RecStonesBean.ListBeanXXX bean = stoneList.get(i);
-                    if (i == 0 || i == (stoneList.size() - 1)) {
-                        llStoneProductName.addView(setText(bean.getStoneTypeName(), R.color.text_color, R.color.theme_bg));
-                        LinearLayout ll = getLinearLayout(R.color.theme_bg);
-                        setStoneLl(ll, bean, R.color.theme_bg, R.color.text_color);
-                        llStone.addView(ll);
-                    } else {
-                        llStoneProductName.addView(setText(bean.getStoneTypeName(), R.color.text_color2, R.color.white));
-                        LinearLayout ll = getLinearLayout(R.color.white);
-                        setStoneLl(ll, bean, R.color.white, R.color.text_color2);
-                        llStone.addView(ll);
-                    }
+        //宝石
+        FinishTableMoreResult.DataBean.RecStonesBean recStonesBean = finishTableMoreResult.getData().getRecStones();
+        List<FinishTableMoreResult.DataBean.RecStonesBean.ListBeanXXX> stoneList = recStonesBean.getList();
+        if (finishTableMoreResult != null) {
+            tvStone.setText(recStonesBean.getTitle());
+            tvStoneMoney.setText("¥" + recStonesBean.getMoneySum());
+        }
+        if (stoneList != null) {
+            for (int i = 0; i < stoneList.size(); i++) {
+                FinishTableMoreResult.DataBean.RecStonesBean.ListBeanXXX bean = stoneList.get(i);
+                if (i == 0 || i == (stoneList.size() - 1)) {
+                    llStoneProductName.addView(setText(bean.getStoneTypeName(), R.color.text_color, R.color.theme_bg));
+                    LinearLayout ll = getLinearLayout(R.color.theme_bg);
+                    setStoneLl(ll, bean, R.color.theme_bg, R.color.text_color);
+                    llStone.addView(ll);
+                } else {
+                    llStoneProductName.addView(setText(bean.getStoneTypeName(), R.color.text_color2, R.color.white));
+                    LinearLayout ll = getLinearLayout(R.color.white);
+                    setStoneLl(ll, bean, R.color.white, R.color.text_color2);
+                    llStone.addView(ll);
                 }
             }
+        }
 
-            otherView();
+        otherView();
 
 
     }
@@ -391,7 +397,7 @@ public class FinishTableMoreActivity extends BaseActivity {
         tv.setText(st);
         LinearLayout.LayoutParams params;
         if (UIUtils.isTabletDevice(this)) {
-            params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+            params = new LinearLayout.LayoutParams(0, UIUtils.dip2px(40), 1);
         } else {
             params = new LinearLayout.LayoutParams(UIUtils.dip2px(80), ViewGroup.LayoutParams.WRAP_CONTENT);
         }

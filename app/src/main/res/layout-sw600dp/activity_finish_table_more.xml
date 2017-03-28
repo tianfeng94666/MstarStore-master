@@ -94,8 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp">
+              >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -162,14 +161,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/color_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp">
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -236,14 +234,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/color_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp">
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -293,8 +290,6 @@
 
                     </LinearLayout>
 
-
-
                         <LinearLayout
                             android:id="@+id/ll_other_work_cost"
                             android:layout_width="match_parent"
@@ -307,6 +302,7 @@
 
             <View
                 android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
                 android:layout_height="1dp"
                 android:background="@color/color_line" />
 
@@ -314,8 +310,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp">
+                >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -380,6 +375,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/color_line" />
 
             <RelativeLayout

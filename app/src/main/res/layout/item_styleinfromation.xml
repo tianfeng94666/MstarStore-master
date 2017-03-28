@@ -49,6 +49,7 @@
                     style="@style/layout_horizontal"
                     android:layout_marginRight="3dip"
                     android:layout_weight="1"
+                    android:inputType="numberDecimal"
                     app:tv_name="规格"
                     app:tv_size="7sp"/>
 

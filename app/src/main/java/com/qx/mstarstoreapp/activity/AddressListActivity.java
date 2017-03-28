@@ -29,6 +29,7 @@ import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +59,12 @@ public class AddressListActivity extends BaseActivity {
     ListView idLvAdress;
     List<AddressListEntity> addressList = new ArrayList<>();
     int type;
-    private final int ADDRESS_MANAGER=1;
-    private final int ADDRESS_ORDER=2;
+    private final int ADDRESS_MANAGER = 1;
+    private final int ADDRESS_ORDER = 2;
 
-    AddressListEntity idDefaultAddressListEntity=new AddressListEntity();
+    AddressListEntity idDefaultAddressListEntity = new AddressListEntity();
+    private LoadingWaitDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,18 +73,32 @@ public class AddressListActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_add_adress);
         ButterKnife.bind(this);
-        type = getIntent().getIntExtra("type",1);
+        type = getIntent().getIntExtra("type", 1);
         initView();
         loadNetData();
     }
 
+    public void showWatiNetDialog() {
+        dialog = new LoadingWaitDialog(this);
+        dialog.show();
+    }
+
+    public void dismissWatiNetDialog() {
+        if (dialog != null) {
+            dialog.cancel();
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
 
     @Override
     public void loadNetData() {
-        String url="";
-        if (type==ADDRESS_MANAGER){
+        showWatiNetDialog();
+        String url = "";
+        if (type == ADDRESS_MANAGER) {
             url = AppURL.URL_ADDRESS_MANAGER + "tokenKey=" + BaseApplication.getToken();
-        } if (type==ADDRESS_ORDER) {
+        }
+        if (type == ADDRESS_ORDER) {
             url = AppURL.URL_ADDRESS_SELECT + "tokenKey=" + BaseApplication.getToken();
         }
 
@@ -89,19 +106,21 @@ public class AddressListActivity extends BaseActivity {
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                dismissWatiNetDialog();
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     AddressListResult address = new Gson().fromJson(result, AddressListResult.class);
-                    if(address.getData()!=null){
+                    if (address.getData() != null) {
                         addressList.clear();
-                        addressList .addAll(address.getData().getAddressList());
-                        if (type==ADDRESS_MANAGER){
+                        addressList.addAll(address.getData().getAddressList());
+                        if (type == ADDRESS_MANAGER) {
                             adapter.notifyDataSetChanged();
-                        } if (type==ADDRESS_ORDER) {
+                        }
+                        if (type == ADDRESS_ORDER) {
                             orderSelectAdressAdapter.notifyDataSetChanged();
                         }
-                        for (int i=0;i<addressList.size();i++){
-                            if(addressList.get(i).getIsDefault().equals("1")){
+                        for (int i = 0; i < addressList.size(); i++) {
+                            if (addressList.get(i).getIsDefault().equals("1")) {
                                 L.e("手动设置默认地址");
                                 idDefaultAddressListEntity.setIsDefault("1");
                                 idDefaultAddressListEntity.setAddr(addressList.get(i).getAddr());
@@ -111,8 +130,7 @@ public class AddressListActivity extends BaseActivity {
                             }
                         }
                     }
-                }
-                else if (error == 2) {
+                } else if (error == 2) {
                     loginToServer(AddressListActivity.class);
                 } else if (error == 1) {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
@@ -123,7 +141,7 @@ public class AddressListActivity extends BaseActivity {
 
             @Override
             public void onFail(String fail) {
-
+                dismissWatiNetDialog();
             }
         });
 
@@ -151,11 +169,12 @@ public class AddressListActivity extends BaseActivity {
         });
         listView.addFooterView(view);// 为listview添加footview
 
-        if (type==ADDRESS_MANAGER){
+        if (type == ADDRESS_MANAGER) {
             adapter = new ListViewAdapter();
             listView.setAdapter(adapter);
-        } if (type==ADDRESS_ORDER) {
-            orderSelectAdressAdapter=new OrderSelectAdressAdapter();
+        }
+        if (type == ADDRESS_ORDER) {
+            orderSelectAdressAdapter = new OrderSelectAdressAdapter();
             listView.setAdapter(orderSelectAdressAdapter);
         }
         AddAddressActivity.setOnRefurbishListener(new AddAddressActivity.OnRefurbishListener() {
@@ -168,14 +187,14 @@ public class AddressListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 //                netSetDefaultAddress(addressList.get(position));
-                if (type==ADDRESS_MANAGER){
+                if (type == ADDRESS_MANAGER) {
                     return;
                 }
-                if (addressList.size()==0){
+                if (addressList.size() == 0) {
                     finish();
                     return;
                 }
-                if (type==ADDRESS_ORDER) {
+                if (type == ADDRESS_ORDER) {
                     netSetDefaultAddress(addressList.get(position));
                 }
                 idDefaultAddressListEntity = addressList.get(position);
@@ -191,7 +210,7 @@ public class AddressListActivity extends BaseActivity {
 
     }
 
-    public class  OrderSelectAdressAdapter extends BaseAdapter {
+    public class OrderSelectAdressAdapter extends BaseAdapter {
         @Override
 
         public int getCount() {
@@ -230,10 +249,10 @@ public class AddressListActivity extends BaseActivity {
 
             AddressListEntity addressListEntity = addressList.get(i);
             // viewHolder.id_lay_bg.setBackgroundColor(getResources().getColor(R.color.theme_bg));
-            if (addressListEntity.getId().equals("0")){
+            if (addressListEntity.getId().equals("0")) {
                 viewHolder.idLyEdit.setVisibility(View.GONE);
                 viewHolder.idLyDel.setVisibility(View.GONE);
-            }else {
+            } else {
                 viewHolder.idLyEdit.setVisibility(View.VISIBLE);
                 viewHolder.idLyDel.setVisibility(View.VISIBLE);
             }
@@ -248,11 +267,11 @@ public class AddressListActivity extends BaseActivity {
             viewHolder.idLyDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (addressList.size()>1){
-                        if (addressList.get(i).getIsDefault().equals("1")){
-                            netDelAddress(addressList.get(i),true);
+                    if (addressList.size() > 1) {
+                        if (addressList.get(i).getIsDefault().equals("1")) {
+                            netDelAddress(addressList.get(i), true);
                         }
-                    }else {
+                    } else {
                         ToastManager.showToastReal(getString(R.string.of_one_adress));
                     }
                 }
@@ -273,21 +292,24 @@ public class AddressListActivity extends BaseActivity {
     }
 
 
-
-        public class ListViewAdapter extends BaseAdapter {
+    public class ListViewAdapter extends BaseAdapter {
         int temp;
+
         @Override
         public int getCount() {
             return addressList.size();
         }
+
         @Override
         public Object getItem(int i) {
             return addressList.get(i);
         }
+
         @Override
         public long getItemId(int i) {
             return i;
         }
+
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder = null;
@@ -322,7 +344,7 @@ public class AddressListActivity extends BaseActivity {
             viewHolder.idLyDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   netDelAddress(addressList.get(i),true);
+                    netDelAddress(addressList.get(i), true);
                 }
             });
 
@@ -350,11 +372,10 @@ public class AddressListActivity extends BaseActivity {
     }
 
 
-
     public void netSetDefaultAddress(final AddressListEntity addressListEntity) {
         String url = AppURL.URL_DEFAULT_ADDRESS + "tokenKey=" + BaseApplication.getToken() + "&id=" + addressListEntity.getId();
         L.e(url);
-        VolleyRequestUtils.getInstance().getCookieRequest(AddressListActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){
+        VolleyRequestUtils.getInstance().getCookieRequest(AddressListActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
@@ -362,8 +383,7 @@ public class AddressListActivity extends BaseActivity {
                     //通知适配器更改
                     L.e(getString(R.string.set_default_adress_success));
                     loadNetData();
-                }
-                else if (error == 2) {
+                } else if (error == 2) {
                     loginToServer(AddressListActivity.class);
                 } else if (error == 1) {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
@@ -381,7 +401,7 @@ public class AddressListActivity extends BaseActivity {
 
     }
 
-    public void netDelAddress(AddressListEntity addressListEntity,boolean isdefault) {
+    public void netDelAddress(AddressListEntity addressListEntity, boolean isdefault) {
         String url = AppURL.URL_DEL_ADDRESS + "tokenKey=" + BaseApplication.getToken() + "&id=" + addressListEntity.getId();
         L.e(url);
         VolleyRequestUtils.getInstance().getCookieRequest(AddressListActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -390,8 +410,7 @@ public class AddressListActivity extends BaseActivity {
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     loadNetData();
-                }
-                else if (error == 2) {
+                } else if (error == 2) {
                     loginToServer(AddressListActivity.class);
                 } else if (error == 1) {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
@@ -418,6 +437,7 @@ public class AddressListActivity extends BaseActivity {
         ImageView igCheck;
         TextView phone_tv;
     }
+
     public void onBack(View view) {
         onsetResult();
     }
@@ -431,7 +451,7 @@ public class AddressListActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public  void  onsetResult(){
+    public void onsetResult() {
         Intent intent = new Intent();
         intent.putExtra("phoneNumber", idDefaultAddressListEntity.getPhone());
         intent.putExtra("name", idDefaultAddressListEntity.getName());

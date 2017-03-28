@@ -199,19 +199,19 @@ public class AppURL {
     public static String URL_CODE_VERSION = baseUrl + "currentVersion?";
 
     //订单搜索页面
-    public static String URL_CODE_ORDER_SEARCH = baseUrl1 + "ModelUserOrderSearchPage?";
+    public static String URL_CODE_ORDER_SEARCH = baseUrl + "ModelUserOrderSearchPage?";
     //搜索订单列表页
-    public static String URL_CODE_ORDER_SEARCH_LIST = baseUrl1 + "ModelOrderSearch?";
+    public static String URL_CODE_ORDER_SEARCH_LIST = baseUrl + "ModelOrderSearch?";
     //搜索详情页
-    public static String URL_CODE_ORDER_SEARCH_DETAIL = baseUrl1 + "ModelOrderSearchDetail?";
+    public static String URL_CODE_ORDER_SEARCH_DETAIL = baseUrl + "ModelOrderSearchDetail?";
     //搜索结算详情页
-    public static String URL_CODE_SEARCH_FINSIH_DETAIL = baseUrl1 + "ModelBillFinishDetailRecForSearch?";
+    public static String URL_CODE_SEARCH_FINSIH_DETAIL = baseUrl + "ModelBillFinishDetailRecForSearch?";
     //搜索出库详情页
-    public static String URL_CODE_SEARCH_DELIVERY_DETAIL = baseUrl1 + "ModelArriveBillMoForSearch?";
+    public static String URL_CODE_SEARCH_DELIVERY_DETAIL = baseUrl + "ModelArriveBillMoForSearch?";
     /*1.1.2.4搜索页面的生产进度*/
-    public static String URL_MODELPRODUCE_PROGRESS2=baseUrl1+"ModelOrderProduceDetailShowRateProgressPageForSearch?";
+    public static String URL_MODELPRODUCE_PROGRESS2=baseUrl+"ModelOrderProduceDetailShowRateProgressPageForSearch?";
     /*订单 详情  ModelOrderProduceDetailPage?  */
-    public static String URL_PD_ORDER_DETAIL2 = baseUrl1 + "ModelOrderProduceDetailHistoryPageForSearch?";
+    public static String URL_PD_ORDER_DETAIL2 = baseUrl + "ModelOrderProduceDetailHistoryPageForSearch?";
 
 }
 

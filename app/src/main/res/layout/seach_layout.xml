@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/id_rel_title"
     android:layout_width="match_parent"
-    android:layout_height="40dip"
-    android:layout_marginTop="10dip"
+    android:layout_height="42dip"
+    android:layout_marginTop="8dip"
     android:layout_marginLeft="5dip"
-    android:layout_marginBottom="10dip"
+    android:layout_marginBottom="8dip"
     android:layout_marginRight="10dip"
     android:orientation="horizontal">
 
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="2dip"
-        android:padding="5dip"
+        android:padding="8dip"
         android:layout_marginRight="8dp"
         android:src="@drawable/icon_return" />
 
@@ -31,6 +31,7 @@
             android:layout_height="match_parent"
             android:paddingRight="56dp"
             android:background="@null"
+
             android:imeOptions="actionSearch"
             android:singleLine="true" />
         <ImageView

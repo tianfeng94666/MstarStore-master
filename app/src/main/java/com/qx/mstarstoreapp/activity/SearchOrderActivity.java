@@ -78,8 +78,6 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     ImageView ivSearchType;
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
-    @Bind(R.id.id_view_line)
-    View idViewLine;
     @Bind(R.id.ig_btn_seach)
     ImageView igBtnSeach;
     @Bind(R.id.id_rl1)
@@ -204,11 +202,13 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
      */
     @Override
     public void loadNetData() {
+        baseShowWatLoading();
         String url = AppURL.URL_CODE_ORDER_SEARCH + "tokenKey=" + BaseApplication.getToken();
         L.e("url" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                baseHideWatLoading();
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
@@ -238,7 +238,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onFail(String fail) {
-
+                baseHideWatLoading();
             }
         });
     }
@@ -309,6 +309,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         RadioButton rb = new RadioButton(this);
         RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(UIUtils.dip2px(marginLeft), 0, 0, 0);
+        params.gravity=Gravity.CENTER_VERTICAL;
         rb.setLayoutParams(params);
         rb.setButtonDrawable(R.drawable.selector_radio);
         rb.setText(st);
@@ -450,7 +451,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         }
         listView.setAdapter(simpleAdapter);
         // 创建PopupWindow实例,200,LayoutParams.MATCH_PARENT分别是宽度和高度
-        popupWindow = new PopupWindow(popupWindowView, UIUtils.dip2px(100), UIUtils.dip2px(28 + list.size() * 20), true);
+        popupWindow = new PopupWindow(popupWindowView, UIUtils.dip2px(100), UIUtils.dip2px(28 + list.size() * 35), true);
         // 点击其他地方消失
         popupWindowView.setOnTouchListener(new View.OnTouchListener() {
             @Override
