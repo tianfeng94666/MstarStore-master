@@ -324,7 +324,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择类型 " + id);
@@ -350,7 +353,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择颜色 " + id);
@@ -377,7 +383,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择净度 " + id);
@@ -404,7 +413,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择规格 " + id);
@@ -430,7 +442,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择形状 " + id);
@@ -468,7 +483,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择类型 " + id);
@@ -494,7 +512,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择颜色 " + id);
@@ -520,7 +541,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择净度 " + id);
@@ -546,7 +570,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择规格 " + id);
@@ -572,7 +599,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择形状 " + id);
@@ -602,7 +632,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择类型 " + id);
@@ -627,7 +660,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择颜色 " + id);
@@ -653,7 +689,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择净度 " + id);
@@ -679,7 +718,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择规格 " + id);
@@ -705,7 +747,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择形状 " + id);
@@ -737,7 +782,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e(getString(R.string.please_select_type)+ id);
@@ -763,7 +811,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e(getString(R.string.please_select_color) + id);
@@ -789,7 +840,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e("请选择净度 " + id);
@@ -815,7 +869,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e(getString(R.string.please_select_norm) + id);
@@ -841,7 +898,10 @@ public class CustommadeInformationActivity extends BaseActivity {
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 L.e(getString(R.string.please_select_shape)+ id);

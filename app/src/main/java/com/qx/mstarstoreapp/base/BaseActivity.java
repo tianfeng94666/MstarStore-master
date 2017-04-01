@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -67,7 +68,9 @@ public abstract class BaseActivity extends FragmentActivity  implements HttpCycl
 	}
 
 
-
+public View getRootView(){
+	return this.getRootView();
+}
 
 	/**
 	 * 设置添加屏幕的背景透明度

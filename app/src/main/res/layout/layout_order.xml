@@ -18,38 +18,36 @@
         android:gravity="center_vertical">
 
 
-
         <CheckBox
             android:id="@+id/ck_checkone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:button="@drawable/radio_style"
+            android:checked="false"
             android:paddingBottom="8dp"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
             android:textColor="@color/black"
-            android:textSize="15sp"
-            android:checked="false" />
+            android:textSize="15sp" />
 
 
         <TextView
 
-            android:layout_alignParentRight="true"
             android:id="@+id/btn_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="10dip"
+            android:layout_marginRight="100dp"
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/btn_delete"
-            android:layout_marginRight="100dp"
             android:button="@null"
             android:drawableLeft="@drawable/icon_edit"
             android:gravity="center"
             android:text="   编辑"
-            android:textSize="14sp"
             android:textColor="@color/black"
-            />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/btn_delete"
@@ -61,8 +59,8 @@
             android:drawableLeft="@drawable/icon_del"
             android:gravity="center"
             android:text="    删除"
-            android:textSize="14sp"
             android:textColor="@color/black"
+            android:textSize="14sp"
 
             />
     </RelativeLayout>
@@ -86,8 +84,8 @@
 
         <ImageView
             android:id="@+id/product_img"
-            android:layout_width="70dip"
-            android:layout_height="70dip"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
             android:contentDescription="@string/app_name"
             android:src="@drawable/no_image" />
 
@@ -109,22 +107,22 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:textSize="16sp"
                         android:id="@+id/product_name"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:lines="2"
-                        android:text="千禧之星裸" />
+                        android:layout_marginBottom="16dp"
+                        android:text="千禧之星裸"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <TextView
-                        android:textSize="14sp"
                         android:id="@+id/product_norms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:text="规格"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -135,13 +133,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:textSize="16sp"
                         android:id="@+id/product_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="1334"
-                        android:textColor="@color/theme_red" />
+                        android:textColor="@color/theme_red"
+                        android:textSize="16sp" />
 
 
                     <TextView
@@ -174,18 +172,17 @@
         android:background="@color/color_line" />
 
     <TextView
-        android:textSize="@dimen/text_size_small_medium"
-        android:textColor="@color/text_color"
         android:id="@+id/id_tv_information"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_below="@id/id_view_line"
         android:layout_marginLeft="@dimen/margin10"
         android:layout_marginRight="@dimen/margin10"
         android:layout_marginTop="3dip"
         android:gravity="center_vertical"
-        android:layout_below="@id/id_view_line"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
         android:lines="2"
-        />
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size_small_medium" />
 
     <View
         android:layout_width="fill_parent"

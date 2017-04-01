@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_title_popupwindow"
+            android:text="标题"
+            android:layout_centerVertical="true"
+            android:textColor="@color/text_color3"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:text="确定"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+<com.wx.wheelview.widget.WheelView
+
+    android:id="@+id/wv_popupwindwo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</com.wx.wheelview.widget.WheelView>
+</LinearLayout>

@@ -126,6 +126,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     int waitOrderCount;
     String itemId;
     static ConfirmOrderOnUpdate confirmOrderOnUpdate;
+    private View rootView;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         StyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -137,6 +138,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         initWindwoState();
         setContentView(R.layout.activity_style_information);
+        rootView = View.inflate(this,R.layout.activity_style_information,null);
         ButterKnife.bind(this);
         getIntentData();
         initView();
@@ -846,7 +848,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 remar = type;
@@ -874,7 +879,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setTypeId(type.getId());
@@ -901,7 +909,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setColorId(type.getId());
@@ -928,7 +939,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setPurityId(type.getId());
@@ -977,7 +991,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
-
+            @Override
+            public View getRootView() {
+                return View.inflate(context,R.layout.activity_style_information,null);
+            }
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setShapeId(type.getId());

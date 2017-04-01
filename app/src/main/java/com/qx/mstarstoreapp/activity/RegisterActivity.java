@@ -150,6 +150,7 @@ public class RegisterActivity extends BaseActivity {
                     openActivity(MainActivity.class, null);
                 }if(error==1) {
                     String message=gson.fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastReal(message);
                     L.e(message);
                 }if (error==2){
                     L.e("重新登录");

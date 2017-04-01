@@ -153,7 +153,10 @@ public class AppURL {
     /*订单 详情  ModelOrderProduceDetailPage?orderNum=IAR201611101415&tokenKey=10b588002228fa805231a59bb7976bf4  */
     public static String URL_PD_ORDER_DETAIL = baseUrl + "ModelOrderProduceDetailPage?";
 
-
+    /**
+     * 订单历史详情
+     */
+    public static String URL_PD_ORDER_DETAIL_HISTORY = baseUrl+"ModelOrderProduceDetailHistoryPage?";
     /*登录验证码*/
     public static String URL_LOGING_CODE=baseUrl+"GetLoginVerifyCodeDo?";
 

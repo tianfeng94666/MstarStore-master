@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -142,7 +143,44 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
             }
         });
     }
+    public void loadHistoryNetData() {
+        baseShowWatLoading();
+        String url = AppURL.URL_PD_ORDER_DETAIL_HISTORY + "orderNum=" + orderNum + "&tokenKey=" + BaseApplication.getToken();
+        L.e("ProductionListActivity" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                baseHideWatLoading();
+                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+                if (error == 0) {
+                    lnyLoadingLayout.setVisibility(View.GONE);
+                    ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
+                    if(productListResult.getData()==null){
+                        return;
+                    }
+                    ProductListResult.DataEntity productListResultData = productListResult.getData();
+                    List<ModelListEntity> modelList = productListResultData.getModelList();
+                    orderInfo = productListResultData.getOrderInfo();
+                    initViewData(modelList);
+                }
+                if (error == 1) {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    L.e(message);
+                    ToastManager.showToastReal(message);
+                }
+                if (error == 2) {
+                    loginToServer(AddressListActivity.class);
+                }
 
+            }
+
+            @Override
+            public void onFail(String fail) {
+                baseHideWatLoading();
+
+            }
+        });
+    }
     private void initViewData(List<ModelListEntity> modelList) {
         idOrderNum.setText("订单编号：" + orderInfo.getOrderNum() + "");
         idOrderDate.setText("下单日期：" + orderInfo.getOrderDate());
@@ -179,7 +217,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
         idTvConfirfilterr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadNetData();
+                loadHistoryNetData();
             }
         });
     }

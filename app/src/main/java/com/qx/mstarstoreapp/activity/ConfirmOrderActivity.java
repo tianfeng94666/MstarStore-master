@@ -342,6 +342,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 public String getTitle() {
                     return "选择成色";
                 }
+
+                @Override
+                public View getRootView() {
+                    return View.inflate(context,R.layout.activity_confirmorder,null);
+                }
             });
 
         idReceipt.setOnClickListener(new View.OnClickListener() {
@@ -370,7 +375,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
                     return list;
                 }
-
+                @Override
+                public View getRootView() {
+                    return View.inflate(context,R.layout.activity_confirmorder,null);
+                }
                 @Override
                 public void getSelectId(Type type) {
                     idCsMass.setText(type.getTypeName());
