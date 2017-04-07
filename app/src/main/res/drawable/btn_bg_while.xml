@@ -7,12 +7,12 @@
         android:bottomRightRadius="10dip"
         android:bottomLeftRadius="10dip" />
 
-    <padding
-        android:left="10dip"
-        android:right="10dip"
-        android:top="3dip"
-        android:bottom="3dip"
-        ></padding>
+    <!--<padding-->
+        <!--android:left="10dip"-->
+        <!--android:right="10dip"-->
+        <!--android:top="3dip"-->
+        <!--android:bottom="3dip"-->
+        <!--&gt;</padding>-->
 
     <!--圆角矩形白色背景-->
 </shape>

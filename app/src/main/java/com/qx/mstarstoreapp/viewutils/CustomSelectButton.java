@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -24,6 +27,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.utils.StringUtils;
+import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.wx.wheelview.adapter.BaseWheelAdapter;
 import com.wx.wheelview.adapter.SimpleWheelAdapter;
@@ -41,11 +45,12 @@ import static com.qx.mstarstoreapp.utils.UIUtils.*;
  */
 public class CustomSelectButton extends RelativeLayout {
 
-    private  View rootview;
+    private View rootview;
     private String text;
     private Type type;
     private Button tv;
     private List<Type> types;
+    private List<String> stringTypes;
     private Context mContext;
     String textName;
     float textSize;
@@ -53,6 +58,7 @@ public class CustomSelectButton extends RelativeLayout {
     private WheelView wheelView;
     private TextView tvTitle;
     private TextView tvConfirm;
+    private int defaultPosition = 5;
 
 
     public Button getTv() {
@@ -74,6 +80,7 @@ public class CustomSelectButton extends RelativeLayout {
     public void setDefaultText(String textName) {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
+            this.tv.setTextColor(getResources().getColor(R.color.text_color2));
         }
     }
 
@@ -81,10 +88,11 @@ public class CustomSelectButton extends RelativeLayout {
         return this.tv.getText().toString();
     }
 
-    public CustomSelectButton(Context context,View rootview) {
+    public CustomSelectButton(Context context, View rootview) {
         super(context);
         this.rootview = rootview;
     }
+
     public CustomSelectButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -100,8 +108,6 @@ public class CustomSelectButton extends RelativeLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomSelectButton);
         try {
             textName = typedArray.getString(R.styleable.CustomSelectButton_tv_name);
-            //  textSize=typedArray.getDimension(R.styleable.CustomSelectButton_tv_size,8);
-            // textColor = typedArray.getColor(R.styleable.CustomSelectButton_tv_color,0);
         } finally {
             typedArray.recycle();
         }
@@ -127,35 +133,91 @@ public class CustomSelectButton extends RelativeLayout {
 
         }
     }
-    private List<String> createMainDatas() {
-        String[] strings = {"黑龙江", "吉林", "辽宁"};
-        return Arrays.asList(strings);
-    }
+
     public void showPopupWindow() {
-        View  view = LayoutInflater.from(mContext).inflate(R.layout.popupwindow_bottom,null);
-          wheelView = (WheelView) view.findViewById(R.id.wv_popupwindwo);
-         tvTitle = (TextView)view.findViewById(R.id.tv_title_popupwindow);
-         tvConfirm = (TextView) view.findViewById(R.id.tv_confirm);
-       SimpleWheelAdapter arrayWheelAdapter = new SimpleWheelAdapter(mContext);
+        String text = getTextName().toString();
+        View view = View.inflate(mContext, R.layout.popupwindow_bottom, null);
+        wheelView = (WheelView) view.findViewById(R.id.wv_popupwindwo);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title_popupwindow);
+        tvConfirm = (TextView) view.findViewById(R.id.tv_confirm);
+        tvTitle.setText(onSelectData.getTitle() + "");
+        SimpleWheelAdapter arrayWheelAdapter = new SimpleWheelAdapter(mContext);
         wheelView.setWheelAdapter(arrayWheelAdapter);
+        wheelView.setWheelSize(5);
         wheelView.setWheelData(types);
         WheelView.WheelViewStyle style = new WheelView.WheelViewStyle();
         style.selectedTextSize = 20;
         style.textSize = 16;
         wheelView.setStyle(style);
+        int select = getSelect(text);
+        if (select == -1) {
+            wheelView.setSelection(defaultPosition);
+        } else {
+            wheelView.setSelection(select);
+        }
+
+        wheelView.setSkin(WheelView.Skin.Holo);
+//        wheelView.setLoop(true);
+        wheelView.setWheelClickable(true);
+        UIUtils.setBackgroundAlpha(mContext, 0.5f);//设置屏幕透明度
+
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.showAtLocation(onSelectData.getRootView(), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+        View view1 = onSelectData.getRootView();
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setAnimationStyle(R.style.Animation);
+        popupWindow.showAtLocation(view1, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        tvConfirm.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                type = types.get(wheelView.getCurrentPosition());
+                if (type != null) {
+                    if (!StringUtils.isEmpty(type.getTypeName())) {
+                        setTextName(type.getTypeName());
+                        setText(type.getTypeName());
+                    }
+                    if (onSelectData != null) {
+                        onSelectData.getSelectId(type);
+                    }
+                }
+                closePupupWindow();
+            }
+        });
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                UIUtils.setBackgroundAlpha(mContext, 1.0f);//设置屏幕透明度
+            }
+        });
     }
+
+    private int getSelect(String text) {
+        int a = -1;
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i).getTypeName().equals(text)) {
+                a = i;
+                break;
+            }
+        }
+        return a;
+    }
+
+    public void closePupupWindow() {
+        UIUtils.setBackgroundAlpha(mContext, 1.0f);//设置屏幕透明度
+        popupWindow.dismiss();
+    }
+
     /**
      * 设置添加屏幕的背景透明度
+     *
      * @param bgAlpha
      */
-    public void backgroundAlpha(float bgAlpha)
-    {
-        WindowManager.LayoutParams lp = ((BaseActivity)mContext).getWindow().getAttributes();
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = ((BaseActivity) mContext).getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
-        ((BaseActivity)mContext).getWindow().setAttributes(lp);
+        ((BaseActivity) mContext).getWindow().setAttributes(lp);
     }
+
     AlertDialog dialog;
 
     public void showDialog() {
@@ -280,13 +342,16 @@ public class CustomSelectButton extends RelativeLayout {
         void getSelectId(Type type);
 
         String getTitle();
+
         View getRootView();
     }
-    class SimpleWheelAdapter extends BaseWheelAdapter<Type> {
+
+    class SimpleWheelAdapter extends com.wx.wheelview.adapter.SimpleWheelAdapter {
 
         private Context mContext;
 
         public SimpleWheelAdapter(Context context) {
+            super(context);
             mContext = context;
         }
 

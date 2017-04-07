@@ -1,5 +1,6 @@
 package com.qx.mstarstoreapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -196,6 +197,12 @@ public class UIUtils {
 	public static boolean isTabletDevice(Context context) {
 		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
 				Configuration.SCREENLAYOUT_SIZE_LARGE;
+	}
+
+	public static void setBackgroundAlpha(Context context, float bgAlpha) {
+		WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
+		lp.alpha = bgAlpha;
+		((Activity)context).getWindow().setAttributes(lp);
 	}
 }
 

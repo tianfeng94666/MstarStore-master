@@ -62,17 +62,13 @@
                     app:tv_size="7sp"/>
 
 
-                <EditText
-                    android:gravity="center"
+                <com.qx.mstarstoreapp.viewutils.CustomselectStringButton
                     android:id="@+id/id_ed_number"
                     style="@style/layout_horizontal"
                     android:layout_marginRight="7dip"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_bg_while"
-                    android:button="@null"
-                    android:hint="数量"
-                    android:inputType="number"
-                    android:textSize="12sp"
+                    app:tv_name="数量"
+                    app:tv_size="7sp"
                     />
 
 

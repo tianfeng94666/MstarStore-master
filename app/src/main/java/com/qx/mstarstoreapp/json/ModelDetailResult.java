@@ -69,6 +69,15 @@ public class ModelDetailResult {
         private List<StoneTypeEntity> stoneType;
         private ModelEntity model;
         private List<RemarksEntity> remarks;
+        private String[] handSizeData;
+
+        public String[] getHandSizeData() {
+            return handSizeData;
+        }
+
+        public void setHandSizeData(String[] handSizeData) {
+            this.handSizeData = handSizeData;
+        }
 
         public void setStoneColor(List<StoneColorEntity> stoneColor) {
             this.stoneColor = stoneColor;
@@ -414,15 +423,15 @@ public class ModelDetailResult {
                 return stone;
             }
 
-            public class StoneAEntity extends StoneEntity{
+            public class StoneAEntity extends StoneEntity {
 
             }
 
-            public class StoneBEntity extends StoneEntity{
+            public class StoneBEntity extends StoneEntity {
 
             }
 
-            public class StoneCEntity extends StoneEntity{
+            public class StoneCEntity extends StoneEntity {
 
             }
 

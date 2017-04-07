@@ -56,10 +56,10 @@
         </LinearLayout>
 
 
-    <LinearLayout
+    <View
         android:id="@+id/line1"
         android:layout_width="match_parent"
-        android:layout_height="2px"
+        android:layout_height="1dp"
         android:layout_below="@+id/id_rel2"
         android:background="@color/color_line"
         android:orientation="horizontal"/>
@@ -77,6 +77,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="40dip"
             android:layout_marginTop="@dimen/margin10"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -130,7 +131,13 @@
         </LinearLayout>
 
     </RelativeLayout>
-
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/id_rel3"
+        android:background="@color/color_line"
+        android:orientation="horizontal"/>
     <com.qx.mstarstoreapp.viewutils.PullToRefreshView
         android:id="@+id/pull_refresh_view"
         android:layout_width="fill_parent"

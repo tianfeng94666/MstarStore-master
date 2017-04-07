@@ -67,7 +67,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.show_main_lay);
         ButterKnife.bind(this);
-
         initView();
         setChioceFragment(0);
         isNeedUpdate();

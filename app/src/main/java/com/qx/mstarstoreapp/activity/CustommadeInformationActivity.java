@@ -127,6 +127,7 @@ public class CustommadeInformationActivity extends BaseActivity {
     MyGridView idGvImage;
     @Bind(R.id.id_store_title)
     TextView idStoreTitle;
+    private View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +136,7 @@ public class CustommadeInformationActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_custom_information);
+        rootView = View.inflate(this,R.layout.activity_custom_information,null);
         ButterKnife.bind(this);
         Bundle extras = getIntent().getExtras();
         id = extras.getString("itemId");
@@ -326,7 +328,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -355,7 +357,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -385,7 +387,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -415,7 +417,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -444,7 +446,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -485,7 +487,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -514,7 +516,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -543,7 +545,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -572,7 +574,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -601,7 +603,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -634,7 +636,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -662,7 +664,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -691,7 +693,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -720,7 +722,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -749,7 +751,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -784,7 +786,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -813,7 +815,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -842,7 +844,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -871,7 +873,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {
@@ -900,7 +902,7 @@ public class CustommadeInformationActivity extends BaseActivity {
             }
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
             @Override
             public void getSelectId(Type type) {

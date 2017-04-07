@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,8 @@ import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by Administrator on 2016/9/13.
  */
@@ -33,6 +36,10 @@ public class CustomSelectInput extends RelativeLayout {
     private Context mContext;
     String textName;
     float textSize;
+    private EditText editText;
+    private TextView titleView;
+    private ImageView ivReduce;
+    private ImageView ivAdd;
 
     public Button getTv() {
         return tv;
@@ -54,6 +61,7 @@ public class CustomSelectInput extends RelativeLayout {
     public void setDefaultText(String textName) {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
+            this.tv.setTextColor(getResources().getColor(R.color.text_color2));
         }
     }
 
@@ -110,19 +118,63 @@ public class CustomSelectInput extends RelativeLayout {
 
     public void showDialog() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_input, null);
-        final EditText editText = (EditText) view.findViewById(R.id.specTitle);
-        TextView titleView = (TextView) view.findViewById(R.id.titleName);
-        Button button = (Button) view.findViewById(R.id.id_cancle);
-        button.setOnClickListener(new OnClickListener() {
+        editText = (EditText) view.findViewById(R.id.specTitle);
+        titleView = (TextView) view.findViewById(R.id.titleName);
+        ivReduce = (ImageView) view.findViewById(R.id.iv_reduce);
+        ivAdd = (ImageView) view.findViewById(R.id.iv_add);
+        editText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setSelection(editText.getText().length());
+            }
+        });
+     editText.setText(getTextName());
+        ivReduce.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String st = editText.getText().toString();
+                double number;
+                if (st.equals("")||st.equals("规格")) {
+                    number = 0;
+                } else {
+                    number = Double.parseDouble(st);
+                }
+                reduce(number);
+            }
+        });
+        ivAdd.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String st = editText.getText().toString();
+                double number=0;
+                if (st.equals("")&&!StringUtils.isNumeric(st)) {
+                    number = 0;
+                } else {
+                    try {
+                        number = Double.parseDouble(st);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+                add(number);
+            }
+        });
+        Button btConfirm = (Button) view.findViewById(R.id.bt_confirm);
+        btConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mValue = editText.getText().toString();
                 if (!StringUtils.isEmpty(mValue)) {
-
                     checkSpeci(mValue);
-
                 }
 
+            }
+        });
+        Button bt_cancle = (Button) view.findViewById(R.id.id_cancle);
+        bt_cancle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
         if (onSelectData != null) {
@@ -137,6 +189,24 @@ public class CustomSelectInput extends RelativeLayout {
         dialog.setCanceledOnTouchOutside(true);
         //设置点击Dialog外部任意区域关闭Dialog，false为不会关闭
         dialog.show();
+    }
+
+    private void add(double number) {
+        if(number>=0&&number<1){
+            DecimalFormat df   = new DecimalFormat("######0.0");
+            editText.setText( df.format(number+0.1)+"");
+        }else if(number>=1){
+            editText.setText(Math.floor(number+1)+"");
+        }
+    }
+
+    private void reduce(double number) {
+        if(number>0&&number<=1){
+            DecimalFormat df   = new DecimalFormat("######0.0");
+            editText.setText(df.format(number-0.1)+"");
+        }else if(number>1){
+            editText.setText((number-1)+"");
+        }
     }
 
 
@@ -189,6 +259,7 @@ public class CustomSelectInput extends RelativeLayout {
         void getSelectId(String key);
 
         String getTitle();
+
     }
 
 }

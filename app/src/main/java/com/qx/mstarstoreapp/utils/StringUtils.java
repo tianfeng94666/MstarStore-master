@@ -275,5 +275,13 @@ public class StringUtils {
 	            temp = temp >> 8; // 向右移8位 
 	        } 
 	        return b; 
-	    } 
+	    }
+	public static boolean isNumeric(String str){
+		for (int i = str.length();--i>=0;){
+			if (!Character.isDigit(str.charAt(i))){
+				return false;
+			}
+		}
+		return true;
+	}
 }

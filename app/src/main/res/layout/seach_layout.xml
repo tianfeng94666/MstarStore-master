@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/id_rel_title"
     android:layout_width="match_parent"
-    android:layout_height="42dip"
-    android:layout_marginTop="8dip"
-    android:layout_marginLeft="5dip"
-    android:layout_marginBottom="8dip"
-    android:layout_marginRight="10dip"
+    android:layout_height="58dip"
+    android:paddingTop="8dip"
+    android:background="@color/theme_bg"
+    android:paddingLeft="5dip"
+    android:paddingBottom="8dip"
+    android:paddingRight="10dip"
     android:orientation="horizontal">
 
 

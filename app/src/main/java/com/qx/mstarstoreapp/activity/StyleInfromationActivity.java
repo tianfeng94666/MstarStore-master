@@ -43,10 +43,14 @@ import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.CustomLV;
 import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
 import com.qx.mstarstoreapp.viewutils.CustomSelectInput;
+import com.qx.mstarstoreapp.viewutils.CustomselectStringButton;
 import com.qx.mstarstoreapp.viewutils.MyGridView;
 import com.qx.mstarstoreapp.viewutils.SelectDotView;
+import com.wx.wheelview.widget.WheelView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +65,6 @@ import butterknife.ButterKnife;
  *
  */
 public class StyleInfromationActivity extends BaseActivity implements View.OnClickListener {
-
 
     List<StoneEntity> stoneEntities = new ArrayList<>();
     StoneEntity stone;
@@ -100,8 +103,6 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     TextView idTvAddOrder;
     @Bind(R.id.id_cus_store_number)
     EditText idCusStoreNumber;
-    @Bind(R.id.id_cus_store_size)
-    EditText idCusStoreSize;
     String categoryTitle, storeNumber, storeSize, categoryId;
     @Bind(R.id.id_cus_store_remarkid)
     CustomSelectButton idCusStoreRemarkid;
@@ -117,16 +118,23 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     TextView indicatorTV;
     @Bind(R.id.index_product_images_indicator)
     LinearLayout newsDotsContainer;
-
+    @Bind(R.id.iv_reduce)
+    ImageView ivReduce;
+    @Bind(R.id.iv_add)
+    ImageView ivAdd;
+    @Bind(R.id.id_cus_store_size)
+    CustomselectStringButton idCusStoreSize;
     @Bind(R.id.id_vipage_content)
     RelativeLayout id_vipage_content;
 
+    WheelView mainWheelView;
     int type = 0;
     String orderId;
     int waitOrderCount;
     String itemId;
     static ConfirmOrderOnUpdate confirmOrderOnUpdate;
     private View rootView;
+    private ModelDetailResult.DataEntity dataEntity;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         StyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -138,13 +146,12 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         initWindwoState();
         setContentView(R.layout.activity_style_information);
-        rootView = View.inflate(this,R.layout.activity_style_information,null);
+        rootView = View.inflate(this, R.layout.activity_style_information, null);
         ButterKnife.bind(this);
         getIntentData();
         initView();
         loadNetData();
     }
-
 
 
     /**
@@ -193,10 +200,70 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 finish();
             }
         });
+        ivAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                add();
+            }
+        });
+
+        ivReduce.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reduce();
+            }
+        });
+    }
+
+    private void reduce() {
+        String st = idCusStoreNumber.getText().toString();
+        double amount;
+        if (st.equals("")) {
+            amount = 0;
+        } else {
+            amount = Double.parseDouble(st);
+        }
+
+        if (amount > 0 && amount ==0.5) {
+            idCusStoreNumber.setText(amount - 0.5 + "");
+        } else if(amount==1){
+            idCusStoreNumber.setText("");
+        }
+        else if (amount >1) {
+            if(amount%1==0.5){
+                idCusStoreNumber.setText(amount - 1 + "");
+            }else {
+                idCusStoreNumber.setText((int) Math.floor(amount -1) + "");
+            }
+        }
+    }
+
+    private void add() {
+        String st = idCusStoreNumber.getText().toString();
+        double amount;
+        if (st.equals("")||st.equals("0.0")) {
+            amount = 0;
+        } else {
+            amount = Double.parseDouble(st);
+        }
+
+        if (amount >= 0 && amount < 0.5) {
+            idCusStoreNumber.setText((int)(amount + 1) + "");
+        } else if (amount == 0.5) {
+            idCusStoreNumber.setText(amount+1 + "");
+        } else if (amount >= 1) {
+            if(amount%1==0.5){
+                idCusStoreNumber.setText(amount + 1 + "");
+            }else {
+                idCusStoreNumber.setText((int) Math.floor(amount + 1) + "");
+            }
+
+        }
     }
 
 
     BadgeView badge;
+
     private void remind(int count) {
         boolean isVisible = false;
         if (count != 0) {
@@ -218,7 +285,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     }
 
     @Override
-    public   void loadNetData() {
+    public void loadNetData() {
         String url;
         if (type == 1) {
             url = AppURL.URL_MODEL_UPDATE + "tokenKey=" + BaseApplication.getToken() + "&itemId=" + itemId;
@@ -238,10 +305,11 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     ModelDetailResult modelDetail = new Gson().fromJson(result, ModelDetailResult.class);
-                    ModelDetailResult.DataEntity dataEntity = modelDetail.getData();
-                    if(dataEntity==null){
+                    dataEntity = modelDetail.getData();
+                    if (dataEntity == null) {
                         return;
                     }
+                    initCustomselectString();
                     List<ModelDetailResult.DataEntity.GoldenPriceEntity> goldenPrice = dataEntity.getGoldenPrice();
                     remarksEntity = dataEntity.getRemarks();
                     modelEntity = dataEntity.getModel();
@@ -251,9 +319,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
                     //L.e("服务器返回是否自带主石头"+isSelfStone);
                     /*得到数量*/
-                    String number =modelEntity.getNumber();
-                    String remark=modelEntity.getRemark();
-                    String handSize=modelEntity.getHandSize();
+                    String number = modelEntity.getNumber();
+                    String remark = modelEntity.getRemark();
+                    String handSize = modelEntity.getHandSize();
 
                     pics = modelEntity.getPics();
                     stone = modelEntity.getStone();
@@ -261,18 +329,18 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                     stoneB = modelEntity.getStoneB();
                     stoneC = modelEntity.getStoneC();
                     stone.setIsSelfStone(modelEntity.getIsSelfStone());
-                    if(modelEntity.getIsSelfStone()==1){
+                    if (modelEntity.getIsSelfStone() == 1) {
                         stone.setChecked(true);
                     }
-                    if(stoneA.getStoneOut().equals("1")){
+                    if (stoneA.getStoneOut().equals("1")) {
                         stoneA.setChecked(true);
                         stoneA.setIsSelfStone(modelEntity.getIsSelfStone());
                     }
-                    if(stoneB.getStoneOut().equals("1")){
+                    if (stoneB.getStoneOut().equals("1")) {
                         stoneB.setChecked(true);
                         stoneB.setIsSelfStone(modelEntity.getIsSelfStone());
                     }
-                    if(stoneC.getStoneOut().equals("1")){
+                    if (stoneC.getStoneOut().equals("1")) {
                         stoneC.setChecked(true);
                         stoneC.setIsSelfStone(modelEntity.getIsSelfStone());
                     }
@@ -293,10 +361,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                     L.e("categoryTitle" + categoryTitle);
                     idStoreTitle.setText(modelEntity.getTitle());
                     idCusStoreType.setTextName(categoryTitle);
-                    if (!StringUtils.isEmpty(number)){
-                        idCusStoreNumber.setText(""+number);
+                    if (!StringUtils.isEmpty(number)) {
+                        idCusStoreNumber.setText("" + number);
                     }
-                    idCusStoreSize.setText(handSize);
+                    idCusStoreSize.setTextName(handSize);
                     // initView();
                     //layoutBtns();
                     //initGvImage();
@@ -327,6 +395,35 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
     }
 
+    private void initCustomselectString() {
+        idCusStoreSize.setDefaultText("手寸");
+        idCusStoreSize.setOnSelectData(new CustomselectStringButton.OnselectData() {
+            @Override
+            public List<String> getData() {
+                return Arrays.asList(dataEntity.getHandSizeData());
+            }
+
+            @Override
+            public void getSelectId(String type) {
+                idCusStoreSize.setTextName(type);
+            }
+
+            @Override
+            public int defaultPosition() {
+                return 22;
+            }
+
+            @Override
+            public String getTitle() {
+                return "手寸";
+            }
+
+            @Override
+            public View getRootView() {
+                return rootView;
+            }
+        });
+    }
 
 
     String[] getPics;
@@ -354,7 +451,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         MyAdapter adapter = new MyAdapter(list);
         viewPager.setAdapter(adapter);
         //currentTab = pics.size() * SCALE / 2;
-        currentTab=0;
+        currentTab = 0;
         viewPager.setCurrentItem(currentTab, false);
         indicatorTV.setVisibility(View.VISIBLE);
         indicatorTV.setText("1" + "/" + list.size());
@@ -364,10 +461,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 //        linearParams.height = UIUtils.dip2px(UIUtils.getWindowHight()/2);// 当控件的高强制设成50象素
 //        viewPager.setLayoutParams(linearParams); // 使设置好的布局参数应用到控件myGrid
         LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) id_vipage_content.getLayoutParams(); // 取控件mGrid当前的布局参数
-        L.e("getWindowHight"+ UIUtils.getWindowHight()/2);
-        if (UIUtils.getWindowHight()>1500){
+        L.e("getWindowHight" + UIUtils.getWindowHight() / 2);
+        if (UIUtils.getWindowHight() > 1500) {
             linearParams.height = UIUtils.dip2px(600);// 当控件的高强制设成50象素
-        }else {
+        } else {
             linearParams.height = UIUtils.dip2px(350);// 当控件的高强制设成50象素
         }
         linearParams.height = UIUtils.getWindowWidth();// 当控件的高强制设成50象素
@@ -452,19 +549,21 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     }
 
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_tv_add_order:
-                chkeckConfirmOrder();
+                if (!UIUtils.isFastDoubleClick()) {
+                    chkeckConfirmOrder();
+                }
                 break;
         }
     }
+
     /*提交订单之前检查是否允许提交*/
     private void chkeckConfirmOrder() {
         storeNumber = idCusStoreNumber.getText().toString();
-        storeSize = idCusStoreSize.getText().toString();
+        storeSize = idCusStoreSize.getTextName().toString();
         L.e("storeNumber" + storeNumber + "storeSize" + storeSize + "categoryTitle" + categoryTitle);
         boolean isConfir = false;
         boolean isConfirA = false;
@@ -472,20 +571,20 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         boolean isConfirC = false;
         if (isNumber(storeNumber)) {
             /*自带主石头*/
-            if(!stone.isChecked()&&!checkUpPass(stone)||stone.isChecked()){
-                isConfir=true;
+            if (!stone.isChecked() && !checkUpPass(stone) || stone.isChecked()) {
+                isConfir = true;
             }
-            if (!stoneA.isChecked()&&!checkUpPass(stoneA)||stoneA.isChecked()){
-                isConfirA=true;
+            if (!stoneA.isChecked() && !checkUpPass(stoneA) || stoneA.isChecked()) {
+                isConfirA = true;
             }
-            if (!stoneB.isChecked()&&!checkUpPass(stoneB)||stoneB.isChecked()){
-                isConfirB=true;
+            if (!stoneB.isChecked() && !checkUpPass(stoneB) || stoneB.isChecked()) {
+                isConfirB = true;
             }
-            if (!stoneC.isChecked()&&!checkUpPass(stoneC)||stoneC.isChecked()){
-                isConfirC=true;
+            if (!stoneC.isChecked() && !checkUpPass(stoneC) || stoneC.isChecked()) {
+                isConfirC = true;
             }
             /*是否可以提交*/
-            if (isConfir&&isConfirA&&isConfirB&&isConfirC) {
+            if (isConfir && isConfirA && isConfirB && isConfirC) {
                 addCurentOrder();
                 idTvAddOrder.setEnabled(false);
             } else {
@@ -499,10 +598,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     }
 
 
-
-    /**提交订单
-     *
-     * **/
+    /**
+     * 提交订单
+     **/
     private void addCurentOrder() {
         // OrderDoCurrentModelItemDo?productId=1&categoryId=8&number=2&handSize=3&stone=1|3|2|3|4|5&stoneA=1|2|2|3|4|5&
         // stoneB=1|2|3|3|4|5&stoneC=1|2|3|3|4|6&tokenKey=10b588002228fa805231a59bb7976bf4
@@ -513,7 +611,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         String urlStroeC = objectisEmptyAndtoJson("stoneC", stoneC);
         if (type == 1) {
             url = AppURL.URL_CURRENT_EDIT_ORDER + "tokenKey=" + BaseApplication.getToken() + "&itemId=" + itemId + "&number=" + storeNumber
-                    + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone()+"";
+                    + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone() + "";
         } else if (type == 2) {
             url = AppURL.URL_UPDATE_ORDER_WATET + "tokenKey=" + BaseApplication.getToken() + "&itemId=" + itemId + "&number=" + storeNumber
                     + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone();
@@ -561,31 +659,29 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     }
 
 
-
-
     /**
      * 验证输入 不通过 返回true 要么全空要么全不为空
-     * */
+     */
     public boolean checkUpPass(StoneEntity stoEntity) {
-        boolean isUpPass=true;
+        boolean isUpPass = true;
         //全部为空
         if (StringUtils.isEmpty(stoEntity.getNumber()) &&
                 StringUtils.isEmpty(stoEntity.getShapeId()) && StringUtils.isEmpty(stoEntity.getPurityTitle())
                 && StringUtils.isEmpty(stoEntity.getColorId()) && StringUtils.isEmpty(stoEntity.getTypeId())
                 && StringUtils.isEmpty(stoEntity.getSpecTitle())) {
-            isUpPass= false;
+            isUpPass = false;
         }
         if (!StringUtils.isEmpty(stoEntity.getNumber()) &&
                 !StringUtils.isEmpty(stoEntity.getShapeId()) && !StringUtils.isEmpty(stoEntity.getPurityTitle())
                 && !StringUtils.isEmpty(stoEntity.getColorId()) && !StringUtils.isEmpty(stoEntity.getTypeId())
                 && !StringUtils.isEmpty(stoEntity.getSpecTitle())) {
-            isUpPass= false;
+            isUpPass = false;
         }
 
-        if (!isUpPass){
-            L.e( stoEntity.toString()+"通过验证");
-        }else {
-            L.e( stoEntity.toString()+"不通过验证");
+        if (!isUpPass) {
+            L.e(stoEntity.toString() + "通过验证");
+        } else {
+            L.e(stoEntity.toString() + "不通过验证");
         }
 
         return isUpPass;
@@ -593,9 +689,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
 
     /*验证数字是否是整形和0.5*/
-    public boolean isNumber(String storeNumber){
-        if(!StringUtils.isEmpty(storeNumber)){
-            if(!storeNumber.equals("0.5")&&!(storeNumber.indexOf(".")==-1)){
+    public boolean isNumber(String storeNumber) {
+        if (!StringUtils.isEmpty(storeNumber)) {
+            double d = Double.parseDouble(storeNumber);
+            if (!storeNumber.equals("0.5") && !(d%1!= 0.5)) {
                 return false;
             }
         }
@@ -605,25 +702,25 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     /**
      * 将选择的数据转化为JSON字符串
      * *
-     * */
+     */
     public String objectisEmptyAndtoJson(String key, StoneEntity stoEntity) {
         List list = new ArrayList();
         //如果是主石
-        if (stoEntity.isChecked()&&!stoEntity.getStroneName().equals("主 石")){
-            for (int i=0;i<7;i++){
+        if (stoEntity.isChecked() && !stoEntity.getStroneName().equals("主 石")) {
+            for (int i = 0; i < 7; i++) {
                 list.add("");
-                if (i==6){
-                    list.add(stoEntity.getIsSelfStone()+"");
+                if (i == 6) {
+                    list.add(stoEntity.getIsSelfStone() + "");
                 }
             }
-        }else if (stoEntity.isChecked()&&stoEntity.getStroneName().equals("主 石")){
+        } else if (stoEntity.isChecked() && stoEntity.getStroneName().equals("主 石")) {
             list.add(stoEntity.getTypeId());
             list.add(stoEntity.getSpecTitle());
             list.add(stoEntity.getShapeId());
             list.add(stoEntity.getColorId());
             list.add(stoEntity.getPurityId());
             list.add(stoEntity.getNumber());
-        }else {
+        } else {
             if (!StringUtils.isEmpty(stoEntity.getNumber()) &&
                     !StringUtils.isEmpty(stoEntity.getPurityId()) && !StringUtils.isEmpty(stoEntity.getColorId())
                     && !StringUtils.isEmpty(stoEntity.getTypeId()) && !StringUtils.isEmpty(stoEntity.getSpecTitle())
@@ -634,8 +731,8 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 list.add(stoEntity.getColorId());
                 list.add(stoEntity.getPurityId());
                 list.add(stoEntity.getNumber());
-                if (!stoEntity.getStroneName().equals("主 石")){
-                    list.add(stoEntity.getIsSelfStone()+"");
+                if (!stoEntity.getStroneName().equals("主 石")) {
+                    list.add(stoEntity.getIsSelfStone() + "");
                 }
 
             }
@@ -644,15 +741,15 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     }
 
 
-
     public class ListAdapter extends BaseAdapter {
-        public  Map<String,StoneEntity> checkedState;
-        public ListAdapter(){
+        public Map<String, StoneEntity> checkedState;
+
+        public ListAdapter() {
             checkedState = new HashMap<>();
         }
 
-        public void removeChecked(StoneEntity stoneEntity){
-            if(checkedState.get(stoneEntity.getStroneName())!=null){
+        public void removeChecked(StoneEntity stoneEntity) {
+            if (checkedState.get(stoneEntity.getStroneName()) != null) {
                 checkedState.remove(stoneEntity.getStroneName());
                 stoneEntity.setChecked(false);
                 notifyDataSetChanged();
@@ -710,68 +807,35 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                     break;
             }
 
-           // viewHolder.idStoreNumber.addTextChangedListener(new TextChange(viewHolder,stoneEntity));
-            viewHolder.idStoreNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus){
-                        L.e("得到焦点 ");
-                        viewHolder.idStoreNumber.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // viewHolder.idStoreNumber.addTextChangedListener(new TextChange(viewHolder,stoneEntity));
 
-                            }
 
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                                L.e("得到焦点改变 数据"+s.toString());
-                                stoneEntity.setNumber(s.toString());
-                            }
-                        });
-                    }
-                    if (!StringUtils.isEmpty(stoneEntity.getNumber())){
-                        viewHolder.idStoreNumber.setBackgroundResource(R.drawable.btn_bg_while);
-                    }else {
-                        viewHolder.idStoreNumber.setBackgroundResource(R.drawable.check_red_border);
-                    }
-                }
-            });
-            viewHolder.idStoreNumber.setText(stoneEntity.getNumber());
-            if (!StringUtils.isEmpty(viewHolder.idStoreNumber.getText().toString())){
-                viewHolder.idStoreNumber.setBackgroundResource(R.drawable.btn_bg_while);
-            }else {
-                viewHolder.idStoreNumber.setBackgroundResource(R.drawable.check_red_border);
+            if (stoneEntity.isChecked()) {
+                redHint(viewHolder, false);
+                checkedState.put(stoneEntity.getStroneName(), stoneEntity);
+            } else {
+                redHint(viewHolder, checkUpPass(stoneEntity));
             }
 
-            if (stoneEntity.isChecked()){
-                redHint(viewHolder,false);
-                checkedState.put(stoneEntity.getStroneName(),stoneEntity);
-            }else {
-                redHint(viewHolder,checkUpPass(stoneEntity));
-            }
-            if(checkedState.get(stoneEntity.getStroneName())!=null){
+
+            if (checkedState.get(stoneEntity.getStroneName()) != null) {
                 viewHolder.idIsCheck.setChecked(true);
-            }else {
+            } else {
                 viewHolder.idIsCheck.setChecked(false);
             }
             viewHolder.idIsCheck.setTag(i);
             viewHolder.idIsCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(checkedState.get(stoneEntity.getStroneName())!=null){
+                    if (checkedState.get(stoneEntity.getStroneName()) != null) {
                         checkedState.remove(stoneEntity.getStroneName());
                         stoneEntity.setChecked(false);
                         stoneEntity.setIsSelfStone(0);
-                    }else {
-                        checkedState.put(stoneEntity.getStroneName(),stoneEntity);
+                    } else {
+                        checkedState.put(stoneEntity.getStroneName(), stoneEntity);
                     }
-                    if (checkedState.size()>0){
-                        for (String key:checkedState.keySet()){
+                    if (checkedState.size() > 0) {
+                        for (String key : checkedState.keySet()) {
                             StoneEntity stone = checkedState.get(key);//得到每个key多对用value的值
                             stone.setChecked(true);
                             stoneEntity.setIsSelfStone(1);
@@ -780,27 +844,28 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                     adapter.notifyDataSetChanged();
                 }
             });
-            initDataAndListener(viewHolder,stoneEntity);
+            initDataAndListener(viewHolder, stoneEntity);
             return view;
         }
 
 
-
-        /*true红色提示  表示不通过验证*/
-        public void redHint(ViewHolder viewHolder,boolean isRed){
-            if (isRed){
+        /**true红色提示  表示不通过验证**/
+        public void redHint(ViewHolder viewHolder, boolean isRed) {
+            if (isRed) {
                 viewHolder.idStoreCut.getTv().setBackgroundResource(R.drawable.check_red_border);
                 viewHolder.idStoreType.getTv().setBackgroundResource(R.drawable.check_red_border);
                 viewHolder.idStoreColor.getTv().setBackgroundResource(R.drawable.check_red_border);
                 viewHolder.idStoreNorm.getTv().setBackgroundResource(R.drawable.check_red_border);
                 viewHolder.idStoreShape.getTv().setBackgroundResource(R.drawable.check_red_border);
-            }else {
+                viewHolder.idStoreNumber.getTv().setBackgroundResource(R.drawable.check_red_border);
+            } else {
                 viewHolder.idStoreCut.getTv().setBackgroundResource(R.drawable.btn_bg_while);
                 viewHolder.idStoreType.getTv().setBackgroundResource(R.drawable.btn_bg_while);
                 viewHolder.idStoreColor.getTv().setBackgroundResource(R.drawable.btn_bg_while);
                 viewHolder.idStoreNorm.getTv().setBackgroundResource(R.drawable.btn_bg_while);
                 viewHolder.idStoreShape.getTv().setBackgroundResource(R.drawable.btn_bg_while);
                 viewHolder.idStoreNumber.setBackgroundResource(R.drawable.btn_bg_while);
+                viewHolder.idStoreNumber.getTv().setBackgroundResource(R.drawable.btn_bg_while);
             }
         }
 
@@ -808,32 +873,69 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     }
 
     /*选中显示*/
-    public void isCheckVisable(final ViewHolder viewHolder,final StoneEntity stoneEntity){
-        if (!stoneEntity.isChecked()){
+    public void isCheckVisable(final ViewHolder viewHolder, final StoneEntity stoneEntity) {
+        if (stoneEntity.isChecked() && !stoneEntity.getStroneName().equals("主 石")) {
             viewHolder.idStoreType.setDefaultText("类型");
             viewHolder.idStoreNorm.setDefaultText("规格");
             viewHolder.idStoreShape.setDefaultText("形状");
             viewHolder.idStoreCut.setDefaultText("净度");
             viewHolder.idStoreColor.setDefaultText("颜色");
-        }else {
+            viewHolder.idStoreNumber.setDefaultText("数量");
+        } else {
             viewHolder.idStoreType.setTextName(stoneEntity.getTypeTitle());
             viewHolder.idStoreNorm.setTextName(stoneEntity.getSpecTitle());
             viewHolder.idStoreShape.setTextName(stoneEntity.getShapeTitle());
             viewHolder.idStoreCut.setTextName(stoneEntity.getPurityTitle());
             viewHolder.idStoreColor.setTextName(stoneEntity.getColorTitle());
+            viewHolder.idStoreNumber.setTextName(stoneEntity.getNumber());
         }
 
     }
 
 
-
-
-
     private void initDataAndListener(final ViewHolder viewHolder, final StoneEntity stoneEntity) {
 
-        isCheckVisable(viewHolder,stoneEntity);
+        isCheckVisable(viewHolder, stoneEntity);
 
+        viewHolder.idStoreNumber.setOnSelectData(new CustomselectStringButton.OnselectData() {
+            @Override
+            public List<String> getData() {
+                List<String> list = new ArrayList<String>();
+                for (int i = 1; i < 100; i++) {
+                    list.add(i + "");
+                }
+                return list;
+            }
 
+            @Override
+            public void getSelectId(String type) {
+                stoneEntity.setNumber(type);
+                viewHolder.idStoreNumber.setText(stoneEntity.getNumber());
+                if (!StringUtils.isEmpty(stoneEntity.getNumber())) {
+                    viewHolder.idStoreNumber.setBackgroundResource(R.drawable.btn_bg_while);
+                } else {
+                    viewHolder.idStoreNumber.setBackgroundResource(R.drawable.check_red_border);
+                }
+                setStorePrice(stoneEntity);
+                // adapter.setTag(viewHolder,position);
+                isSetNOcheck(stoneEntity);
+            }
+
+            @Override
+            public int defaultPosition() {
+                return 0;
+            }
+
+            @Override
+            public String getTitle() {
+                return "数量";
+            }
+
+            @Override
+            public View getRootView() {
+                return rootView;
+            }
+        });
 
         idCusStoreRemarkid.setOnSelectData(new CustomSelectButton.OnselectData() {
             @Override
@@ -848,10 +950,13 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
+
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
+
+
             @Override
             public void getSelectId(Type type) {
                 remar = type;
@@ -879,22 +984,24 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
+
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
+
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setTypeId(type.getId());
                 stoneEntity.setTypeTitle(type.getTypeName());
                 setStorePrice(stoneEntity);
-               // adapter.setTag(viewHolder,position);
+                // adapter.setTag(viewHolder,position);
                 isSetNOcheck(stoneEntity);
             }
 
             @Override
             public String getTitle() {
-                return "请选择类型";
+                return "类型";
             }
         });
         viewHolder.idStoreColor.setOnSelectData(new CustomSelectButton.OnselectData() {
@@ -909,22 +1016,24 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
+
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
+
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setColorId(type.getId());
                 stoneEntity.setColorTitle(type.getTypeName());
-               setStorePrice(stoneEntity);
-               // adapter.setTag(viewHolder,position);
+                setStorePrice(stoneEntity);
+                // adapter.setTag(viewHolder,position);
                 isSetNOcheck(stoneEntity);
             }
 
             @Override
             public String getTitle() {
-                return "请选择颜色";
+                return "颜色";
             }
         });
         viewHolder.idStoreCut.setOnSelectData(new CustomSelectButton.OnselectData() {
@@ -939,22 +1048,24 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
+
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
+
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setPurityId(type.getId());
                 stoneEntity.setPurityTitle(type.getTypeName());
                 setStorePrice(stoneEntity);
-               // adapter.setTag(viewHolder,position);
+                // adapter.setTag(viewHolder,position);
                 isSetNOcheck(stoneEntity);
             }
 
             @Override
             public String getTitle() {
-                return "请选择净度";
+                return "净度";
             }
         });
 
@@ -964,7 +1075,8 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             public void getSelectId(String key) {
                 stoneEntity.setSpecTitle(key);
                 setStorePrice(stoneEntity);
-              //  adapter.setTag(viewHolder,position);
+
+                //  adapter.setTag(viewHolder,position);
                 isSetNOcheck(stoneEntity);
             }
 
@@ -991,10 +1103,12 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 }
                 return list;
             }
+
             @Override
             public View getRootView() {
-                return View.inflate(context,R.layout.activity_style_information,null);
+                return rootView;
             }
+
             @Override
             public void getSelectId(Type type) {
                 stoneEntity.setShapeId(type.getId());
@@ -1005,7 +1119,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
             @Override
             public String getTitle() {
-                return "请选择形状";
+                return "形状";
             }
         });
 
@@ -1030,12 +1144,23 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     }
 
 
-    public void isSetNOcheck(StoneEntity  stoneEntity){
-        if (stoneEntity.isChecked()&&!stoneEntity.getStroneName().equals("主 石")){
+    public void isSetNOcheck(StoneEntity stoneEntity) {
+        if (stoneEntity.isChecked() && !stoneEntity.getStroneName().equals("主 石")) {
             adapter.removeChecked(stoneEntity);
         }
+        adapter.notifyDataSetChanged();
     }
 
+    public void firstClick(StoneEntity stoneEntity){
+        //全部为空
+        boolean isUpPass = false;
+        if (StringUtils.isEmpty(stoneEntity.getNumber()) &&
+                StringUtils.isEmpty(stoneEntity.getShapeId()) && StringUtils.isEmpty(stoneEntity.getPurityTitle())
+                && StringUtils.isEmpty(stoneEntity.getColorId()) && StringUtils.isEmpty(stoneEntity.getTypeId())
+                && StringUtils.isEmpty(stoneEntity.getSpecTitle())) {
+            isUpPass = true;
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1051,7 +1176,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             }
         }
         if (requestCode == 12) {
-            if (data==null){
+            if (data == null) {
                 return;
             }
             waitOrderCount = data.getExtras().getInt("waitOrderCount");
@@ -1089,7 +1214,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
-                    ToastManager.showToastReal(message);
+//                    ToastManager.showToastReal(message);
                 }
             }
 
@@ -1116,7 +1241,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         @Bind(R.id.id_tv_title)
         TextView idTvTitle;
         @Bind(R.id.id_ed_number)
-        EditText idStoreNumber;
+        CustomselectStringButton idStoreNumber;
         @Bind(R.id.id_check_Layout_visiable)
         LinearLayout checkLayoutVisible;
 
@@ -1125,11 +1250,11 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
         @Bind(R.id.tv_hint)
         TextView tvHint;
+
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
-
 
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
