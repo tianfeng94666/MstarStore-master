@@ -144,7 +144,7 @@
                             android:layout_marginLeft="20dip"
                             android:layout_marginRight="15dip"
                             android:layout_weight="1"
-                            app:tv_name="选择质量等级"/>
+                            app:tv_name="选择成色"/>
                     </LinearLayout>
 
                     <View
@@ -177,7 +177,7 @@
                             android:layout_marginLeft="20dip"
                             android:layout_marginRight="15dip"
                             android:layout_weight="1"
-                            app:tv_name="选择成色"/>
+                            app:tv_name="选择质量等级"/>
                     </LinearLayout>
 
                     <View

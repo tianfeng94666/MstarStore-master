@@ -325,7 +325,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     for (int i = 0; i < modelColorItme.size(); i++) {
                         Type type = new Type();
                         type.setId(modelColorItme.get(i).getId());
-                        type.setTypeName(modelColorItme.get(i).getTitle()+"         价格"+modelColorItme.get(i).getPrice());
+                        type.setTypeName(modelColorItme.get(i).getTitle()+"  "+modelColorItme.get(i).getPrice()+"/g");
                         list.add(type);
                     }
                     return list;
@@ -340,7 +340,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 @Override
                 public String getTitle() {
-                    return "选择成色";
+                    return "选择质量等级";
                 }
 
                 @Override
@@ -388,7 +388,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 @Override
                 public String getTitle() {
-                    return "选择质量等级";
+                    return "选择成色";
                 }
             });
 
