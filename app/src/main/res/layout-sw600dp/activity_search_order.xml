@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/white">
+        >
 
         <ImageView
             android:id="@+id/iv_left"
@@ -16,23 +16,59 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:layout_marginLeft="2dip"
+            android:layout_marginLeft="11dip"
             android:padding="5dip"
             android:src="@drawable/icon_return" />
 
+        <TextView
+            android:text="订单搜索"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <!--<ImageView-->
+        <!--android:id="@+id/iv_right"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:padding="10dp"-->
+        <!--android:src="@drawable/icon_search" />-->
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_line"/>
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="搜索类型"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_size_small_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:layout_marginLeft="6dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="6dp"
             android:layout_toRightOf="@+id/iv_left"
-            android:background="@drawable/frame_bg_while">
+            android:background="@drawable/board_gray">
 
             <LinearLayout
                 android:id="@+id/ll_search_type"
-                android:layout_width="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -49,7 +85,7 @@
                     android:layout_width="32dp"
                     android:layout_height="36dp"
                     android:padding="5dp"
-                    android:src="@drawable/icon_date_down_28" />
+                    android:src="@drawable/icon_date_down" />
             </LinearLayout>
 
             <RelativeLayout
@@ -79,21 +115,12 @@
             </RelativeLayout>
 
         </LinearLayout>
-
-        <!--<ImageView-->
-        <!--android:id="@+id/iv_right"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:padding="10dp"-->
-        <!--android:src="@drawable/icon_search" />-->
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        style="@style/margin_parent"
         android:background="@color/color_line" />
 
     <LinearLayout
@@ -108,9 +135,10 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_gravity="center_vertical"
-            android:text="客       户"
+            android:text="客        户"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size_small_medium" />
 
@@ -123,12 +151,13 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="16dip"
             android:layout_weight="1"
-            android:background="@drawable/frame_bg_while">
+            android:background="@drawable/board_gray">
 
             <EditText
                 android:id="@+id/id_et_seach"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingLeft="8dp"
                 android:hint="输入搜索"
                 android:background="@null"
                 android:singleLine="true"
@@ -159,6 +188,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        style="@style/margin_parent"
         android:background="@color/color_line" />
     <LinearLayout
         android:background="@color/white"
@@ -176,39 +206,38 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_marginBottom="4dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="11dp"
             android:layout_marginTop="4dp"
-            android:padding="5dp"
             android:text="范围日期"
             android:textColor="@color/text_color" />
 
         <RelativeLayout
             android:id="@+id/rl_start_date"
             android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="35dp"
+            android:layout_marginLeft="16dp"
             android:padding="5dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/board_gray">
 
-            <ImageView
-                android:id="@+id/iv_start_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_date_28" />
+
 
             <TextView
                 android:id="@+id/tv_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/icon_date"
+                android:layout_centerInParent="true"
+                android:drawablePadding="4dp"
                 android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@id/iv_start_date"
+                android:gravity="center"
                 android:text="2017-03-22" />
         </RelativeLayout>
 
@@ -222,7 +251,9 @@
 
         <RelativeLayout
             android:id="@+id/rl_end_date"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
             android:layout_height="35dp"
             android:layout_marginBottom="8dp"
@@ -230,20 +261,17 @@
             android:padding="5dp"
             android:background="@drawable/board_gray">
 
-            <ImageView
-                android:id="@+id/iv_end_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_date_28" />
+
 
             <TextView
                 android:id="@+id/tv_end_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/icon_date"
+                android:drawablePadding="4dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
                 android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@id/iv_end_date"
                 android:text="2017-03-22" />
         </RelativeLayout>
     </LinearLayout>
@@ -251,6 +279,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        style="@style/margin_parent"
         android:background="@color/color_line" />
 
     <LinearLayout

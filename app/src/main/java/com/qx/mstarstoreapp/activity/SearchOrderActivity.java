@@ -42,12 +42,17 @@ import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static cn.finalteam.toolsfinal.DateUtils.calendar;
 
 /**
  * Created by Administrator on 2017/3/14 0014.
@@ -60,14 +65,10 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     TextView tvSearchType;
     @Bind(R.id.et_search_key)
     EditText etSearchKey;
-    @Bind(R.id.iv_start_date)
-    ImageView ivStartDate;
     @Bind(R.id.tv_start_date)
     TextView tvStartDate;
     @Bind(R.id.rl_start_date)
     RelativeLayout rlStartDate;
-    @Bind(R.id.iv_end_date)
-    ImageView ivEndDate;
     @Bind(R.id.tv_end_date)
     TextView tvEndDate;
     @Bind(R.id.rl_end_date)
@@ -95,11 +96,6 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
 
     private DatePicker datePicker;
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minute;
     private PopupWindow popupWindow;
     private String choosetype;
     CustomerEntity isDefaultCustomer;
@@ -108,6 +104,9 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     private List<SearchOrderResult.DataBean.SearchScopeBean> searchScopeBeenlist;
     private OrderSearchBean orderSearchBean = new OrderSearchBean();//搜索数据类
     private List<SearchOrderResult.DataBean.SearchDateScopeBean> searchDateScopeBeen;
+    private int year;
+    private int month;
+    private int day;
 
 
     @Override
@@ -171,12 +170,34 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
      * 跳转到搜索结果页面
      */
     private void goToSearchResultActivity() {
+        String startDate = tvStartDate.getText().toString();
+        String endDate = tvEndDate.getText().toString();
         orderSearchBean.setKeyword(etSearchKey.getText().toString());
-        orderSearchBean.setSdate(tvStartDate.getText().toString());
-        orderSearchBean.setEdate(tvEndDate.getText().toString());
+        orderSearchBean.setSdate(startDate);
+        orderSearchBean.setEdate(endDate);
+        if (!dateIsRight(startDate, endDate)) {
+            ToastManager.showToastReal("日期填写错误！");
+            return;
+        }
         Bundle bundle = new Bundle();
         bundle.putSerializable("searchData", orderSearchBean);
         openActivity(SearchResultActivity.class, bundle);
+    }
+
+    /**
+     * 判断时间是否正确
+     * @param sDate
+     * @param eDate
+     * @return
+     */
+    private boolean dateIsRight(String sDate, String eDate) {
+        Date startDate = dateFromString(sDate);
+        Date endDate = dateFromString(eDate);
+        if (endDate.before(startDate)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -309,7 +330,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         RadioButton rb = new RadioButton(this);
         RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(UIUtils.dip2px(marginLeft), 0, 0, 0);
-        params.gravity=Gravity.CENTER_VERTICAL;
+        params.gravity = Gravity.CENTER_VERTICAL;
         rb.setLayoutParams(params);
         rb.setButtonDrawable(R.drawable.selector_radio);
         rb.setText(st);
@@ -475,8 +496,55 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+
+    /**
+     * 获得格式2015-09-01类似的String
+     *
+     * @param mYear
+     * @param mMonth
+     * @param mDay
+     * @return
+     */
+    public String getDate(int mYear, int mMonth, int mDay) {
+        StringBuilder sb = new StringBuilder().append(mYear).append("-")
+                .append((mMonth + 1) < 10 ? "0" + (mMonth + 1) : (mMonth + 1)).append("-")
+                .append((mDay < 10) ? "0" + mDay : mDay);
+        String st = sb.toString();
+        return st;
+    }
+
+    /**
+     * 将yyyy-MM-dd string转化为date
+     *
+     * @param st
+     * @return
+     */
+    public Date dateFromString(String st) {
+        Date date = null;
+        // 设置传入的时间格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = dateFormat.parse(st);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    /**
+     * 根据类型设置对应的textview
+     *
+     * @param type
+     */
     public void initData(final String type) {
+        Date date = null;
         Calendar calendar = Calendar.getInstance();
+        if (type.equals("start")) {
+            date = dateFromString(tvStartDate.getText().toString());
+        } else {
+            date = dateFromString(tvEndDate.getText().toString());
+        }
+        calendar.setTime(date);
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -498,35 +566,6 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    /**
-     * 获得格式2015-09-01类似的String
-     *
-     * @param mYear
-     * @param mMonth
-     * @param mDay
-     * @return
-     */
-    public String getDate(int mYear, int mMonth, int mDay) {
-        StringBuilder sb = new StringBuilder().append(mYear).append("-")
-                .append((mMonth + 1) < 10 ? "0" + (mMonth + 1) : (mMonth + 1)).append("-")
-                .append((mDay < 10) ? "0" + mDay : mDay);
-        String st = sb.toString();
-        return st;
-    }
-
-    /**
-     * 获得当前日期
-     *
-     * @return
-     */
-    private String getCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        return getDate(year, month, day);
-    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         L.e("onActivityResult" + requestCode);

@@ -212,7 +212,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFail(String fail) {
-
+                baseHideWatLoading();
             }
 
 

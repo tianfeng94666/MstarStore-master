@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +46,6 @@ import com.qx.mstarstoreapp.viewutils.MyGridView;
 import com.qx.mstarstoreapp.viewutils.SelectDotView;
 import com.wx.wheelview.widget.WheelView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,7 +64,8 @@ import butterknife.ButterKnife;
 public class StyleInfromationActivity extends BaseActivity implements View.OnClickListener {
 
     List<StoneEntity> stoneEntities = new ArrayList<>();
-    StoneEntity stone;
+    List<StoneEntity> stoneEntitiesTemp = new ArrayList<>();
+    StoneEntity stone, stoneTemp, stoneATemp, stoneBTemp, stoneCTemp;
     ModelDetailResult.DataEntity.ModelEntity.StoneAEntity stoneA;
     ModelDetailResult.DataEntity.ModelEntity.StoneBEntity stoneB;
     ModelDetailResult.DataEntity.ModelEntity.StoneCEntity stoneC;
@@ -126,6 +124,12 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     CustomselectStringButton idCusStoreSize;
     @Bind(R.id.id_vipage_content)
     RelativeLayout id_vipage_content;
+    @Bind(R.id.tv_reset)
+    TextView tvReset;
+    @Bind(R.id.tv_del)
+    TextView tvDel;
+    @Bind(R.id.tv_add)
+    TextView tvAdd;
 
     WheelView mainWheelView;
     int type = 0;
@@ -133,6 +137,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     int waitOrderCount;
     String itemId;
     static ConfirmOrderOnUpdate confirmOrderOnUpdate;
+
     private View rootView;
     private ModelDetailResult.DataEntity dataEntity;
 
@@ -186,7 +191,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         }
         lymenus = (LinearLayout) findViewById(R.id.id_menus);
         idTvAddOrder.setOnClickListener(this);
-        adapter = new ListAdapter();
+        adapter = new ListAdapter(stoneEntities);
         listView.setAdapter(adapter);
         badge = new BadgeView(StyleInfromationActivity.this, idTvCurorder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         remind(waitOrderCount);
@@ -213,6 +218,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 reduce();
             }
         });
+        tvAdd.setOnClickListener(this);
+        tvDel.setOnClickListener(this);
+        tvReset.setOnClickListener(this);
     }
 
     private void reduce() {
@@ -224,16 +232,15 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             amount = Double.parseDouble(st);
         }
 
-        if (amount > 0 && amount ==0.5) {
+        if (amount > 0 && amount == 0.5) {
             idCusStoreNumber.setText(amount - 0.5 + "");
-        } else if(amount==1){
+        } else if (amount == 1) {
             idCusStoreNumber.setText("");
-        }
-        else if (amount >1) {
-            if(amount%1==0.5){
+        } else if (amount > 1) {
+            if (amount % 1 == 0.5) {
                 idCusStoreNumber.setText(amount - 1 + "");
-            }else {
-                idCusStoreNumber.setText((int) Math.floor(amount -1) + "");
+            } else {
+                idCusStoreNumber.setText((int) Math.floor(amount - 1) + "");
             }
         }
     }
@@ -241,20 +248,20 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     private void add() {
         String st = idCusStoreNumber.getText().toString();
         double amount;
-        if (st.equals("")||st.equals("0.0")) {
+        if (st.equals("") || st.equals("0.0")) {
             amount = 0;
         } else {
             amount = Double.parseDouble(st);
         }
 
         if (amount >= 0 && amount < 0.5) {
-            idCusStoreNumber.setText((int)(amount + 1) + "");
+            idCusStoreNumber.setText((int) (amount + 1) + "");
         } else if (amount == 0.5) {
-            idCusStoreNumber.setText(amount+1 + "");
+            idCusStoreNumber.setText(amount + 1 + "");
         } else if (amount >= 1) {
-            if(amount%1==0.5){
+            if (amount % 1 == 0.5) {
                 idCusStoreNumber.setText(amount + 1 + "");
-            }else {
+            } else {
                 idCusStoreNumber.setText((int) Math.floor(amount + 1) + "");
             }
 
@@ -344,10 +351,8 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                         stoneC.setChecked(true);
                         stoneC.setIsSelfStone(modelEntity.getIsSelfStone());
                     }
-                    stoneEntities.add(stone);
-                    stoneEntities.add(stoneA);
-                    stoneEntities.add(stoneB);
-                    stoneEntities.add(stoneC);
+                    addEntities(stone, stoneA, stoneB, stoneC);
+
                     stoneTypeItme = dataEntity.getStoneType();
                     stoneColorItme = dataEntity.getStoneColor();
                     stonePurityItme = dataEntity.getStonePurity();
@@ -392,6 +397,39 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
         });
 
+
+    }
+
+    /**
+     * 备份stone数据，判断是否显示，添加到list 中
+     *
+     * @param stone
+     * @param stoneA
+     * @param stoneB
+     * @param stoneC
+     */
+    private void addEntities(StoneEntity stone, ModelDetailResult.DataEntity.ModelEntity.StoneAEntity stoneA, ModelDetailResult.DataEntity.ModelEntity.StoneBEntity stoneB, ModelDetailResult.DataEntity.ModelEntity.StoneCEntity stoneC) {
+        stoneTemp = copyStone(stone);
+        stoneEntitiesTemp.add(stoneTemp);
+        stoneATemp = copyStone(stoneA);
+        stoneEntitiesTemp.add(stoneATemp);
+        stoneBTemp = copyStone(stoneB);
+        stoneEntitiesTemp.add(stoneBTemp);
+        stoneCTemp = copyStone(stoneC);
+        stoneEntitiesTemp.add(stoneCTemp);
+
+        if (stone.getIsNotEmpty() == 1) {
+            stoneEntities.add(stone);
+        }
+        if (stoneA.getIsNotEmpty() == 1) {
+            stoneEntities.add(stoneA);
+        }
+        if (stoneB.getIsNotEmpty() == 1) {
+            stoneEntities.add(stoneB);
+        }
+        if (stoneC.getIsNotEmpty() == 1) {
+            stoneEntities.add(stoneC);
+        }
 
     }
 
@@ -557,7 +595,110 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                     chkeckConfirmOrder();
                 }
                 break;
+            case R.id.tv_reset:
+                reset();
+                break;
+            case R.id.tv_add:
+                addStone();
+                break;
+            case R.id.tv_del:
+                delStone();
+                break;
         }
+    }
+
+    public StoneEntity copyStone(StoneEntity stoneEntity) {
+        StoneEntity stoneCopy = new StoneEntity();
+        stoneCopy.setChecked(stoneEntity.isChecked());
+        stoneCopy.setStroneName(stoneEntity.getStroneName());
+        stoneCopy.setPrice(stoneEntity.getPrice());
+        stoneCopy.setShapeId(stoneEntity.getSpecId());
+        stoneCopy.setNumber(stoneEntity.getNumber());
+        stoneCopy.setShapeId(stoneEntity.getShapeId());
+        stoneCopy.setPurityTitle(stoneEntity.getPurityTitle());
+        stoneCopy.setShapeTitle(stoneEntity.getShapeTitle());
+        stoneCopy.setColorId(stoneEntity.getColorId());
+        stoneCopy.setTypeId(stoneEntity.getTypeId());
+        stoneCopy.setSpecTitle(stoneEntity.getSpecTitle());
+        stoneCopy.setColorTitle(stoneEntity.getColorTitle());
+        stoneCopy.setTypeTitle(stoneEntity.getTypeTitle());
+        stoneCopy.setPurityId(stoneEntity.getPurityId());
+        stoneCopy.setSpecSelectTitle(stoneEntity.getSpecSelectTitle());
+        stoneCopy.setIsSelfStone(stoneEntity.getIsSelfStone());
+        stoneCopy.setIsNotEmpty(stoneEntity.getIsNotEmpty());
+        stoneCopy.setStoneOut(stoneEntity.getStoneOut());
+        return stoneCopy;
+    }
+
+
+    /**
+     * 判断添加对应的stone
+     */
+    private void addStone() {
+        switch (stoneEntities.size()) {
+            case 0:
+                stoneEntities.add(copyStone(stoneTemp));
+                break;
+            case 1:
+                stoneEntities.add(copyStone(stoneATemp));
+                break;
+            case 2:
+                stoneEntities.add(copyStone(stoneBTemp));
+                break;
+            case 3:
+                stoneEntities.add(copyStone(stoneCTemp));
+                break;
+        }
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
+    }
+
+    /**
+     * 判断删除对应的stone
+     */
+    private void delStone() {
+        switch (stoneEntities.size()) {
+            case 1:
+                stoneEntities.remove(0);
+                break;
+            case 2:
+                stoneEntities.remove(1);
+                break;
+            case 3:
+                stoneEntities.remove(2);
+                break;
+            case 4:
+                stoneEntities.remove(3);
+                break;
+        }
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
+    }
+
+    /**
+     * 判断重置对应的stone
+     */
+    private void reset() {
+        switch (stoneEntities.size()) {
+            case 1:
+                stoneEntities.remove(0);
+                stoneEntities.add(copyStone(stoneTemp));
+                break;
+            case 2:
+                stoneEntities.remove(1);
+                stoneEntities.add(copyStone(stoneATemp));
+                break;
+            case 3:
+                stoneEntities.remove(2);
+                stoneEntities.add(copyStone(stoneBTemp));
+                break;
+            case 4:
+                stoneEntities.remove(3);
+                stoneEntities.add(copyStone(stoneCTemp));
+                break;
+        }
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
     }
 
     /*提交订单之前检查是否允许提交*/
@@ -605,6 +746,29 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         // OrderDoCurrentModelItemDo?productId=1&categoryId=8&number=2&handSize=3&stone=1|3|2|3|4|5&stoneA=1|2|2|3|4|5&
         // stoneB=1|2|3|3|4|5&stoneC=1|2|3|3|4|6&tokenKey=10b588002228fa805231a59bb7976bf4
         String url = "";
+        StoneEntity stone = null, stoneA = null, stoneB = null, stoneC = null;
+        if (stoneEntities.size() > 0) {
+            stone = stoneEntities.get(0);
+        } else {
+            stone = stoneATemp;
+        }
+
+        if (stoneEntities.size() > 1) {
+            stoneA = stoneEntities.get(1);
+        } else {
+            stoneA = stoneATemp;
+        }
+        if (stoneEntities.size() > 2) {
+            stoneB = stoneEntities.get(2);
+        } else {
+            stoneB = stoneBTemp;
+        }
+
+        if (stoneEntities.size() > 3) {
+            stoneC = stoneEntities.get(3);
+        } else {
+            stoneC = stoneCTemp;
+        }
         String urlStroe = objectisEmptyAndtoJson("stone", stone);
         String urlStroeA = objectisEmptyAndtoJson("stoneA", stoneA);
         String urlStroeB = objectisEmptyAndtoJson("stoneB", stoneB);
@@ -692,7 +856,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     public boolean isNumber(String storeNumber) {
         if (!StringUtils.isEmpty(storeNumber)) {
             double d = Double.parseDouble(storeNumber);
-            if (!storeNumber.equals("0.5") && !(d%1!= 0.5)) {
+            if (!storeNumber.equals("0.5") && !(d % 1 != 0.5)) {
                 return false;
             }
         }
@@ -743,8 +907,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
     public class ListAdapter extends BaseAdapter {
         public Map<String, StoneEntity> checkedState;
+        List<StoneEntity> stoneEntities;
 
-        public ListAdapter() {
+        public ListAdapter(List<StoneEntity> stoneEntities) {
+            this.stoneEntities = stoneEntities;
             checkedState = new HashMap<>();
         }
 
@@ -849,7 +1015,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         }
 
 
-        /**true红色提示  表示不通过验证**/
+        /**
+         * true红色提示  表示不通过验证
+         **/
         public void redHint(ViewHolder viewHolder, boolean isRed) {
             if (isRed) {
                 viewHolder.idStoreCut.getTv().setBackgroundResource(R.drawable.check_red_border);
@@ -882,12 +1050,38 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             viewHolder.idStoreColor.setDefaultText("颜色");
             viewHolder.idStoreNumber.setDefaultText("数量");
         } else {
-            viewHolder.idStoreType.setTextName(stoneEntity.getTypeTitle());
-            viewHolder.idStoreNorm.setTextName(stoneEntity.getSpecTitle());
-            viewHolder.idStoreShape.setTextName(stoneEntity.getShapeTitle());
-            viewHolder.idStoreCut.setTextName(stoneEntity.getPurityTitle());
-            viewHolder.idStoreColor.setTextName(stoneEntity.getColorTitle());
-            viewHolder.idStoreNumber.setTextName(stoneEntity.getNumber());
+            if (!StringUtils.isEmpty(stoneEntity.getTypeTitle())) {
+                viewHolder.idStoreType.setTextName(stoneEntity.getTypeTitle());
+            } else {
+                viewHolder.idStoreType.setDefaultText("类型");
+            }
+            if (!StringUtils.isEmpty(stoneEntity.getSpecTitle())) {
+                viewHolder.idStoreNorm.setTextName(stoneEntity.getSpecTitle());
+            } else {
+                viewHolder.idStoreNorm.setDefaultText("规格");
+            }
+            if (!StringUtils.isEmpty(stoneEntity.getShapeTitle())) {
+                viewHolder.idStoreShape.setTextName(stoneEntity.getShapeTitle());
+            } else {
+                viewHolder.idStoreShape.setDefaultText("形状");
+            }
+            if (!StringUtils.isEmpty(stoneEntity.getPurityTitle())) {
+                viewHolder.idStoreCut.setTextName(stoneEntity.getPurityTitle());
+            } else {
+                viewHolder.idStoreCut.setDefaultText("净度");
+            }
+            if (!StringUtils.isEmpty(stoneEntity.getColorTitle())) {
+                viewHolder.idStoreColor.setTextName(stoneEntity.getColorTitle());
+            } else {
+                viewHolder.idStoreColor.setDefaultText("颜色");
+            }
+            if (!StringUtils.isEmpty(stoneEntity.getNumber())) {
+                viewHolder.idStoreNumber.setTextName(stoneEntity.getNumber());
+            } else {
+                viewHolder.idStoreNumber.setDefaultText("数量");
+            }
+
+
         }
 
     }
@@ -1151,7 +1345,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         adapter.notifyDataSetChanged();
     }
 
-    public void firstClick(StoneEntity stoneEntity){
+    public void firstClick(StoneEntity stoneEntity) {
         //全部为空
         boolean isUpPass = false;
         if (StringUtils.isEmpty(stoneEntity.getNumber()) &&

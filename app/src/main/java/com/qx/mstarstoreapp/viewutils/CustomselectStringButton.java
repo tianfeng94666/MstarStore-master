@@ -146,7 +146,7 @@ public class CustomselectStringButton extends RelativeLayout {
         tvConfirm = (TextView) view.findViewById(R.id.tv_confirm);
         SimpleWheelAdapter arrayWheelAdapter = new SimpleWheelAdapter(mContext);
         wheelView.setWheelAdapter(arrayWheelAdapter);
-        wheelView.setWheelSize(3);
+        wheelView.setWheelSize(5);
         wheelView.setWheelData(types);
         WheelView.WheelViewStyle style = new WheelView.WheelViewStyle();
         style.selectedTextSize = 20;

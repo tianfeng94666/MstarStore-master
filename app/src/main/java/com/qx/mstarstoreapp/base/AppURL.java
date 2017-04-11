@@ -61,14 +61,14 @@ public class AppURL {
 
 
     /*款号详情   ModelDetailPage?tokenKey=944df2f27ffce557042887589986c193&id=1*/
-    public static String URL_MODEL_DETAIL = baseUrl + "ModelDetailPage?";
+    public static String URL_MODEL_DETAIL = baseUrl1 + "ModelDetailPage?";
 
     /*款号修改   ModelDetailPage?tokenKey=944df2f27ffce557042887589986c193&id=1*/
-    public static String URL_MODEL_UPDATE = baseUrl + "ModelDetailPageForCurrentOrderEditPage?";
+    public static String URL_MODEL_UPDATE = baseUrl1 + "ModelDetailPageForCurrentOrderEditPage?";
 
     //?itemId=16&tokenKey=10b588002228fa805231a59bb7976bf4
     //订单页修改款号
-    public static String URL_ORDER_MODEL_UPDATE = baseUrl + "ModelOrderWaitCheckModelDetailPageForCurrentOrderEditPage?";
+    public static String URL_ORDER_MODEL_UPDATE = baseUrl1+ "ModelOrderWaitCheckModelDetailPageForCurrentOrderEditPage?";
 
     /*获得石头价格*/
     public static String URL_STONE_PRICE = baseUrl + "getStonePrice?";

@@ -123,7 +123,6 @@
                         android:layout_marginLeft="@dimen/margin10"
                         android:layout_marginRight="@dimen/margin5"
                         android:layout_weight="1"
-
                         android:button="@null"
                         android:hint="手寸"
                         android:inputType="numberDecimal"
@@ -138,6 +137,61 @@
                     android:layout_weight="1  "
                     android:divider="@color/white"
                     android:dividerHeight="@dimen/margin10" />
+                <LinearLayout
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"/>
+
+
+                        <TextView
+                            android:id="@+id/tv_reset"
+                            android:text="  重置"
+
+                            android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/icon_reset"
+                            android:layout_weight="0.25"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+
+
+
+                        <TextView
+                            android:id="@+id/tv_del"
+                            android:text="  删除"
+                            android:layout_marginLeft="8dp"
+                            android:gravity="center_vertical"
+                           android:drawableLeft="@drawable/icon_del"
+                            android:layout_weight="0.25"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.15"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal"
+                    android:background="@color/theme_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:id="@+id/tv_add"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="  添加副石"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/icon_add2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -181,7 +235,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/btn_bg_while"
                         android:button="@null"
-                        android:textSize="10sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

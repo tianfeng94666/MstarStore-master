@@ -4,6 +4,8 @@ package com.qx.mstarstoreapp.json;
  * Created by Administrator on 2016/10/19.
  */
 public class StoneEntity implements Cloneable {
+
+
     /**
      * specId : 1
      * number : null
@@ -34,7 +36,39 @@ public class StoneEntity implements Cloneable {
     private String purityId;
     private String specSelectTitle;
     private int isSelfStone;
-private String stoneOut;
+    private int isNotEmpty;
+    private String stoneOut;
+
+    public StoneEntity() {
+    }
+
+    public StoneEntity(StoneEntity stoneEntity) {
+        this.isChecked = stoneEntity.isChecked();
+        this.stroneName = stoneEntity.getStroneName();
+        this.price = stoneEntity.getPrice();
+        this.specId = stoneEntity.getSpecId();
+        this.number =stoneEntity.getNumber() ;
+        this.shapeId = stoneEntity.getShapeId();
+        this.purityTitle = stoneEntity.getPurityTitle();
+        this.shapeTitle = stoneEntity.getShapeTitle();
+        this.colorId = stoneEntity.getColorId();
+        this.typeId = stoneEntity.getTypeId();
+        this.specTitle = stoneEntity.getSpecTitle();
+        this.colorTitle = stoneEntity.getColorTitle();
+        this.typeTitle = stoneEntity.getTypeTitle();
+        this.purityId = stoneEntity.getPurityId();
+        this.specSelectTitle = stoneEntity.getSpecSelectTitle();
+        this.isSelfStone = stoneEntity.getIsSelfStone();
+        this.isNotEmpty = stoneEntity.getIsNotEmpty();
+        this.stoneOut = stoneEntity.getStoneOut();
+    }
+    public int getIsNotEmpty() {
+        return isNotEmpty;
+    }
+
+    public void setIsNotEmpty(int isNotEmpty) {
+        this.isNotEmpty = isNotEmpty;
+    }
 
     public String getStoneOut() {
         return stoneOut;

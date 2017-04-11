@@ -109,10 +109,12 @@ public class ModifyDataActivity extends BaseActivity {
     @Override
     public void loadNetData() {
         String url = AppURL.URL_USER_MODIFY + "tokenKey=" + BaseApplication.getToken();
+        baseShowWatLoading();
         L.e("获取个人信息" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                baseHideWatLoading();
                 L.e("loadNetData  " + result);
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
@@ -144,7 +146,7 @@ public class ModifyDataActivity extends BaseActivity {
 
             @Override
             public void onFail(String fail) {
-
+                baseHideWatLoading();
             }
         });
 

@@ -425,14 +425,23 @@ public class ModelDetailResult {
 
             public class StoneAEntity extends StoneEntity {
 
+                public StoneAEntity(StoneEntity stoneEntity) {
+                    super(stoneEntity);
+                }
             }
 
             public class StoneBEntity extends StoneEntity {
 
+                public StoneBEntity(StoneEntity stoneEntity) {
+                    super(stoneEntity);
+                }
             }
 
             public class StoneCEntity extends StoneEntity {
 
+                public StoneCEntity(StoneEntity stoneEntity) {
+                    super(stoneEntity);
+                }
             }
 
             public class PicsEntity {
