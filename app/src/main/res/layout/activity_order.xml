@@ -49,8 +49,6 @@
                   android:layout_width="match_parent"
                   android:layout_height="42dip"
                   android:layout_below="@+id/id_rel_title"
-                  android:layout_marginBottom="@dimen/margin5"
-                  android:layout_marginTop="@dimen/margin5"
                   android:orientation="horizontal">
         <include layout="@layout/select_type_item"/>
         </LinearLayout>

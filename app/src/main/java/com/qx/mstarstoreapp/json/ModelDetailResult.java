@@ -318,6 +318,15 @@ public class ModelDetailResult {
             private String number;
             private String remark;
             private String handSize;
+            private String weight;
+
+            public String getWeight() {
+                return weight;
+            }
+
+            public void setWeight(String weight) {
+                this.weight = weight;
+            }
 
             public String getHandSize() {
                 return handSize;

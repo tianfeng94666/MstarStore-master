@@ -1,6 +1,7 @@
 package com.qx.mstarstoreapp.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -37,6 +39,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 	private int mPosition;
 	
 	private String[] mPhotos;
+	private ImageView idIgBack;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,13 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 		mSvpPager.setAdapter(mAdapter);
 		mSvpPager.setCurrentItem(mPosition, false);
 		mSvpPager.setOnPageChangeListener(this);
+		idIgBack = (ImageView)findViewById(R.id.id_ig_back);
+		idIgBack.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 	}
 
 	@Override

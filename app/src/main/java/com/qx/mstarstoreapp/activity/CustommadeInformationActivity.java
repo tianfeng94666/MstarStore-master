@@ -119,8 +119,6 @@ public class CustommadeInformationActivity extends BaseActivity {
 
     List<ModelDetailResult.DataEntity.ModelEntity.PicsEntity> pics;
     String id;
-    @Bind(R.id.id_store_information)
-    TextView idStoreInformation;
     @Bind(R.id.id_menus)
     LinearLayout idMenus;
     @Bind(R.id.id_gv_image)
@@ -170,7 +168,7 @@ public class CustommadeInformationActivity extends BaseActivity {
                             sb.append(goldenPrice.get(i).getTitle() + " " + goldenPrice.get(i).getPrice());
                         }
 
-                        idStoreInformation.setText(/*"pt 335/g"*/sb);
+
                         pics = dataEntity.getModel().getPics();
                         stone = dataEntity.getModel().getStone();
                         stoneA = dataEntity.getModel().getStoneA();

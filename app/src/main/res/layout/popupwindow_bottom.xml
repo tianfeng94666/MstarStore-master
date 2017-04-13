@@ -8,6 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/tv_cancle"
+            android:text="取消"
+            android:padding="10dp"
+            android:layout_marginLeft= "6dp"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
             android:id="@+id/tv_title_popupwindow"
             android:text="标题"
             android:layout_centerVertical="true"
@@ -19,6 +27,7 @@
             android:id="@+id/tv_confirm"
             android:text="确定"
             android:padding="10dp"
+            android:layout_marginRight="6dp"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

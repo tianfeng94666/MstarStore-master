@@ -59,6 +59,7 @@ public class CustomSelectButton extends RelativeLayout {
     private TextView tvTitle;
     private TextView tvConfirm;
     private int defaultPosition = 5;
+    private TextView tvCancle;
 
 
     public Button getTv() {
@@ -140,6 +141,7 @@ public class CustomSelectButton extends RelativeLayout {
         wheelView = (WheelView) view.findViewById(R.id.wv_popupwindwo);
         tvTitle = (TextView) view.findViewById(R.id.tv_title_popupwindow);
         tvConfirm = (TextView) view.findViewById(R.id.tv_confirm);
+        tvCancle = (TextView)view.findViewById(R.id.tv_cancle);
         tvTitle.setText(onSelectData.getTitle() + "");
         SimpleWheelAdapter arrayWheelAdapter = new SimpleWheelAdapter(mContext);
         wheelView.setWheelAdapter(arrayWheelAdapter);
@@ -180,6 +182,12 @@ public class CustomSelectButton extends RelativeLayout {
                         onSelectData.getSelectId(type);
                     }
                 }
+                closePupupWindow();
+            }
+        });
+        tvCancle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 closePupupWindow();
             }
         });

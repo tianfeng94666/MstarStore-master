@@ -48,9 +48,7 @@ import com.wx.wheelview.widget.WheelView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -86,8 +84,6 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     LinearLayout lymenus;
     @Bind(R.id.id_store_title)
     TextView idStoreTitle;
-    @Bind(R.id.id_store_information)
-    TextView idStoreInformation;
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
 
@@ -130,6 +126,8 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     TextView tvDel;
     @Bind(R.id.tv_add)
     TextView tvAdd;
+    @Bind(R.id.tv_weight)
+    TextView tvWeight;
 
     WheelView mainWheelView;
     int type = 0;
@@ -137,6 +135,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     int waitOrderCount;
     String itemId;
     static ConfirmOrderOnUpdate confirmOrderOnUpdate;
+
 
     private View rootView;
     private ModelDetailResult.DataEntity dataEntity;
@@ -221,6 +220,24 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         tvAdd.setOnClickListener(this);
         tvDel.setOnClickListener(this);
         tvReset.setOnClickListener(this);
+           /*    查看当前订单*/
+        idTvCurorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //addCurentOrder();
+                //  openActivity(ConfirmOrderActivity.class,null);
+                /*确定页面的取消修改*/
+                System.out.println("type=" + type);
+                if (type == 1 || type == 2) {
+                    finish();
+                } else {
+                    /*查看当前订单*/
+                    Intent intent = new Intent(StyleInfromationActivity.this, ConfirmOrderActivity.class);
+                    intent.putExtra("waitOrderCount", waitOrderCount);
+                    startActivityForResult(intent, 12);
+                }
+            }
+        });
     }
 
     private void reduce() {
@@ -365,9 +382,13 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                     setStorePrice(stoneC);
                     L.e("categoryTitle" + categoryTitle);
                     idStoreTitle.setText(modelEntity.getTitle());
+                    tvWeight.setText(modelEntity.getWeight());
                     idCusStoreType.setTextName(categoryTitle);
                     if (!StringUtils.isEmpty(number)) {
                         idCusStoreNumber.setText("" + number);
+                    }
+                    if (!StringUtils.isEmpty(remark)) {
+                        idTvStoreRemarks.setText("" + remark);
                     }
                     idCusStoreSize.setTextName(handSize);
                     // initView();
@@ -378,7 +399,39 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                     for (int i = 0; i < goldenPrice.size(); i++) {
                         sb.append(goldenPrice.get(i).getTitle() + " " + goldenPrice.get(i).getPrice() + "      ");
                     }
-                    idStoreInformation.setText(sb.toString());
+//                    idStoreInformation.setText(sb.toString());
+                    idCusStoreRemarkid.setOnSelectData(new CustomSelectButton.OnselectData() {
+                        @Override
+                        public List<Type> getData() {
+                            List<Type> list = new ArrayList<>();
+                            for (int i = 0; i < remarksEntity.size(); i++) {
+                                Type type = new Type();
+                                type.setId(remarksEntity.get(i).getId());
+                                type.setTypeName(remarksEntity.get(i).getTitle());
+                                type.setContent(remarksEntity.get(i).getContent());
+                                list.add(type);
+                            }
+                            return list;
+                        }
+
+                        @Override
+                        public View getRootView() {
+                            return rootView;
+                        }
+
+
+                        @Override
+                        public void getSelectId(Type type) {
+                            remar = type;
+                            String curentRemar = idTvStoreRemarks.getText().toString();
+                            idTvStoreRemarks.setText(curentRemar + type.getContent());
+                        }
+
+                        @Override
+                        public String getTitle() {
+                            return "选择备注";
+                        }
+                    });
                     adapter.notifyDataSetChanged();
                 } else if (error == 2) {
                     ToastManager.showToastReal(getString(R.string.data_error));
@@ -648,6 +701,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             case 3:
                 stoneEntities.add(copyStone(stoneCTemp));
                 break;
+            case 4:
+                ToastManager.showToastReal("不能再添加了！");
+                break;
         }
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
@@ -707,25 +763,21 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         storeSize = idCusStoreSize.getTextName().toString();
         L.e("storeNumber" + storeNumber + "storeSize" + storeSize + "categoryTitle" + categoryTitle);
         boolean isConfir = false;
-        boolean isConfirA = false;
-        boolean isConfirB = false;
-        boolean isConfirC = false;
+        int j = 0;
         if (isNumber(storeNumber)) {
-            /*自带主石头*/
-            if (!stone.isChecked() && !checkUpPass(stone) || stone.isChecked()) {
+            for (int i = 0; i < stoneEntities.size(); i++) {
+                StoneEntity stone = stoneEntities.get(i);
+                  /*自带主石头*/
+                if (!stone.isChecked() && !checkUpPass(stone) || stone.isChecked()) {
+                    j++;
+                }
+            }
+            if (j == stoneEntities.size()) {
                 isConfir = true;
             }
-            if (!stoneA.isChecked() && !checkUpPass(stoneA) || stoneA.isChecked()) {
-                isConfirA = true;
-            }
-            if (!stoneB.isChecked() && !checkUpPass(stoneB) || stoneB.isChecked()) {
-                isConfirB = true;
-            }
-            if (!stoneC.isChecked() && !checkUpPass(stoneC) || stoneC.isChecked()) {
-                isConfirC = true;
-            }
+
             /*是否可以提交*/
-            if (isConfir && isConfirA && isConfirB && isConfirC) {
+            if (isConfir) {
                 addCurentOrder();
                 idTvAddOrder.setEnabled(false);
             } else {
@@ -747,6 +799,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         // stoneB=1|2|3|3|4|5&stoneC=1|2|3|3|4|6&tokenKey=10b588002228fa805231a59bb7976bf4
         String url = "";
         StoneEntity stone = null, stoneA = null, stoneB = null, stoneC = null;
+        String remark = idTvStoreRemarks.getText().toString();
         if (stoneEntities.size() > 0) {
             stone = stoneEntities.get(0);
         } else {
@@ -775,13 +828,13 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         String urlStroeC = objectisEmptyAndtoJson("stoneC", stoneC);
         if (type == 1) {
             url = AppURL.URL_CURRENT_EDIT_ORDER + "tokenKey=" + BaseApplication.getToken() + "&itemId=" + itemId + "&number=" + storeNumber
-                    + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone() + "";
+                    + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone() + "" + "&remarks=" + remark;
         } else if (type == 2) {
             url = AppURL.URL_UPDATE_ORDER_WATET + "tokenKey=" + BaseApplication.getToken() + "&itemId=" + itemId + "&number=" + storeNumber
-                    + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone();
+                    + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone() + "" + "&remarks=" + remark;
         } else {
             url = AppURL.URL_CURRENT_ORDER + "tokenKey=" + BaseApplication.getToken() + "&productId=" + itemId + "&categoryId=" + categoryId +
-                    "&number=" + storeNumber + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone();
+                    "&number=" + storeNumber + "&handSize=" + storeSize + urlStroe + urlStroeA + urlStroeB + urlStroeC + "&isSelfStone=" + stone.getIsSelfStone() + "" + "&remarks=" + remark;
         }
         L.e("提交订单" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -871,9 +924,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         List list = new ArrayList();
         //如果是主石
         if (stoEntity.isChecked() && !stoEntity.getStroneName().equals("主 石")) {
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                 list.add("");
-                if (i == 6) {
+                if (i == 5) {
                     list.add(stoEntity.getIsSelfStone() + "");
                 }
             }
@@ -906,21 +959,12 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
 
     public class ListAdapter extends BaseAdapter {
-        public Map<String, StoneEntity> checkedState;
         List<StoneEntity> stoneEntities;
 
         public ListAdapter(List<StoneEntity> stoneEntities) {
             this.stoneEntities = stoneEntities;
-            checkedState = new HashMap<>();
         }
 
-        public void removeChecked(StoneEntity stoneEntity) {
-            if (checkedState.get(stoneEntity.getStroneName()) != null) {
-                checkedState.remove(stoneEntity.getStroneName());
-                stoneEntity.setChecked(false);
-                notifyDataSetChanged();
-            }
-        }
 
         @Override
         public int getCount() {
@@ -978,35 +1022,38 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
             if (stoneEntity.isChecked()) {
                 redHint(viewHolder, false);
-                checkedState.put(stoneEntity.getStroneName(), stoneEntity);
+//                checkedState.put(stoneEntity.getStroneName(), stoneEntity);
             } else {
                 redHint(viewHolder, checkUpPass(stoneEntity));
             }
+            viewHolder.idIsCheck.setChecked(stoneEntity.isChecked());
 
-
-            if (checkedState.get(stoneEntity.getStroneName()) != null) {
-                viewHolder.idIsCheck.setChecked(true);
-            } else {
-                viewHolder.idIsCheck.setChecked(false);
-            }
             viewHolder.idIsCheck.setTag(i);
             viewHolder.idIsCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (checkedState.get(stoneEntity.getStroneName()) != null) {
-                        checkedState.remove(stoneEntity.getStroneName());
-                        stoneEntity.setChecked(false);
-                        stoneEntity.setIsSelfStone(0);
+                    stoneEntity.setChecked(!stoneEntity.isChecked());
+                    if (stoneEntity.isChecked()) {
+                        stoneEntity.setIsSelfStone(1);
                     } else {
-                        checkedState.put(stoneEntity.getStroneName(), stoneEntity);
+                        stoneEntity.setIsSelfStone(0);
                     }
-                    if (checkedState.size() > 0) {
-                        for (String key : checkedState.keySet()) {
-                            StoneEntity stone = checkedState.get(key);//得到每个key多对用value的值
-                            stone.setChecked(true);
-                            stoneEntity.setIsSelfStone(1);
-                        }
-                    }
+
+//                    if (checkedState.get(stoneEntity.getStroneName()) != null) {
+////                        checkedState.remove(stoneEntity.getStroneName());
+//                        stoneEntity.setChecked(false);
+//                        stoneEntity.setIsSelfStone(0);
+//                    }
+////                    else {
+////                        checkedState.put(stoneEntity.getStroneName(), stoneEntity);
+////                    }
+//                    if (checkedState.size() > 0) {
+//                        for (String key : checkedState.keySet()) {
+//                            StoneEntity stone = checkedState.get(key);//得到每个key多对用value的值
+//                            stone.setChecked(true);
+//                            stoneEntity.setIsSelfStone(1);
+//                        }
+//                    }
                     adapter.notifyDataSetChanged();
                 }
             });
@@ -1128,40 +1175,6 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             @Override
             public View getRootView() {
                 return rootView;
-            }
-        });
-
-        idCusStoreRemarkid.setOnSelectData(new CustomSelectButton.OnselectData() {
-            @Override
-            public List<Type> getData() {
-                List<Type> list = new ArrayList<>();
-                for (int i = 0; i < remarksEntity.size(); i++) {
-                    Type type = new Type();
-                    type.setId(remarksEntity.get(i).getId());
-                    type.setTypeName(remarksEntity.get(i).getTitle());
-                    type.setContent(remarksEntity.get(i).getContent());
-                    list.add(type);
-                }
-                return list;
-            }
-
-            @Override
-            public View getRootView() {
-                return rootView;
-            }
-
-
-            @Override
-            public void getSelectId(Type type) {
-                remar = type;
-                String curentRemar = idTvStoreRemarks.getText().toString();
-                idTvStoreRemarks.setText(curentRemar + type.getContent());
-                isSetNOcheck(stoneEntity);
-            }
-
-            @Override
-            public String getTitle() {
-                return "选择备注";
             }
         });
 
@@ -1318,29 +1331,12 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         });
 
 
-        /*    查看当前订单*/
-        idTvCurorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //addCurentOrder();
-                //  openActivity(ConfirmOrderActivity.class,null);
-                /*确定页面的取消修改*/
-                if (type == 1 || type == 2) {
-                    finish();
-                } else {
-                    /*查看当前订单*/
-                    Intent intent = new Intent(StyleInfromationActivity.this, ConfirmOrderActivity.class);
-                    intent.putExtra("waitOrderCount", waitOrderCount);
-                    startActivityForResult(intent, 12);
-                }
-            }
-        });
     }
 
 
     public void isSetNOcheck(StoneEntity stoneEntity) {
         if (stoneEntity.isChecked() && !stoneEntity.getStroneName().equals("主 石")) {
-            adapter.removeChecked(stoneEntity);
+            stoneEntity.setChecked(false);
         }
         adapter.notifyDataSetChanged();
     }
