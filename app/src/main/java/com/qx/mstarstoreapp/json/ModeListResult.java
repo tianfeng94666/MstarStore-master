@@ -159,6 +159,17 @@ public class ModeListResult {
             private List<ModelListEntity> modelList;
             private String list_count;
 
+            public int getIsShowPrice() {
+                return isShowPrice;
+            }
+
+            public void setIsShowPrice(int isShowPrice) {
+                this.isShowPrice = isShowPrice;
+            }
+
+            private int isShowPrice;
+
+
             public void setModelList(List<ModelListEntity> modelList) {
                 this.modelList = modelList;
             }

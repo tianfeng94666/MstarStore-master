@@ -107,6 +107,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     public static List<SearchValue> singleKey = new ArrayList<>();
 
     private int waitOrderCount;
+    private ModeListResult modeListResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,7 +249,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
-                    ModeListResult modeListResult = new Gson().fromJson(result, ModeListResult.class);
+                     modeListResult = new Gson().fromJson(result, ModeListResult.class);
                     ModeListResult.DataEntity dataEntity = modeListResult.getData();
                     if(dataEntity==null){
                         return;
@@ -652,6 +653,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 convertView = LayoutInflater.from(OrderActivity.this).inflate(R.layout.adapter_goods_list, parent, false);
                 holder.lay = (LinearLayout) convertView.findViewById(R.id.img_container);
                 holder.tv = (TextView) convertView.findViewById(R.id.name);
+                holder.llPrice = (LinearLayout)convertView.findViewById(R.id.ll_price);
                 holder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
                 holder.ig = (SquareImageView) convertView.findViewById(R.id.product_img);
                 convertView.setTag(holder);
@@ -666,6 +668,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
                 holder.ig.setTag(data.get(position).getPic());
             }
+            if(modeListResult.getData().getModel().getIsShowPrice()==1){
+                holder.llPrice.setVisibility(View.VISIBLE);
+            }else {
+                holder.llPrice.setVisibility(View.GONE);
+            }
             return convertView;
         }
 
@@ -674,6 +681,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             SquareImageView ig;
             TextView tv;
             TextView tvPrice;
+            LinearLayout llPrice;
         }
     };
 

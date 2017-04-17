@@ -21,7 +21,7 @@
             android:layout_marginLeft="@dimen/margin10"
             android:text="主  石"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_small"/>
+            android:textSize="@dimen/text_size_small_medium"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,6 +112,7 @@
                     style="@style/layout_horizontal"
                     android:layout_weight="1"
                     android:orientation="horizontal"
+                    android:layout_marginRight="7dip"
                     android:gravity="center"
                     android:background="@drawable/btn_bg_while"
                     >

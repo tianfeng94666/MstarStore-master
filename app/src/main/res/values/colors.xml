@@ -54,4 +54,6 @@
     <!--textview浅灰色背景-->
     <color name="textview_background">#F4F5F7</color>
     <color name="finish_item_bg">#f5f5f7</color>
+
+    <color name="colorSeekBarDefault">#c3c3c3</color>
 </resources>

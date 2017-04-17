@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_small_medium"
                     />
 
                 <TextView
@@ -49,7 +49,7 @@
                     android:layout_marginRight="10dp"
                     android:singleLine="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small" />
+                    android:textSize="@dimen/text_size_small_medium" />
 
             </RelativeLayout>
 
@@ -72,7 +72,7 @@
                         android:gravity="center_vertical"
                         android:text="类型"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_small" />
+                        android:textSize="@dimen/text_size_small_medium" />
 
                     <com.qx.mstarstoreapp.viewutils.CustomSelectButton
                         android:id="@+id/id_cus_store_type"
@@ -99,7 +99,7 @@
                         android:layout_marginRight="2dip"
                         android:text="件数"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_small" />
+                        android:textSize="@dimen/text_size_small_medium" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -143,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:text="手 寸"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_small" />
+                        android:textSize="@dimen/text_size_small_medium" />
 
                     <com.qx.mstarstoreapp.viewutils.CustomselectStringButton
                         android:id="@+id/id_cus_store_size"
@@ -181,7 +181,7 @@
                     <TextView
                         android:id="@+id/tv_reset"
                         android:layout_width="0dp"
-
+android:textSize="@dimen/text_size_small_medium"
                         android:layout_height="match_parent"
                         android:layout_weight="0.25"
                         android:drawableLeft="@drawable/icon_reset"
@@ -192,6 +192,7 @@
                     <TextView
                         android:id="@+id/tv_del"
                         android:layout_width="0dp"
+                        android:textSize="@dimen/text_size_small_medium"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="8dp"
                         android:layout_weight="0.25"
@@ -220,6 +221,7 @@
                         android:drawableLeft="@drawable/icon_add2"
                         android:gravity="center_vertical"
                         android:paddingLeft="8dp"
+                        android:textSize="@dimen/text_size_small_medium"
                         android:paddingRight="8dp"
                         android:text="  添加副石" />
                 </LinearLayout>
@@ -238,7 +240,7 @@
                         android:layout_marginRight="2dip"
                         android:text="备注"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_small" />
+                        android:textSize="@dimen/text_size_small_medium" />
 
                     <com.qx.mstarstoreapp.viewutils.CustomSelectButton
                         android:id="@+id/id_cus_store_remarkid"

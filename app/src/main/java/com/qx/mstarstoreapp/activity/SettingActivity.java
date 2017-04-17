@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -18,11 +19,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -61,7 +64,7 @@ import butterknife.ButterKnife;
  * @version    修改资料界面
  *
  */
-public class ModifyDataActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity {
 
 
     private final String TAG = "MystoreActivity";
@@ -85,11 +88,14 @@ public class ModifyDataActivity extends BaseActivity {
     TextView mTvUsername;
     @Bind(R.id.id_update_icon)
     RelativeLayout update_icon;
+    @Bind(R.id.iv_is_show_price)
+    ToggleButton ivIsShowPrice;
 
     private LayoutInflater inflater;
-    private String[] titles ;
+    private String[] titles;
     private String temp_img_dir;
     private Uri mImageCaptureUri;
+    private int isShowPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +108,56 @@ public class ModifyDataActivity extends BaseActivity {
         context = this;
         ButterKnife.bind(this);
         loadNetData();
+initViews();
 
     }
 
-    String userName,phone,headPic,address;
+    private void initViews() {
+        ivIsShowPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int i;
+                if(isChecked){
+                    i=1;
+                }else {
+                    i=0;
+                }
+                commitIsShowPrice(i);
+            }
+        });
+    }
+
+    private void commitIsShowPrice(int i) {
+        String url = AppURL.URL_IS_SHOW_PRICE + "tokenKey=" + BaseApplication.getToken()+"&value="+i;
+        L.e("获取个人信息" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+
+                L.e("loadNetData  " + result);
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+                    ToastManager.showToastReal("修改成功");
+                } else if (error.equals("2")) {
+                    loginToServer(CustomMadeActivity.class);
+                } else {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    L.e(message);
+                    ToastManager.showToastReal(message);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+        });
+
+    }
+
+    String userName, phone, headPic, address;
+
     @Override
     public void loadNetData() {
         String url = AppURL.URL_USER_MODIFY + "tokenKey=" + BaseApplication.getToken();
@@ -119,18 +171,19 @@ public class ModifyDataActivity extends BaseActivity {
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
-                    try{
-                        if(jsonResult.get("data")!=null){
+                    try {
+                        if (jsonResult.get("data") != null) {
                             JsonObject jsData = jsonResult.get("data").getAsJsonObject();
                             userName = jsData.get("userName").getAsString();
                             phone = jsData.get("phone").getAsString();
                             headPic = jsData.get("headPic").getAsString();
                             address = jsData.get("address").getAsString();
+                            isShowPrice = jsData.get("isShowPrice").getAsInt();
                             L.e("userName:" + userName + "phone" + phone + "address:" + address);
                             initContent(userName, headPic, phone, address);
                         }
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         initContent(userName, headPic, phone, address);
                     }
 
@@ -175,7 +228,18 @@ public class ModifyDataActivity extends BaseActivity {
 
     private void initContent(String userName, String pic, String phone, String adress) {
         titleText.setText("个人中心");
-        mTvUsername.setText("用户名："+userName);
+        mTvUsername.setText("用户名：" + userName);
+        if(Build.VERSION.SDK_INT<=19){
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.setMargins(0,0,0,0);
+            ivIsShowPrice.setLayoutParams(params);
+        }
+        if(isShowPrice==1){
+            ivIsShowPrice.setChecked(true);
+        }else {
+            ivIsShowPrice.setChecked(false);
+        }
+
         temp_img_dir = Environment.getExternalStorageDirectory() + File.separator + "tempImage.jpg";
         ImageLoader.getInstance().displayImage(pic, idIgUserpic, ImageLoadOptions.getOptions());
         content.removeAllViews();
@@ -188,7 +252,7 @@ public class ModifyDataActivity extends BaseActivity {
                 viewHoder.tv_openning_hint.setVisibility(View.VISIBLE);
             }
             if (titles[i].equals(getString(R.string.adress_manager))) {
-                if (!StringUtils.isEmpty(adress)){
+                if (!StringUtils.isEmpty(adress)) {
                     viewHoder.tv_openning_hint.setLines(2);
                     viewHoder.tv_openning_hint.setText(adress);
                     viewHoder.tv_openning_hint.setVisibility(View.VISIBLE);
@@ -214,7 +278,7 @@ public class ModifyDataActivity extends BaseActivity {
         update_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageInitiDialog imageInitiDialog = new ImageInitiDialog(ModifyDataActivity.this);
+                ImageInitiDialog imageInitiDialog = new ImageInitiDialog(SettingActivity.this);
                 imageInitiDialog.showDialog(idLayRoot);
                 imageInitiDialog.setOnImageSelectListener(new ImageInitiDialog.OnImageSelectListener() {
                     @Override
@@ -225,7 +289,7 @@ public class ModifyDataActivity extends BaseActivity {
                         mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "tmp_avatar_"
                                 + String.valueOf(System.currentTimeMillis())
                                 + ".jpg"));
-                        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
                         intent.putExtra("return-data", true);
                         startActivityForResult(intent, PICK_FROM_CAMERA);
                     }
@@ -267,13 +331,13 @@ public class ModifyDataActivity extends BaseActivity {
                     photo = extras.getParcelable("data");
                 }
                 File f = new File(getRealPathFromURI(mImageCaptureUri));
-                if (f.exists() && photo != null){
+                if (f.exists() && photo != null) {
                       /*图片路径压缩*/
                     final File file = new File(BimpUtils.getInstace().savebitmap(photo));
                     submitToServer(file);
-                }else{
+                } else {
                     Toast.makeText(this, "the file doesnt exist", Toast.LENGTH_SHORT).show();
-                 }
+                }
                 break;
         }
     }
@@ -321,7 +385,7 @@ public class ModifyDataActivity extends BaseActivity {
         public View getView(int position, View convertView, ViewGroup group) {
             if (convertView == null)
                 convertView = mInflater.inflate(R.layout.crop_selector, null);
-              CropOption item = mOptions.get(position);
+            CropOption item = mOptions.get(position);
             if (item != null) {
                 ((ImageView) convertView.findViewById(R.id.iv_icon))
                         .setImageDrawable(item.icon);
@@ -334,6 +398,7 @@ public class ModifyDataActivity extends BaseActivity {
             return null;
         }
     }
+
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
@@ -353,7 +418,6 @@ public class ModifyDataActivity extends BaseActivity {
         public Drawable icon;
         public Intent appIntent;
     }
-
 
 
     private void submitToServer(final File file) {
@@ -381,7 +445,7 @@ public class ModifyDataActivity extends BaseActivity {
                     // refreshImg(j);
                     BaseApplication.setUserPic(j);
                     ImageLoader.getInstance().displayImage(BaseApplication.getUserPic(), idIgUserpic, ImageLoadOptions.getOptions());
-                }else {
+                } else {
                     ToastManager.showToastReal("上传失败 重新上传");
                 }
             }
@@ -416,7 +480,9 @@ public class ModifyDataActivity extends BaseActivity {
         viewHoder.iv_menu_ic = (ImageView) inf_rel.findViewById(R.id.iv_below_menu_ic);
         viewHoder.inf_rel = inf_rel;
     }
+
     private ViewHoder viewHoder;
+
     public class ViewHoder {
         View inf_rel;
         TextView tv_title;
@@ -431,13 +497,13 @@ public class ModifyDataActivity extends BaseActivity {
             Intent intent = new Intent();
             switch (tag) {
                 case "修改密码":
-                    intent.setClass(ModifyDataActivity.this, UpdatePassWordActivity.class);
+                    intent.setClass(SettingActivity.this, UpdatePassWordActivity.class);
                     break;
                 case "修改手机号码":
-                    intent.setClass(ModifyDataActivity.this, UpdatePhoneNumber.class);
+                    intent.setClass(SettingActivity.this, UpdatePhoneNumber.class);
                     break;
                 case "管理用户地址":
-                    intent.setClass(ModifyDataActivity.this, AddressListActivity.class);
+                    intent.setClass(SettingActivity.this, AddressListActivity.class);
                     break;
             }
             startActivity(intent);

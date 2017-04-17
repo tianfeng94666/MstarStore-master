@@ -3,21 +3,22 @@
     android:id="@+id/id_rel_title"
     android:layout_width="match_parent"
     android:layout_height="55dip"
-    android:paddingTop="7dip"
     android:background="@color/theme_bg"
-    android:paddingLeft="5dip"
+    android:orientation="horizontal"
     android:paddingBottom="7dip"
+    android:paddingLeft="5dip"
     android:paddingRight="10dip"
-    android:orientation="horizontal">
+    android:paddingTop="7dip">
 
 
     <ImageView
-        android:onClick="onBack"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="2dip"
-        android:padding="8dip"
-        android:layout_marginRight="8dp"
+        android:paddingLeft="6dip"
+        android:paddingRight="6dp"
+        android:layout_marginRight="2dp"
+        android:onClick="onBack"
+        android:padding="10dip"
         android:src="@drawable/icon_return" />
 
     <RelativeLayout
@@ -30,19 +31,21 @@
             android:id="@+id/id_et_seach"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingRight="56dp"
             android:background="@null"
-
+            android:hint="请输入搜索关键字"
             android:imeOptions="actionSearch"
-            android:singleLine="true" />
+            android:paddingRight="56dp"
+            android:singleLine="true"
+            android:textSize="14sp" />
+
         <ImageView
             android:id="@+id/iv_delete"
-            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:layout_toLeftOf="@+id/id_view_line"
-            android:layout_centerVertical="true"
+            android:padding="8dp"
             android:src="@drawable/icon_close" />
 
         <View
@@ -55,11 +58,11 @@
 
         <ImageView
             android:id="@+id/ig_btn_seach"
-            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:padding="8dp"
             android:src="@drawable/icon_search" />
     </RelativeLayout>
 
@@ -70,13 +73,13 @@
         android:orientation="vertical">
 
         <ImageView
-            android:onClick="scan"
             android:id="@+id/id_ig_sao"
             style="@style/layout_vertical"
             android:layout_margin="2dip"
             android:layout_weight="2"
             android:background="@drawable/iocn_qr"
-            android:gravity="center" />
+            android:gravity="center"
+            android:onClick="scan" />
 
         <!--本元素的左边缘和某元素的的左边缘对齐-->
         <TextView

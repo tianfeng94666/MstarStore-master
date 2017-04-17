@@ -99,7 +99,7 @@ public class CustomSelectInput extends RelativeLayout {
         if (!StringUtils.isEmpty(textName)) {
             tv.setText(textName);
         }
-        // tv.setTextSize(textSize);
+        tv.setTextSize(14);
         tv.setOnClickListener(new RadioClickListener());
     }
 

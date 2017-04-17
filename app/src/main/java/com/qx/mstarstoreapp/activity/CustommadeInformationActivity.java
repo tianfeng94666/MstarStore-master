@@ -123,8 +123,7 @@ public class CustommadeInformationActivity extends BaseActivity {
     LinearLayout idMenus;
     @Bind(R.id.id_gv_image)
     MyGridView idGvImage;
-    @Bind(R.id.id_store_title)
-    TextView idStoreTitle;
+
     private View rootView;
 
     @Override

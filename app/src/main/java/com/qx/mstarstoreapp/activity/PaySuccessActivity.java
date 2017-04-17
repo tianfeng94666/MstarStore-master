@@ -28,7 +28,7 @@ public class PaySuccessActivity extends BaseActivity {
     }
 
     public void onGotoModify(View view){
-        openActivity(ModifyDataActivity.class,null);
+        openActivity(SettingActivity.class,null);
     }
 
     public void onGotoOrder(View view){

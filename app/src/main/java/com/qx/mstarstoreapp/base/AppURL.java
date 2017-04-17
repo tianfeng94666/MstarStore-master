@@ -57,18 +57,18 @@ public class AppURL {
     public static String URL_MODE_LIST = baseUrl + "modelListPage?";
 
     /*上传头像*/
-    public static String URL_UPLOAD_PiC = baseUrl + "userModifyHeadPicDo?";
+    public static String URL_UPLOAD_PiC = baseUrl1 + "userModifyHeadPicDo?";
 
 
     /*款号详情   ModelDetailPage?tokenKey=944df2f27ffce557042887589986c193&id=1*/
-    public static String URL_MODEL_DETAIL = baseUrl1 + "ModelDetailPage?";
+    public static String URL_MODEL_DETAIL = baseUrl + "ModelDetailPage?";
 
     /*款号修改   ModelDetailPage?tokenKey=944df2f27ffce557042887589986c193&id=1*/
-    public static String URL_MODEL_UPDATE = baseUrl1 + "ModelDetailPageForCurrentOrderEditPage?";
+    public static String URL_MODEL_UPDATE = baseUrl + "ModelDetailPageForCurrentOrderEditPage?";
 
     //?itemId=16&tokenKey=10b588002228fa805231a59bb7976bf4
     //订单页修改款号
-    public static String URL_ORDER_MODEL_UPDATE = baseUrl1+ "ModelOrderWaitCheckModelDetailPageForCurrentOrderEditPage?";
+    public static String URL_ORDER_MODEL_UPDATE = baseUrl+ "ModelOrderWaitCheckModelDetailPageForCurrentOrderEditPage?";
 
     /*获得石头价格*/
     public static String URL_STONE_PRICE = baseUrl + "getStonePrice?";
@@ -183,7 +183,10 @@ public class AppURL {
     /*个人设置页面*/
     public static String URL_USER_MODIFY= baseUrl + "userModifyPage?";
     //http://appapi1.fanerweb.com/api/Aproxy/userModifyPage?tokenKey=509e15ec5b23808d098ecaf1f533c7de
-
+    /**
+     * 是否显示价格
+     */
+    public static String URL_IS_SHOW_PRICE =baseUrl + "UpdateIsShowPrice?";
     //忘记密码
     public static String URL_USER_FORGETPWD= baseUrl + "userForgetPasswordDo?";
 

@@ -121,7 +121,42 @@
 
 
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dip"
+        android:layout_marginTop="1dip"
+        android:padding="5dip"
+        android:background="@color/white"
+        >
 
+        <TextView
+            android:id="@+id/tv_is_show_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:padding="10dip"
+            android:text="是否显示价格"
+            />
+
+        <ToggleButton
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:button="@drawable/togglebutton"
+            android:id="@+id/iv_is_show_price"
+            android:background="@android:color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="-40dp"
+            android:text=""
+            android:textOff=""
+            android:textOn=""
+            android:layout_alignTop="@id/tv_is_show_price"
+
+            />
+
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/content"

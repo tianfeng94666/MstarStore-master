@@ -18,7 +18,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.AddAddressActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
 import com.qx.mstarstoreapp.activity.MainActivity;
-import com.qx.mstarstoreapp.activity.ModifyDataActivity;
+import com.qx.mstarstoreapp.activity.SettingActivity;
 import com.qx.mstarstoreapp.activity.OrderActivity;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseApplication;
@@ -88,7 +88,7 @@ public class HomeFragment extends BaseFragment {
         idIgSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ModifyDataActivity.class);
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
                 startActivity(intent);
             }
         });

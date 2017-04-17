@@ -100,7 +100,30 @@ public class UIUtils {
 		final float scale = getContext().getResources().getDisplayMetrics().density;
 		return (int) (px / scale + 0.5f);
 	}
+	/**
+	 * 将px值转换为sp值，保证文字大小不变
+	 *
+	 * @param pxValue
 
+	 *            （DisplayMetrics类中属性scaledDensity）
+	 * @return
+	 */
+	public static int px2sp( float pxValue) {
+		final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
+		return (int) (pxValue / fontScale + 0.5f);
+	}
+	/**
+	 * 将sp值转换为px值，保证文字大小不变
+	 *
+	 * @param spValue
+	 *            （DisplayMetrics类中属性scaledDensity）
+	 * @return
+	 */
+
+	public static int sp2px( float spValue) {
+		final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
+		return (int) (spValue * fontScale + 0.5f);
+	}
 	/** 获取主线程的handler */
 	public static Handler getHandler() {
 		return BaseApplication.getMainThreadHandler();

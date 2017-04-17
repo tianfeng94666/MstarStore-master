@@ -117,8 +117,9 @@ public class CustomSelectButton extends RelativeLayout {
         tv = (Button) rootView.findViewById(R.id.id_cus_tv);
         if (!StringUtils.isEmpty(textName)) {
             tv.setText(textName);
+
         }
-        // tv.setTextSize(textSize);
+         tv.setTextSize(14);
         tv.setOnClickListener(new RadioClickListener());
     }
 

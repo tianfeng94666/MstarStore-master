@@ -53,4 +53,7 @@
     <dimen name="pad_margin_left">8dp</dimen>
     <dimen name="pad_text_padding">10dp</dimen>
 
+    <!--标准行高-->
+    <dimen name="standard_height">35dp</dimen>
+    <dimen name="margin2">2dp</dimen>
 </resources>

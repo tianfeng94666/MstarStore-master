@@ -74,7 +74,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private String tokenKey;
     private ListView listView;
     private LoadingWaitDialog dialog;
-
+    JsonObject jsonResult;
     public FragOrderListFragment(int fragType) {
         this.fragType = fragType;
     }
@@ -95,7 +95,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             //相当于Fragment的onResume
-            loadNetData();
+            if(jsonResult==null){
+                loadNetData();
+            }
         } else {
             //相当于Fragment的onPause
         }
@@ -171,40 +173,6 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     }
 
 
-    //    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        if (getUserVisibleHint() && !isflag) {
-//            //LogUtils.e(TAG + "调用onActivityCreated" + indentState);
-//           // curpage = 1;
-//            showWatiNetDialog();
-//            loadNetData();
-//        }
-//        isflag = true; //仅第一次调用
-//    }
-//
-//    /**
-//     * 当前用户看到一个fragment时可以执行一下代码
-//     *
-//     * @param isVisibleToUser
-//     */
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        if (isVisibleToUser && isflag) {
-//            // LogUtils.e(TAG+"setUserVisibleHint是否在显示" + indentState);
-////            curpage = 1;
-//            showWatiNetDialog();
-//            loadNetData();
-//        }
-//        super.setUserVisibleHint(isVisibleToUser);
-//    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //cpage=1;
-        //loadNetData();
-    }
 
     public void showWatiNetDialog() {
         dialog = new LoadingWaitDialog(getActivity());
@@ -247,7 +215,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
             public void onSuccess(String result) {
                 dismissWatiNetDialog();
                 L.e("loadNetData  " + result);
-                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                 jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 //待审核及生产中 返回结果
                 OrderWaitResult orderWaitResult;
@@ -327,7 +295,6 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private void setBadge( OrderWaitResult.DataBean.StatusCountBean statusCountBean) {
         if(statusCountBean!=null){
                     ((CustomMadeActivity)getActivity()).onFragOrderCount(statusCountBean);
-
         }
     }
 
@@ -375,10 +342,13 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
     @Override
     public void onHeaderRefresh(PullToRefreshView pullToFootRefreshView) {
-//        tempCurpage = cpage;
-//        cpage = 1;
-//        pullStatus = PULL_REFRESH;
-//        loadNetData();
+        tempCurpage = cpage;
+        cpage = 1;
+        pullStatus = PULL_REFRESH;
+        listData.clear();
+        sendinglist.clear();
+      loadNetData();
+
     }
 
 
