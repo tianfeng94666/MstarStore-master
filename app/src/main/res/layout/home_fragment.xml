@@ -28,7 +28,15 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/icon_seting"
             />
-
+        <ImageView
+            android:id="@+id/id_ig_stone"
+            android:padding="10dip"
+            android:layout_margin="5dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/icon_seting"
+            />
 
 
         <com.qx.mstarstoreapp.viewutils.CircleImageView

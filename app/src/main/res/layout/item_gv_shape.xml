@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/corners_bg_while"
+    android:layout_height="70dp">
+<com.qx.mstarstoreapp.viewutils.RoundCornerImageView
+    android:id="@+id/iv_item_shape"
+android:layout_width="match_parent"
+    app:rciv_radius="5dp"
+    android:layout_height="70dp" />
+</LinearLayout>

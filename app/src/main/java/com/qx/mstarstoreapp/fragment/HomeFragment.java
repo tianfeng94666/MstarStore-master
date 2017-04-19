@@ -18,8 +18,9 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.AddAddressActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
 import com.qx.mstarstoreapp.activity.MainActivity;
-import com.qx.mstarstoreapp.activity.SettingActivity;
 import com.qx.mstarstoreapp.activity.OrderActivity;
+import com.qx.mstarstoreapp.activity.SettingActivity;
+import com.qx.mstarstoreapp.activity.StoneSearchInfoActivity;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.BaseFragment;
@@ -54,6 +55,8 @@ public class HomeFragment extends BaseFragment {
     TextView idTvName;
     @Bind(R.id.id_ig_setting)
     ImageView idIgSetting;
+    @Bind(R.id.id_ig_stone)
+    ImageView idIgStone;
 
     public HomeFragment() {
 
@@ -89,6 +92,14 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        idIgStone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), StoneSearchInfoActivity.class);
                 startActivity(intent);
             }
         });
@@ -189,15 +200,14 @@ public class HomeFragment extends BaseFragment {
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     homeResult = new Gson().fromJson(result, HomeResult.class);
-                    if(homeResult.getData()==null){
+                    if (homeResult.getData() == null) {
                         return;
                     }
                     functionsList = homeResult.getData().getFunctionsList();
                     initView(view);
-                }
-                else if (error == 2) {
+                } else if (error == 2) {
                     loginToServer(MainActivity.class);
-                }else {
+                } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
                     ToastManager.showToastReal(message);
@@ -213,6 +223,11 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 
 
     public class ViewHolder {

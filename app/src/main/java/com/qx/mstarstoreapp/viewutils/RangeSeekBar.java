@@ -227,7 +227,7 @@ public class RangeSeekBar extends View {
 
         lineLeft = DEFAULT_PADDING_LEFT_AND_RIGHT  + getPaddingLeft();
         lineRight = w - lineLeft - getPaddingRight();
-        lineTop = (int)mHintBGHeight + mThumbSize/2 -mSeekBarHeight/2 ;
+        lineTop = getPaddingTop()+ mThumbSize/2 -mSeekBarHeight/2 ;
         lineBottom = lineTop + mSeekBarHeight ;
         lineWidth = lineRight - lineLeft;
         line.set(lineLeft, lineTop, lineRight, lineBottom);

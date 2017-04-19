@@ -76,7 +76,19 @@ public class BaseViewHolder {
         view.setText(text);
         return this;
     }
-
+    /**
+     * 为TextView设置背景
+     *
+     * @param viewId
+     * @param text
+     * @return
+     */
+    public BaseViewHolder setText(int viewId, String text,int id) {
+        TextView view = getView(viewId);
+        view.setText(text);
+        view.setBackgroundResource(id);
+        return this;
+    }
     /**
      * 为ImageView设置图片
      *
@@ -102,7 +114,17 @@ public class BaseViewHolder {
         view.setImageBitmap(bm);
         return this;
     }
-
+    /**
+     * 为ImageView设置图片
+     *
+     * @param viewId
+     * @return
+     */
+    public BaseViewHolder setImageBitmap(int viewId, String st) {
+        ImageView view = getView(viewId);
+        ImageLoader.getInstance().displayImage(st, view, ImageLoadOptions.getOptions());
+        return this;
+    }
     /**
      * 为ImageView设置图片
      *

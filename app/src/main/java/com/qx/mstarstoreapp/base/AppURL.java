@@ -218,7 +218,8 @@ public class AppURL {
     public static String URL_MODELPRODUCE_PROGRESS2=baseUrl+"ModelOrderProduceDetailShowRateProgressPageForSearch?";
     /*订单 详情  ModelOrderProduceDetailPage?  */
     public static String URL_PD_ORDER_DETAIL2 = baseUrl + "ModelOrderProduceDetailHistoryPageForSearch?";
-
+    /*裸石库  http://appapi1.fanerweb.com/api/Aproxy/stoneSearchInfo?tokenKey=e9884c4435d75a135ce41fb668788827*/
+    public static String URL_STONE_SEARCHINFO = baseUrl1 + "stoneSearchInfo?";
 }
 
 

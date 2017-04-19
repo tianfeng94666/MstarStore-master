@@ -95,7 +95,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     TextView idTvCurorder;
     @Bind(R.id.id_tv_add_order)
     TextView idTvAddOrder;
-    @Bind(R.id.id_cus_store_number)
+    @Bind(R.id.et_spot)
     EditText idCusStoreNumber;
     String categoryTitle, storeNumber, storeSize, categoryId;
     @Bind(R.id.id_cus_store_remarkid)

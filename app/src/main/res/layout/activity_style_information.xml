@@ -117,7 +117,7 @@
                             android:src="@drawable/icon_acc" />
 
                         <EditText
-                            android:id="@+id/id_cus_store_number"
+                            android:id="@+id/et_spot"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginRight="2dp"
