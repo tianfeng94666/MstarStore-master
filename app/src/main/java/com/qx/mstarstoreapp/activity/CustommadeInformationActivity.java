@@ -100,7 +100,7 @@ public class CustommadeInformationActivity extends BaseActivity {
     CustomSelectButton idStorecCut;
     @Bind(R.id.id_storec_price)
     CustomSelectButton idStorecPrice;
-    @Bind(R.id.id_tv_curorder)
+    @Bind(R.id.tv_reset)
     TextView idTvCurorder;
    StoneEntity stone;
     ModelDetailResult.DataEntity.ModelEntity.StoneAEntity stoneA;
@@ -924,7 +924,7 @@ public class CustommadeInformationActivity extends BaseActivity {
 
     protected void initView() {
         titleText.setText("款号信息");
-        tvCurOrder = (TextView) findViewById(R.id.id_tv_curorder);
+        tvCurOrder = (TextView) findViewById(R.id.tv_reset);
         tvCurOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

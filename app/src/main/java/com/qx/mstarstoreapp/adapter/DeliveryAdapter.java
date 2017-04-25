@@ -13,7 +13,6 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.json.DeliveryTableResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.utils.UIUtils;
-import com.qx.mstarstoreapp.viewutils.FlowLayout;
 
 import java.util.List;
 
@@ -124,7 +123,7 @@ public class DeliveryAdapter extends BaseAdapter {
         ImageView ivProduct;
         @Bind(R.id.ll_item_delivery)
         LinearLayout llItemDelivery;
-        @Bind(R.id.ll_stone)
+        @Bind(R.id.lv_stone)
         LinearLayout llStone;
 
         ViewHolder(View view) {

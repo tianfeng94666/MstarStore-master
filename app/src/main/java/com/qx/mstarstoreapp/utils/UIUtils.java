@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.GridView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.qx.mstarstoreapp.base.BaseApplication;
 
@@ -226,6 +229,43 @@ public class UIUtils {
 		WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
 		lp.alpha = bgAlpha;
 		((Activity)context).getWindow().setAttributes(lp);
+	}
+
+	// 动态加载GridView 高度
+	public static void setGridViewHeightBasedOnChildren(GridView myGridView, int num) {
+		ListAdapter listAdapter = myGridView.getAdapter();
+		if (listAdapter == null) {
+			return;
+		}
+		int col = num;
+		int totalHeight = 0;
+		for (int i = 0; i < listAdapter.getCount(); i += col) {
+			View listItem = listAdapter.getView(i, null, myGridView);
+			listItem.measure(0, 0);
+			totalHeight += listItem.getMeasuredHeight();
+		}
+		ViewGroup.LayoutParams params = myGridView.getLayoutParams();
+		params.height = totalHeight+20;
+		((ViewGroup.MarginLayoutParams) params).setMargins(10, 10, 10, 10);
+		myGridView.setLayoutParams(params);
+	}
+	// 动态加载GridView 高度
+	public static void setListViewHeightBasedOnChildren(ListView myGridView) {
+		ListAdapter listAdapter = myGridView.getAdapter();
+		if (listAdapter == null) {
+			return;
+		}
+
+		int totalHeight = 0;
+		for (int i = 0; i < listAdapter.getCount(); i ++) {
+			View listItem = listAdapter.getView(i, null, myGridView);
+			listItem.measure(0, 0);
+			totalHeight += listItem.getMeasuredHeight();
+		}
+		ViewGroup.LayoutParams params = myGridView.getLayoutParams();
+		params.height = totalHeight;
+		((ViewGroup.MarginLayoutParams) params).setMargins(0, 10, 0, 10);
+		myGridView.setLayoutParams(params);
 	}
 }
 

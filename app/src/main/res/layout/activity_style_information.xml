@@ -207,6 +207,7 @@ android:textSize="@dimen/text_size_small_medium"
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_add"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginBottom="8dp"
@@ -331,7 +332,7 @@ android:textSize="@dimen/text_size_small_medium"
                 android:background="@color/color_line" />
 
             <TextView
-                android:id="@+id/id_tv_add_order"
+                android:id="@+id/tv_search"
                 style="@style/layout_horizontal"
                 android:layout_weight="1"
                 android:background="@color/theme_red"

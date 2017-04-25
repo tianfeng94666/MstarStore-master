@@ -96,6 +96,10 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
     </style>
+    <style name="item_stone_search">
+        <item name="android:width">60dp</item>
+        <item name="android:height">35dp</item>
+    </style>
 
     <style name="text_tow_oneraw">
         <item name="android:textColor">@color/text_color2</item>
@@ -137,5 +141,8 @@
         <item name="android:layout_marginRight">16dp</item>
     </style>
 
-
+    <style name="margin_topAndBottom">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
 </resources>

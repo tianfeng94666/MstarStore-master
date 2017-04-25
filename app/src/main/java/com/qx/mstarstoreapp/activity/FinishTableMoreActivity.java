@@ -98,7 +98,7 @@ public class FinishTableMoreActivity extends BaseActivity {
     TextView tvStoneMoney;
     @Bind(R.id.ll_stone_product_name)
     LinearLayout llStoneProductName;
-    @Bind(R.id.ll_stone)
+    @Bind(R.id.lv_stone)
     LinearLayout llStone;
     @Bind(R.id.tv_amount)
     TextView tvAmount;

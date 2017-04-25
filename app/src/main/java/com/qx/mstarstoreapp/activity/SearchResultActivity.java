@@ -19,7 +19,6 @@ import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.bean.OrderSearchBean;
-import com.qx.mstarstoreapp.json.SearchOrderResult;
 import com.qx.mstarstoreapp.json.SearchResultResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -42,7 +41,7 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.iv_right)
+    @Bind(R.id.tv_right)
     ImageView ivRight;
     @Bind(R.id.id_rel_title)
     RelativeLayout idRelTitle;

@@ -7,8 +7,9 @@ import java.util.List;
  */
 
 public class StoneSearchResult {
+
     /**
-     * data : {"certAuth":{"keyword":"certAuth","title":"证书机构","values":["GIA","IGI"]},"color":{"keyword":"color","title":"颜色","values":["D","E","F","G","H","I","J","K","L","N","M"]},"cut":{"keyword":"cut","title":"切工","values":["EX","VG","GD","FR"]},"fluorescence":{"keyword":"Fluorescence","title":"荧光","values":["N","F","M","S","VS"]},"polishing":{"keyword":"polishing","title":"抛光","values":["EX","VG","GD","FR"]},"purity":{"keyword":"purity","title":"净度","values":["VVS1","VVS2","VS1","VS2","SI1","SI2","SI3","I1"]},"shape":{"keyword":"shape","title":"形状","values":[{"name":"圆形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_1.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_1_2.png"},{"name":"公主方","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_2.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_2_2.png"},{"name":"雷迪恩","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_3.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_3_2.png"},{"name":"心形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_4.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_4_2.png"},{"name":"马眼形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_5.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_5_2.png"},{"name":"椭圆形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_6.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_6_2.png"},{"name":"梨形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_7.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_7_2.png"},{"name":"梯形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_8.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_8_2.png"},{"name":"祖母绿","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_9.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_9_2.png"},{"name":"三角形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_10.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_10_2.png"}]},"symmetric":{"keyword":"symmetric","title":"对称","values":["EX","VG","GD","FR"]}}
+     * data : {"certAuth":{"keyword":"certAuth","title":"证书机构","values":["GIA","IGI"]},"color":{"keyword":"color","title":"颜色","values":["D","E","F","G","H","I","J","K","L","N","M"]},"cut":{"keyword":"cut","title":"切工","values":["EX","VG","GD","FR"]},"fluorescence":{"keyword":"Fluorescence","title":"荧光","values":["N","F","M","S","VS"]},"polishing":{"keyword":"polishing","title":"抛光","values":["EX","VG","GD","FR"]},"price":{"keyword":"price","maximum":20000,"minimum":0,"title":"价格范围(元) 0-20000"},"purity":{"keyword":"purity","title":"净度","values":["VVS1","VVS2","VS1","VS2","SI1","SI2","SI3","I1"]},"shape":{"keyword":"shape","title":"形状","values":[{"name":"圆形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_1.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_1_2.png"},{"name":"公主方","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_2.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_2_2.png"},{"name":"雷迪恩","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_3.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_3_2.png"},{"name":"心形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_4.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_4_2.png"},{"name":"马眼形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_5.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_5_2.png"},{"name":"椭圆形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_6.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_6_2.png"},{"name":"梨形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_7.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_7_2.png"},{"name":"梯形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_8.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_8_2.png"},{"name":"祖母绿","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_9.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_9_2.png"},{"name":"三角形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_10.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_10_2.png"}]},"symmetric":{"keyword":"symmetric","title":"对称","values":["EX","VG","GD","FR"]},"weight":{"keyword":"weight","maximum":30,"minimum":0,"title":"钻石重量(克拉) 0-30"}}
      * error : 0
      * message :
      * response :
@@ -58,9 +59,11 @@ public class StoneSearchResult {
          * cut : {"keyword":"cut","title":"切工","values":["EX","VG","GD","FR"]}
          * fluorescence : {"keyword":"Fluorescence","title":"荧光","values":["N","F","M","S","VS"]}
          * polishing : {"keyword":"polishing","title":"抛光","values":["EX","VG","GD","FR"]}
+         * price : {"keyword":"price","maximum":20000,"minimum":0,"title":"价格范围(元) 0-20000"}
          * purity : {"keyword":"purity","title":"净度","values":["VVS1","VVS2","VS1","VS2","SI1","SI2","SI3","I1"]}
          * shape : {"keyword":"shape","title":"形状","values":[{"name":"圆形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_1.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_1_2.png"},{"name":"公主方","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_2.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_2_2.png"},{"name":"雷迪恩","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_3.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_3_2.png"},{"name":"心形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_4.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_4_2.png"},{"name":"马眼形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_5.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_5_2.png"},{"name":"椭圆形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_6.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_6_2.png"},{"name":"梨形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_7.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_7_2.png"},{"name":"梯形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_8.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_8_2.png"},{"name":"祖母绿","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_9.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_9_2.png"},{"name":"三角形","pic":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_10.png","pic1":"http://appapi.fanerweb.com//images/stoneSearCh/Diamonds_10_2.png"}]}
          * symmetric : {"keyword":"symmetric","title":"对称","values":["EX","VG","GD","FR"]}
+         * weight : {"keyword":"weight","maximum":30,"minimum":0,"title":"钻石重量(克拉) 0-30"}
          */
 
         private CertAuthBean certAuth;
@@ -68,9 +71,11 @@ public class StoneSearchResult {
         private CutBean cut;
         private FluorescenceBean fluorescence;
         private PolishingBean polishing;
+        private PriceBean price;
         private PurityBean purity;
         private ShapeBean shape;
         private SymmetricBean symmetric;
+        private WeightBean weight;
 
         public CertAuthBean getCertAuth() {
             return certAuth;
@@ -112,6 +117,14 @@ public class StoneSearchResult {
             this.polishing = polishing;
         }
 
+        public PriceBean getPrice() {
+            return price;
+        }
+
+        public void setPrice(PriceBean price) {
+            this.price = price;
+        }
+
         public PurityBean getPurity() {
             return purity;
         }
@@ -134,6 +147,14 @@ public class StoneSearchResult {
 
         public void setSymmetric(SymmetricBean symmetric) {
             this.symmetric = symmetric;
+        }
+
+        public WeightBean getWeight() {
+            return weight;
+        }
+
+        public void setWeight(WeightBean weight) {
+            this.weight = weight;
         }
 
         public static class CertAuthBean {
@@ -316,6 +337,52 @@ public class StoneSearchResult {
             }
         }
 
+        public static class PriceBean {
+            /**
+             * keyword : price
+             * maximum : 20000
+             * minimum : 0
+             * title : 价格范围(元) 0-20000
+             */
+
+            private String keyword;
+            private int maximum;
+            private int minimum;
+            private String title;
+
+            public String getKeyword() {
+                return keyword;
+            }
+
+            public void setKeyword(String keyword) {
+                this.keyword = keyword;
+            }
+
+            public int getMaximum() {
+                return maximum;
+            }
+
+            public void setMaximum(int maximum) {
+                this.maximum = maximum;
+            }
+
+            public int getMinimum() {
+                return minimum;
+            }
+
+            public void setMinimum(int minimum) {
+                this.minimum = minimum;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+        }
+
         public static class PurityBean {
             /**
              * keyword : purity
@@ -457,6 +524,52 @@ public class StoneSearchResult {
 
             public void setValues(List<String> values) {
                 this.values = values;
+            }
+        }
+
+        public static class WeightBean {
+            /**
+             * keyword : weight
+             * maximum : 30
+             * minimum : 0
+             * title : 钻石重量(克拉) 0-30
+             */
+
+            private String keyword;
+            private int maximum;
+            private int minimum;
+            private String title;
+
+            public String getKeyword() {
+                return keyword;
+            }
+
+            public void setKeyword(String keyword) {
+                this.keyword = keyword;
+            }
+
+            public int getMaximum() {
+                return maximum;
+            }
+
+            public void setMaximum(int maximum) {
+                this.maximum = maximum;
+            }
+
+            public int getMinimum() {
+                return minimum;
+            }
+
+            public void setMinimum(int minimum) {
+                this.minimum = minimum;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
             }
         }
     }

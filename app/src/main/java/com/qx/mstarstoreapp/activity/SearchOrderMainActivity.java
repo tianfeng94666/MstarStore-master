@@ -25,7 +25,6 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.fragment.DeliveryFragment;
 import com.qx.mstarstoreapp.fragment.FinishFragment;
-import com.qx.mstarstoreapp.fragment.FragOrderListFragment;
 import com.qx.mstarstoreapp.fragment.ProductingFragment;
 import com.qx.mstarstoreapp.json.SearchOrderMainResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
@@ -57,7 +56,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.iv_right)
+    @Bind(R.id.tv_right)
     ImageView ivRight;
     @Bind(R.id.ll_waiting_check)
     LinearLayout llWaitingCheck;
@@ -305,7 +304,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
             case R.id.id_fr3:
                 viewPager.setCurrentItem(2);
                 break;
-            case R.id.iv_right:
+            case R.id.tv_right:
                 search();
                 break;
         }

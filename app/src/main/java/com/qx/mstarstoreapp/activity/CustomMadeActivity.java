@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.debug.hv.ViewServer;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.fragment.FragOrderListFragment;
@@ -46,7 +45,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.iv_right)
+    @Bind(R.id.tv_right)
     ImageView ivRight;
     private FragOrderListFragment checkingFrament; //待审核
     private FragOrderListFragment productingFragment;//生产中
@@ -200,7 +199,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
             case R.id.id_fr3:
                 viewPager.setCurrentItem(3);
                 break;
-            case R.id.iv_right:
+            case R.id.tv_right:
                 search();
                 break;
         }

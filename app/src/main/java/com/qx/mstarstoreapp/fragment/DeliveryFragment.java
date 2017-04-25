@@ -1,6 +1,5 @@
 package com.qx.mstarstoreapp.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -31,7 +30,7 @@ public class DeliveryFragment extends BaseFragment {
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.iv_right)
+    @Bind(R.id.tv_right)
     ImageView ivRight;
     @Bind(R.id.id_rel_title)
     RelativeLayout idRelTitle;

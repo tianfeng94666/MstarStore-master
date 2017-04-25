@@ -14,7 +14,6 @@
         android:background="@color/theme_bg"
         android:layout_below="@+id/id_rel_title"
         android:orientation="vertical"
-
         >
 
 

@@ -3,23 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme_bg"
+    android:background="@color/white"
     android:orientation="vertical">
-    <include
-        layout="@layout/title_layout"
-        ></include>
+
+    <include layout="@layout/title_layout"></include>
+
     <ScrollView
-        android:layout_below="@id/id_rel_title"
-        android:layout_marginBottom="40dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/id_rel_title"
+        android:layout_marginBottom="40dp">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/ll_certificate_orgnization"
+                style="@style/margin_topAndBottom"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/standard_height"
                 android:orientation="horizontal">
@@ -29,43 +31,65 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:paddingLeft="16dp"
-                    android:textColor="@color/text_color"
                     android:text="证书机构"
+                    android:textColor="@color/text_color"
                     android:textSize="@dimen/text_size_small_medium" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
                 <TextView
                     android:id="@+id/tv_certificate_1"
-                    android:gravity="center"
                     android:layout_width="0dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_height="match_parent" />
+                    android:background="@drawable/corners_white_bg"
+                    android:gravity="center"
+                    android:padding="4dp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
                 <TextView
                     android:id="@+id/tv_certificate_2"
-                    android:gravity="center"
-                    android:layout_margin="5dp"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="16dp"
                     android:layout_weight="1"
-                    android:layout_height="match_parent" />
+                    android:background="@drawable/corners_white_bg"
+                    android:gravity="center"
+                    android:padding="4dp" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line" />
 
             <LinearLayout
                 style="@style/padding_parent"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
 
-
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_add_spot"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textColor="@color/text_color"
                     android:gravity="center_vertical"
                     android:src="@drawable/icon_acc"
-                    android:textSize="@dimen/text_size_small_medium"
-                    android:text="加点" />
+                    android:text="加点"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text_size_small_medium" />
 
                 <ImageView
                     android:id="@+id/iv_reduce"
@@ -81,11 +105,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="2dp"
                     android:layout_weight="1.5"
-                    android:background="@drawable/btn_bg_while"
+                    android:background="@color/white"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="1"
                     android:inputType="numberDecimal"
+                    android:text="1"
                     android:textSize="@dimen/text_size_small_medium" />
 
                 <ImageView
@@ -100,218 +124,266 @@
                     android:layout_height="match_parent"
                     android:layout_weight="4" />
             </LinearLayout>
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="horizontal"
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/standard_height">
+                android:layout_height="1dp"
+                android:background="@color/color_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/standard_height"
+                android:gravity="center"
+                android:orientation="horizontal">
+
                 <TextView
-                    android:text="钻石重量(克拉)"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/text_size_small_medium"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="钻石重量(克拉)"
+                    android:textSize="@dimen/text_size_small_medium" />
+
                 <TextView
                     android:id="@+id/tv_weight_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:text="0.1"
                     android:textColor="@color/theme_red"
-                    android:layout_centerInParent="true"
-                    android:textSize="@dimen/text_size_small_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textSize="@dimen/text_size_small_medium" />
+
                 <TextView
-                    android:text="-10"
                     android:id="@+id/tv_weight_max"
-                    android:textColor="@color/theme_red"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/text_size_small_medium"
-                    android:layout_marginRight="16dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:text="-10"
+                    android:textColor="@color/theme_red"
+                    android:textSize="@dimen/text_size_small_medium" />
 
             </LinearLayout>
+
             <com.qx.mstarstoreapp.viewutils.RangeSeekBar
                 android:id="@+id/sb_weight"
-             android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:layout_width="match_parent"
-                android:paddingTop="5dp"
                 android:layout_height="40dp"
-                app:lineColorSelected="@android:color/holo_red_dark"
-                app:lineColorEdge="@android:color/white"
-                app:min="0.1"
-                app:max="10"
-                app:seekBarResId="@drawable/seekbar_thumb"
-                app:thumbPrimaryColor="@android:color/white"
-                app:thumbSecondaryColor="@android:color/holo_red_dark"
-                app:seekBarHeight="4dp"
-                app:thumbSize="35dp"
-                app:cellMode="number"
-                app:seekBarMode="range"
-                />
-            <LinearLayout
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/standard_height">
-                <TextView
-                    android:text="价格范围(元)"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:textSize="@dimen/text_size_small_medium"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/tv_price_min"
-                    android:text="500"
-                    android:textColor="@color/theme_red"
-                    android:layout_centerInParent="true"
-                    android:textSize="@dimen/text_size_small_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:text="-1000"
-                    android:id="@+id/tv_price_max"
-                    android:textSize="@dimen/text_size_small_medium"
-                    android:textColor="@color/theme_red"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-            <com.qx.mstarstoreapp.viewutils.RangeSeekBar
-                android:id="@+id/sb_price"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                app:lineColorSelected="@android:color/holo_red_dark"
+                app:cellMode="number"
                 app:lineColorEdge="@android:color/white"
-                app:min="500"
-                app:max="1000"
+                app:lineColorSelected="@android:color/holo_red_dark"
+                app:max="10"
+                app:min="0.1"
+                app:seekBarHeight="4dp"
+                app:seekBarMode="range"
                 app:seekBarResId="@drawable/seekbar_thumb"
                 app:thumbPrimaryColor="@android:color/white"
                 app:thumbSecondaryColor="@android:color/holo_red_dark"
-                app:seekBarHeight="4dp"
-                app:thumbSize="35dp"
-                app:cellMode="number"
-                app:seekBarMode="range"
-                />
+                app:thumbSize="35dp" />
+
             <LinearLayout
-                android:id="@+id/ll_shape"
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/standard_height"
+                android:gravity="center">
+
                 <TextView
-                    android:text="形状"
-                    android:textColor="@color/text_color"
-                    android:paddingLeft="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="价格范围(元)"
+                    android:textSize="@dimen/text_size_small_medium" />
+
+                <TextView
+                    android:id="@+id/tv_price_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="500"
+                    android:textColor="@color/theme_red"
+                    android:textSize="@dimen/text_size_small_medium" />
+
+                <TextView
+                    android:id="@+id/tv_price_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:text="-1000"
+                    android:textColor="@color/theme_red"
+                    android:textSize="@dimen/text_size_small_medium" />
+
             </LinearLayout>
 
-            <GridView
+            <com.qx.mstarstoreapp.viewutils.RangeSeekBar
+                android:id="@+id/sb_price"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="5dp"
+                app:cellMode="number"
+                app:lineColorEdge="@android:color/white"
+                app:lineColorSelected="@android:color/holo_red_dark"
+                app:max="1000"
+                app:min="500"
+                app:seekBarHeight="4dp"
+                app:seekBarMode="range"
+                app:seekBarResId="@drawable/seekbar_thumb"
+                app:thumbPrimaryColor="@android:color/white"
+                app:thumbSecondaryColor="@android:color/holo_red_dark"
+                app:thumbSize="35dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line" />
+
+            <LinearLayout
+                android:id="@+id/ll_shape"
+                style="@style/margin_topAndBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:text="形状"
+                    android:textColor="@color/text_color" />
+            </LinearLayout>
+
+            <com.qx.mstarstoreapp.viewutils.CustomGridView
                 android:id="@+id/gv_shape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:isScrollContainer="false"
+                android:numColumns="5"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:numColumns="5"
-                android:isScrollContainer="false"
                 android:scrollbars="none"
-                android:horizontalSpacing="4dp"
-                android:verticalSpacing="4dp"
+                android:verticalSpacing="4dp"></com.qx.mstarstoreapp.viewutils.CustomGridView>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></GridView>
+                android:layout_height="1dp"
+                android:background="@color/color_line" />
+
             <LinearLayout
                 android:id="@+id/ll_color"
+                style="@style/margin_topAndBottom"
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <TextView
-                    android:text="颜色"
-                    android:paddingLeft="16dp"
-                    android:textColor="@color/text_color"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:text="颜色"
+                    android:textColor="@color/text_color" />
+
                 <TextView
                     android:id="@+id/tv_color"
-                    android:layout_marginLeft="16dp"
-                    android:textColor="@color/theme_red"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/theme_red" />
 
             </LinearLayout>
 
             <GridView
                 android:id="@+id/gv_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:isScrollContainer="false"
+                android:numColumns="7"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:numColumns="7"
                 android:scrollbars="none"
-                android:isScrollContainer="false"
-                android:horizontalSpacing="4dp"
-                android:verticalSpacing="4dp"
+                android:verticalSpacing="4dp"></GridView>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></GridView>
+                android:layout_height="1dp"
+                android:background="@color/color_line" />
+
             <LinearLayout
                 android:id="@+id/ll_quality"
+                style="@style/margin_topAndBottom"
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <TextView
-                    android:text="净度"
-                    android:textColor="@color/text_color"
-                    android:paddingLeft="16dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:text="净度"
+                    android:textColor="@color/text_color" />
+
                 <TextView
                     android:id="@+id/tv_quality"
-                    android:layout_marginLeft="16dp"
-                    android:textColor="@color/theme_red"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/theme_red" />
             </LinearLayout>
 
 
             <GridView
                 android:id="@+id/gv_quality"
                 android:layout_width="match_parent"
-                android:numColumns="5"
-                android:scrollbars="none"
-                android:horizontalSpacing="4dp"
-                android:verticalSpacing="4dp"
-                android:isScrollContainer="false"
                 android:layout_height="wrap_content"
+                android:horizontalSpacing="4dp"
+                android:isScrollContainer="false"
+                android:numColumns="5"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"></GridView>
+                android:paddingRight="16dp"
+                android:scrollbars="none"
+                android:verticalSpacing="4dp"></GridView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_line" />
 
             <ListView
                 android:id="@+id/lv_others"
-                android:divider="@null"
                 android:layout_width="match_parent"
-                android:layout_height="175dp"></ListView>
+                android:layout_height="175dp"
+                android:divider="@color/color_line"
+                android:dividerHeight="1dp"></ListView>
         </LinearLayout>
 
     </ScrollView>
+
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true">
+
         <TextView
-            android:id="@+id/id_tv_add_order"
-          android:layout_width="0dp"
+            android:id="@+id/tv_search"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/theme_red"
             android:gravity="center"
             android:text="查询"
             android:textColor="@color/white" />
+
         <TextView
-            android:id="@+id/id_tv_curorder"
+            android:id="@+id/tv_reset"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:background="@color/gray"
+            android:gravity="center"
             android:text="重置"
             android:textColor="@color/black" />
 

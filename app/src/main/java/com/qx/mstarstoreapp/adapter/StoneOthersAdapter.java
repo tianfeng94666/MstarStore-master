@@ -103,14 +103,31 @@ public class StoneOthersAdapter extends BaseAdapter {
         tv.setLayoutParams(params);
         tv.setGravity(Gravity.CENTER);
         if (isCheck) {
-            tv.setBackgroundResource(R.drawable.check_border);
+            tv.setBackgroundResource(R.drawable.corners_red_bg);
+            tv.setTextColor(context.getResources().getColor(R.color.white));
         } else {
-            tv.setBackgroundResource(R.drawable.cb_bg_gray);
+            tv.setBackgroundResource(R.drawable.corners_white_bg);
+            tv.setTextColor(context.getResources().getColor(R.color.text_color));
         }
 
         return tv;
     }
 
+    public String getChooseResult(int j){
+        StringBuilder sb = new StringBuilder();
+        boolean[] ischeck = isCheckList.get(j);
+        List<String> listString = list.get(j);
+        for(int i =0;i<ischeck.length;i++){
+            if(ischeck[i]){
+                if(sb.toString().equals("")){
+                    sb.append(listString.get(i));
+                }else {
+                    sb.append(","+listString.get(i));
+                }
+            }
+        }
+        return sb.toString();
+    }
     class ViewHolder {
         @Bind(R.id.tv_title)
         TextView tvTitle;

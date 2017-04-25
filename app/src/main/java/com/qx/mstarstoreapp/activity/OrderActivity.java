@@ -18,9 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.debug.hv.ViewServer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -97,7 +95,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     TextView idTvHisOrder;
     @Bind(R.id.id_classify)
     TextView idTvClassify;
-    @Bind(R.id.id_tv_curorder)
+    @Bind(R.id.tv_reset)
     TextView idTvCurOrder;
     @Bind(R.id.iv_delete)
     ImageView ivDelete;

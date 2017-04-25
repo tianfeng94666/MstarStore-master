@@ -91,9 +91,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     LinearLayout idMenus;
     @Bind(R.id.id_cus_store_type)
     CustomSelectButton idCusStoreType;
-    @Bind(R.id.id_tv_curorder)
-    TextView idTvCurorder;
-    @Bind(R.id.id_tv_add_order)
+    @Bind(R.id.tv_reset)
+    TextView tvReset;
+    @Bind(R.id.tv_search)
     TextView idTvAddOrder;
     @Bind(R.id.et_spot)
     EditText idCusStoreNumber;
@@ -120,22 +120,22 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     CustomselectStringButton idCusStoreSize;
     @Bind(R.id.id_vipage_content)
     RelativeLayout id_vipage_content;
-    @Bind(R.id.tv_reset)
-    TextView tvReset;
     @Bind(R.id.tv_del)
     TextView tvDel;
     @Bind(R.id.tv_add)
     TextView tvAdd;
     @Bind(R.id.tv_weight)
     TextView tvWeight;
-
+    @Bind(R.id.id_tv_curorder)
+    TextView idTvCurorder;
     WheelView mainWheelView;
     int type = 0;
     String orderId;
     int waitOrderCount;
     String itemId;
     static ConfirmOrderOnUpdate confirmOrderOnUpdate;
-
+    @Bind(R.id.ll_add)
+    LinearLayout llAdd;
 
     private View rootView;
     private ModelDetailResult.DataEntity dataEntity;
@@ -217,7 +217,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 reduce();
             }
         });
-        tvAdd.setOnClickListener(this);
+        llAdd.setOnClickListener(this);
         tvDel.setOnClickListener(this);
         tvReset.setOnClickListener(this);
            /*    查看当前订单*/
@@ -643,7 +643,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.id_tv_add_order:
+            case R.id.tv_search:
                 if (!UIUtils.isFastDoubleClick()) {
                     chkeckConfirmOrder();
                 }
@@ -651,7 +651,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             case R.id.tv_reset:
                 reset();
                 break;
-            case R.id.tv_add:
+            case R.id.ll_add:
                 addStone();
                 break;
             case R.id.tv_del:

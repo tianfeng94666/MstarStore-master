@@ -49,7 +49,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.iv_right)
+    @Bind(R.id.tv_right)
     ImageView ivRight;
     @Bind(R.id.id_rel_title)
     RelativeLayout idRelTitle;

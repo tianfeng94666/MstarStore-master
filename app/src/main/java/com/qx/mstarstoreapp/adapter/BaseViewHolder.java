@@ -90,6 +90,20 @@ public class BaseViewHolder {
         return this;
     }
     /**
+     * 为TextView字体颜色
+     *
+     * @param viewId
+     * @param text
+     * @return
+     */
+    public BaseViewHolder setText(int viewId, String text,int backgroundid ,int colorid) {
+        TextView view = getView(viewId);
+        view.setText(text);
+        view.setBackgroundResource(backgroundid);
+        view.setTextColor(colorid);
+        return this;
+    }
+    /**
      * 为ImageView设置图片
      *
      * @param viewId
@@ -125,6 +139,23 @@ public class BaseViewHolder {
         ImageLoader.getInstance().displayImage(st, view, ImageLoadOptions.getOptions());
         return this;
     }
+    public BaseViewHolder setImageBitmapHeight(int viewId, double t) {
+        ImageView view = getView(viewId);
+        view.setMinimumHeight((int)(view.getMeasuredWidth()*t));
+        return this;
+    }
+    /**
+     * 为ImageView设置点击事件
+     *
+     * @param viewId
+     * @return
+     */
+    public BaseViewHolder setViewOnclick(int viewId, View.OnClickListener clickListener) {
+        View view = getView(viewId);
+       view.setOnClickListener(clickListener);
+        return this;
+    }
+
     /**
      * 为ImageView设置图片
      *
