@@ -1,9 +1,10 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,7 +18,6 @@ import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.StoneSearchResultAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
-import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
@@ -25,6 +25,7 @@ import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 import com.qx.mstarstoreapp.viewutils.xListView.XListView;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/4/24 0024.
  */
 
-public class StoneSearchResultActivity extends BaseActivity implements View.OnClickListener, XListView.IXListViewListener, StoneSearchResultAdapter.ChooseItemInterface {
+public class StoneSearchResultActivity extends Activity implements View.OnClickListener, XListView.IXListViewListener, StoneSearchResultAdapter.ChooseItemInterface {
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
     @Bind(R.id.title_text)
@@ -76,6 +77,10 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
     LinearLayout llTitle;
     @Bind(R.id.tv_search_target)
     TextView tvSearchTarget;
+    @Bind(R.id.tv_item_price)
+    TextView tvItemPrice;
+    @Bind(R.id.tv_item_cerauth_number)
+    TextView tvItemCerauthNumber;
 
 
     private boolean isLandscape;
@@ -89,6 +94,8 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
     private int pullStatus;
     private int listCount;
     private List<String> listTitle;
+    private String orderby = "";
+    int ordertimes = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,14 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
         ButterKnife.bind(this);
         init();
         getDate();
+
+
+    }
+
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return stoneSearchInfoResult;
     }
 
     private void init() {
@@ -110,14 +125,20 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
         lvStone.setPullLoadEnable(true);
         tvQutedPriceAll.setOnClickListener(this);
         titleText.setText("搜索结果");
+        tvItemWeight.setOnClickListener(this);
     }
 
     private void getDate() {
         Intent intent = getIntent();
+        Bundle stoneBundle = null;
         Bundle bundle = intent.getBundleExtra("stoneInfo");
         stoneSearchInfo = (StoneSearchInfo) bundle.getSerializable("searchStoneInfo");
-        Log.e("stoneSearchInfo", stoneSearchInfo.getCerAuth() + stoneSearchInfo.getPrice());
-        loadNetData();
+        stoneSearchInfoResult = (StoneSearchInfoResult) getLastNonConfigurationInstance();
+        if (stoneSearchInfoResult != null) {
+            setXListview(stoneSearchInfoResult);
+        } else {
+            loadNetData();
+        }
     }
 
     private void initTitleView() {
@@ -126,23 +147,24 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
         listTitle = dataBean.getStone().getHeadline();
         tvIscheckStone.setText(listTitle.get(0));
         tvItemWeight.setText(listTitle.get(1));
-        tvItemShape.setText(listTitle.get(2));
-        tvItemColor.setText(listTitle.get(3));
-        tvItemPurity.setText(listTitle.get(4));
-        tvItemCut.setText(listTitle.get(5));
-        tvItemPolish.setText(listTitle.get(6));
-        tvItemSymmetric.setText(listTitle.get(7));
-        tvItemFluorescence.setText(listTitle.get(8));
-        tvItemCertauth.setText(listTitle.get(9));
+        tvItemPrice.setText(listTitle.get(2));
+        tvItemShape.setText(listTitle.get(3));
+        tvItemColor.setText(listTitle.get(4));
+        tvItemPurity.setText(listTitle.get(5));
+        tvItemCut.setText(listTitle.get(6));
+        tvItemPolish.setText(listTitle.get(7));
+        tvItemSymmetric.setText(listTitle.get(8));
+        tvItemFluorescence.setText(listTitle.get(9));
+        tvItemCertauth.setText(listTitle.get(10));
+        tvItemCerauthNumber.setText(listTitle.get(11));
     }
 
-    @Override
     public void loadNetData() {
-        baseShowWatLoading();
+//        baseShowWatLoading();
         String url = "";
         url = AppURL.URL_STONE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + page + "&certAuth=" + stoneSearchInfo.getCerAuth() + "&color=" + stoneSearchInfo.getColor() + "&shape=" + stoneSearchInfo.getShape()
                 + "&purity=" + stoneSearchInfo.getPurity() + "&cut=" + stoneSearchInfo.getCut() + "&polishing=" + stoneSearchInfo.getPolishing() + "&symmetric=" + stoneSearchInfo.getSymmetric() + "&fluorescence=" + stoneSearchInfo.getFluorescence()
-                + "&price=" + stoneSearchInfo.getPrice() + "&weight=" + stoneSearchInfo.getWeight();
+                + "&price=" + stoneSearchInfo.getPrice() + "&weight=" + stoneSearchInfo.getWeight() + "&orderby=" + orderby + "&percent="+stoneSearchInfo.getPercent();
         if (StringUtils.isEmpty(url)) {
             return;
         }
@@ -150,7 +172,7 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-                baseHideWatLoading();
+//                baseHideWatLoading();
                 L.e("result" + result);
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
@@ -160,27 +182,11 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
                         ToastManager.showToastReal("没有数据！");
                         return;
                     }
-                    List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> templist = stoneSearchInfoResult.getData().getStone().getList();
-                    listCount = Integer.parseInt(stoneSearchInfoResult.getData().getStone().getList_count());
-                    list.addAll(templist);
-                    if (listTitle == null) {
-                        initTitleView();
-                    }
-                    String st = stoneSearchInfoResult.getData().getStone().getSearchKey();
-                    if (!st.equals("")) {
-                        tvSearchTarget.setVisibility(View.VISIBLE);
-                        tvSearchTarget.setText(st);
-                    } else {
-                        tvSearchTarget.setVisibility(View.GONE);
-                    }
-
-                    stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this);
-                    lvStone.setAdapter(stoneSearchResultAdapter);
-                    lvStone.stopRefresh();
-                    lvStone.stopRefresh();
+                    init();
+                    setXListview(stoneSearchInfoResult);
 
                 } else if (error.equals("2")) {
-                    loginToServer(FinishTableLessActivity.class);
+
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     ToastManager.showToastWhendebug(message);
@@ -190,10 +196,31 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
 
             @Override
             public void onFail(String fail) {
-                baseHideWatLoading();
+//                baseHideWatLoading();
             }
 
         });
+    }
+
+    private void setXListview(StoneSearchInfoResult stoneSearchInfoResult) {
+        List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> templist = stoneSearchInfoResult.getData().getStone().getList();
+        listCount = Integer.parseInt(stoneSearchInfoResult.getData().getStone().getList_count());
+        list.addAll(templist);
+        if (listTitle == null) {
+            initTitleView();
+        }
+        String st = stoneSearchInfoResult.getData().getStone().getSearchKey();
+        if (!st.equals("")) {
+            tvSearchTarget.setVisibility(View.VISIBLE);
+            tvSearchTarget.setText(st);
+        } else {
+            tvSearchTarget.setVisibility(View.GONE);
+        }
+
+        stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this);
+        lvStone.setAdapter(stoneSearchResultAdapter);
+        lvStone.stopRefresh();
+        lvStone.stopLoadMore();
     }
 
     @Override
@@ -208,10 +235,38 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
             case R.id.tv_quoted_price_all:
                 quotedPrice(stoneSearchResultAdapter.getQuotedPriceId());
                 break;
+            case R.id.tv_item_weight:
+                setorderBy();
+                break;
         }
     }
 
+    private void setorderBy() {
+        list.clear();
+        page = 1;
+        ordertimes++;
+        Drawable drawable = null;
+        switch (ordertimes % 3) {
+            case 0:
+                orderby = "";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort);
+                break;
+            case 1:
+                orderby = "weight_asc";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort_d);
+                break;
+            case 2:
+                orderby = "weight_desc";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort_u);
+                break;
+        }
+        loadNetData();
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
+        tvItemWeight.setCompoundDrawables(null, null, drawable, null);
+    }
+
     private void changeOrientation(View v) {
+
         if (!isLandscape) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             isLandscape = true;
@@ -228,6 +283,7 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
         list.clear();
         pullStatus = PULL_REFRESH;
         loadNetData();
+        lvStone.stopRefresh();
 
     }
 
@@ -240,13 +296,38 @@ public class StoneSearchResultActivity extends BaseActivity implements View.OnCl
         } else {
             ToastManager.showToastReal("没有更多数据");
             lvStone.stopLoadMore();
+            lvStone.stopRefresh();
         }
     }
 
     @Override
     public void quotedPrice(String id) {
-        Intent intent  = new Intent(this,StoneQuotedPriceActivity.class);
-        intent.putExtra("stoneIds",id);
-        startActivity(intent);
+        if (id.equals("")) {
+            ToastManager.showToastReal("您未选择产品！");
+        } else {
+            Intent intent = new Intent(this, StoneQuotedPriceActivity.class);
+            intent.putExtra("stoneIds", id);
+            intent.putExtra("percent",stoneSearchInfo.getPercent());
+            startActivity(intent);
+        }
+
+    }
+
+    private LoadingWaitDialog loadingDialog;
+
+    protected void baseShowWatLoading() {
+        if (loadingDialog == null) {
+            loadingDialog = new LoadingWaitDialog(this, getString(R.string.pull_to_refresh_footer_refreshing_label));
+            loadingDialog.show();
+        }
+        //SystemClock.sleep(1000);
+    }
+
+    public void baseHideWatLoading() {
+        if (loadingDialog == null) return;
+        if (loadingDialog != null || loadingDialog.isShowing()) {
+            loadingDialog.cancel();
+            loadingDialog = null;
+        }
     }
 }

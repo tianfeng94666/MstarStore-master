@@ -63,8 +63,8 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     TextView idTvInvo;
     @Bind(R.id.id_tv_detail)
     TextView idTvDetail;
-    @Bind(R.id.id_tv_price)
-    TextView idTvPrice;
+    @Bind(R.id.tv_remark)
+    TextView tvRemark;
     @Bind(R.id.id_pd_lv)
     ListView idPdLv;
 
@@ -134,7 +134,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
         idOrderDate.setText("下单日期：" + isEmpty(orderInfoBean.getOrderDate()));
         idUpdateDate.setText("审核日期：" + isEmpty(orderInfoBean.getConfirmDate()));
         idTvInvo.setText("发票： " + "类型：" + isEmpty(orderInfoBean.getInvoiceType() + "") + " 抬头：" + isEmpty(orderInfoBean.getInvoiceTitle() + ""));
-        idTvPrice.setText("价格：" + isEmpty(orderInfoBean.getNeedPayPrice()));
+        tvRemark.setText("备注：" + isEmpty(orderInfoBean.getOrderNote()));
         idTvDetail.setText(isEmpty(orderInfoBean.getOtherInfo()));
         if (pullStauts != PULL_LOAD) {
             orderlList.clear();

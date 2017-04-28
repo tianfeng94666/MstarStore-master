@@ -134,7 +134,7 @@ public class HomeFragment extends BaseFragment {
                         startActivity(intent);
                         break;
                     case 1:
-                        intent = new Intent(getActivity(), CustomMadeActivity.class);
+                        intent = new Intent(getActivity(), StoneSearchInfoActivity.class);
                         startActivity(intent);
                         break;
                     case 2:

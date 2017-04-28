@@ -141,10 +141,11 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
                 if (error == 0) {
                     SearchResultResult searchResultResult = new Gson().fromJson(result, SearchResultResult.class);
 
-                    if (searchResultResult.getData() != null) {
-                        List<SearchResultResult.DataBean.OrderListBean> templist = searchResultResult.getData().getOrderList();
-                        list.addAll(templist);
+                    if (searchResultResult.getData() == null) {
+                      return;
                     }
+                    List<SearchResultResult.DataBean.OrderListBean> templist = searchResultResult.getData().getOrderList();
+                    list.addAll(templist);
                     if (list.size()!=0) {
                         listcount= searchResultResult.getData().getList_count();
                         searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, list);

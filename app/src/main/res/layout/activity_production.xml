@@ -75,12 +75,13 @@
 
             <TextView
                 android:textColor="@color/theme_back"
-                android:id="@+id/id_tv_price"
+                android:id="@+id/tv_remark"
+                android:layout_margin="@dimen/margin5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="价格："
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
         </LinearLayout>
 

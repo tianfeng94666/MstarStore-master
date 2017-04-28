@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,9 +48,10 @@ public class StoneQuotedPriceActivity extends BaseActivity {
     @Bind(R.id.id_rel_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.lv_quoted_price)
-    XListView lvQuotedPrice;
+    ListView lvQuotedPrice;
     String stoneIds;
     private List<QuotedPriceResult.DataBean.ListBean> list;
+    private String percent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class StoneQuotedPriceActivity extends BaseActivity {
     private void getDate() {
         Intent intent = getIntent();
         stoneIds = intent.getStringExtra("stoneIds");
+        percent = intent.getStringExtra("percent");
         loadNetData();
     }
 
@@ -83,7 +86,7 @@ public class StoneQuotedPriceActivity extends BaseActivity {
     public void loadNetData() {
         baseShowWatLoading();
         String url = "";
-        url = AppURL.URL_STONE_QUOTED_PRICE + "tokenKey=" + BaseApplication.getToken() + "&id="+stoneIds;
+        url = AppURL.URL_STONE_QUOTED_PRICE + "tokenKey=" + BaseApplication.getToken() + "&id="+stoneIds+"&percent= "+percent;
 
         if (StringUtils.isEmpty(url)) {
             return;

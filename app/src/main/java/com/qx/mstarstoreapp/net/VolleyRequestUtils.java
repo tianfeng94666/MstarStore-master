@@ -11,6 +11,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 
 import org.json.JSONObject;
@@ -87,7 +88,7 @@ public class VolleyRequestUtils {
 
 		});
 		jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				2,
 				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 		jsonObjectRequest.setTag(context);
 		BaseApplication.requestQueue.add(jsonObjectRequest);

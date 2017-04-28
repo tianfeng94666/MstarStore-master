@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -60,7 +59,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
     TextView idTvDetail;
     @Bind(R.id.id_tv_invo)
     TextView idTvInvo;
-    @Bind(R.id.id_tv_price)
+    @Bind(R.id.tv_remark)
     TextView idTvPrice;
 
     @Bind(R.id.id_update_date)
@@ -186,7 +185,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
         idOrderDate.setText("下单日期：" + orderInfo.getOrderDate());
         idUpdateDate.setText("审核日期：" + orderInfo.getConfirmDate());
         idTvInvo.setText("发票： " + "类型：" + orderInfo.getInvoiceType() + " 抬头：" + orderInfo.getInvoiceTitle());
-        idTvPrice.setText("价格：" + orderInfo.getNeedPayPrice());
+        idTvPrice.setText("备注：" + orderInfo.getOrderNote());
         idTvDetail.setText(orderInfo.getOtherInfo());
         if (pullStauts != PULL_LOAD) {
             orderlList.clear();

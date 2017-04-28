@@ -28,6 +28,15 @@ public class OrderInfoEntity {
     private String customerName;
     private String invoiceType;
     private String invoiceTitle;
+    private String orderNote;
+
+    public String getOrderNote() {
+        return orderNote;
+    }
+
+    public void setOrderNote(String orderNote) {
+        this.orderNote = orderNote;
+    }
 
     public String getInvoiceType() {
         return invoiceType;

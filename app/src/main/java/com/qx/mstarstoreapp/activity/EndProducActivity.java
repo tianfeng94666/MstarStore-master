@@ -44,7 +44,7 @@ public class EndProducActivity extends BaseActivity implements View.OnClickListe
     TextView shareBtn;
     @Bind(R.id.tv_price)
     TextView tvPrice;
-    @Bind(R.id.id_tv_price)
+    @Bind(R.id.tv_remark)
     TextView idTvPrice;
     @Bind(R.id.btn_commodity_minus)
     ImageView btnCommodityMinus;

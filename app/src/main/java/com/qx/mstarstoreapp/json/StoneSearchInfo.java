@@ -17,6 +17,15 @@ public class StoneSearchInfo implements Serializable{
     private String fluorescence;
     private String price;
     private String weight;
+    private String percent;
+
+    public String getPercent() {
+        return percent;
+    }
+
+    public void setPercent(String percent) {
+        this.percent = percent;
+    }
 
     public String getWeight() {
         return weight;

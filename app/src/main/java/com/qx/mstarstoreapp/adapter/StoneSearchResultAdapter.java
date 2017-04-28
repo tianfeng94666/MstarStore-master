@@ -68,6 +68,9 @@ public class StoneSearchResultAdapter extends BaseAdapter {
         viewHolder.tvItemSymmetric.setText(bean.getSymmetric());
         viewHolder.tvItemFluorescence.setText(bean.getFluorescence());
         viewHolder.tvItemCertauth.setText(bean.getCertAuth());
+        viewHolder.cbIscheckStone.setChecked(bean.ischeck());
+        viewHolder.tvItemPrice.setText(bean.getPrice());
+        viewHolder.tvItemCerauthNumber.setText(bean.getCertCode());
         viewHolder.cbIscheckStone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -123,9 +126,12 @@ public class StoneSearchResultAdapter extends BaseAdapter {
         TextView tvItemFluorescence;
         @Bind(R.id.tv_item_certauth)
         TextView tvItemCertauth;
+        @Bind(R.id.tv_item_price)
+        TextView tvItemPrice;
+        @Bind(R.id.tv_item_cerauth_number)
+        TextView tvItemCerauthNumber;
         @Bind(R.id.tv_item_quoted_price)
         TextView tvItemQuotedPrice;
-
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

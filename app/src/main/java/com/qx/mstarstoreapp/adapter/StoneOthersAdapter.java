@@ -98,8 +98,8 @@ public class StoneOthersAdapter extends BaseAdapter {
         tv.setText(string);
         tv.setTextColor(context.getResources().getColor(R.color.text_color));
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, UIUtils.dip2px(35), 1);
-        params.setMargins(5,5,5,5);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, UIUtils.dip2px(30), 1);
+        params.setMargins(10,10,10,10);
         tv.setLayoutParams(params);
         tv.setGravity(Gravity.CENTER);
         if (isCheck) {

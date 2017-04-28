@@ -23,7 +23,7 @@
             <!-- 相当于padding -->
             <item android:bottom="1dp">
                 <shape>
-                    <solid android:color="@color/white" />
+                    <solid android:color="@color/theme_bg" />
                 </shape>
             </item>
         </layer-list>
