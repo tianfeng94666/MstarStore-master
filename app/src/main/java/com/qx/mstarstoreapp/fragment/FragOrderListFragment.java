@@ -139,7 +139,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                     case CHECKING_CODE:
                         intent = new Intent(getActivity(), ConfirmOrderActivity.class);
                         bundle = new Bundle();
-                        bundle.putInt("type", fragType);
+                        bundle.putInt("type", 2);
                         bundle.putString("itemId", listData.get(i).getId());
                         intent.putExtras(bundle);
                         startActivityForResult(intent, 11);

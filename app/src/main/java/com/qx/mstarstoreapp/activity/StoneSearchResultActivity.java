@@ -81,6 +81,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     TextView tvItemPrice;
     @Bind(R.id.tv_item_cerauth_number)
     TextView tvItemCerauthNumber;
+    @Bind(R.id.tv_reset)
+    TextView tvReset;
 
 
     private boolean isLandscape;
@@ -111,6 +113,29 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
 
     }
 
+    private void getDate() {
+        Intent intent = getIntent();
+        Bundle stoneBundle = null;
+        Bundle bundle = intent.getBundleExtra("stoneInfo");
+        stoneSearchInfo = (StoneSearchInfo) bundle.getSerializable("searchStoneInfo");
+        stoneSearchInfoResult = (StoneSearchInfoResult) getLastNonConfigurationInstance();
+        if (stoneSearchInfoResult != null) {
+            setXListview(stoneSearchInfoResult);
+        } else {
+            loadNetData();
+        }
+    }
+
+    private void changeOrientation() {
+
+        if (!isLandscape) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            isLandscape = true;
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            isLandscape = false;
+        }
+    }
 
     @Override
     public Object onRetainNonConfigurationInstance() {
@@ -126,25 +151,17 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         tvQutedPriceAll.setOnClickListener(this);
         titleText.setText("搜索结果");
         tvItemWeight.setOnClickListener(this);
+        tvReset.setOnClickListener(this);
     }
 
-    private void getDate() {
-        Intent intent = getIntent();
-        Bundle stoneBundle = null;
-        Bundle bundle = intent.getBundleExtra("stoneInfo");
-        stoneSearchInfo = (StoneSearchInfo) bundle.getSerializable("searchStoneInfo");
-        stoneSearchInfoResult = (StoneSearchInfoResult) getLastNonConfigurationInstance();
-        if (stoneSearchInfoResult != null) {
-            setXListview(stoneSearchInfoResult);
-        } else {
-            loadNetData();
-        }
-    }
 
     private void initTitleView() {
         StoneSearchInfoResult.DataBean dataBean = stoneSearchInfoResult.getData();
         tvRight.setOnClickListener(this);
         listTitle = dataBean.getStone().getHeadline();
+        if (listTitle == null) {
+            return;
+        }
         tvIscheckStone.setText(listTitle.get(0));
         tvItemWeight.setText(listTitle.get(1));
         tvItemPrice.setText(listTitle.get(2));
@@ -164,7 +181,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         String url = "";
         url = AppURL.URL_STONE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + page + "&certAuth=" + stoneSearchInfo.getCerAuth() + "&color=" + stoneSearchInfo.getColor() + "&shape=" + stoneSearchInfo.getShape()
                 + "&purity=" + stoneSearchInfo.getPurity() + "&cut=" + stoneSearchInfo.getCut() + "&polishing=" + stoneSearchInfo.getPolishing() + "&symmetric=" + stoneSearchInfo.getSymmetric() + "&fluorescence=" + stoneSearchInfo.getFluorescence()
-                + "&price=" + stoneSearchInfo.getPrice() + "&weight=" + stoneSearchInfo.getWeight() + "&orderby=" + orderby + "&percent="+stoneSearchInfo.getPercent();
+                + "&price=" + stoneSearchInfo.getPrice() + "&weight=" + stoneSearchInfo.getWeight() + "&orderby=" + orderby + "&percent=" + stoneSearchInfo.getPercent();
         if (StringUtils.isEmpty(url)) {
             return;
         }
@@ -227,7 +244,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_right:
-                changeOrientation(v);
+                changeOrientation();
                 break;
             case R.id.id_ig_back:
                 finish();
@@ -237,6 +254,11 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 break;
             case R.id.tv_item_weight:
                 setorderBy();
+                break;
+            case R.id.tv_reset:
+                stoneSearchInfoResult = null;
+                list.clear();
+                loadNetData();
                 break;
         }
     }
@@ -263,17 +285,6 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         loadNetData();
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
         tvItemWeight.setCompoundDrawables(null, null, drawable, null);
-    }
-
-    private void changeOrientation(View v) {
-
-        if (!isLandscape) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            isLandscape = true;
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            isLandscape = false;
-        }
     }
 
 
@@ -307,7 +318,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         } else {
             Intent intent = new Intent(this, StoneQuotedPriceActivity.class);
             intent.putExtra("stoneIds", id);
-            intent.putExtra("percent",stoneSearchInfo.getPercent());
+            intent.putExtra("percent", stoneSearchInfo.getPercent());
             startActivity(intent);
         }
 

@@ -1,8 +1,10 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +94,8 @@ public class SettingActivity extends BaseActivity {
     RelativeLayout update_icon;
     @Bind(R.id.iv_is_show_price)
     ToggleButton ivIsShowPrice;
+    @Bind(R.id.rl_clear_memery)
+    RelativeLayout rlClearMemery;
 
     private LayoutInflater inflater;
     private String[] titles;
@@ -108,7 +114,7 @@ public class SettingActivity extends BaseActivity {
         context = this;
         ButterKnife.bind(this);
         loadNetData();
-initViews();
+        initViews();
 
     }
 
@@ -117,18 +123,27 @@ initViews();
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int i;
-                if(isChecked){
-                    i=1;
-                }else {
-                    i=0;
+                if (isChecked) {
+                    i = 1;
+                } else {
+                    i = 0;
                 }
                 commitIsShowPrice(i);
+            }
+        });
+
+        rlClearMemery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageLoader.getInstance().clearDiscCache();
+                ImageLoader.getInstance().clearMemoryCache();
+                ToastManager.showToastReal("已经清空！");
             }
         });
     }
 
     private void commitIsShowPrice(int i) {
-        String url = AppURL.URL_IS_SHOW_PRICE + "tokenKey=" + BaseApplication.getToken()+"&value="+i;
+        String url = AppURL.URL_IS_SHOW_PRICE + "tokenKey=" + BaseApplication.getToken() + "&value=" + i;
         L.e("获取个人信息" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -229,14 +244,14 @@ initViews();
     private void initContent(String userName, String pic, String phone, String adress) {
         titleText.setText("个人中心");
         mTvUsername.setText("用户名：" + userName);
-        if(Build.VERSION.SDK_INT<=19){
+        if (Build.VERSION.SDK_INT <= 19) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.setMargins(0,0,0,0);
+            params.setMargins(0, 0, 0, 0);
             ivIsShowPrice.setLayoutParams(params);
         }
-        if(isShowPrice==1){
+        if (isShowPrice == 1) {
             ivIsShowPrice.setChecked(true);
-        }else {
+        } else {
             ivIsShowPrice.setChecked(false);
         }
 
@@ -278,6 +293,7 @@ initViews();
         update_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setCameraPermission( );
                 ImageInitiDialog imageInitiDialog = new ImageInitiDialog(SettingActivity.this);
                 imageInitiDialog.showDialog(idLayRoot);
                 imageInitiDialog.setOnImageSelectListener(new ImageInitiDialog.OnImageSelectListener() {
@@ -522,5 +538,20 @@ initViews();
 
     public void onBack(View view) {
         finish();
+    }
+    private static String[] PERMISSIONS_CAMERA_AND_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA};
+    public  void setCameraPermission( ){
+        if (Build.VERSION.SDK_INT >= 23) {
+            int storagePermission = this.checkSelfPermission(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+            if (storagePermission != PackageManager.PERMISSION_GRANTED || cameraPermission!= PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(this,PERMISSIONS_CAMERA_AND_STORAGE,
+                        0x007);
+            }
+        }
     }
 }

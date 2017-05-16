@@ -80,7 +80,6 @@ public class StoneSearchResultAdapter extends BaseAdapter {
         viewHolder.tvItemQuotedPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastManager.showToastReal("diaji"+position);
                 chooseItem.quotedPrice(bean.getId());
             }
         });

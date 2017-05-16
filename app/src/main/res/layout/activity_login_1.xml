@@ -12,10 +12,16 @@
         style="@style/layout_vertical"
         android:layout_weight="1.3"
         android:orientation="vertical"
-        android:gravity="center"
         android:background="@drawable/icon_login_bg"
         >
-
+<TextView
+    android:layout_gravity="top|"
+    android:textColor="@color/white"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="4dp"
+    android:text="@string/app_version_detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
     </LinearLayout>
 
 

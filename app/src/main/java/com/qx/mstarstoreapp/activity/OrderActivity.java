@@ -661,7 +661,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             // holder.ig.setImageResource(R.drawable.no_image);
             holder.tv.setText(data.get(position).getTitle());
             holder.tvPrice.setText(data.get(position).getPrice());
-            if (!data.get(position).getPic().equals(holder.ig.getTag())) {
+            if (data.get(position).getPic()==null||!data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
                 ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
                 holder.ig.setTag(data.get(position).getPic());

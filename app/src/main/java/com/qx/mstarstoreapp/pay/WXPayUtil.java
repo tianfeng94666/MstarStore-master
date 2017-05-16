@@ -2,10 +2,12 @@ package com.qx.mstarstoreapp.pay;
 
 import android.app.Activity;
 import android.widget.Toast;
-import com.tencent.mm.sdk.constants.Build;
-import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+import com.tencent.mm.opensdk.constants.Build;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
 
 public class WXPayUtil {
 	private IWXAPI api;
@@ -24,7 +26,7 @@ public class WXPayUtil {
 			api.registerApp(WXPayInfo.APP_ID);
 			System.out.println(result);
 			sendPayReq(result);
-			Toast.makeText(activity, "微信已启动", 0).show();
+			Toast.makeText(activity, "微信已启动",Toast.LENGTH_SHORT).show();
 		}else{
 			Toast.makeText(activity, "您的微信版本暂不支持支付！", Toast.LENGTH_SHORT).show();
 		}

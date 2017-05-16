@@ -157,7 +157,36 @@
 
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_clear_memery"
+        android:layout_width="wrap_content"
+        android:layout_height="50dip"
+        android:layout_marginTop="1dip"
+        android:padding="5dip"
+        android:background="@color/white"
+        >
 
+        <TextView
+            android:id="@+id/tv_is_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:padding="10dip"
+            android:text="是否清空图片缓存"
+            />
+
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:src="@drawable/icon_right"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="5dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"

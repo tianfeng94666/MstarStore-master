@@ -2,7 +2,6 @@ package com.qx.mstarstoreapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,8 @@ import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.inter.AdapterCallBack;
 import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.AddressEntity;
+import com.qx.mstarstoreapp.json.ComitOrderResult;
+import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
@@ -65,7 +66,7 @@ import butterknife.ButterKnife;
  */
 public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshView.OnFooterRefreshListener,
         PullToRefreshView.OnHeaderRefreshListener, CanScrollVerticallyDelegate,
-        OnFlingOverListener, AdapterCallBack,ConfirmOrderOnUpdate{
+        OnFlingOverListener, AdapterCallBack, ConfirmOrderOnUpdate {
 
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
@@ -140,8 +141,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     RelativeLayout rootView;
     @Bind(R.id.iv_delete)
     ImageView ivDelete;
+    @Bind(R.id.tv_pay)
+    Button tvPay;
 
     protected ListView lv_list;
+
     private int tempCurpage = 1;
     private int pullState = 1;
     private int curpage = 1;
@@ -152,7 +156,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     private int list_count = -1;
     private static final int PULL_REFRESH = 1;
     private static final int PULL_LOAD = 2;
-    int  waitOrderCount;
+    int waitOrderCount;
+    private ConfirmOrderResult confirmOrderResult;
 
 
     @Override
@@ -177,18 +182,18 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         }
         type = bundle.getInt("type");
         orderId = bundle.getString("itemId");
-        waitOrderCount=getIntent().getIntExtra("waitOrderCount",0);
+        waitOrderCount = getIntent().getIntExtra("waitOrderCount", 0);
         return type;
     }
 
     @Override
-    public  void loadNetData() {
+    public void loadNetData() {
         String url;
         if (type == 2) {
             url = AppURL.URL_ORDER_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&orderId=" + orderId;
         } else {
             url = AppURL.URL_ORDER_LIST + "tokenKey=" + BaseApplication.getToken() + "&purityId=" + purityId +
-                    "&qualityId=" + qualityId+ "&cpage=" + curpage;
+                    "&qualityId=" + qualityId + "&cpage=" + curpage;
         }
         L.e("获取订单信息" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -200,7 +205,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 if (error == 0) {
                     OrderListResult orderListResult = new Gson().fromJson(result, OrderListResult.class);
                     OrderListResult.DataEntity dataEntity = orderListResult.getData();
-                    if(dataEntity!=null){
+                    if (dataEntity != null) {
                         OrderListResult.DataEntity.CurrentOrderlListEntity currentOrderlList = dataEntity.getCurrentOrderlList();
                         List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> list = currentOrderlList.getList();
                         isDefaultAddress = dataEntity.getAddress();
@@ -225,7 +230,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         }
                         if (isFirst) {
                             if (type == 2) {
-                                OrderListResult.DataEntity.OrderInfoEntity orderInfo  = dataEntity.getOrderInfo();
+                                OrderListResult.DataEntity.OrderInfoEntity orderInfo = dataEntity.getOrderInfo();
                                 Double totalPrice = dataEntity.getTotalPrice();
                                 Double totalNeedPayPrice = dataEntity.getTotalNeedPayPrice();
                                 L.e("orderInfo" + orderInfo.toString() + "totalPrice:" + totalPrice + "totalNeedPayPrice:" + totalNeedPayPrice);
@@ -238,11 +243,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 idTvNeedPrice.setText("定金 :" + totalNeedPayPrice);
                                 idTvTotalPrice.setText("合计 :" + totalPrice);
                                 setListHeadView(orderInfo);
-                                invTitle =  orderInfo.getInvoiceTitle();
-                                invType =  orderInfo.getInvoiceType();
-                                if (!StringUtils.isEmpty(orderInfo.getInvoiceTitle())&&!StringUtils.isEmpty(invType)){
-                                    idReceipt.setText("类型："+invType+"     抬头："+invTitle);
-                                    L.e("类型："+invTitle+"     抬头："+invTitle);
+                                invTitle = orderInfo.getInvoiceTitle();
+                                invType = orderInfo.getInvoiceType();
+                                if (!StringUtils.isEmpty(orderInfo.getInvoiceTitle()) && !StringUtils.isEmpty(invType)) {
+                                    idReceipt.setText("类型：" + invType + "     抬头：" + invTitle);
+                                    L.e("类型：" + invTitle + "     抬头：" + invTitle);
                                 }
 
                             } else {
@@ -262,16 +267,16 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 }
                             }
                         }
-                        if (type==2){
-                            btGoPay.setVisibility(View.INVISIBLE);
+                        if (type == 2) {
+                            btGoPay.setVisibility(View.GONE);
                             idLayOrderDetail.setVisibility(View.VISIBLE);
-                            idLayPrice1.setVisibility(View.INVISIBLE);
+                            idLayPrice1.setVisibility(View.GONE);
                             idLayPrice2.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             btGoPay.setVisibility(View.VISIBLE);
-                            idLayOrderDetail.setVisibility(View.INVISIBLE);
+                            idLayOrderDetail.setVisibility(View.GONE);
                             idLayPrice1.setVisibility(View.VISIBLE);
-                            idLayPrice2.setVisibility(View.INVISIBLE);
+                            idLayPrice2.setVisibility(View.GONE);
                         }
                         L.e("解析成功");
                         endNetRequest();
@@ -301,17 +306,16 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     }
 
 
-
-    public void setListHeadView(OrderListResult.DataEntity.OrderInfoEntity orderInfo){
-        listHeadView=LayoutInflater.from(this).inflate(R.layout.order_header_view,null);
+    public void setListHeadView(OrderListResult.DataEntity.OrderInfoEntity orderInfo) {
+        listHeadView = LayoutInflater.from(this).inflate(R.layout.order_header_view, null);
         TextView orderNum = (TextView) listHeadView.findViewById(R.id.id_order_num);
         TextView orderDate = (TextView) listHeadView.findViewById(R.id.id_order_date);
         TextView orderStatus = (TextView) listHeadView.findViewById(R.id.id_order_status);
         TextView goodprice = (TextView) listHeadView.findViewById(R.id.id_order_goodprice);
-        orderNum.setText("订单编号："+orderInfo.getOrderNum());
-        orderDate.setText("下单日期："+orderInfo.getOrderDate());
-        orderStatus.setText("状态："+orderInfo.getOrderStatus());
-        goodprice.setText("金价："+orderInfo.getGoldPrice());
+        orderNum.setText("订单编号：" + orderInfo.getOrderNum());
+        orderDate.setText("下单日期：" + orderInfo.getOrderDate());
+        orderStatus.setText("状态：" + orderInfo.getOrderStatus());
+        goodprice.setText("金价：" + orderInfo.getGoldPrice());
         lv_list.addHeaderView(listHeadView);
     }
 
@@ -325,7 +329,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     for (int i = 0; i < modelColorItme.size(); i++) {
                         Type type = new Type();
                         type.setId(modelColorItme.get(i).getId());
-                        type.setTypeName(modelColorItme.get(i).getTitle()+"  "+modelColorItme.get(i).getPrice()+"/g");
+                        type.setTypeName(modelColorItme.get(i).getTitle() + "  " + modelColorItme.get(i).getPrice() + "/g");
                         list.add(type);
                     }
                     return list;
@@ -345,7 +349,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 @Override
                 public View getRootView() {
-                    return View.inflate(context,R.layout.activity_confirmorder,null);
+                    return View.inflate(context, R.layout.activity_confirmorder, null);
                 }
             });
 
@@ -353,11 +357,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ConfirmOrderActivity.this, ReceiptActivity.class);
-                if (!StringUtils.isEmpty(invTitle)){
-                    intent.putExtra("invTitle",invTitle);
+                if (!StringUtils.isEmpty(invTitle)) {
+                    intent.putExtra("invTitle", invTitle);
                 }
-                intent.putExtra("type",type);
-                intent.putExtra("invTitle",invType);
+                intent.putExtra("type", type);
+                intent.putExtra("invTitle", invType);
                 startActivityForResult(intent, 13);
             }
         });
@@ -375,10 +379,12 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
                     return list;
                 }
+
                 @Override
                 public View getRootView() {
-                    return View.inflate(context,R.layout.activity_confirmorder,null);
+                    return View.inflate(context, R.layout.activity_confirmorder, null);
                 }
+
                 @Override
                 public void getSelectId(Type type) {
                     idCsMass.setText(type.getTypeName());
@@ -423,7 +429,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             @Override
             public void onClick(View view) {
                 boolean isFast = UIUtils.isFastDoubleClick();
-                if(!isFast){
+                if (!isFast) {
                     seachCustom("");
                 }
             }
@@ -452,10 +458,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             @Override
             public void onClick(View view) {
                 //openActivity(ShopingAddressActivity.class,null);
-               // Intent intent = new Intent(ConfirmOrderActivity.this, ShopingAddressActivity.class);
-               // startActivityForResult(intent, 12);
+                // Intent intent = new Intent(ConfirmOrderActivity.this, ShopingAddressActivity.class);
+                // startActivityForResult(intent, 12);
                 Intent intent = new Intent(ConfirmOrderActivity.this, AddressListActivity.class);
-                intent.putExtra("type",2);
+                intent.putExtra("type", 2);
                 startActivityForResult(intent, 12);
             }
         });
@@ -465,6 +471,17 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             @Override
             public void onClick(View view) {
                 cancalOrder();
+            }
+        });
+        tvPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(ConfirmOrderActivity.this, ModeOfPaymentActivity.class);
+                if(!orderId.equals("")){
+                    intent.putExtra("id",orderId);
+                }
+                startActivity(intent);
             }
         });
 
@@ -481,12 +498,12 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             public void onSuccess(String result) {
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
-                if (error==0) {
+                if (error == 0) {
                     ToastManager.showToastReal("提交成功");
                     setResult(11);
                     finish();
                 }
-                if (error==2) {
+                if (error == 2) {
                     loginToServer(OrderActivity.class);
                 }
             }
@@ -501,6 +518,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     /*价格查询  等级和 成色的变化都会影响价格*/
     List<PriceResult.DataEntity.PriceListEntity> priceList;
+
     public void queryPricefoServer(String qualityId, String purityId) {
         String url;
         if (type == 2) {
@@ -562,10 +580,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
 
     public void onBack(View view) {
-        L.e("删除后"+waitOrderCount);
-        Intent intent=new Intent();
-        intent.putExtra("waitOrderCount",waitOrderCount);
-        setResult(12,intent);
+        L.e("删除后" + waitOrderCount);
+        Intent intent = new Intent();
+        intent.putExtra("waitOrderCount", waitOrderCount);
+        setResult(12, intent);
         finish();
     }
 
@@ -573,9 +591,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
-            Intent intent=new Intent();
-            intent.putExtra("waitOrderCount",waitOrderCount);
-            setResult(12,intent);
+            Intent intent = new Intent();
+            intent.putExtra("waitOrderCount", waitOrderCount);
+            setResult(12, intent);
             finish();
             return true;
         }
@@ -583,6 +601,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     }
 
     View listHeadView;
+
     protected void initView() {
         lnyLoadingLayout.setVisibility(View.VISIBLE);
         listData = new ArrayList<>();
@@ -627,7 +646,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     List<String> mcheckId;
 
 
-    String invTitle,invType;
+    String invTitle, invType;
+
     /*
      * @version  提交订单
      */
@@ -635,11 +655,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         String url = AppURL.URL_ORDER_SUBMIT + "&tokenKey=" + BaseApplication.getToken();
         String word = idEdWord.getText().toString();
         String remarks = idEdRemarks.getText().toString();
-        if (isDefaultAddress==null){
+        if (isDefaultAddress == null) {
             ToastManager.showToastReal(getString(R.string.please_write_address));
             return;
         }
-        if (isDefaultCustomer==null){
+        if (isDefaultCustomer == null) {
             ToastManager.showToastReal(getString(R.string.please_write_customer));
             return;
         }
@@ -653,7 +673,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             itemurl = StringUtils.purUrlCut("itemId", mcheckId).toString();
         }
         L.e("word" + word + "   addressId" + addressId + "");
-        if (customerID.equals("-1")){
+        if (customerID.equals("-1")) {
             ToastManager.showToastReal("请填写客户资料");
             return;
         }
@@ -661,36 +681,42 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             ToastManager.showToastReal("请填写完整资料");
             return;
         }
-        url += itemurl + "&word=" + word + "&purityId=" + purityId + "&addressId=" + addressId + "&qualityId=" + qualityId + "&customerID=" + customerID+
-                "&invTitle="+invTitle+"&invType="+invType+"&orderNote="+remarks;
+        url += itemurl + "&word=" + word + "&purityId=" + purityId + "&addressId=" + addressId + "&qualityId=" + qualityId + "&customerID=" + customerID +
+                "&invTitle=" + invTitle + "&invType=" + invType + "&orderNote=" + remarks;
         L.e("submitOrder" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-                L.e("确定订单"+result);
+                L.e("确定订单" + result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     ToastManager.showToastReal("提交成功");
-                    onUpdate();
+//                    onUpdate();
                     JsonObject jsonObject = new Gson().fromJson(result, JsonObject.class).get("data").getAsJsonObject();
-                    String id=jsonObject.get("id").getAsString();
-                    waitOrderCount=Integer.valueOf(jsonObject.get("waitOrderCount").getAsString());
-                    //是否需要付款  0不需要   1需要
-                    int  isNeedPay=jsonObject.get("isNeetPay").getAsInt();
-                    //是都已经上传到ERP订单  //1 跳转到生产详情页    0跳转到审核页面
-                    int  isErpOrder=jsonObject.get("isErpOrder").getAsInt();
-                    //intent = new Intent(getActivity(), CustomMadeActivity.class);
-                   // startActivity(intent);
-
-                    Intent intent;
-                    if (isNeedPay==1){
-                        //支付
-                        intent  = new Intent(ConfirmOrderActivity.this, ModeOfPaymentActivity.class);
-                        startActivity(intent);
+                    confirmOrderResult = new Gson().fromJson(result,ConfirmOrderResult.class);
+                    if(confirmOrderResult.getData()==null){
                         return;
                     }
+                    String id = jsonObject.get("id").getAsString();
+                    waitOrderCount = Integer.valueOf(jsonObject.get("waitOrderCount").getAsString());
+                    //是否需要付款  0不需要   1需要
+                    int isNeedPay = jsonObject.get("isNeetPay").getAsInt();
+                    //是都已经上传到ERP订单  //1 跳转到生产详情页    0跳转到审核页面
+                    int isErpOrder = jsonObject.get("isErpOrder").getAsInt();
+                    //intent = new Intent(getActivity(), CustomMadeActivity.class);
+                    // startActivity(intent);
 
-                    if (isErpOrder==1){
+                    Intent intent;
+//                    if (isNeedPay == 0) {
+//                        //支付
+//                        btGoPay.setVisibility(View.GONE);
+//                        idLayOrderDetail.setVisibility(View.VISIBLE);
+//                    }else {
+//                        idLayOrderDetail.setVisibility(View.GONE);
+//                        btGoPay.setVisibility(View.VISIBLE);
+//                    }
+
+                    if (isErpOrder == 1) {
                         //生产中详情说
 //                        intent = new Intent(ConfirmOrderActivity.this, CustomMadeActivity.class);
 //                        Bundle bundle = new Bundle();
@@ -698,23 +724,23 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 //                        bundle.putString("orderNum", id);
 //                        intent.putExtras(bundle);
 //                        startActivity(intent);
-                       // "orderNum":"AP2017021316476
-                        String  orderNum=jsonObject.get("orderNum").getAsString();
-                        ProgressDialog progressDialog=new ProgressDialog(ConfirmOrderActivity.this,orderNum,1);
+                        // "orderNum":"AP2017021316476
+                        String orderNum = jsonObject.get("orderNum").getAsString();
+                        ProgressDialog progressDialog = new ProgressDialog(ConfirmOrderActivity.this, orderNum, 1);
                         progressDialog.showAsDropDown(rootView);
-                       // intent.putExtra("pageNumber",1);
-                    }else {
-                       // intent.putExtra("pageNumber",0);  //待审核
+                        // intent.putExtra("pageNumber",1);
+                    }
+                    else {
+                        // intent.putExtra("pageNumber",0);  //待审核
                         Bundle bundle = new Bundle();
                         bundle.putInt("type", 2);
                         bundle.putString("itemId", id);
-                        openActivity(ConfirmOrderActivity.class,bundle);
+                        openActivity(ConfirmOrderActivity.class, bundle);
                     }
 
-                }
-                else if (error == 2) {
+                } else if (error == 2) {
                     loginToServer(OrderActivity.class);
-                }else {
+                } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
             }
@@ -734,7 +760,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         String url = AppURL.URL_HAVE_CUSTOMER + "tokenKey=" + BaseApplication.getToken() + "&keyword=" + keyWord;
         //keyword=广西|平果&tokenKey=944df2f27ffce557042887589986c193
         L.e("seachCustom" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
                 L.e(result);
@@ -756,10 +782,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         intent.putExtra("keyWord", keyWord);
                         startActivityForResult(intent, 11);
                     }
-                }
-                else if (error == 2) {
+                } else if (error == 2) {
                     loginToServer(OrderActivity.class);
-                }else {
+                } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
             }
@@ -889,26 +914,26 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         if (requestCode == 13) {
             invTitle = data.getStringExtra("invTitle");
             invType = data.getStringExtra("invTypeId");
-            int type = data.getIntExtra("type",1);
+            int type = data.getIntExtra("type", 1);
             String invTypeTitle = data.getStringExtra("invTypeTitle");
-            if (!StringUtils.isEmpty(invTitle)&&!StringUtils.isEmpty(invTypeTitle)){
-                idReceipt.setText("类型："+invTypeTitle+"     抬头："+invTitle);
-            }else {
-                invTitle="";
-                invType="";
+            if (!StringUtils.isEmpty(invTitle) && !StringUtils.isEmpty(invTypeTitle)) {
+                idReceipt.setText("类型：" + invTypeTitle + "     抬头：" + invTitle);
+            } else {
+                invTitle = "";
+                invType = "";
                 idReceipt.setText("暂不开票");
             }
-            if (type==2){
+            if (type == 2) {
                 updateInv();
             }
         }
     }
 
-    public void updateInv(){
+    public void updateInv() {
         String url = AppURL.URL_WATI_ORDER_MODIINFO + "tokenKey=" + BaseApplication.getToken() + "&invTitle=" + invTitle +
                 "&invType=" + invType +
-                "&orderId=" + orderId ;
-        L.e("updateInv"+url);
+                "&orderId=" + orderId;
+        L.e("updateInv" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
@@ -1004,9 +1029,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     public class ConfirOrderAdapter extends BaseAdapter {
         private Map<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> checkedState;
+
         public ConfirOrderAdapter() {
             checkedState = new HashMap<>();
-           // L.e("ConfirOrderAdapter");
+            // L.e("ConfirOrderAdapter");
         }
 
 
@@ -1176,20 +1202,21 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 url = AppURL.URL_ORDER_DELETE + "&tokenKey=" + BaseApplication.getToken() + "&itemId=" + id;
             }
             L.e("删除订单" + url);
-            VolleyRequestUtils.getInstance().getCookieRequest(ConfirmOrderActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack(){
+            VolleyRequestUtils.getInstance().getCookieRequest(ConfirmOrderActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
                 @Override
                 public void onSuccess(String result) {
                     L.e(result);
                     int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                     if (error == 0) {
                         ToastManager.showToastReal("删除成功");
-                        String strwaitOrderCount =  new Gson().fromJson(result,JsonObject.class).get("data").getAsJsonObject().get("waitOrderCount").getAsString();
-                        waitOrderCount =Integer.valueOf(strwaitOrderCount);
+                        String strwaitOrderCount = new Gson().fromJson(result, JsonObject.class).get("data").getAsJsonObject().get("waitOrderCount").getAsString();
+                        waitOrderCount = Integer.valueOf(strwaitOrderCount);
                         loadNetData();
                     }
                     if (error == 2) {
                         loginToServer(OrderActivity.class);
-                    }if (error==1){
+                    }
+                    if (error == 1) {
                         String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                         L.e(message);
                         ToastManager.showToastReal(message);

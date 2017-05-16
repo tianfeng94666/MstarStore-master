@@ -433,16 +433,16 @@
             android:enabled="false"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="gone">
 
 
             <Button
+                android:id="@+id/tv_pay"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/margin5"
                 android:background="@drawable/btn_nor_down"
-                android:enabled="false"
                 android:gravity="center"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"

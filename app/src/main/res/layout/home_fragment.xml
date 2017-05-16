@@ -18,7 +18,14 @@
         android:layout_weight="0.38"
         android:background="@drawable/img_home_title"
         >
-
+        <TextView
+            android:layout_gravity="top|"
+            android:textColor="@color/white"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/app_version_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/id_ig_setting"
             android:padding="10dip"
