@@ -140,7 +140,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     private View rootView;
     private ModelDetailResult.DataEntity dataEntity;
 
-    public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
+    public static void  setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         StyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
     }
 

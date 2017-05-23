@@ -58,22 +58,24 @@ public class ReceiptActivity extends BaseActivity {
     int invTypeId;
     String invTypeTitle;
 
-    final int SET_INVOICE=1;
-    final int UPDATE_INVOICE=2;
+    final int SET_INVOICE = 1;
+    final int UPDATE_INVOICE = 2;
     int INVOICE_TYPE;
+    private String type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt);
         ButterKnife.bind(this);
-        INVOICE_TYPE=getIntent().getIntExtra("type",1);
-        invTypeTitle=getIntent().getStringExtra("invTitle");
-        L.e(INVOICE_TYPE+"");
-        if (StringUtils.isEmpty(invTypeTitle)){
-            edInvTitle.setText(invTypeTitle);
-        }
+        getDate();
+        initView();
+        loadNetData();
+    }
+
+    private void initView() {
         titleText.setText("开发票");
-        mData=new ArrayList<>();
+        mData = new ArrayList<>();
         mListView = (ListView) findViewById(R.id.id_listview);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);//开启单选模式
         mAdapter = new ListViewAdapter(mData, R.layout.adapter_receipt_item);
@@ -81,18 +83,18 @@ public class ReceiptActivity extends BaseActivity {
         tvConfir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String edInvTitleStr=edInvTitle.getText().toString();
-                if (StringUtils.isEmpty(edInvTitleStr)){
+                String edInvTitleStr = edInvTitle.getText().toString();
+                if (StringUtils.isEmpty(edInvTitleStr)) {
                     ToastManager.showToastReal("请填写抬头发票");
                     return;
                 }
-                if (StringUtils.isEmpty(invTypeTitle)){
+                if (StringUtils.isEmpty(invTypeTitle)) {
                     ToastManager.showToastReal("请填写抬头发票内容");
                     return;
                 }
                 Intent intent = new Intent();
-                intent.putExtra("invTitle",edInvTitleStr );
-                intent.putExtra("invTypeId", invTypeId+"");
+                intent.putExtra("invTitle", edInvTitleStr);
+                intent.putExtra("invTypeId", invTypeId + "");
                 intent.putExtra("invTypeTitle", invTypeTitle);
                 intent.putExtra("type", INVOICE_TYPE);
                 setResult(13, intent);
@@ -104,24 +106,38 @@ public class ReceiptActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("invTitle","");
+                intent.putExtra("invTitle", "");
                 intent.putExtra("invTypeId", "");
                 intent.putExtra("invTypeTitle", "");
                 setResult(13, intent);
                 finish();
             }
         });
-        loadNetData();
+    }
+
+    private void getDate() {
+        INVOICE_TYPE = getIntent().getIntExtra("type", 1);
+       type = getIntent().getStringExtra("isStone");
+        if(type==null){
+            type = "1";
+        }
+        invTypeTitle = getIntent().getStringExtra("invTitle");
+        L.e(INVOICE_TYPE + "");
+        if (StringUtils.isEmpty(invTypeTitle)) {
+            edInvTitle.setText(invTypeTitle);
+        }
     }
 
     @Override
-    public void loadNetData(){
-        String   url = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
-//        if (INVOICE_TYPE==UPDATE_INVOICE){
-//            path = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
-//        }if (INVOICE_TYPE==SET_INVOICE){
-//            path = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
-//        }
+    public void loadNetData() {
+        String url;
+        if (type.equals("2")) {
+            url = AppURL.URL_STONE_INVOICE + "tokenKey=" + BaseApplication.getToken();
+        } else {
+            url = AppURL.URL_MODELINVOICE_PAGE + "tokenKey=" + BaseApplication.getToken();
+        }
+
+
         L.e(url);
         // 进行登录请求
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -132,7 +148,7 @@ public class ReceiptActivity extends BaseActivity {
                 if (error == 0) {
                     InvocieResult invocieResult = new Gson().fromJson(result, InvocieResult.class);
                     InvocieResult.DataEntity data = invocieResult.getData();
-                    if(data==null){
+                    if (data == null) {
                         return;
                     }
                     mData = data.getInvoiceType();
@@ -149,6 +165,7 @@ public class ReceiptActivity extends BaseActivity {
                     L.e("未审核");
                 }
             }
+
             @Override
             public void onFail(String fail) {
 
@@ -157,21 +174,21 @@ public class ReceiptActivity extends BaseActivity {
     }
 
 
-
     public void onBack(View view) {
         finish();
     }
 
-        public class ListViewAdapter extends CommonAdapter<InvocieResult.DataEntity.InvoiceTypeEntity> {
+    public class ListViewAdapter extends CommonAdapter<InvocieResult.DataEntity.InvoiceTypeEntity> {
         private int temp = -1;
+
         public ListViewAdapter(List<InvocieResult.DataEntity.InvoiceTypeEntity> invoiceType, int itemLayoutId) {
             super(invoiceType, itemLayoutId);
-            L.e("ListViewAdapter"+temp);
+            L.e("ListViewAdapter" + temp);
         }
 
         @Override
         public void convert(final int position, BaseViewHolder helper, InvocieResult.DataEntity.InvoiceTypeEntity item) {
-            L.e("convert"+temp);
+            L.e("convert" + temp);
             final RadioButton radioButton = helper.getView(R.id.backup_record_item_btn);
             radioButton.setText(item.getTitle());
             radioButton.setId(position);
@@ -179,8 +196,8 @@ public class ReceiptActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     temp = radioButton.getId();
-                    invTypeId=getItem(position).getId();
-                    invTypeTitle=getItem(position).getTitle();
+                    invTypeId = getItem(position).getId();
+                    invTypeTitle = getItem(position).getTitle();
                     notifyDataSetChanged();
                 }
             });

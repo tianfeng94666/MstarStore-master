@@ -652,7 +652,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 holder.lay = (LinearLayout) convertView.findViewById(R.id.img_container);
                 holder.tv = (TextView) convertView.findViewById(R.id.name);
                 holder.llPrice = (LinearLayout)convertView.findViewById(R.id.ll_price);
-                holder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+                holder.tvPrice = (TextView) convertView.findViewById(R.id.tv_sum_price);
                 holder.ig = (SquareImageView) convertView.findViewById(R.id.product_img);
                 convertView.setTag(holder);
             } else {

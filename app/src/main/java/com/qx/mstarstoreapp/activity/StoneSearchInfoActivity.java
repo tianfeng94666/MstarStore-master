@@ -135,6 +135,8 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         idIgBack.setOnClickListener(this);
         tvSearch.setOnClickListener(this);
         idTvCurorder.setOnClickListener(this);
+        ivRight.setVisibility(View.VISIBLE);
+        ivRight.setOnClickListener(this);
         initCertificate();
         initSpot();
         initRandSeekBar();
@@ -379,6 +381,10 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
             case R.id.tv_reset:
                 loadNetData();
                 break;
+            case R.id.tv_right:
+                Intent intent = new Intent(this,StoneHistoryOrder.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -394,6 +400,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         stoneSearchInfo.setPolishing(stoneOthersAdapter.getChooseResult(1));
         stoneSearchInfo.setSymmetric(stoneOthersAdapter.getChooseResult(2));
         stoneSearchInfo.setFluorescence(stoneOthersAdapter.getChooseResult(3));
+        stoneSearchInfo.setPercent(etSpot.getText().toString());
     }
 
     private String getPurity() {

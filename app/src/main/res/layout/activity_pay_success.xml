@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_marginTop="100dip"
         android:id="@+id/id_lay_1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -69,7 +69,7 @@
         android:background="@drawable/edit_border"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:text="返回个人中心"
+        android:text="订单详情"
         android:clickable="true"
         android:layout_height="40dip" />
 

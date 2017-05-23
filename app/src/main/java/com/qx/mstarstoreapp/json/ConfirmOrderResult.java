@@ -54,6 +54,7 @@ public class ConfirmOrderResult {
          * orderNum : AP170512020
          * isNeetPay : 1
          * id : 2020
+         *
          * waitOrderCount : 3
          * isErpOrder : 0
          */
@@ -61,8 +62,17 @@ public class ConfirmOrderResult {
         private String orderNum;
         private int isNeetPay;
         private String id;
+        private String orderId;
         private String waitOrderCount;
         private int isErpOrder;
+
+        public String getOrderId() {
+            return orderId;
+        }
+
+        public void setOrderId(String orderId) {
+            this.orderId = orderId;
+        }
 
         public String getOrderNum() {
             return orderNum;

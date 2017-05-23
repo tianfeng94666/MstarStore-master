@@ -30,15 +30,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="需支付订金" />
-
             <TextView
+                android:id="@+id/tv_money"
                 android:layout_marginTop="5dip"
                 android:layout_below="@+id/id_tv_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="40dip"
-                android:text="9000" />
+                android:text="" />
         </LinearLayout>
 
 

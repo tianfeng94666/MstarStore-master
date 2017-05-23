@@ -61,7 +61,7 @@
         <TextView
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:id="@+id/tv_price"
+            android:id="@+id/tv_sum_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="849.90"/>

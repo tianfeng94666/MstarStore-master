@@ -7,7 +7,7 @@ package com.qx.mstarstoreapp.json;
 public class ComitOrderResult {
 
     /**
-     * data : {"Ailpay":{"orderId":"AP170209532","out_trade_no":"350547653655960010","proName":"千禧之星订单支付:AP170209532","probody":"Y06155-60","total_fee":0.01},"needPayPrice":0.01}
+     * data : {"Ailpay":{"orderNnm":"AP170512233","out_trade_no":"310548325710836010","proName":"千禧之星订单支付:AP170512233","probody":"LM0061","total_fee":0.01},"needPayPrice":0.01,"title":"AP170512233定金支付"}
      * error : 0
      * message :
      * response :
@@ -52,12 +52,14 @@ public class ComitOrderResult {
 
     public static class DataBean {
         /**
-         * Ailpay : {"orderId":"AP170209532","out_trade_no":"350547653655960010","proName":"千禧之星订单支付:AP170209532","probody":"Y06155-60","total_fee":0.01}
+         * Ailpay : {"orderNnm":"AP170512233","out_trade_no":"310548325710836010","proName":"千禧之星订单支付:AP170512233","probody":"LM0061","total_fee":0.01}
          * needPayPrice : 0.01
+         * title : AP170512233定金支付
          */
 
         private AilpayBean Ailpay;
-        private double needPayPrice;
+        private String needPayPrice;
+        private String title;
 
         public AilpayBean getAilpay() {
             return Ailpay;
@@ -67,35 +69,43 @@ public class ComitOrderResult {
             this.Ailpay = Ailpay;
         }
 
-        public double getNeedPayPrice() {
+        public String getNeedPayPrice() {
             return needPayPrice;
         }
 
-        public void setNeedPayPrice(double needPayPrice) {
+        public void setNeedPayPrice(String needPayPrice) {
             this.needPayPrice = needPayPrice;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public static class AilpayBean {
             /**
-             * orderId : AP170209532
-             * out_trade_no : 350547653655960010
-             * proName : 千禧之星订单支付:AP170209532
-             * probody : Y06155-60
+             * orderNnm : AP170512233
+             * out_trade_no : 310548325710836010
+             * proName : 千禧之星订单支付:AP170512233
+             * probody : LM0061
              * total_fee : 0.01
              */
 
-            private String orderId;
+            private String orderNnm;
             private String out_trade_no;
             private String proName;
             private String probody;
-            private String total_fee;
+            private double total_fee;
 
-            public String getOrderId() {
-                return orderId;
+            public String getOrderNnm() {
+                return orderNnm;
             }
 
-            public void setOrderId(String orderId) {
-                this.orderId = orderId;
+            public void setOrderNnm(String orderNnm) {
+                this.orderNnm = orderNnm;
             }
 
             public String getOut_trade_no() {
@@ -122,11 +132,11 @@ public class ComitOrderResult {
                 this.probody = probody;
             }
 
-            public String getTotal_fee() {
+            public double getTotal_fee() {
                 return total_fee;
             }
 
-            public void setTotal_fee(String total_fee) {
+            public void setTotal_fee(double total_fee) {
                 this.total_fee = total_fee;
             }
         }

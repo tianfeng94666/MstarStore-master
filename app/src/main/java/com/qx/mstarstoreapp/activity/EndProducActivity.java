@@ -42,7 +42,7 @@ public class EndProducActivity extends BaseActivity implements View.OnClickListe
     TextView tvProductName;
     @Bind(R.id.share_btn)
     TextView shareBtn;
-    @Bind(R.id.tv_price)
+    @Bind(R.id.tv_sum_price)
     TextView tvPrice;
     @Bind(R.id.tv_remark)
     TextView idTvPrice;

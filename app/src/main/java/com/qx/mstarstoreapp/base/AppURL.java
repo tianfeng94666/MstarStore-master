@@ -6,7 +6,8 @@ import com.qx.mstarstoreapp.R;
  * Created by Administrator on 2016/9/21.
  */
 public class AppURL {
-     static String QxVersion = "&QxVersion="+ "beta"+"&";
+//     static String QxVersion = "&QxVersion="+ "beta"+"&";
+    static String QxVersion = "QxVersion="+ ""+"&";
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi1.fanerweb.com/api/aproxy/";
     //测试 http://appapi1.fanerweb.com/api/Aproxy/
@@ -244,6 +245,24 @@ public class AppURL {
      * http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?tokenKey=69a875e5c234b5b49d1bead689f84832
      */
     public static String URL_GETAILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?";
+    /**
+     * 石头确认下单
+     */
+    public static String URL_STONE_PLACE_ORDER=  baseUrl + "stoneOrderListPage?"+QxVersion;
+    /**
+     * 石头订单详情
+     */
+    public static String URL_STONE_ORDER_DETAIL=  baseUrl + "stoneOrderDetailpage?"+QxVersion;
+    /**石头 获取发票*/
+    public static String URL_STONE_INVOICE=baseUrl+"StoneInvoicePage?"+QxVersion;
+    /**
+     * 石头订单提交
+     */
+    public static String URL_STONE_COMMIT_ORDER=baseUrl+"stoneSubmitOrderDo?"+QxVersion;
+    /**
+     * 石头支付界面
+     */
+    public static String URL_PAY_CURRENT_STONE_ORDER = baseUrl+ "PaymentCurrentOrderStonePage?"+QxVersion;
 }
 
 

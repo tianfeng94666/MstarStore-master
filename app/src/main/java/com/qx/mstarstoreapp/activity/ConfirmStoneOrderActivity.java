@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.Scrollable.CanScrollVerticallyDelegate;
 import com.qx.mstarstoreapp.Scrollable.OnFlingOverListener;
@@ -30,25 +29,25 @@ import com.qx.mstarstoreapp.Scrollable.TabsLayout;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
-import com.qx.mstarstoreapp.bean.Type;
-import com.qx.mstarstoreapp.inter.AdapterCallBack;
+import com.qx.mstarstoreapp.inter.AdapterStoneCallBack;
 import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.AddressEntity;
-import com.qx.mstarstoreapp.json.ComitOrderResult;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
-import com.qx.mstarstoreapp.net.ImageLoadOptions;
+import com.qx.mstarstoreapp.json.StoneBean;
+import com.qx.mstarstoreapp.json.StoneOrderDetailResult;
+import com.qx.mstarstoreapp.json.StoneOrderResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
-import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
 import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,15 +57,13 @@ import java.util.Set;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/*
- * 创建人：Yangshao
- * 创建时间：2016/9/23 15:35
- * @version     确认订单页面
- *
+/**
+ * Created by Administrator on 2017/5/19 0019.
  */
-public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshView.OnFooterRefreshListener,
+
+public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRefreshView.OnFooterRefreshListener,
         PullToRefreshView.OnHeaderRefreshListener, CanScrollVerticallyDelegate,
-        OnFlingOverListener, AdapterCallBack, ConfirmOrderOnUpdate {
+        OnFlingOverListener, AdapterStoneCallBack, ConfirmOrderOnUpdate {
 
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
@@ -88,29 +85,19 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     TextView idTvName;
     @Bind(R.id.id_tv_address)
     TextView idTvAddress;
-    @Bind(R.id.id_cs_color)
-    CustomSelectButton idCsColor;
     @Bind(R.id.id_receipt)
     Button idReceipt;
-    @Bind(R.id.id_cs_mass)
-    CustomSelectButton idCsMass;
+
     @Bind(android.R.id.list)
     ListView list;
     @Bind(R.id.pull_refresh_view)
     PullToRefreshView pullRefreshView;
     @Bind(R.id.rel_shopping_car_bottom_action)
     RelativeLayout relShoppingCarBottomAction;
-    /*选择成色的ItME*/
-    List<OrderListResult.DataEntity.ModelColorEntity> modelColorItme;
-    /*选择质量等级的Item*/
-    List<OrderListResult.DataEntity.ModelQualityEntity> modelQualityItem;
-    List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> listData;
     @Bind(R.id.id_lay_order_detail)
     LinearLayout idLayOrderDetail;
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
-    @Bind(R.id.id_view_line)
-    View idViewLine;
     @Bind(R.id.ig_btn_seach)
     ImageView igBtnSeach;
     @Bind(R.id.id_rl1)
@@ -119,10 +106,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     TextView phoneTv;
     @Bind(R.id.lny_loading_layout)
     LinearLayout lnyLoadingLayout;
-    AddressEntity isDefaultAddress;
-    CustomerEntity isDefaultCustomer;
-    @Bind(R.id.id_ed_word)
-    EditText idEdWord;
+
     @Bind(R.id.id_ed_remarks)
     EditText idEdRemarks;
     @Bind(R.id.id_lay_price1)
@@ -133,8 +117,6 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     TextView idTvTotalPrice;
     @Bind(R.id.id_lay_price2)
     LinearLayout idLayPrice2;
-    @Bind(R.id.scrollable_layout)
-    ScrollableLayout scrollableLayout;
     @Bind(R.id.id_cancle_order)
     Button idCancleOrder;
     @Bind(R.id.root_view)
@@ -145,6 +127,47 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     Button tvPay;
 
     protected ListView lv_list;
+    @Bind(R.id.tv_right)
+    ImageView tvRight;
+    @Bind(R.id.id_no_adress)
+    TextView idNoAdress;
+    @Bind(R.id.id_view_line)
+    View idViewLine;
+    @Bind(R.id.ll_stone_confirm_order)
+    LinearLayout llStoneConfirmOrder;
+    @Bind(R.id.tv_post_name)
+    TextView tvPostName;
+    @Bind(R.id.tv_post_phone)
+    TextView tvPostPhone;
+    @Bind(R.id.tv_post_address)
+    TextView tvPostAddress;
+    @Bind(R.id.tv_sum_price)
+    TextView tvSumPrice;
+    @Bind(R.id.tv_amount)
+    TextView tvAmount;
+    @Bind(R.id.tv_date)
+    TextView tvDate;
+    @Bind(R.id.tv_remark)
+    TextView tvRemark;
+    @Bind(R.id.ll_stone_order_detail)
+    LinearLayout llStoneOrderDetail;
+    @Bind(R.id.header)
+    LinearLayout header;
+    @Bind(R.id.id_rl)
+    LinearLayout idRl;
+    @Bind(R.id.scrollable_layout)
+    ScrollableLayout scrollableLayout;
+    @Bind(R.id.tips_loading_msg)
+    TextView tipsLoadingMsg;
+    @Bind(R.id.tv_order_state)
+    TextView tvOrderState;
+    @Bind(R.id.tv_customer_name)
+    TextView tvCustomerName;
+    @Bind(R.id.tv_order_number)
+    TextView tvOrderNumber;
+    @Bind(R.id.ll_order_detail_state)
+    LinearLayout llOrderDetailState;
+
 
     private int tempCurpage = 1;
     private int pullState = 1;
@@ -158,7 +181,15 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     private static final int PULL_LOAD = 2;
     int waitOrderCount;
     private ConfirmOrderResult confirmOrderResult;
-
+    /*选择成色的ItME*/
+    List<OrderListResult.DataEntity.ModelColorEntity> modelColorItme;
+    /*选择质量等级的Item*/
+    List<OrderListResult.DataEntity.ModelQualityEntity> modelQualityItem;
+    List<StoneBean> listData;
+    AddressEntity isDefaultAddress;
+    CustomerEntity isDefaultCustomer;
+    private String percent;
+    DecimalFormat    df   = new DecimalFormat("######0.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,9 +197,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_confirmorder);
+        setContentView(R.layout.activity_confirm_stone_order);
         ButterKnife.bind(this);
-        getActivityType();
+        getDate();
         initView();
         initScroll();
         loadNetData();
@@ -176,25 +207,23 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     }
 
-    public int getActivityType() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle == null) {
-            return 0;
-        }
-        type = bundle.getInt("type");
-        orderId = bundle.getString("itemId");
-        waitOrderCount = getIntent().getIntExtra("waitOrderCount", 0);
-        return type;
+    private void getDate() {
+        Intent intent = getIntent();
+        orderId = intent.getStringExtra("itemId");
+        System.out.println("itemId=" + orderId);
+        percent = intent.getStringExtra("percent");
+        type = intent.getIntExtra("type", 0);
+
     }
+
 
     @Override
     public void loadNetData() {
         String url;
         if (type == 2) {
-            url = AppURL.URL_ORDER_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&orderId=" + orderId;
+            url = AppURL.URL_STONE_ORDER_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + orderId;
         } else {
-            url = AppURL.URL_ORDER_LIST + "tokenKey=" + BaseApplication.getToken() + "&purityId=" + purityId +
-                    "&qualityId=" + qualityId + "&cpage=" + curpage;
+            url = AppURL.URL_STONE_PLACE_ORDER + "tokenKey=" + BaseApplication.getToken() + "&id=" + orderId + "&percent=" + percent;
         }
         L.e("获取订单信息" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -204,93 +233,91 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
-                    OrderListResult orderListResult = new Gson().fromJson(result, OrderListResult.class);
-                    OrderListResult.DataEntity dataEntity = orderListResult.getData();
-                    if (dataEntity != null) {
-                        OrderListResult.DataEntity.CurrentOrderlListEntity currentOrderlList = dataEntity.getCurrentOrderlList();
-                        List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> list = currentOrderlList.getList();
-                        isDefaultAddress = dataEntity.getAddress();
-                        if (pullState != PULL_LOAD) {
-                            confirOrderAdapter.cancelAll();
-                            listData.clear();
+                    List<StoneBean> currentOrderlList = null;
+                    if (type == 2) {
+                        btGoPay.setVisibility(View.GONE);
+                        idLayOrderDetail.setVisibility(View.VISIBLE);
+                        idLayPrice1.setVisibility(View.GONE);
+                        idLayPrice2.setVisibility(View.VISIBLE);
+                        llStoneOrderDetail.setVisibility(View.VISIBLE);
+                        llStoneConfirmOrder.setVisibility(View.GONE);
+                        layAddress.setVisibility(View.GONE);
+                        llOrderDetailState.setVisibility(View.VISIBLE);
+
+                        StoneOrderDetailResult stoneOrderDetailResult = new Gson().fromJson(result, StoneOrderDetailResult.class);
+                        StoneOrderDetailResult.DataBean dataBean = stoneOrderDetailResult.getData();
+                        currentOrderlList = dataBean.getList();
+                        tvOrderState.setText(dataBean.getOrderStatusTitle());
+                        tvCustomerName.setText(dataBean.getCustomerName());
+                        tvOrderNumber.setText(dataBean.getOrderNum());
+                        tvPostName.setText(dataBean.getPostName());
+                        tvPostPhone.setText(dataBean.getPostTel());
+                        tvPostAddress.setText(dataBean.getPostAddress());
+                        tvSumPrice.setText(dataBean.getTotelPrice());
+                        tvAmount.setText(dataBean.getOrderNumber() + "");
+                        tvDate.setText(dataBean.getOrderDate());
+                        tvRemark.setText(dataBean.getRemark());
+                    } else {
+                        btGoPay.setVisibility(View.VISIBLE);
+                        idLayOrderDetail.setVisibility(View.GONE);
+                        idLayPrice1.setVisibility(View.VISIBLE);
+                        idLayPrice2.setVisibility(View.GONE);
+                        llStoneOrderDetail.setVisibility(View.GONE);
+                        llStoneConfirmOrder.setVisibility(View.VISIBLE);
+                        layAddress.setVisibility(View.VISIBLE);
+                        llOrderDetailState.setVisibility(View.GONE);
+
+
+                        StoneOrderResult stoneOrderResult = new Gson().fromJson(result, StoneOrderResult.class);
+                        if (stoneOrderResult.getData() == null) {
+                            showToastReal("数据为空");
+                            return;
                         }
-                        list_count = Integer.valueOf(currentOrderlList.getList_count());
-                        if (curpage == 1) {
-                            modelColorItme = dataEntity.getModelColor();
-                            modelQualityItem = dataEntity.getModelQuality();
-                        }
-                        if (list_count == 0) {
-                            ToastManager.showToastReal("没有数据");
-                        } else {
-                            listData.addAll(list);
-                        }
+                        StoneOrderResult.DataBean dataBean = stoneOrderResult.getData();
+                        isDefaultAddress = dataBean.getAddress();
+                        currentOrderlList = dataBean.getList();
                         if (isDefaultAddress != null) {
                             idTvName.setText(isDefaultAddress.getName());
                             idTvAddress.setText(isDefaultAddress.getAddr());
                             phoneTv.setText(isDefaultAddress.getPhone());
                         }
-                        if (isFirst) {
-                            if (type == 2) {
-                                OrderListResult.DataEntity.OrderInfoEntity orderInfo = dataEntity.getOrderInfo();
-                                Double totalPrice = dataEntity.getTotalPrice();
-                                Double totalNeedPayPrice = dataEntity.getTotalNeedPayPrice();
-                                L.e("orderInfo" + orderInfo.toString() + "totalPrice:" + totalPrice + "totalNeedPayPrice:" + totalNeedPayPrice);
-                                idCsColor.setTextName(orderInfo.getPurityName());
-                                idCsMass.setTextName(orderInfo.getQualityName());
-                                idEdWord.setText(orderInfo.getWord());
-                                idEdRemarks.setText(orderInfo.getOrderNote());
-                                idEtSeach.setText(orderInfo.getCustomerName());
-                                tvTotalPrice.setText(totalNeedPayPrice + "--定金   " + totalPrice + "(合计)");
-                                idTvNeedPrice.setText("定金 :" + totalNeedPayPrice);
-                                idTvTotalPrice.setText("合计 :" + totalPrice);
-                                setListHeadView(orderInfo);
-                                invTitle = orderInfo.getInvoiceTitle();
-                                invType = orderInfo.getInvoiceType();
-                                if (!StringUtils.isEmpty(orderInfo.getInvoiceTitle()) && !StringUtils.isEmpty(invType)) {
-                                    idReceipt.setText("类型：" + invType + "     抬头：" + invTitle);
-                                    L.e("类型：" + invTitle + "     抬头：" + invTitle);
-                                }
 
-                            } else {
-                                isDefaultCustomer = dataEntity.getCustomer();
-                                if (isDefaultCustomer != null) {
-                                    idEtSeach.setText(isDefaultCustomer.getCustomerName());
-                                }
-                            }
-                            isFirst = false;
-                        }
-                        if (priceList != null && priceList.size() != 0) {
-                            for (int i = 0; i < priceList.size(); i++) {
-                                for (int j = 0; j < listData.size(); j++) {
-                                    if (listData.get(j).getId().equals(priceList.get(i).getId())) {
-                                        listData.get(j).setPrice(priceList.get(i).getPrice() + "");
-                                    }
-                                }
-                            }
-                        }
-                        if (type == 2) {
-                            btGoPay.setVisibility(View.GONE);
-                            idLayOrderDetail.setVisibility(View.VISIBLE);
-                            idLayPrice1.setVisibility(View.GONE);
-                            idLayPrice2.setVisibility(View.VISIBLE);
-                        } else {
-                            btGoPay.setVisibility(View.VISIBLE);
-                            idLayOrderDetail.setVisibility(View.GONE);
-                            idLayPrice1.setVisibility(View.VISIBLE);
-                            idLayPrice2.setVisibility(View.GONE);
-                        }
-                        L.e("解析成功");
-                        endNetRequest();
-                        initListener();
-                        L.e("mchecked" + mchecked.size());
-                        Set<Map.Entry<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity>> entries = mchecked.entrySet();
-//                    for (Map.Entry<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> entry : entries) {
-//                        OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity entity = entry.getValue();
-//                        L.e(entity.toString());
-//                    }
-                        changeState(mchecked);
                     }
 
+                    if (pullState != PULL_LOAD) {
+
+                        listData.clear();
+                    }
+                    list_count = currentOrderlList.size();
+
+                    if (list_count == 0) {
+                        showToastReal("没有数据");
+                    } else {
+                        listData.addAll(currentOrderlList);
+                    }
+
+                    if (isFirst) {
+                        if (isDefaultCustomer != null) {
+                            idEtSeach.setText(isDefaultCustomer.getCustomerName());
+                        }
+
+                        isFirst = false;
+                    }
+                    if (priceList != null && priceList.size() != 0) {
+                        for (int i = 0; i < priceList.size(); i++) {
+                            for (int j = 0; j < listData.size(); j++) {
+                                if (listData.get(j).getId().equals(priceList.get(i).getId())) {
+                                    listData.get(j).setPrice(priceList.get(i).getPrice() + "");
+                                }
+                            }
+                        }
+                    }
+                    L.e("解析成功");
+                    tvTotalPrice.setText(confirOrderAdapter.getTotleMoney());
+                    endNetRequest();
+                    initListener();
+                    L.e("mchecked" + mchecked.size());
+                    Set<Map.Entry<String, StoneBean>> entries = mchecked.entrySet();
                 }
                 if (error == 2) {
                     loginToServer(OrderActivity.class);
@@ -322,95 +349,24 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
 
     private void initListener() {
-        if (idCsColor != null)
-            idCsColor.setOnSelectData(new CustomSelectButton.OnselectData() {
-                @Override
-                public List<Type> getData() {
-                    List<Type> list = new ArrayList<>();
-                    for (int i = 0; i < modelColorItme.size(); i++) {
-                        Type type = new Type();
-                        type.setId(modelColorItme.get(i).getId());
-                        type.setTypeName(modelColorItme.get(i).getTitle() + "  " + modelColorItme.get(i).getPrice() + "/g");
-                        list.add(type);
-                    }
-                    return list;
-                }
 
-                @Override
-                public void getSelectId(Type type) {
-                    idCsColor.setText(type.getTypeName());
-                    purityId = type.getId();
-                    queryPricefoServer(qualityId, purityId);
-                }
-
-                @Override
-                public String getTitle() {
-                    return "选择质量等级";
-                }
-
-                @Override
-                public View getRootView() {
-                    return View.inflate(context, R.layout.activity_confirmorder, null);
-                }
-            });
 
         idReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ConfirmOrderActivity.this, ReceiptActivity.class);
+                Intent intent = new Intent(ConfirmStoneOrderActivity.this, ReceiptActivity.class);
                 if (!StringUtils.isEmpty(invTitle)) {
                     intent.putExtra("invTitle", invTitle);
                 }
+                intent.putExtra("isStone", "2");//是否是石头
                 intent.putExtra("type", type);
                 intent.putExtra("invTitle", invType);
                 startActivityForResult(intent, 13);
             }
         });
 
-        if (idCsMass != null)
-            idCsMass.setOnSelectData(new CustomSelectButton.OnselectData() {
-                @Override
-                public List<Type> getData() {
-                    List<Type> list = new ArrayList<>();
-                    for (int i = 0; i < modelQualityItem.size(); i++) {
-                        Type type = new Type();
-                        type.setId(modelQualityItem.get(i).getId());
-                        type.setTypeName(modelQualityItem.get(i).getTitle());
-                        list.add(type);
-                    }
-                    return list;
-                }
-
-                @Override
-                public View getRootView() {
-                    return View.inflate(context, R.layout.activity_confirmorder, null);
-                }
-
-                @Override
-                public void getSelectId(Type type) {
-                    idCsMass.setText(type.getTypeName());
-                    qualityId = type.getId();
-                    queryPricefoServer(qualityId, purityId);
-                }
-
-                @Override
-                public String getTitle() {
-                    return "选择成色";
-                }
-            });
 
 
-        ckCheckall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ckCheckall.isChecked()) {
-                    confirOrderAdapter.selectAll();
-                } else {
-                    confirOrderAdapter.cancelAll();
-                }
-                confirOrderAdapter.notifyDataSetChanged();
-            }
-        });
 
 
 
@@ -436,14 +392,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             }
         });
 
-        idEdWord.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    updateCustomorWord(idEtSeach.getText().toString(), idEdWord.getText().toString());
-                }
-            }
-        });
+        ;
         /*确定支付*/
         btGoPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -461,7 +410,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 //openActivity(ShopingAddressActivity.class,null);
                 // Intent intent = new Intent(ConfirmOrderActivity.this, ShopingAddressActivity.class);
                 // startActivityForResult(intent, 12);
-                Intent intent = new Intent(ConfirmOrderActivity.this, AddressListActivity.class);
+                Intent intent = new Intent(ConfirmStoneOrderActivity.this, AddressListActivity.class);
                 intent.putExtra("type", 2);
                 startActivityForResult(intent, 12);
             }
@@ -478,9 +427,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             @Override
             public void onClick(View v) {
                 Intent intent;
-                intent = new Intent(ConfirmOrderActivity.this, ModeOfPaymentActivity.class);
+                intent = new Intent(ConfirmStoneOrderActivity.this, ModeOfPaymentActivity.class);
                 if (!orderId.equals("")) {
                     intent.putExtra("id", orderId);
+                    intent.putExtra("type",1);
                 }
                 startActivity(intent);
             }
@@ -549,23 +499,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         }
                     }
                     endNetRequest();
-                    if (type == 2) {
-                        Double total = .0;
-                        Double needPrice = .0;
-                        for (OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity cartItem : listData) {
-                            total += Double.valueOf(cartItem.getPrice()) * Double.valueOf(cartItem.getNumber());
-                            needPrice += Double.valueOf(cartItem.getNeedPayPrice()) * Double.valueOf(cartItem.getNumber());
-                            L.e("needPrice" + needPrice);
-                        }
-                        //价格
-                        tvTotalPrice.setText(StringUtils.formatedPrice(total));
-                        idLayPrice1.setVisibility(View.INVISIBLE);
-                        idLayPrice2.setVisibility(View.VISIBLE);
-                        idTvNeedPrice.setText("定金 :" + needPrice);
-                        idTvTotalPrice.setText("合计 :" + total);
-                    } else {
-                        confirOrderAdapter.updatePrice();
-                    }
+
+
                 }
                 if (error == 2) {
                     loginToServer(StyleInfromationActivity.class);
@@ -659,8 +594,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
      * @version  提交订单
      */
     public void submitOrder() {
-        String url = AppURL.URL_ORDER_SUBMIT + "&tokenKey=" + BaseApplication.getToken();
-        String word = idEdWord.getText().toString();
+        String url = AppURL.URL_STONE_COMMIT_ORDER + "&tokenKey=" + BaseApplication.getToken();
+
         String remarks = idEdRemarks.getText().toString();
         if (isDefaultAddress == null) {
             ToastManager.showToastReal(getString(R.string.please_write_address));
@@ -673,23 +608,23 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
         String addressId = isDefaultAddress.getId();
         String customerID = isDefaultCustomer.getCustomerID() + "";
-        String itemurl = "";
-        if (mcheckId == null || mcheckId.size() == 0) {
-            ToastManager.showToastReal(getString(R.string.please_select_order));
-        } else {
-            itemurl = StringUtils.purUrlCut("itemId", mcheckId).toString();
-        }
-        L.e("word" + word + "   addressId" + addressId + "");
+
+
         if (customerID.equals("-1")) {
-            ToastManager.showToastReal("请填写客户资料");
+            showToastReal("请填写客户资料");
             return;
         }
-        if (StringUtils.isEmpty(word) && StringUtils.isEmpty(addressId) && StringUtils.isEmpty(customerID) && StringUtils.isEmpty(itemurl)) {
-            ToastManager.showToastReal("请填写完整资料");
+        if (StringUtils.isEmpty(addressId) && StringUtils.isEmpty(customerID)) {
+            showToastReal("请填写完整资料");
             return;
         }
-        url += itemurl + "&word=" + word + "&purityId=" + purityId + "&addressId=" + addressId + "&qualityId=" + qualityId + "&customerID=" + customerID +
-                "&invTitle=" + invTitle + "&invType=" + invType + "&orderNote=" + remarks;
+        String id = confirOrderAdapter.getAllIdAndNumber();
+        if (StringUtils.isEmpty(id)) {
+            showToastReal("没有产品！");
+            return;
+        }
+        url += "&id=" + id + "&addressId=" + addressId + "&customerId=" + customerID +
+                "&invTitle=" + invTitle + "&invType=" + invType + "&orderNote=" + remarks + "&percent=" + percent;
         L.e("submitOrder" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -704,45 +639,13 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     if (confirmOrderResult.getData() == null) {
                         return;
                     }
-                    String id = jsonObject.get("id").getAsString();
-                    waitOrderCount = Integer.valueOf(jsonObject.get("waitOrderCount").getAsString());
-                    //是否需要付款  0不需要   1需要
-                    int isNeedPay = jsonObject.get("isNeetPay").getAsInt();
-                    //是都已经上传到ERP订单  //1 跳转到生产详情页    0跳转到审核页面
-                    int isErpOrder = jsonObject.get("isErpOrder").getAsInt();
-                    //intent = new Intent(getActivity(), CustomMadeActivity.class);
-                    // startActivity(intent);
+                    String id = confirmOrderResult.getData().getOrderId();
 
-                    Intent intent;
-//                    if (isNeedPay == 0) {
-//                        //支付
-//                        btGoPay.setVisibility(View.GONE);
-//                        idLayOrderDetail.setVisibility(View.VISIBLE);
-//                    }else {
-//                        idLayOrderDetail.setVisibility(View.GONE);
-//                        btGoPay.setVisibility(View.VISIBLE);
-//                    }
-
-                    if (isErpOrder == 1) {
-                        //生产中详情说
-//                        intent = new Intent(ConfirmOrderActivity.this, CustomMadeActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putInt("type", 2);
-//                        bundle.putString("orderNum", id);
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
-                        // "orderNum":"AP2017021316476
-                        String orderNum = jsonObject.get("orderNum").getAsString();
-                        ProgressDialog progressDialog = new ProgressDialog(ConfirmOrderActivity.this, orderNum, 1);
-                        progressDialog.showAsDropDown(rootView);
-                        // intent.putExtra("pageNumber",1);
-                    } else {
-                        // intent.putExtra("pageNumber",0);  //待审核
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("type", 2);
-                        bundle.putString("itemId", id);
-                        openActivity(ConfirmOrderActivity.class, bundle);
-                    }
+                    Intent intent = new Intent(ConfirmStoneOrderActivity.this, ConfirmStoneOrderActivity.class);
+                    intent.putExtra("itemId", id);
+                    intent.putExtra("type", 2);
+                    startActivity(intent);
+                    finish();
 
                 } else if (error == 2) {
                     loginToServer(OrderActivity.class);
@@ -781,10 +684,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
                     if (state == 1) {
                         ToastManager.showToastReal("有此客户");
-                        updateCustomorWord(keyWord, idEdWord.getText().toString());
+                        updateCustomorWord(keyWord);
                     }
                     if (state == 2) {
-                        Intent intent = new Intent(ConfirmOrderActivity.this, CustomersListActivity.class);
+                        Intent intent = new Intent(ConfirmStoneOrderActivity.this, CustomersListActivity.class);
                         intent.putExtra("keyWord", keyWord);
                         startActivityForResult(intent, 11);
                     }
@@ -805,14 +708,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     /*
      * @version  修改客户和自印
      */
-    public void updateCustomorWord(String cus, String word) {
+    public void updateCustomorWord(String cus) {
         // ModelOrderWaitCheckDetailModifyInfoDo?orderId=10&customerId=2990&tokenKey=10b588002228fa805231a59bb7976bf4
         String url = "";
         if (type != 2) {
             return;
         }
         url = AppURL.URL_WATI_ORDER_MODIINFO + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + orderId +
-                "&customerId=" + cus + "&word=" + word;
+                "&customerId=" + cus;
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
@@ -834,45 +737,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     }
 
 
-    Map<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> mchecked = new HashMap<>();
-
-    @Override
-    public void changeState(Map<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> checked) {
-        List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> checkedGoods = new ArrayList<>();
-        if (confirOrderAdapter.isAllSelected()) {
-            ckCheckall.setChecked(true);
-        } else {
-            ckCheckall.setChecked(false);
-        }
-        mchecked.putAll(checked);
-        Set<Map.Entry<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity>> entries = checked.entrySet();
-        for (Map.Entry<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> entry : entries) {
-            OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity entity = entry.getValue();
-            checkedGoods.add(entity);
-        }
-        Double total = .0;
-        for (OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity cartItem : checkedGoods) {
-            total += Double.valueOf(cartItem.getPrice()) * Double.valueOf(cartItem.getNumber());
-        }
-        //价格
-        tvTotalPrice.setText(StringUtils.formatedPrice(total));
-        if (checkedGoods.size() == 0) {
-            btGoPay.setEnabled(false);
-        } else {
-            btGoPay.setEnabled(true);
-        }
-        if (checkedGoods.size() != 0) {
-            mcheckId = new ArrayList<>();
-            for (int i = 0; i < checkedGoods.size(); i++) {
-                mcheckId.add(checkedGoods.get(i).getId());
-            }
-        }
-    }
+    Map<String, StoneBean> mchecked = new HashMap<>();
 
 
     private void endNetRequest() {
-        ckCheckall.setChecked(confirOrderAdapter.isAllSelected());
-        //changeState(mchecked);
+
         confirOrderAdapter.notifyDataSetChanged();
         tempCurpage = curpage;
         if (pullState == PULL_LOAD) {
@@ -898,7 +767,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 isDefaultCustomer = new CustomerEntity();
             }
             isDefaultCustomer.setCustomerID(customerID);
-            updateCustomorWord(customerID + "", idEdWord.getText().toString());
+            updateCustomorWord(customerID + "");
         }
         if (requestCode == 12) {
             String phoneNumber = data.getStringExtra("phoneNumber");
@@ -911,6 +780,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 isDefaultAddress = new AddressEntity();
             }
             isDefaultAddress.setId(addressId);
+            isDefaultAddress.setAddr(address);
+            isDefaultAddress.setName(name);
+            isDefaultAddress.setPhone(phoneNumber);
 
             idTvName.setText(name);
             idTvAddress.setText(address);
@@ -1008,23 +880,15 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     @Override
     public void onFooterRefresh(PullToRefreshView view) {
-        if (listData.size() < list_count) {
-            tempCurpage = curpage;
-            curpage++;
-            pullState = PULL_LOAD;
-            loadNetData();
-        } else {
-            ToastManager.showToastReal("没有更多数据");
-            view.onFooterRefreshComplete();
-        }
+
+//            ToastManager.showToastReal("没有更多数据");
+        view.onFooterRefreshComplete();
+
     }
 
     @Override
     public void onHeaderRefresh(PullToRefreshView view) {
-        tempCurpage = curpage;
-        curpage = 1;
-        pullState = PULL_REFRESH;
-        loadNetData();
+        view.onHeaderRefreshComplete();
     }
 
     @Override
@@ -1033,8 +897,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     }
 
 
+    @Override
+    public void changeStoneTotleMoney(String st) {
+        tvTotalPrice.setText(st);
+    }
+
+
     public class ConfirOrderAdapter extends BaseAdapter {
-        private Map<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> checkedState;
+        private Map<String, StoneBean> checkedState;
 
         public ConfirOrderAdapter() {
             checkedState = new HashMap<>();
@@ -1042,25 +912,18 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         }
 
 
-        public void selectAll() {
-            for (OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity t : listData) {
-                checkedState.put(t.getId(), t);
+        public String getAllIdAndNumber() {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < listData.size(); i++) {
+                StoneBean listEntity = listData.get(i);
+                if (i == (listData.size() - 1)) {
+                    sb.append(listEntity.getId() + "," + listEntity.getNumber());
+                } else {
+                    sb.append(listEntity.getId() + "," + listEntity.getNumber() + "|");
+                }
             }
-            if (callBack != null)
-                callBack.changeState(checkedState);
+            return sb.toString();
         }
-
-        public void cancelAll() {
-            checkedState.clear();
-            if (callBack != null)
-                callBack.changeState(checkedState);
-        }
-
-        public void updatePrice() {
-            if (callBack != null)
-                callBack.changeState(checkedState);
-        }
-
 
         @Override
         public int getCount() {
@@ -1068,7 +931,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         }
 
         @Override
-        public OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity getItem(int i) {
+        public StoneBean getItem(int i) {
             return listData.get(i);
         }
 
@@ -1077,11 +940,21 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             return i;
         }
 
+        public String getTotleMoney() {
+            double sum = 0;
+            for (int i = 0; i < listData.size(); i++) {
+                StoneBean listEntity = listData.get(i);
+                sum = sum + Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "");
+            }
+            DecimalFormat    df   = new DecimalFormat("######0.00");
+            return  df.format(sum) + "";
+        }
+
         @Override
         public View getView(final int position, View convertView, ViewGroup viewGroup) {
             final ViewHolder vh;
             if (convertView == null) {
-                convertView = LayoutInflater.from(ConfirmOrderActivity.this).inflate(R.layout.layout_order, null);
+                convertView = LayoutInflater.from(ConfirmStoneOrderActivity.this).inflate(R.layout.layout_stone_order, null);
                 vh = new ViewHolder(convertView);
                 convertView.setTag(vh);
             } else {
@@ -1089,66 +962,57 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             }
 
             if (type == 2) {
-                vh.ckCheckone.setVisibility(View.GONE);
+
             }
 
-            OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity listEntity = listData.get(position);
-            if (checkedState.get(getItem(position).getId()) != null) {
-                vh.ckCheckone.setChecked(true);
-            } else {
-                vh.ckCheckone.setChecked(false);
-            }
-            vh.ckCheckone.setTag(position);
-            vh.ckCheckone.setOnClickListener(new View.OnClickListener() {
+            final StoneBean listEntity = listData.get(position);
+
+            vh.ivAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    if (checkedState.get(getItem(position).getId()) != null) {
-                        checkedState.remove(getItem(position).getId());
-                    } else {
-                        checkedState.put(getItem(position).getId(), getItem(position));
-                    }
-                    if (callBack != null)
-                        callBack.changeState(checkedState);
+                public void onClick(View v) {
+                    int number = listEntity.getNumber();
+                    vh.productNumber.setText(++number + "");
+                    listEntity.setNumber(number);
+                    vh.productPrice.setText(df.format(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "") ));
+                    callBack.changeStoneTotleMoney(getTotleMoney());
                 }
             });
-            vh.productName.setText(listEntity.getTitle());
+            vh.ivReduce.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int number = listEntity.getNumber();
+                    if (number == 1) {
+                        ToastManager.showToastReal("数量不能少于1！");
+                    } else {
+                        vh.productNumber.setText(--number + "");
+                        listEntity.setNumber(number);
+                        vh.productPrice.setText(df.format(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "")));
+                    }
+                    callBack.changeStoneTotleMoney(getTotleMoney());
+                }
+            });
+            vh.productName.setText(listEntity.getInfo());
             vh.productPrice.setText(listEntity.getPrice());
-            vh.idTvInformation.setText(listEntity.getInfo());
-            vh.productNorms.setText(listEntity.getBaseInfo());
-            vh.productNumber.setText(listEntity.getNumber());
-            vh.btnEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    Intent intent = new Intent();
-//                    intent.putExtra("itemId", listData.get(position).getId());
-//                    setResult(11, intent);
-//                    finish();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("itemId", listData.get(position).getId());
-                    if (type == 2) {
-                        // ModelOrderWaitCheckDetailModifyInfoDo?orderId=10&customerId=2990&tokenKey=10b588002228fa805231a59bb7976bf4
-                        bundle.putInt("type", 2);
-                        bundle.putString("orderId", orderId);
-                    } else {
-                        bundle.putInt("type", 1);
-                    }
-                    openActivity(StyleInfromationActivity.class, bundle);
+            vh.productNumber.setText(listEntity.getNumber() + "");
 
-                }
-            });
-            ImageLoader.getInstance().displayImage(listData.get(position).getPic(), vh.productImg, ImageLoadOptions.getOptions());
             vh.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    deleteOrder(listData.get(position).getId());
+                    if (listData.remove(listEntity)) {
+                        showToastReal("删除成功！");
+                    } else {
+                        showToastReal("删除失败！");
+                    }
+                    notifyDataSetChanged();
+                    callBack.changeStoneTotleMoney(getTotleMoney());
                 }
             });
             return convertView;
         }
 
-        private AdapterCallBack callBack;
+        private AdapterStoneCallBack callBack;
 
-        public void setOnAdapterCallBack(AdapterCallBack callBack) {
+        public void setOnAdapterCallBack(AdapterStoneCallBack callBack) {
             this.callBack = callBack;
         }
 
@@ -1156,84 +1020,36 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             return checkedState.size() == listData.size() && listData.size() != 0;
         }
 
+
         class ViewHolder {
             @Bind(R.id.ck_checkone)
             CheckBox ckCheckone;
-            @Bind(R.id.btn_edit)
-            TextView btnEdit;
             @Bind(R.id.btn_delete)
             TextView btnDelete;
             @Bind(R.id.item_button_layout)
             RelativeLayout itemButtonLayout;
             @Bind(R.id.line)
             View line;
-            @Bind(R.id.product_img)
-            ImageView productImg;
             @Bind(R.id.product_name)
             TextView productName;
-            @Bind(R.id.product_norms)
-            TextView productNorms;
             @Bind(R.id.product_price)
             TextView productPrice;
+            @Bind(R.id.iv_reduce)
+            ImageView ivReduce;
             @Bind(R.id.product_number)
             TextView productNumber;
+            @Bind(R.id.iv_add)
+            ImageView ivAdd;
             @Bind(R.id.id_oder_type)
             TextView idOderType;
             @Bind(R.id.id_lay1)
             LinearLayout idLay1;
             @Bind(R.id.id_view_line)
             View idViewLine;
-            @Bind(R.id.id_tv_information)
-            TextView idTvInformation;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
-        }
-
-
-        /*
-         * @version    删除订单
-         *
-         */
-        public void deleteOrder(String id) {
-            String url;
-            if (type == 2) {
-                if (listData.size() <= 1) {
-                    ToastManager.showToastReal("请点击取消订单");
-                    return;
-                }
-                url = AppURL.URL_ORDER_WAIT_DELETE + "&tokenKey=" + BaseApplication.getToken() + "&itemId=" + id;
-            } else {
-                url = AppURL.URL_ORDER_DELETE + "&tokenKey=" + BaseApplication.getToken() + "&itemId=" + id;
-            }
-            L.e("删除订单" + url);
-            VolleyRequestUtils.getInstance().getCookieRequest(ConfirmOrderActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-                @Override
-                public void onSuccess(String result) {
-                    L.e(result);
-                    int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
-                    if (error == 0) {
-                        ToastManager.showToastReal("删除成功");
-                        String strwaitOrderCount = new Gson().fromJson(result, JsonObject.class).get("data").getAsJsonObject().get("waitOrderCount").getAsString();
-                        waitOrderCount = Integer.valueOf(strwaitOrderCount);
-                        loadNetData();
-                    }
-                    if (error == 2) {
-                        loginToServer(OrderActivity.class);
-                    }
-                    if (error == 1) {
-                        String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                        L.e(message);
-                        ToastManager.showToastReal(message);
-                    }
-                }
-
-                @Override
-                public void onFail(String fail) {
-
-                }
-            });
         }
     }
 

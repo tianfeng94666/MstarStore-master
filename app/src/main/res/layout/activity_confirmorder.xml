@@ -58,6 +58,8 @@
                         android:layout_marginRight="@dimen/margin10"
                         android:layout_marginTop="@dimen/margin5"
                         android:layout_weight="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -134,7 +136,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="成       色"
+                            android:text="质量等级"
                             android:textSize="@dimen/text_size_small_medium"/>
 
                         <com.qx.mstarstoreapp.viewutils.CustomSelectButton
@@ -144,7 +146,7 @@
                             android:layout_marginLeft="20dip"
                             android:layout_marginRight="15dip"
                             android:layout_weight="1"
-                            app:tv_name="选择成色"/>
+                            app:tv_name="选择质量等级"/>
                     </LinearLayout>
 
                     <View
@@ -167,7 +169,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="质量等级"
+                            android:text="成       色"
                             android:textSize="@dimen/text_size_small_medium"/>
 
                         <com.qx.mstarstoreapp.viewutils.CustomSelectButton
@@ -177,7 +179,7 @@
                             android:layout_marginLeft="20dip"
                             android:layout_marginRight="15dip"
                             android:layout_weight="1"
-                            app:tv_name="选择质量等级"/>
+                            app:tv_name="选择成色"/>
                     </LinearLayout>
 
                     <View

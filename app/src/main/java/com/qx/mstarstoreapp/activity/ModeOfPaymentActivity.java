@@ -20,7 +20,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -31,12 +30,8 @@ import com.qx.mstarstoreapp.alipay.PayResult;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
-import com.qx.mstarstoreapp.base.MyAction;
-import com.qx.mstarstoreapp.dialog.ConfirmPwdDialog;
-import com.qx.mstarstoreapp.inter.OnResultListener;
 import com.qx.mstarstoreapp.json.ALipayResult;
 import com.qx.mstarstoreapp.json.ComitOrderResult;
-import com.qx.mstarstoreapp.json.StoneSearchResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
@@ -71,6 +66,8 @@ public class ModeOfPaymentActivity extends BaseActivity {
     RelativeLayout idRelTitle;
     @Bind(R.id.id_lay1)
     LinearLayout idLay1;
+    @Bind(R.id.tv_money)
+    TextView tvMoney;
     private int[] payDrawables;//支付方式图标
     private String[] payNames;//支付方式 名称
 
@@ -83,6 +80,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
     String id;
     private ComitOrderResult comitOrderResult;
     private ALipayResult aLipayResult;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +91,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
         setContentView(R.layout.activity_mode_pay);
         ButterKnife.bind(this);
         getDate();
-        initView();
-
+        loadNetData();
         // selectDialog=new SelectDialog(this);
         // selectDialog.show();
 
@@ -106,6 +103,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
 //        totalPrice = Double.parseDouble(getIntent().getStringExtra("totalPrice"));
 //        proName = getIntent().getStringExtra("pr
         id = getIntent().getStringExtra("id");
+        type = getIntent().getIntExtra("type", 0);
     }
 
     private void initView() {
@@ -131,6 +129,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
                 onBack();
             }
         });
+        tvMoney.setText(comitOrderResult.getData().getNeedPayPrice());
     }
 
     public void onBack() {
@@ -139,6 +138,47 @@ public class ModeOfPaymentActivity extends BaseActivity {
 
     @Override
     public void loadNetData() {
+        baseShowWatLoading();
+        String url = "";
+        if (type == 0) {
+            url = AppURL.URL_PAY_CURRENT_ORDER + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+        } else {
+            url = AppURL.URL_PAY_CURRENT_STONE_ORDER + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+        }
+
+        if (StringUtils.isEmpty(url)) {
+            return;
+        }
+        L.e("获取地址" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println(result);
+                baseHideWatLoading();
+                L.e("result" + result);
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+                    comitOrderResult = new Gson().fromJson(result, ComitOrderResult.class);
+                    if (comitOrderResult.getData() == null) {
+                        return;
+                    }
+                    initView();
+                } else if (error.equals("2")) {
+                    loginToServer(FinishTableLessActivity.class);
+                } else {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastWhendebug(message);
+                    L.e(message);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+                baseHideWatLoading();
+            }
+
+        });
 
     }
 
@@ -257,7 +297,12 @@ public class ModeOfPaymentActivity extends BaseActivity {
                     String resultStatus = payResult.getResultStatus();
                     // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                     if (TextUtils.equals(resultStatus, "9000")) {
-                        openActivity(PaySuccessActivity.class,null);
+                        Intent intent;
+                        intent = new Intent(ModeOfPaymentActivity.this, PaySuccessActivity.class);
+                        if (!id.equals("")) {
+                            intent.putExtra("id", id);
+                        }
+                        startActivity(intent);
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
@@ -301,7 +346,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
 //                    if (comitOrderResult.getData() == null) {
 //                        return;
 //                    }
-                     aLipayResult = new Gson().fromJson(result,ALipayResult.class);
+                    aLipayResult = new Gson().fromJson(result, ALipayResult.class);
                     aliPay();
                 } else if (error.equals("2")) {
                     loginToServer(FinishTableLessActivity.class);

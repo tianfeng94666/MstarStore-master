@@ -69,6 +69,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     public void onBack(View view) {
+        openActivity(OrderActivity.class,null);
         finish();
     }
 

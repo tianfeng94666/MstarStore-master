@@ -12,12 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.StoneSearchResultAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
+import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
@@ -83,6 +85,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     TextView tvItemCerauthNumber;
     @Bind(R.id.tv_reset)
     TextView tvReset;
+    @Bind(R.id.tv_place_order)
+    TextView tvPlaceOrder;
 
 
     private boolean isLandscape;
@@ -145,13 +149,14 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void init() {
         idIgBack.setOnClickListener(this);
         lvStone.setXListViewListener(this);
-        lvStone.setAutoLoadEnable(true);
-        lvStone.setPullRefreshEnable(true);
+        lvStone.setAutoLoadEnable(false);
+        lvStone.setPullRefreshEnable(false);
         lvStone.setPullLoadEnable(true);
         tvQutedPriceAll.setOnClickListener(this);
         titleText.setText("搜索结果");
         tvItemWeight.setOnClickListener(this);
         tvReset.setOnClickListener(this);
+        tvPlaceOrder.setOnClickListener(this);
     }
 
 
@@ -181,7 +186,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         String url = "";
         url = AppURL.URL_STONE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + page + "&certAuth=" + stoneSearchInfo.getCerAuth() + "&color=" + stoneSearchInfo.getColor() + "&shape=" + stoneSearchInfo.getShape()
                 + "&purity=" + stoneSearchInfo.getPurity() + "&cut=" + stoneSearchInfo.getCut() + "&polishing=" + stoneSearchInfo.getPolishing() + "&symmetric=" + stoneSearchInfo.getSymmetric() + "&fluorescence=" + stoneSearchInfo.getFluorescence()
-                + "&price=" + stoneSearchInfo.getPrice() + "&weight=" + stoneSearchInfo.getWeight() + "&orderby=" + orderby + "&percent=" + stoneSearchInfo.getPercent();
+                + "&price=" + stoneSearchInfo.getPrice() + "&weight=" + stoneSearchInfo.getWeight() + "&orderby=" + orderby;
         if (StringUtils.isEmpty(url)) {
             return;
         }
@@ -235,7 +240,12 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         }
 
         stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this);
-        lvStone.setAdapter(stoneSearchResultAdapter);
+        if (pullStatus == PULL_LOAD) {
+            stoneSearchResultAdapter.notifyDataSetChanged();
+        } else {
+            lvStone.setAdapter(stoneSearchResultAdapter);
+        }
+
         lvStone.stopRefresh();
         lvStone.stopLoadMore();
     }
@@ -260,12 +270,40 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 list.clear();
                 loadNetData();
                 break;
+            case R.id.tv_place_order:
+
+                stonePlaceOrder(stoneSearchResultAdapter.getQuotedPriceId());
+                break;
+        }
+    }
+
+    private Toast toast = null;
+
+    public void showToastReal(String msg) {
+        if (toast == null) {
+            toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        } else {
+            toast.setText(msg);
+        }
+        toast.show();
+    }
+
+    private void stonePlaceOrder(String id) {
+        if (id.equals("")) {
+            showToastReal("您未选择产品！");
+        } else {
+            Intent intent = new Intent(this, ConfirmStoneOrderActivity.class);
+            intent.putExtra("itemId", id);
+            intent.putExtra("percent", stoneSearchInfo.getPercent());
+            intent.putExtra("type", 0);
+            startActivity(intent);
         }
     }
 
     private void setorderBy() {
         list.clear();
         page = 1;
+        pullStatus = 0;
         ordertimes++;
         Drawable drawable = null;
         switch (ordertimes % 3) {
