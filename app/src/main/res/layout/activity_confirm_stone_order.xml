@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dip"
+        android:descendantFocusability="afterDescendants"
         app:scrollable_autoMaxScroll="true"
         app:scrollable_autoMaxScrollViewId="@+id/header"
         app:scrollable_closeUpAnimationMillis="250"
@@ -130,8 +131,6 @@
                         android:layout_marginRight="@dimen/margin10"
                         android:layout_marginTop="@dimen/margin5"
                         android:layout_weight="1"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -215,17 +214,20 @@
                             android:textSize="@dimen/text_size_small_medium" />
 
 
-                        <Button
+                        <TextView
                             android:id="@+id/id_receipt"
                             style="@style/layout_horizontal"
+                            android:drawablePadding="8dp"
+                            android:gravity="right|center_vertical"
+                            android:textColor="@color/text_color"
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="2dip"
                             android:layout_marginLeft="20dip"
                             android:layout_marginRight="15dip"
                             android:layout_marginTop="2dp"
+                            android:drawableRight="@drawable/icon_right"
                             android:layout_weight="1"
-                            android:background="@drawable/btn_bg_while"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
 
@@ -286,7 +288,7 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/android_download" />
+                            android:src="@drawable/icon_map" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -440,24 +442,18 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.qx.mstarstoreapp.viewutils.PullToRefreshView
-            android:id="@+id/pull_refresh_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/id_rel_title"
-            android:layout_marginBottom="35dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/theme_bg"
-            android:orientation="vertical">
+
 
             <ListView
                 android:id="@android:id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="50dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/theme_bg"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="10dp" />
-        </com.qx.mstarstoreapp.viewutils.PullToRefreshView>
+
     </com.qx.mstarstoreapp.Scrollable.ScrollableLayout>
 
 
@@ -477,20 +473,7 @@
             android:layout_alignParentTop="true"
             android:background="@color/theme_bg" />
 
-        <CheckBox
-            android:id="@+id/ck_checkall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:button="@drawable/radio_style"
-            android:checked="false"
-            android:paddingBottom="8dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="8dp"
-            android:text="全选"
-            android:textColor="@color/black"
-            android:visibility="gone" />
+
 
         <!-- middle stuff -->
         <LinearLayout
@@ -499,7 +482,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="25dp"
-            android:layout_toRightOf="@id/ck_checkall"
             android:orientation="horizontal">
 
             <TextView
@@ -526,7 +508,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/ck_checkall"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -609,7 +590,7 @@
     </RelativeLayout>
 
 
-    <include layout="@layout/progress_layout" />
+
 
 
 </RelativeLayout>

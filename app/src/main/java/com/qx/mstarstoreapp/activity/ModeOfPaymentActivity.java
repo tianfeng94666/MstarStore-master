@@ -68,6 +68,8 @@ public class ModeOfPaymentActivity extends BaseActivity {
     LinearLayout idLay1;
     @Bind(R.id.tv_money)
     TextView tvMoney;
+    @Bind(R.id.id_tv_1)
+    TextView idTv1;
     private int[] payDrawables;//支付方式图标
     private String[] payNames;//支付方式 名称
 
@@ -130,6 +132,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
             }
         });
         tvMoney.setText(comitOrderResult.getData().getNeedPayPrice());
+        idTv1.setText(comitOrderResult.getData().getTitle());
     }
 
     public void onBack() {
@@ -301,6 +304,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
                         intent = new Intent(ModeOfPaymentActivity.this, PaySuccessActivity.class);
                         if (!id.equals("")) {
                             intent.putExtra("id", id);
+                            intent.putExtra("type",type+"");
                         }
                         startActivity(intent);
                     } else {
@@ -328,7 +332,12 @@ public class ModeOfPaymentActivity extends BaseActivity {
     private void topay() {
         baseShowWatLoading();
         String url = "";
-        url = AppURL.URL_GETAILPAY + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+        if(type==2){
+            url = AppURL.URL_GET_STONE_AILPAY + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+        }else {
+            url = AppURL.URL_GETAILPAY + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+        }
+
         if (StringUtils.isEmpty(url)) {
             return;
         }

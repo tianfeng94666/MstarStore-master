@@ -78,6 +78,15 @@ public class StoneOrderDetailResult {
         private String remark;
         private String totelPrice;
         private List<StoneBean> list;
+        private int isNeetPay;
+
+        public int getIsNeetPay() {
+            return isNeetPay;
+        }
+
+        public void setIsNeetPay(int isNeetPay) {
+            this.isNeetPay = isNeetPay;
+        }
 
         public String getCustomerName() {
             return customerName;

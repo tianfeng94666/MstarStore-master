@@ -127,7 +127,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         CommentListPagerAdapter adapter = new CommentListPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(adapter);
         viewPager.setOnPageChangeListener(this);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
 
         //显示第几个Fragment
         int pagerNumber = getIntent().getIntExtra("pageNumber", 0);

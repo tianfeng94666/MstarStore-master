@@ -12,7 +12,7 @@ public class StoneOrderResult {
      * response :
      * error : 0
      * message :
-     * data : {"address":{"id":"119","name":"Gigi ","phone":"13456543456","addr":"江苏省 淮安市 盱眙县 34567788887"},"list":[{"id":"11","price":"2376.00","info":"证书:GIA证书号:2131040153 重量:0.75 颜色:G 净度:SI2"},{"id":"12","price":"1800.00","info":"证书:GIA证书号:1136126085 重量:0.32 颜色:D 净度:VS1"},{"id":"13","price":"2388.00","info":"证书:GIA证书号:1136461182 重量:0.52 颜色:H 净度:VS2"}]}
+     * data : {"address":{"id":"119","name":"Gigi ","phone":"13456543456","addr":"江苏省 淮安市 盱眙县 34567788887"},"list":[],"customer":{"customerID":23651,"keycode":"97108","customerName":"冼小俊测试","customerFullName":null}}
      */
 
     private String response;
@@ -55,10 +55,12 @@ public class StoneOrderResult {
     public static class DataBean {
         /**
          * address : {"id":"119","name":"Gigi ","phone":"13456543456","addr":"江苏省 淮安市 盱眙县 34567788887"}
-         * list : [{"id":"11","price":"2376.00","info":"证书:GIA证书号:2131040153 重量:0.75 颜色:G 净度:SI2"},{"id":"12","price":"1800.00","info":"证书:GIA证书号:1136126085 重量:0.32 颜色:D 净度:VS1"},{"id":"13","price":"2388.00","info":"证书:GIA证书号:1136461182 重量:0.52 颜色:H 净度:VS2"}]
+         * list : []
+         * customer : {"customerID":23651,"keycode":"97108","customerName":"冼小俊测试","customerFullName":null}
          */
 
         private AddressEntity address;
+        private CustomerEntity customer;
         private List<StoneBean> list;
 
         public AddressEntity getAddress() {
@@ -67,6 +69,14 @@ public class StoneOrderResult {
 
         public void setAddress(AddressEntity address) {
             this.address = address;
+        }
+
+        public CustomerEntity getCustomer() {
+            return customer;
+        }
+
+        public void setCustomer(CustomerEntity customer) {
+            this.customer = customer;
         }
 
         public List<StoneBean> getList() {

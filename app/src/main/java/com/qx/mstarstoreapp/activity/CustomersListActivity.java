@@ -80,6 +80,7 @@ public class CustomersListActivity extends BaseActivity {
 
     private void initView() {
         keyWord = getIntent().getStringExtra("keyWord");
+        idEtSeach.setText(keyWord);
         madata = new ArrayList<>();
         customersListAdapter = new CustomersListAdapter();
         idLvCustom.setAdapter(customersListAdapter);

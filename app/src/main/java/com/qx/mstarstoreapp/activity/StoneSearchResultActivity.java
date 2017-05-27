@@ -182,7 +182,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     }
 
     public void loadNetData() {
-//        baseShowWatLoading();
+        baseShowWatLoading();
         String url = "";
         url = AppURL.URL_STONE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + page + "&certAuth=" + stoneSearchInfo.getCerAuth() + "&color=" + stoneSearchInfo.getColor() + "&shape=" + stoneSearchInfo.getShape()
                 + "&purity=" + stoneSearchInfo.getPurity() + "&cut=" + stoneSearchInfo.getCut() + "&polishing=" + stoneSearchInfo.getPolishing() + "&symmetric=" + stoneSearchInfo.getSymmetric() + "&fluorescence=" + stoneSearchInfo.getFluorescence()
@@ -194,7 +194,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-//                baseHideWatLoading();
+                baseHideWatLoading();
                 L.e("result" + result);
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
@@ -218,7 +218,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
 
             @Override
             public void onFail(String fail) {
-//                baseHideWatLoading();
+                baseHideWatLoading();
             }
 
         });

@@ -132,10 +132,11 @@
                             android:layout_marginRight="2dp"
                             android:src="@drawable/icon_acc" />
 
-                        <TextView
+                        <EditText
                             android:padding="5dp"
                             android:id="@+id/product_number"
-                            android:layout_width="wrap_content"
+                            android:gravity="center"
+                            android:layout_width="40dp"
                             android:layout_height="wrap_content"
                           android:layout_gravity="center_vertical"
                             android:text="1" />

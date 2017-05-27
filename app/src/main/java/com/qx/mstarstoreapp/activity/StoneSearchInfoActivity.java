@@ -477,18 +477,18 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
 
     private void reduce() {
         int i = Integer.parseInt(etSpot.getText().toString());
-        if (i > 1) {
+//        if (i > 1) {
             --i;
             etSpot.setText(i + "");
-        }
+//        }
     }
 
     private void add() {
         int i = Integer.parseInt(etSpot.getText().toString());
-        if (i >= 1) {
+//        if (i >= 1) {
             ++i;
             etSpot.setText(i + "");
-        }
+//        }
     }
 
     private void isChoose(int i) {

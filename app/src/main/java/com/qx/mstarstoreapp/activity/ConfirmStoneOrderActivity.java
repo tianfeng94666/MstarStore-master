@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -34,6 +35,7 @@ import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.AddressEntity;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
+import com.qx.mstarstoreapp.json.CustumerKeySearchResult;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
 import com.qx.mstarstoreapp.json.StoneBean;
@@ -61,8 +63,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/5/19 0019.
  */
 
-public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRefreshView.OnFooterRefreshListener,
-        PullToRefreshView.OnHeaderRefreshListener, CanScrollVerticallyDelegate,
+public class ConfirmStoneOrderActivity extends BaseActivity implements CanScrollVerticallyDelegate,
         OnFlingOverListener, AdapterStoneCallBack, ConfirmOrderOnUpdate {
 
     @Bind(R.id.id_ig_back)
@@ -71,8 +72,6 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     TextView titleText;
     @Bind(R.id.id_lay_address)
     RelativeLayout layAddress;
-    @Bind(R.id.ck_checkall)
-    CheckBox ckCheckall;
     @Bind(R.id.tv_totalPrice)
     TextView tvTotalPrice;
     @Bind(R.id.bt_go_pay)
@@ -86,12 +85,10 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     @Bind(R.id.id_tv_address)
     TextView idTvAddress;
     @Bind(R.id.id_receipt)
-    Button idReceipt;
+    TextView idReceipt;
 
     @Bind(android.R.id.list)
     ListView list;
-    @Bind(R.id.pull_refresh_view)
-    PullToRefreshView pullRefreshView;
     @Bind(R.id.rel_shopping_car_bottom_action)
     RelativeLayout relShoppingCarBottomAction;
     @Bind(R.id.id_lay_order_detail)
@@ -104,8 +101,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     RelativeLayout idRl1;
     @Bind(R.id.phone_tv)
     TextView phoneTv;
-    @Bind(R.id.lny_loading_layout)
-    LinearLayout lnyLoadingLayout;
+
 
     @Bind(R.id.id_ed_remarks)
     EditText idEdRemarks;
@@ -157,8 +153,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     LinearLayout idRl;
     @Bind(R.id.scrollable_layout)
     ScrollableLayout scrollableLayout;
-    @Bind(R.id.tips_loading_msg)
-    TextView tipsLoadingMsg;
+
     @Bind(R.id.tv_order_state)
     TextView tvOrderState;
     @Bind(R.id.tv_customer_name)
@@ -189,7 +184,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     AddressEntity isDefaultAddress;
     CustomerEntity isDefaultCustomer;
     private String percent;
-    DecimalFormat    df   = new DecimalFormat("######0.00");
+    DecimalFormat df = new DecimalFormat("######0.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +224,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-                lnyLoadingLayout.setVisibility(View.GONE);
+
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
@@ -238,11 +233,13 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                         btGoPay.setVisibility(View.GONE);
                         idLayOrderDetail.setVisibility(View.VISIBLE);
                         idLayPrice1.setVisibility(View.GONE);
-                        idLayPrice2.setVisibility(View.VISIBLE);
+                        idLayPrice2.setVisibility(View.GONE);
                         llStoneOrderDetail.setVisibility(View.VISIBLE);
                         llStoneConfirmOrder.setVisibility(View.GONE);
                         layAddress.setVisibility(View.GONE);
                         llOrderDetailState.setVisibility(View.VISIBLE);
+
+
 
                         StoneOrderDetailResult stoneOrderDetailResult = new Gson().fromJson(result, StoneOrderDetailResult.class);
                         StoneOrderDetailResult.DataBean dataBean = stoneOrderDetailResult.getData();
@@ -257,6 +254,12 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                         tvAmount.setText(dataBean.getOrderNumber() + "");
                         tvDate.setText(dataBean.getOrderDate());
                         tvRemark.setText(dataBean.getRemark());
+
+                        if (dataBean.getIsNeetPay() == 1) {
+                            tvPay.setVisibility(View.VISIBLE);
+                        } else {
+                            tvPay.setVisibility(View.GONE);
+                        }
                     } else {
                         btGoPay.setVisibility(View.VISIBLE);
                         idLayOrderDetail.setVisibility(View.GONE);
@@ -266,7 +269,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                         llStoneConfirmOrder.setVisibility(View.VISIBLE);
                         layAddress.setVisibility(View.VISIBLE);
                         llOrderDetailState.setVisibility(View.GONE);
-
+                        idLayPrice1.setVisibility(View.VISIBLE);
 
                         StoneOrderResult stoneOrderResult = new Gson().fromJson(result, StoneOrderResult.class);
                         if (stoneOrderResult.getData() == null) {
@@ -275,6 +278,10 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                         }
                         StoneOrderResult.DataBean dataBean = stoneOrderResult.getData();
                         isDefaultAddress = dataBean.getAddress();
+                        isDefaultCustomer = dataBean.getCustomer();
+                        if (isDefaultCustomer != null) {
+                            idEtSeach.setText(isDefaultCustomer.getCustomerName());
+                        }
                         currentOrderlList = dataBean.getList();
                         if (isDefaultAddress != null) {
                             idTvName.setText(isDefaultAddress.getName());
@@ -387,7 +394,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
             public void onClick(View view) {
                 boolean isFast = UIUtils.isFastDoubleClick();
                 if (!isFast) {
-                    seachCustom("");
+                    seachCustom(idEtSeach.getText().toString());
                 }
             }
         });
@@ -430,7 +437,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                 intent = new Intent(ConfirmStoneOrderActivity.this, ModeOfPaymentActivity.class);
                 if (!orderId.equals("")) {
                     intent.putExtra("id", orderId);
-                    intent.putExtra("type",1);
+                    intent.putExtra("type", 2);
                 }
                 startActivity(intent);
             }
@@ -520,7 +527,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
         Intent intent = new Intent();
         intent.putExtra("waitOrderCount", waitOrderCount);
         if (type == 2) {
-            intent.setClass(this, CustomMadeActivity.class);
+            intent.setClass(this, StoneHistoryOrder.class);
             startActivity(intent);
         } else {
             setResult(12, intent);
@@ -545,21 +552,20 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     View listHeadView;
 
     protected void initView() {
-        lnyLoadingLayout.setVisibility(View.VISIBLE);
+
         listData = new ArrayList<>();
         lv_list = (ListView) findViewById(android.R.id.list);
         confirOrderAdapter = new ConfirOrderAdapter();
         confirOrderAdapter.setOnAdapterCallBack(this);
         lv_list.setEmptyView(findViewById(R.id.lny_no_result));
         lv_list.setAdapter(confirOrderAdapter);
-        pullRefreshView.setOnFooterRefreshListener(this);
-        pullRefreshView.setOnHeaderRefreshListener(this);
+
+
           /*发票*/
         idReceipt.setText(R.string.write_a_receip);
 
 
         if (type == 2) {
-            ckCheckall.setVisibility(View.GONE);
             titleText.setText(R.string.order_detail);
             idCancleOrder.setText(R.string.cancle_order);
         } else {
@@ -579,6 +585,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
             @Override
             public void onClick(View v) {
                 idEtSeach.setText("");
+                isDefaultCustomer = null;
             }
         });
     }
@@ -609,7 +616,6 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
         String addressId = isDefaultAddress.getId();
         String customerID = isDefaultCustomer.getCustomerID() + "";
 
-
         if (customerID.equals("-1")) {
             showToastReal("请填写客户资料");
             return;
@@ -624,7 +630,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
             return;
         }
         url += "&id=" + id + "&addressId=" + addressId + "&customerId=" + customerID +
-                "&invTitle=" + invTitle + "&invType=" + invType + "&orderNote=" + remarks + "&percent=" + percent;
+                "&invTitle=" + invTitle + "&invType=" + invType + "&remark=" + remarks + "&percent=" + percent;
         L.e("submitOrder" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -676,6 +682,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                    CustumerKeySearchResult custumerKeySearchResult = new Gson().fromJson(result, CustumerKeySearchResult.class);
                     JsonObject jsonObject = jsonResult.get("data").getAsJsonObject();
                     int state = jsonObject.get("state").getAsInt();
                     if (state == 0) {
@@ -684,7 +691,13 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                     }
                     if (state == 1) {
                         ToastManager.showToastReal("有此客户");
-                        updateCustomorWord(keyWord);
+                        if (type == 2) {
+                            updateCustomorWord(isDefaultCustomer.getCustomerID() + "", idEtSeach.getText().toString());
+                        } else {
+                            isDefaultCustomer = custumerKeySearchResult.getData().getList().get(0);
+                            idEtSeach.setText(isDefaultCustomer.getCustomerName());
+                        }
+
                     }
                     if (state == 2) {
                         Intent intent = new Intent(ConfirmStoneOrderActivity.this, CustomersListActivity.class);
@@ -708,7 +721,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     /*
      * @version  修改客户和自印
      */
-    public void updateCustomorWord(String cus) {
+    public void updateCustomorWord(String cus, String word) {
         // ModelOrderWaitCheckDetailModifyInfoDo?orderId=10&customerId=2990&tokenKey=10b588002228fa805231a59bb7976bf4
         String url = "";
         if (type != 2) {
@@ -744,11 +757,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
 
         confirOrderAdapter.notifyDataSetChanged();
         tempCurpage = curpage;
-        if (pullState == PULL_LOAD) {
-            pullRefreshView.onFooterRefreshComplete();
-        } else if (pullState == PULL_REFRESH) {
-            pullRefreshView.onHeaderRefreshComplete();
-        }
+
         pullState = 0;
     }
 
@@ -767,7 +776,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                 isDefaultCustomer = new CustomerEntity();
             }
             isDefaultCustomer.setCustomerID(customerID);
-            updateCustomorWord(customerID + "");
+            updateCustomorWord(customerID + "", idEtSeach.getText().toString());
         }
         if (requestCode == 12) {
             String phoneNumber = data.getStringExtra("phoneNumber");
@@ -878,18 +887,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
     }
 
 
-    @Override
-    public void onFooterRefresh(PullToRefreshView view) {
 
-//            ToastManager.showToastReal("没有更多数据");
-        view.onFooterRefreshComplete();
-
-    }
-
-    @Override
-    public void onHeaderRefresh(PullToRefreshView view) {
-        view.onHeaderRefreshComplete();
-    }
 
     @Override
     public void onUpdate() {
@@ -946,8 +944,8 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                 StoneBean listEntity = listData.get(i);
                 sum = sum + Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "");
             }
-            DecimalFormat    df   = new DecimalFormat("######0.00");
-            return  df.format(sum) + "";
+            DecimalFormat df = new DecimalFormat("######0.00");
+            return df.format(sum) + "";
         }
 
         @Override
@@ -960,12 +958,54 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
-
+            final StoneBean listEntity = listData.get(position);
             if (type == 2) {
+                vh.ivAdd.setVisibility(View.GONE);
+                vh.ivReduce.setVisibility(View.GONE);
+                vh.btnDelete.setVisibility(View.GONE);
+                vh.productNumber.setText("×"+listEntity.getNumber() + "");
+//              vh.productNumber.setEnabled(false);
+            } else {
+                vh.ivAdd.setVisibility(View.VISIBLE);
+                vh.ivReduce.setVisibility(View.VISIBLE);
+                vh.btnDelete.setVisibility(View.VISIBLE);
+                vh.productNumber.setText(listEntity.getNumber() + "");
 
+//                vh.productNumber.setEnabled(true);
+                final int[] index = new int[1];
+                vh.productNumber.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_UP) {
+                            index[0] = position;
+                            showToastReal("ssssssssss");
+                        }
+                        return false;
+                    }
+                });
+
+                if (index[0] != -1 && index[0] == position) {
+                    // 如果当前的行下标和点击事件中保存的index一致，手动为EditText设置焦点。
+                    vh.productNumber.setFocusable(true);
+                    vh.productNumber.requestFocus();
+                    vh.productNumber.setSelection(vh.productNumber.getText().toString().length()
+                    );
+                }
+                vh.productNumber.setOnFocusChangeListener(new android.view.View.
+                        OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (hasFocus) {
+                            // 此处为得到焦点时的处理内容
+                            showToastReal("获得");
+                        } else {
+                            // 此处为失去焦点时的处理内容
+                            showToastReal("获得");
+                        }
+                    }
+                });
             }
 
-            final StoneBean listEntity = listData.get(position);
 
             vh.ivAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -973,7 +1013,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
                     int number = listEntity.getNumber();
                     vh.productNumber.setText(++number + "");
                     listEntity.setNumber(number);
-                    vh.productPrice.setText(df.format(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "") ));
+                    vh.productPrice.setText(df.format(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "")));
                     callBack.changeStoneTotleMoney(getTotleMoney());
                 }
             });
@@ -993,7 +1033,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
             });
             vh.productName.setText(listEntity.getInfo());
             vh.productPrice.setText(listEntity.getPrice());
-            vh.productNumber.setText(listEntity.getNumber() + "");
+
 
             vh.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1037,7 +1077,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements PullToRef
             @Bind(R.id.iv_reduce)
             ImageView ivReduce;
             @Bind(R.id.product_number)
-            TextView productNumber;
+            EditText productNumber;
             @Bind(R.id.iv_add)
             ImageView ivAdd;
             @Bind(R.id.id_oder_type)

@@ -241,7 +241,7 @@ public class AppURL {
      */
     public static String URL_PAY_ALIPAY= "http://appapi1.fanerweb.com/api/Payment/ReceiveAilpayNotice?"+QxVersion;
     /**
-     * 支付宝回调接口
+     * 订单支付宝回调接口
      * http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?tokenKey=69a875e5c234b5b49d1bead689f84832
      */
     public static String URL_GETAILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?";
@@ -263,6 +263,27 @@ public class AppURL {
      * 石头支付界面
      */
     public static String URL_PAY_CURRENT_STONE_ORDER = baseUrl+ "PaymentCurrentOrderStonePage?"+QxVersion;
+    /**
+     * 石头待付款
+     */
+    public static String URL_STONE_ORDER_WAIT_PAY = baseUrl+ "stoneWaitPayOrderList?"+QxVersion;
+    /**
+     * 石头已付款
+     */
+    public static String URL_STONE_ORDER_PAYED = baseUrl+ "stoneAlreadyPayOrderList?"+QxVersion;
+    /**
+     * 石头已发货
+     */
+    public static String URL_STONE_ORDER_SENDING = baseUrl+ "stoneAlreadyDeliverGoodsOrderList?"+QxVersion;
+    /**
+     * 石头已发货
+     */
+    public static String URL_STONE_ORDER_FINISH = baseUrl+ "stoneAlreadyFinishOrderList?"+QxVersion;
+    /**
+     * 石头订单支付宝回调接口
+     *
+     */
+    public static String URL_GET_STONE_AILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayStoneOrderPayStr?";
 }
 
 

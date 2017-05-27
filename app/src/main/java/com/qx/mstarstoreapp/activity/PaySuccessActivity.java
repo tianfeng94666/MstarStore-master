@@ -15,7 +15,9 @@ import static android.R.attr.id;
  * Created by Administrator on 2016/10/28.
  */
 public class PaySuccessActivity extends BaseActivity {
-private String id;
+    private String id;
+    private String type;//type为2裸石订单
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,7 @@ private String id;
 
     private void getDate() {
         id = getIntent().getStringExtra("id");
+        type = getIntent().getStringExtra("type");
     }
 
     @Override
@@ -35,15 +38,27 @@ private String id;
 
     }
 
-    public void onGotoModify(View view){
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", 2);
-        bundle.putString("itemId", id);
-        openActivity(ConfirmOrderActivity.class, bundle);
+    public void onGotoModify(View view) {
+        if(type.equals("2")){
+            Intent intent = new Intent(this, ConfirmStoneOrderActivity.class);
+            intent.putExtra("itemId", id);
+            intent.putExtra("type", 2);
+            startActivity(intent);
+        }else {
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", 2);
+            bundle.putString("itemId", id);
+            openActivity(ConfirmOrderActivity.class, bundle);
+        }
     }
 
-    public void onGotoOrder(View view){
-        openActivity(OrderActivity.class,null);
+    public void onGotoOrder(View view) {
+
+        if(type.equals("2")){
+            openActivity(StoneSearchInfoActivity.class, null);
+        }else {
+            openActivity(OrderActivity.class, null);
+        }
     }
 
     @Override

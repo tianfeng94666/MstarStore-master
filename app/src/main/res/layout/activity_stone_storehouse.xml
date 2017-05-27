@@ -113,7 +113,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:text="1"
+                    android:text="0"
                     android:textSize="@dimen/text_size_small_medium" />
 
                 <TextView

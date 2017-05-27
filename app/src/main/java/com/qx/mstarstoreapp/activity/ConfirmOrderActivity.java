@@ -37,6 +37,7 @@ import com.qx.mstarstoreapp.json.AddressEntity;
 import com.qx.mstarstoreapp.json.ComitOrderResult;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
+import com.qx.mstarstoreapp.json.CustumerKeySearchResult;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
@@ -431,7 +432,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             public void onClick(View view) {
                 boolean isFast = UIUtils.isFastDoubleClick();
                 if (!isFast) {
-                    seachCustom("");
+                    seachCustom(idEtSeach.getText().toString());
                 }
             }
         });
@@ -773,6 +774,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                    CustumerKeySearchResult custumerKeySearchResult = new Gson().fromJson(result, CustumerKeySearchResult.class);
                     JsonObject jsonObject = jsonResult.get("data").getAsJsonObject();
                     int state = jsonObject.get("state").getAsInt();
                     if (state == 0) {
@@ -781,7 +783,13 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
                     if (state == 1) {
                         ToastManager.showToastReal("有此客户");
-                        updateCustomorWord(keyWord, idEdWord.getText().toString());
+                        if(type==2){
+                            updateCustomorWord(isDefaultCustomer.getCustomerID()+"", idEdWord.getText().toString());
+                        }else {
+                            isDefaultCustomer= custumerKeySearchResult.getData().getList().get(0);
+                            idEtSeach.setText(isDefaultCustomer.getCustomerName());
+                        }
+
                     }
                     if (state == 2) {
                         Intent intent = new Intent(ConfirmOrderActivity.this, CustomersListActivity.class);
