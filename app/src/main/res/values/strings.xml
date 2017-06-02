@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">千禧之星珠宝</string>
-    <string name="app_version">1.1</string>
-    <string name="app_version_detail">T 1.1</string>
+    <string name="app_version">1.2</string>
+    <string name="app_version_detail">B 1.2</string>
     <string name="version">4</string>
 
     <string name="pull_to_refresh_pull_label">下拉刷新</string>
@@ -33,7 +33,7 @@
     <string name="set_default_adress_success">设置默认地址成功</string>
     <string name="classify_select">分类选择</string>
     <string name="write_a_receip">开发票</string>
-    <string name="order_detail">订单详细</string>
+    <string name="order_detail">订单详情</string>
     <string name="cancle_order">取消订单</string>
     <string name="confirm_order">确认订单</string>
     <string name="please_write_address">清填写地址</string>

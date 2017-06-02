@@ -225,6 +225,10 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     }
 
     private void setXListview(StoneSearchInfoResult stoneSearchInfoResult) {
+        if(stoneSearchInfoResult.getData().getStone().getList()==null){
+            ToastManager.showToastReal("数据为空！");
+            return;
+        }
         List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> templist = stoneSearchInfoResult.getData().getStone().getList();
         listCount = Integer.parseInt(stoneSearchInfoResult.getData().getStone().getList_count());
         list.addAll(templist);

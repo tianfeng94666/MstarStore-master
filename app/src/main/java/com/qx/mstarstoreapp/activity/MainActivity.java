@@ -84,8 +84,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     versionResult = new Gson().fromJson(result, VersionResult.class);
+                    if(versionResult.getData()==null){
+                        ToastManager.showToastReal("获取数据失败！");
+                        return;
+                    }
                     version = versionResult.getData().getVersion();
-                    if (!version.equals(getString(R.string.app_version))) {
+                    Double versionDouble = Double.parseDouble(version);
+                    Double currentDouble = Double.parseDouble(getString(R.string.app_version));
+                    if (versionDouble>currentDouble) {
                         showNoticeDialog();
                     }
                 } else if (error.equals("2")) {

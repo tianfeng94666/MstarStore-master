@@ -6,7 +6,45 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/title_layout"></include>
+    <RelativeLayout
+        android:id="@+id/id_rel_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="@drawable/title_shadow_style"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/id_ig_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:onClick="onBack"
+            android:padding="10dip"
+
+            android:src="@drawable/icon_return" />
+
+        <TextView
+            android:id="@+id/title_text"
+            android:textSize="18sp"
+            android:textColor="@color/text_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="" />
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+           android:gravity="center"
+           android:text="历史订单"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"

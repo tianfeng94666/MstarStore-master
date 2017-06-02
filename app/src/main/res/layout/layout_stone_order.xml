@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="10dip"
@@ -18,19 +17,6 @@
         android:gravity="center_vertical">
 
 
-        <CheckBox
-            android:id="@+id/ck_checkone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:button="@drawable/radio_style"
-            android:checked="false"
-            android:visibility="gone"
-            android:paddingBottom="8dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
 
 
 
@@ -137,6 +123,7 @@
                             android:id="@+id/product_number"
                             android:gravity="center"
                             android:layout_width="40dp"
+                            android:inputType="number"
                             android:layout_height="wrap_content"
                           android:layout_gravity="center_vertical"
                             android:text="1" />

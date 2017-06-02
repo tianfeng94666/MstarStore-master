@@ -21,19 +21,25 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.activity.ConfirmOrderActivity;
 import com.qx.mstarstoreapp.activity.ConfirmStoneOrderActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
+import com.qx.mstarstoreapp.activity.CustomersListActivity;
 import com.qx.mstarstoreapp.activity.ModeOfPaymentActivity;
+import com.qx.mstarstoreapp.activity.OrderActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
 import com.qx.mstarstoreapp.adapter.SendingListAdater;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.BaseFragment;
+import com.qx.mstarstoreapp.json.CancleStoneOrderResult;
+import com.qx.mstarstoreapp.json.IsHaveCustomerResult;
 import com.qx.mstarstoreapp.json.OrderWaitResult;
 import com.qx.mstarstoreapp.json.SendingResult;
 import com.qx.mstarstoreapp.json.StoneOrderStateResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
+import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
@@ -370,6 +376,39 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
 
     }
 
+    private void cancleOrder(final String orderId) {
+        String url = AppURL.URL_STONE_CANCLE_ORDER + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + orderId;
+        //keyword=广西|平果&tokenKey=944df2f27ffce557042887589986c193
+        L.e("cancleOrdre:" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                L.e(result);
+                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+                if (error == 0) {
+                    CancleStoneOrderResult cancleStoneOrderResult= new Gson().fromJson(result,CancleStoneOrderResult.class);
+                    ToastManager.showToastReal(cancleStoneOrderResult.getMessage());
+                    for(int i =0 ;i<listData.size();i++){
+                        if(listData.get(i).getId().equals(orderId)){
+                            listData.remove(i);
+                            break;
+
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                } else if (error == 2) {
+                    loginToServer(OrderActivity.class);
+                } else {
+                    ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+        });
+    }
 
     public class ListViewAdapter extends BaseAdapter {
         @Override
@@ -401,8 +440,9 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
             viewHolder.tvAction.setVisibility(View.GONE);
             switch (fragType) {
                 case WAITINGPAY_CODE:
-                   viewHolder.tvOrderState.setText("代付款");
+                    viewHolder.tvOrderState.setText("代付款");
                     viewHolder.tvAction.setVisibility(View.VISIBLE);
+                    viewHolder.tvCancleOrder.setVisibility(View.VISIBLE);
                     break;
                 case PAYED_CODE:
                     viewHolder.tvOrderState.setText("已付款");
@@ -418,12 +458,19 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
             viewHolder.tvAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  Intent  intent = new Intent(getContext(), ModeOfPaymentActivity.class);
+                    Intent intent = new Intent(getContext(), ModeOfPaymentActivity.class);
                     if (!listEntity.getId().equals("")) {
                         intent.putExtra("id", listEntity.getId());
                         intent.putExtra("type", 2);
+                        intent.putExtra("isFinish", 1);
                     }
                     startActivity(intent);
+                }
+            });
+            viewHolder.tvCancleOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cancleOrder(listEntity.getId());
                 }
             });
 
@@ -431,8 +478,8 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
             viewHolder.idCusName.setText(listEntity.getCustomerName());
             viewHolder.idStartDate.setText(listEntity.getOrderDate());
             viewHolder.tvRemark.setText(listEntity.getRemark());
-           viewHolder.tvAmount.setText("共"+listEntity.getNumber()+"件 合计 ");
-            viewHolder.tvMoney.setText("¥"+listEntity.getTotalPrice());
+            viewHolder.tvAmount.setText("共" + listEntity.getNumber() + "件 合计 ");
+            viewHolder.tvMoney.setText("¥" + listEntity.getTotalPrice());
 
             return convertView;
         }
@@ -547,6 +594,7 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
 
         }
 
+
         class ViewHolder {
             @Bind(R.id.specifiction_content)
             MyLinearLayout specifictionContent;
@@ -564,18 +612,20 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
             TextView tv2;
             @Bind(R.id.id_start_date)
             TextView idStartDate;
+            @Bind(R.id.tv_action)
+            TextView tvAction;
             @Bind(R.id.tv3)
             TextView tv3;
             @Bind(R.id.tv_remark)
             TextView tvRemark;
             @Bind(R.id.inner_lny_container)
             LinearLayout innerLnyContainer;
+            @Bind(R.id.tv_cancle_order)
+            TextView tvCancleOrder;
             @Bind(R.id.tv_amount)
             TextView tvAmount;
             @Bind(R.id.tv_money)
             TextView tvMoney;
-            @Bind(R.id.tv_action)
-            TextView tvAction;
             @Bind(R.id.img_container)
             CustomGridView imgContainer;
             @Bind(R.id.id_lay_images)

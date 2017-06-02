@@ -3,8 +3,8 @@
     android:id="@+id/linear_container_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
 
     >
 
@@ -55,8 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-           android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
 
             android:text="代付款"
             android:textColor="@color/theme_red"></TextView>
@@ -88,8 +88,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:text="客户："
-                android:textColor="@color/theme_back"
-                />
+                android:textColor="@color/theme_back" />
 
             <TextView
                 android:id="@+id/id_cus_name"
@@ -99,15 +98,14 @@
                 android:layout_marginLeft="@dimen/margin10"
                 android:layout_toRightOf="@+id/tv1"
                 android:text="湖北黄冈罗田"
-                android:textColor="@color/theme_back"
-                />
+                android:textColor="@color/theme_back" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="@dimen/margin5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin5">
 
             <TextView
                 android:id="@+id/tv2"
@@ -116,8 +114,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:text="下单日期："
-                android:textColor="@color/theme_back"
-                />
+                android:textColor="@color/theme_back" />
 
             <TextView
                 android:id="@+id/id_start_date"
@@ -127,34 +124,34 @@
                 android:layout_marginLeft="@dimen/margin10"
                 android:layout_toRightOf="@+id/tv2"
                 android:text="2016-11-11"
-                android:textColor="@color/theme_back"
-                />
+                android:textColor="@color/theme_back" />
+
             <TextView
                 android:id="@+id/tv_action"
-                android:text="去付款"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/theme_red"
-                android:padding="@dimen/margin5"
-                android:background="@drawable/board_red_backgroud_white"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/board_red_backgroud_white"
+                android:padding="@dimen/margin5"
+                android:text="去付款"
+                android:textColor="@color/theme_red" />
         </RelativeLayout>
 
 
         <RelativeLayout
-            android:layout_marginTop="@dimen/margin5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin5">
 
             <TextView
                 android:id="@+id/tv3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="备注："
-                android:textColor="@color/theme_back"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="备注："
+                android:textColor="@color/theme_back" />
 
             <TextView
                 android:id="@+id/tv_remark"
@@ -164,12 +161,9 @@
                 android:layout_marginLeft="@dimen/margin10"
                 android:layout_toRightOf="@+id/tv3"
                 android:text="2016-11-11"
-                android:textColor="@color/theme_back"
-                />
+                android:textColor="@color/theme_back" />
 
         </RelativeLayout>
-
-
 
 
     </LinearLayout>
@@ -188,13 +182,24 @@
         android:paddingRight="15dp"
         android:paddingTop="5dp">
 
-       <TextView
+        <TextView
+            android:id="@+id/tv_cancle_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/board_black_backgroud_white"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:text="取消订单"
+            android:textColor="@color/text_color" />
 
-           android:id="@+id/tv_amount"
-           android:layout_toLeftOf ="@+id/tv_money"
-           android:layout_width="wrap_content"
-           android:text="共1件 合计 "
-           android:layout_height="wrap_content" />
+        <TextView
+
+            android:id="@+id/tv_amount"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tv_money"
+            android:text="共1件 合计 " />
 
         <TextView
             android:id="@+id/tv_money"
@@ -202,9 +207,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:gravity="center"
+            android:padding="5dp"
             android:text="¥1350"
-            android:textColor="@color/theme_red"
-            />
+            android:textColor="@color/theme_red" />
     </RelativeLayout>
 
     <View
@@ -229,11 +234,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/id_lay_images"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/id_lay_images"
-        android:orientation="horizontal"
-        />
+        android:orientation="horizontal" />
 
 
 </LinearLayout>

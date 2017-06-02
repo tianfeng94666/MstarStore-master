@@ -82,7 +82,7 @@ public class StoneHistoryOrder extends BaseActivity {
         tab.addTab(tab.newTab().setText("4"));
         //添加页卡标题
         mTitleList.add("待支付");
-        mTitleList.add("已支付");
+        mTitleList.add("已付款");
         mTitleList.add("已发货");
         mTitleList.add("已完成");
         tab.setupWithViewPager(viewPager);

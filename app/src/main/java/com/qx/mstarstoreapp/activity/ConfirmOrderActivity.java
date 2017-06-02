@@ -38,6 +38,7 @@ import com.qx.mstarstoreapp.json.ComitOrderResult;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
 import com.qx.mstarstoreapp.json.CustumerKeySearchResult;
+import com.qx.mstarstoreapp.json.IsHaveCustomerResult;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
@@ -221,7 +222,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                             modelQualityItem = dataEntity.getModelQuality();
                         }
                         if (list_count == 0) {
-                            ToastManager.showToastReal("没有数据");
+                           showToastReal("没有数据");
                         } else {
                             listData.addAll(list);
                         }
@@ -251,7 +252,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                     idReceipt.setText("类型：" + invType + "     抬头：" + invTitle);
                                     L.e("类型：" + invTitle + "     抬头：" + invTitle);
                                 }
-
+                                isDefaultCustomer = dataEntity.getCustomer();
                             } else {
                                 isDefaultCustomer = dataEntity.getCustomer();
                                 if (isDefaultCustomer != null) {
@@ -501,7 +502,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
-                    ToastManager.showToastReal("提交成功");
+                   showToastReal("提交成功");
                     setResult(11);
                     finish();
                 }
@@ -676,17 +677,17 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         String customerID = isDefaultCustomer.getCustomerID() + "";
         String itemurl = "";
         if (mcheckId == null || mcheckId.size() == 0) {
-            ToastManager.showToastReal(getString(R.string.please_select_order));
+            showToastReal(getString(R.string.please_select_order));
         } else {
             itemurl = StringUtils.purUrlCut("itemId", mcheckId).toString();
         }
         L.e("word" + word + "   addressId" + addressId + "");
         if (customerID.equals("-1")) {
-            ToastManager.showToastReal("请填写客户资料");
+           showToastReal("请填写客户资料");
             return;
         }
         if (StringUtils.isEmpty(word) && StringUtils.isEmpty(addressId) && StringUtils.isEmpty(customerID) && StringUtils.isEmpty(itemurl)) {
-            ToastManager.showToastReal("请填写完整资料");
+         showToastReal("请填写完整资料");
             return;
         }
         url += itemurl + "&word=" + word + "&purityId=" + purityId + "&addressId=" + addressId + "&qualityId=" + qualityId + "&customerID=" + customerID +
@@ -774,19 +775,19 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                    CustumerKeySearchResult custumerKeySearchResult = new Gson().fromJson(result, CustumerKeySearchResult.class);
+                    IsHaveCustomerResult isHaveCustomerResult = new Gson().fromJson(result, IsHaveCustomerResult.class);
                     JsonObject jsonObject = jsonResult.get("data").getAsJsonObject();
                     int state = jsonObject.get("state").getAsInt();
                     if (state == 0) {
-                        ToastManager.showToastReal("没有此客户");
+                        showToastReal("没有此客户");
                         isDefaultCustomer.setCustomerID(-1);
                     }
                     if (state == 1) {
-                        ToastManager.showToastReal("有此客户");
+                        showToastReal("有此客户");
+                        isDefaultCustomer= isHaveCustomerResult.getData().getCustomer();
                         if(type==2){
                             updateCustomorWord(isDefaultCustomer.getCustomerID()+"", idEdWord.getText().toString());
                         }else {
-                            isDefaultCustomer= custumerKeySearchResult.getData().getList().get(0);
                             idEtSeach.setText(isDefaultCustomer.getCustomerName());
                         }
 
@@ -827,7 +828,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 L.e(result);
                 if (error == 0) {
-                    ToastManager.showToastReal("更新成功");
+                    showToastReal("更新成功");
                 }
                 if (error == 2) {
                     loginToServer(StyleInfromationActivity.class);
@@ -1022,7 +1023,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             pullState = PULL_LOAD;
             loadNetData();
         } else {
-            ToastManager.showToastReal("没有更多数据");
+     showToastReal("没有更多数据");
             view.onFooterRefreshComplete();
         }
     }
@@ -1208,7 +1209,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             String url;
             if (type == 2) {
                 if (listData.size() <= 1) {
-                    ToastManager.showToastReal("请点击取消订单");
+                    showToastReal("请点击取消订单");
                     return;
                 }
                 url = AppURL.URL_ORDER_WAIT_DELETE + "&tokenKey=" + BaseApplication.getToken() + "&itemId=" + id;

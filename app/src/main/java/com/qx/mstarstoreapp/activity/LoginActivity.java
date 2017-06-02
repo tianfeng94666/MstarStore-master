@@ -116,7 +116,9 @@ public class LoginActivity extends BaseActivity {
                 if (error.equals("0")) {
                     VersionResult versionResult = new Gson().fromJson(result, VersionResult.class);
                     version = versionResult.getData().getVersion();
-                    if (!version.equals(R.string.app_version)) {
+                    Double versionDouble = Double.parseDouble(version);
+                    Double currentDouble = Double.parseDouble(getString(R.string.app_version));
+                    if (versionDouble>currentDouble) {
 //                        new UpdateManager(context).Update(versionResult.getData().getUrl());
                     } else {
                         initView();

@@ -50,7 +50,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     @Bind(R.id.title_text)
     TextView titleText;
     @Bind(R.id.tv_right)
-    ImageView ivRight;
+    TextView ivRight;
     @Bind(R.id.id_rel_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.ll_certificate_orgnization)

@@ -2,6 +2,9 @@ package com.qx.mstarstoreapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,6 +39,7 @@ import com.qx.mstarstoreapp.json.AddressEntity;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
 import com.qx.mstarstoreapp.json.CustumerKeySearchResult;
+import com.qx.mstarstoreapp.json.IsHaveCustomerResult;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
 import com.qx.mstarstoreapp.json.StoneBean;
@@ -47,7 +51,6 @@ import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
-import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -185,6 +188,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     CustomerEntity isDefaultCustomer;
     private String percent;
     DecimalFormat df = new DecimalFormat("######0.00");
+    private int isFinish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +203,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
         initScroll();
         loadNetData();
         isFirst = true;
-
+        new Thread(run2).start();
     }
 
     private void getDate() {
@@ -208,9 +212,27 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
         System.out.println("itemId=" + orderId);
         percent = intent.getStringExtra("percent");
         type = intent.getIntExtra("type", 0);
+        isFinish = intent.getIntExtra("isFinish", 0);
 
     }
 
+    Runnable run2 = new Runnable() {
+
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                View rootview = ConfirmStoneOrderActivity.this.getWindow().getDecorView();
+                View aaa = rootview.findFocus();
+                Log.i("tag", aaa.toString());
+            }
+
+        }
+    };
 
     @Override
     public void loadNetData() {
@@ -238,7 +260,6 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                         llStoneConfirmOrder.setVisibility(View.GONE);
                         layAddress.setVisibility(View.GONE);
                         llOrderDetailState.setVisibility(View.VISIBLE);
-
 
 
                         StoneOrderDetailResult stoneOrderDetailResult = new Gson().fromJson(result, StoneOrderDetailResult.class);
@@ -457,7 +478,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
-                    ToastManager.showToastReal("提交成功");
+                    showToastReal("提交成功");
                     setResult(11);
                     finish();
                 }
@@ -527,8 +548,11 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
         Intent intent = new Intent();
         intent.putExtra("waitOrderCount", waitOrderCount);
         if (type == 2) {
-            intent.setClass(this, StoneHistoryOrder.class);
-            startActivity(intent);
+            if (isFinish == 0) {
+                intent.setClass(this, StoneHistoryOrder.class);
+                startActivity(intent);
+            }
+
         } else {
             setResult(12, intent);
         }
@@ -605,11 +629,11 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
         String remarks = idEdRemarks.getText().toString();
         if (isDefaultAddress == null) {
-            ToastManager.showToastReal(getString(R.string.please_write_address));
+            showToastReal(getString(R.string.please_write_address));
             return;
         }
         if (isDefaultCustomer == null) {
-            ToastManager.showToastReal(getString(R.string.please_write_customer));
+           showToastReal(getString(R.string.please_write_customer));
             return;
         }
 
@@ -656,7 +680,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                 } else if (error == 2) {
                     loginToServer(OrderActivity.class);
                 } else {
-                    ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
+                    showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
             }
 
@@ -682,19 +706,19 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                    CustumerKeySearchResult custumerKeySearchResult = new Gson().fromJson(result, CustumerKeySearchResult.class);
+                    IsHaveCustomerResult isHaveCustomerResult = new Gson().fromJson(result, IsHaveCustomerResult.class);
                     JsonObject jsonObject = jsonResult.get("data").getAsJsonObject();
                     int state = jsonObject.get("state").getAsInt();
                     if (state == 0) {
-                        ToastManager.showToastReal("没有此客户");
+                        showToastReal("没有此客户");
                         isDefaultCustomer.setCustomerID(-1);
                     }
                     if (state == 1) {
-                        ToastManager.showToastReal("有此客户");
+                     showToastReal("有此客户");
+                        isDefaultCustomer = isHaveCustomerResult.getData().getCustomer();
                         if (type == 2) {
-                            updateCustomorWord(isDefaultCustomer.getCustomerID() + "", idEtSeach.getText().toString());
+                            updateCustomorWord(isDefaultCustomer.getCustomerID() + "", keyWord);
                         } else {
-                            isDefaultCustomer = custumerKeySearchResult.getData().getList().get(0);
                             idEtSeach.setText(isDefaultCustomer.getCustomerName());
                         }
 
@@ -735,7 +759,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 L.e(result);
                 if (error == 0) {
-                    ToastManager.showToastReal("更新成功");
+                    showToastReal("更新成功");
                 }
                 if (error == 2) {
                     loginToServer(StyleInfromationActivity.class);
@@ -887,8 +911,6 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     }
 
 
-
-
     @Override
     public void onUpdate() {
         loadNetData();
@@ -903,6 +925,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
     public class ConfirOrderAdapter extends BaseAdapter {
         private Map<String, StoneBean> checkedState;
+        int index;
 
         public ConfirOrderAdapter() {
             checkedState = new HashMap<>();
@@ -963,45 +986,42 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                 vh.ivAdd.setVisibility(View.GONE);
                 vh.ivReduce.setVisibility(View.GONE);
                 vh.btnDelete.setVisibility(View.GONE);
-                vh.productNumber.setText("×"+listEntity.getNumber() + "");
+                vh.productNumber.setText("×" + listEntity.getNumber() + "");
 //              vh.productNumber.setEnabled(false);
             } else {
                 vh.ivAdd.setVisibility(View.VISIBLE);
                 vh.ivReduce.setVisibility(View.VISIBLE);
                 vh.btnDelete.setVisibility(View.VISIBLE);
                 vh.productNumber.setText(listEntity.getNumber() + "");
-
-//                vh.productNumber.setEnabled(true);
-                final int[] index = new int[1];
                 vh.productNumber.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         if (event.getAction() == MotionEvent.ACTION_UP) {
-                            index[0] = position;
-                            showToastReal("ssssssssss");
+                            index = position;
                         }
                         return false;
                     }
                 });
 
-                if (index[0] != -1 && index[0] == position) {
+                vh.productNumber.clearFocus();
+                if (index != -1 && index == position) {
                     // 如果当前的行下标和点击事件中保存的index一致，手动为EditText设置焦点。
-                    vh.productNumber.setFocusable(true);
                     vh.productNumber.requestFocus();
-                    vh.productNumber.setSelection(vh.productNumber.getText().toString().length()
-                    );
                 }
-                vh.productNumber.setOnFocusChangeListener(new android.view.View.
-                        OnFocusChangeListener() {
+                vh.productNumber.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (hasFocus) {
-                            // 此处为得到焦点时的处理内容
-                            showToastReal("获得");
-                        } else {
-                            // 此处为失去焦点时的处理内容
-                            showToastReal("获得");
-                        }
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        listEntity.setNumber(Integer.parseInt(vh.productNumber.getText().toString()));
                     }
                 });
             }
@@ -1022,7 +1042,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                 public void onClick(View v) {
                     int number = listEntity.getNumber();
                     if (number == 1) {
-                        ToastManager.showToastReal("数量不能少于1！");
+                        showToastReal("数量不能少于1！");
                     } else {
                         vh.productNumber.setText(--number + "");
                         listEntity.setNumber(number);
@@ -1062,8 +1082,6 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
 
         class ViewHolder {
-            @Bind(R.id.ck_checkone)
-            CheckBox ckCheckone;
             @Bind(R.id.btn_delete)
             TextView btnDelete;
             @Bind(R.id.item_button_layout)

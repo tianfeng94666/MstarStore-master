@@ -7,7 +7,8 @@ import com.qx.mstarstoreapp.R;
  */
 public class AppURL {
 //     static String QxVersion = "&QxVersion="+ "beta"+"&";
-    static String QxVersion = "QxVersion="+ ""+"&";
+//    static String QxVersion = "QxVersion="+ ""+"&";
+    static String QxVersion = "QxVersion="+ "beta1.2"+"&"+"QxSubject=jz0755&";
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi1.fanerweb.com/api/aproxy/";
     //测试 http://appapi1.fanerweb.com/api/Aproxy/
@@ -244,7 +245,7 @@ public class AppURL {
      * 订单支付宝回调接口
      * http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?tokenKey=69a875e5c234b5b49d1bead689f84832
      */
-    public static String URL_GETAILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?";
+    public static String URL_GETAILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?"+QxVersion;
     /**
      * 石头确认下单
      */
@@ -283,7 +284,11 @@ public class AppURL {
      * 石头订单支付宝回调接口
      *
      */
-    public static String URL_GET_STONE_AILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayStoneOrderPayStr?";
+    public static String URL_GET_STONE_AILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayStoneOrderPayStr?"+QxVersion;
+    /**
+     * 取消石头代付款订单
+     */
+    public static String URL_STONE_CANCLE_ORDER= baseUrl+ "stoneCancelOrderDo?"+QxVersion;
 }
 
 

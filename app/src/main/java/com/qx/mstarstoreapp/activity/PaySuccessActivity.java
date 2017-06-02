@@ -39,17 +39,10 @@ public class PaySuccessActivity extends BaseActivity {
     }
 
     public void onGotoModify(View view) {
-        if(type.equals("2")){
-            Intent intent = new Intent(this, ConfirmStoneOrderActivity.class);
-            intent.putExtra("itemId", id);
-            intent.putExtra("type", 2);
-            startActivity(intent);
-        }else {
-            Bundle bundle = new Bundle();
-            bundle.putInt("type", 2);
-            bundle.putString("itemId", id);
-            openActivity(ConfirmOrderActivity.class, bundle);
-        }
+
+
+            openActivity(MainActivity.class, null);
+
     }
 
     public void onGotoOrder(View view) {

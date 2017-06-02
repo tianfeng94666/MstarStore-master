@@ -37,6 +37,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="100dp"
             android:textSize="12sp"
+            android:visibility="gone"
             android:layout_marginTop="15dp"
             android:layout_marginRight="100dp"
             android:layout_width="wrap_content"
@@ -69,7 +70,7 @@
         android:background="@drawable/edit_border"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:text="订单详情"
+        android:text="返回个人中心"
         android:clickable="true"
         android:layout_height="40dip" />
 
