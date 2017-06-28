@@ -50,7 +50,7 @@ public class CustomSelectInput extends RelativeLayout {
     }
 
     public void setTextName(String textName) {
-        if (!StringUtils.isEmpty(textName)) {
+        if (!StringUtils.isEmpty(textName)&&!textName.equals("规格")) {
             this.tv.setText(textName);
             tv.setTextColor(getResources().getColor(R.color.black));
             tv.setBackgroundResource(R.drawable.btn_bg_while);
@@ -67,6 +67,9 @@ public class CustomSelectInput extends RelativeLayout {
 
 
     public String getTextName() {
+        if(tv.getText().toString().equals("规格")){
+            return "";
+        }
         return this.tv.getText().toString();
     }
 
@@ -125,10 +128,14 @@ public class CustomSelectInput extends RelativeLayout {
         editText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(editText.getText().toString().equals("规格")){
+                    editText.setText("");
+                }
                 editText.setSelection(editText.getText().length());
             }
         });
      editText.setText(getTextName());
+
         ivReduce.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +186,7 @@ public class CustomSelectInput extends RelativeLayout {
         });
         if (onSelectData != null) {
             titleView.setText(onSelectData.getTitle());
+
             titleView.setTextColor(getResources().getColor(R.color.black));
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

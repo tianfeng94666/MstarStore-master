@@ -35,8 +35,7 @@
                 android:layout_height="50dip"
                 android:background="@drawable/edit_for_line_bg"
                 android:gravity="center"
-                android:hint="请输入合法规格"
-                android:inputType="number" />
+                android:hint="请输入合法规格" />
 
             <ImageView
                 android:id="@+id/iv_add"

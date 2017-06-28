@@ -222,7 +222,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                             modelQualityItem = dataEntity.getModelQuality();
                         }
                         if (list_count == 0) {
-                           showToastReal("没有数据");
+                            showToastReal("没有数据");
                         } else {
                             listData.addAll(list);
                         }
@@ -502,7 +502,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
-                   showToastReal("提交成功");
+                    showToastReal("提交成功");
                     setResult(11);
                     finish();
                 }
@@ -546,6 +546,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                             for (int j = 0; j < listData.size(); j++) {
                                 if (listData.get(j).getId().equals(priceList.get(i).getId())) {
                                     listData.get(j).setPrice(priceList.get(i).getPrice() + "");
+                                    listData.get(j).setNeedPayPrice(priceList.get(i).getNeedPayPrice()+"");
                                 }
                             }
                         }
@@ -683,11 +684,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         }
         L.e("word" + word + "   addressId" + addressId + "");
         if (customerID.equals("-1")) {
-           showToastReal("请填写客户资料");
+            showToastReal("请填写客户资料");
             return;
         }
         if (StringUtils.isEmpty(word) && StringUtils.isEmpty(addressId) && StringUtils.isEmpty(customerID) && StringUtils.isEmpty(itemurl)) {
-         showToastReal("请填写完整资料");
+            showToastReal("请填写完整资料");
             return;
         }
         url += itemurl + "&word=" + word + "&purityId=" + purityId + "&addressId=" + addressId + "&qualityId=" + qualityId + "&customerID=" + customerID +
@@ -784,10 +785,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
                     if (state == 1) {
                         showToastReal("有此客户");
-                        isDefaultCustomer= isHaveCustomerResult.getData().getCustomer();
-                        if(type==2){
-                            updateCustomorWord(isDefaultCustomer.getCustomerID()+"", idEdWord.getText().toString());
-                        }else {
+                        isDefaultCustomer = isHaveCustomerResult.getData().getCustomer();
+                        if (type == 2) {
+                            updateCustomorWord(isDefaultCustomer.getCustomerID() + "", idEdWord.getText().toString());
+                        } else {
                             idEtSeach.setText(isDefaultCustomer.getCustomerName());
                         }
 
@@ -920,7 +921,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 isDefaultAddress = new AddressEntity();
             }
             isDefaultAddress.setId(addressId);
-
+            if (type == 2) {
+                updatAddress();
+            }
             idTvName.setText(name);
             idTvAddress.setText(address);
             phoneTv.setText(phoneNumber);
@@ -942,6 +945,30 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 updateInv();
             }
         }
+    }
+
+    private void updatAddress() {
+        String url = AppURL.URL_ORDER_ADRESS_CHANGE+ "tokenKey=" + BaseApplication.getToken() + "&addressId=" + isDefaultAddress.getId() +
+                "&orderId=" + orderId;
+        L.e("updateInv" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+                L.e(result);
+                if (error == 0) {
+                    ToastManager.showToastReal("更新成功");
+                }
+                if (error == 2) {
+                    loginToServer(StyleInfromationActivity.class);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+        });
     }
 
     public void updateInv() {
@@ -1023,7 +1050,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             pullState = PULL_LOAD;
             loadNetData();
         } else {
-     showToastReal("没有更多数据");
+            showToastReal("没有更多数据");
             view.onFooterRefreshComplete();
         }
     }

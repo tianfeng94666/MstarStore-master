@@ -31,6 +31,7 @@ import java.util.List;
 import cn.finalteam.okhttpfinal.OkHttpFinal;
 import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 import cn.finalteam.okhttpfinal.Part;
+import cn.sharesdk.framework.ShareSDK;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 
@@ -86,6 +87,8 @@ public class BaseApplication extends Application {
         initImageLoder();
         initOkHttpFinal();
         initParams();
+        //初始化分享
+        ShareSDK.initSDK(this);
     }
 
     private void initParams() {

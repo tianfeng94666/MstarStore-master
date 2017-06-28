@@ -11,9 +11,11 @@ import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
+import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.viewutils.CountTimerButton;
@@ -147,6 +149,8 @@ public class RegisterActivity extends BaseActivity {
                 L.e("error"+error);
                 if (error==0){
                     L.e("成功");
+                    BaseApplication.spUtils.saveString(SpUtils.key_username, userName);
+                    BaseApplication.spUtils.saveString(SpUtils.key_password, pwd);
                     openActivity(MainActivity.class, null);
                 }if(error==1) {
                     String message=gson.fromJson(result, JsonObject.class).get("message").getAsString();

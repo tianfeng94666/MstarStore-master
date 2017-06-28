@@ -47,7 +47,6 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         context = this;
 //		ViewServer.get(this).addWindow(this);
     }

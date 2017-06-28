@@ -61,21 +61,21 @@ public class DeliveryAdapter extends BaseAdapter {
 
         viewHolder.tvDeliveryItemNumber.setText(bean.getModNum());
         viewHolder.tvDeliveryItemName.setText(bean.getTypeName() + " " + bean.getModelNum());
-        viewHolder.tvDeliveryItemCost.setText(  bean.getUnitPrice());
+        viewHolder.tvDeliveryItemCost.setText(bean.getUnitPrice());
         ImageLoader.getInstance().displayImage(bean.getPic(), viewHolder.ivProduct, ImageLoadOptions.getOptions());
         viewHolder.tvDeliveryItemLess.setText(bean.getSInfo());
         viewHolder.tvDeliveryItemLess2.setText(bean.getSInfo());
-        for(int j =0 ;j<bean.getStInfo().size();j++){
+        for (int j = 0; j < bean.getStInfo().size(); j++) {
             TextView tv = new TextView(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(UIUtils.dip2px(8),0,0,0);
+            params.setMargins(UIUtils.dip2px(8), 0, 0, 0);
             tv.setLayoutParams(params);
             tv.setText(bean.getStInfo().get(j));
-            tv.setTextColor(context.getResources().getColor(R.color.text_color));
+            tv.setTextColor(context.getResources().getColor(R.color.text_color2));
 
             viewHolder.llStone.addView(tv);
         }
-//        viewHolder.tvDeliveryItemProductInf.setText(bean.getDInfo());
+        viewHolder.tvDeliveryItemProductInf.setText(bean.getDInfo());
         viewHolder.tvDeliveryItemRemark.setText(bean.getRemark());
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.llItemDelivery.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +93,7 @@ public class DeliveryAdapter extends BaseAdapter {
                 }
             }
         });
-
+        notifyDataSetChanged();
         return view;
     }
 
@@ -130,7 +130,6 @@ public class DeliveryAdapter extends BaseAdapter {
             ButterKnife.bind(this, view);
         }
     }
-
 
 
 }

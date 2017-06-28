@@ -276,7 +276,9 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
             helper.setText(R.id.product_name, item.getTitle());
             helper.setText(R.id.product_price, item.getPrice());
             helper.setText(R.id.product_norms, item.getBaseInfo());
-            helper.setText(R.id.product_number, item.getNumber() + "");
+            TextView tvNumber= helper.getView(R.id.product_number);
+            tvNumber.setTextColor(getResources().getColor(R.color.theme_red));
+            helper.setText(R.id.product_number,"×" +item.getNumber() + "件");
             helper.setText(R.id.id_tv_information, item.getInfo());
             ImageLoader.getInstance().displayImage(item.getPic(), productImg, ImageLoadOptions.getOptions());
         }

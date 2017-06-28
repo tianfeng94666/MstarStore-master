@@ -7,8 +7,8 @@ import com.qx.mstarstoreapp.R;
  */
 public class AppURL {
 //     static String QxVersion = "&QxVersion="+ "beta"+"&";
-//    static String QxVersion = "QxVersion="+ ""+"&";
-    static String QxVersion = "QxVersion="+ "beta1.2"+"&"+"QxSubject=jz0755&";
+    static String QxVersion = "QxVersion=1.3"+"&";
+//    static String QxVersion = "QxVersion="+ "beta1.2"+"&"+"";
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi1.fanerweb.com/api/aproxy/";
     //测试 http://appapi1.fanerweb.com/api/Aproxy/
@@ -141,6 +141,10 @@ public class AppURL {
     /*定金页价格修改*/
    // ?purityId=1&qualityId=1&orderId=13&tokenKey=10b588002228fa805231a59bb7976bf4
     public static String URL_WATI_ORDER_PRICE = baseUrl + "ModelOrderWaitCheckModifyGetOrderPricePageListDo?";
+    /*订单详情修改地址*/
+    // ?purityId=1&qualityId=1&orderId=13&tokenKey=10b588002228fa805231a59bb7976bf4
+    public static String URL_ORDER_ADRESS_CHANGE = baseUrl + "ModelOrderWaitCheckDetailModifyAddressDo?";
+
     /*待审核订单  ModelOrderWaitCheckList?tokenKey=10b588002228fa805231a59bb7976bf4 */
     public static String URL_ORDER_WAITCHECK = baseUrl + "ModelOrderWaitCheckList?"+QxVersion;
 
@@ -245,7 +249,12 @@ public class AppURL {
      * 订单支付宝回调接口
      * http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?tokenKey=69a875e5c234b5b49d1bead689f84832
      */
-    public static String URL_GETAILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayPayStr?"+QxVersion;
+    public static String URL_GETAILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayModelOrderPayStr?"+QxVersion;
+    /**
+     * 获取微信支付数据接口
+     * http://appapi1.fanerweb.com/api/Payment/ReceiveAilpayNotice
+     */
+    public static String URL_PAY_WEIXIN= "http://appapi1.fanerweb.com/api/Payment/GetWxpayModelParameter?"+QxVersion;
     /**
      * 石头确认下单
      */
@@ -278,6 +287,7 @@ public class AppURL {
     public static String URL_STONE_ORDER_SENDING = baseUrl+ "stoneAlreadyDeliverGoodsOrderList?"+QxVersion;
     /**
      * 石头已发货
+     *
      */
     public static String URL_STONE_ORDER_FINISH = baseUrl+ "stoneAlreadyFinishOrderList?"+QxVersion;
     /**
@@ -286,9 +296,15 @@ public class AppURL {
      */
     public static String URL_GET_STONE_AILPAY= "http://appapi1.fanerweb.com/api/Payment/GetAilpayStoneOrderPayStr?"+QxVersion;
     /**
+     * 石头订单微信回调接口
+     *
+     */
+    public static String URL_GET_STONE_WEIXIN= "http://appapi1.fanerweb.com/api/Payment/GetWxpayStoneParameter?"+QxVersion;
+    /**
      * 取消石头代付款订单
      */
     public static String URL_STONE_CANCLE_ORDER= baseUrl+ "stoneCancelOrderDo?"+QxVersion;
+
 }
 
 

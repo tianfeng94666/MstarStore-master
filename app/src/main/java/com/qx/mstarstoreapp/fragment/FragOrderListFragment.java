@@ -1,5 +1,6 @@
 package com.qx.mstarstoreapp.fragment;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,9 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.ConfirmOrderActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
-import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
 import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
-import com.qx.mstarstoreapp.activity.MainActivity;
 import com.qx.mstarstoreapp.activity.ProductionListActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
@@ -51,7 +50,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
+@SuppressLint("ValidFragment")
 public class FragOrderListFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
     private List<OrderWaitResult.DataBean.OrderListBean.ListBean> listData;
     private BaseAdapter adapter;
@@ -79,7 +78,8 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         this.fragType = fragType;
     }
 
-
+    public FragOrderListFragment() {
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -383,7 +383,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
             viewHolder.tvOrderNumber.setText(listEntity.getOrderNum());
             viewHolder.idCusName.setText(listEntity.getCustomerName());
             viewHolder.idStartDate.setText(listEntity.getOrderDate());
-
+            viewHolder.tvOrderState.setText(listEntity.getOrderStatusTitle());
 
             if (fragType == 1) {
                 //修改日期
@@ -393,7 +393,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 viewHolder.idEndDate.setText(listEntity.getModifyDate());
             }
             viewHolder.idRemarks.setText(listEntity.getOtherInfo());
-            viewHolder.tvTotalAmount.setText("参考总价 " + listEntity.getTotalPrice());
+            viewHolder.tvTotalAmount.setText("¥" + listEntity.getTotalPrice());
             viewHolder.idTvNeed.setText("定金 " + listEntity.getNeedPayPrice());
 
 
@@ -481,6 +481,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
             TextView idTvNeed;
             @Bind(R.id.id_lay_images)
             LinearLayout layImages;
+            @Bind(R.id.tv_order_state)
+            TextView tvOrderState;
+
             CustomTypeListViewAdapter customListViewAdapter;
 
             ViewHolder(View view) {

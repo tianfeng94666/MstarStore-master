@@ -2,6 +2,7 @@ package com.qx.mstarstoreapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -26,6 +27,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.base.MyAction;
 import com.qx.mstarstoreapp.dialog.GridMenuDialog;
 import com.qx.mstarstoreapp.inter.ClassifyOnSeachListener;
@@ -127,10 +129,6 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         super.onDestroy();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     private void remind(int count) {
         boolean isVisible = false;
@@ -247,9 +245,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
-                     modeListResult = new Gson().fromJson(result, ModeListResult.class);
+                    modeListResult = new Gson().fromJson(result, ModeListResult.class);
                     ModeListResult.DataEntity dataEntity = modeListResult.getData();
-                    if(dataEntity==null){
+                    if (dataEntity == null) {
                         return;
                     }
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
@@ -344,6 +342,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         //mCustomGridView.addFooterView(loadStateView);
         //没有数据显示
         mCustomGridView.setEmptyView(findViewById(R.id.lny_no_result));
+        if( isScreenChange()){
+            mCustomGridView.setNumColumns(4);
+        }else {
+            mCustomGridView.setNumColumns(2);
+        }
         mCustomGridView.setAdapter(mGvAdapter);
 
         badge = new BadgeView(OrderActivity.this, idTvCurOrder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
@@ -355,15 +358,13 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 idEtSeach.setText("");
             }
         });
-        idEtSeach.setOnEditorActionListener(new TextView.OnEditorActionListener(){
-
+        idEtSeach.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
 
             @Override
             public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
                 // TODO Auto-generated method stub
-                if(arg1 == EditorInfo.IME_ACTION_SEARCH)
-                {
+                if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
                     curpage = 1;
                     String url = getInitUrl();
                     url += getkeyWordUrl();
@@ -374,6 +375,25 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
 
         });
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // 如果是橫屏時候
+        try {
+            // Checks the orientation of the screen
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mCustomGridView.setNumColumns(4);
+                Global.divideAmount = 4;
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                mCustomGridView.setNumColumns(2);
+                Global.divideAmount = 2;
+            }
+        } catch (Exception ex) {
+
+        }
+
     }
 
     BadgeView badge;
@@ -448,6 +468,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     /**
      * 关键字
+     *
      * @return
      */
     public String getkeyWordUrl() {
@@ -570,7 +591,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idIgSeach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(idEtSeach.getText().toString().equals("")){
+                if (idEtSeach.getText().toString().equals("")) {
                     ToastManager.showToastReal("搜索内容为空！");
                     return;
                 }
@@ -651,7 +672,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 convertView = LayoutInflater.from(OrderActivity.this).inflate(R.layout.adapter_goods_list, parent, false);
                 holder.lay = (LinearLayout) convertView.findViewById(R.id.img_container);
                 holder.tv = (TextView) convertView.findViewById(R.id.name);
-                holder.llPrice = (LinearLayout)convertView.findViewById(R.id.ll_price);
+                holder.llPrice = (LinearLayout) convertView.findViewById(R.id.ll_price);
                 holder.tvPrice = (TextView) convertView.findViewById(R.id.tv_sum_price);
                 holder.ig = (SquareImageView) convertView.findViewById(R.id.product_img);
                 convertView.setTag(holder);
@@ -661,16 +682,19 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             // holder.ig.setImageResource(R.drawable.no_image);
             holder.tv.setText(data.get(position).getTitle());
             holder.tvPrice.setText(data.get(position).getPrice());
-            if (data.get(position).getPic()==null||!data.get(position).getPic().equals(holder.ig.getTag())) {
+            if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
                 ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
                 holder.ig.setTag(data.get(position).getPic());
             }
-            if(modeListResult.getData().getModel().getIsShowPrice()==1){
-                holder.llPrice.setVisibility(View.VISIBLE);
-            }else {
-                holder.llPrice.setVisibility(View.GONE);
+            if (curpage == 1) {
+                if (modeListResult.getData().getModel().getIsShowPrice() == 1) {
+                    holder.llPrice.setVisibility(View.VISIBLE);
+                } else {
+                    holder.llPrice.setVisibility(View.GONE);
+                }
             }
+
             return convertView;
         }
 
@@ -683,6 +707,22 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         }
     };
 
+    public boolean isScreenChange() {
+
+        Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
+        int ori = mConfiguration.orientation; //获取屏幕方向
+
+        if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+
+//横屏
+            return true;
+        } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+
+//竖屏
+            return false;
+        }
+        return false;
+    }
 
     @Override
     public void onFooterRefresh(PullToRefreshView view) {

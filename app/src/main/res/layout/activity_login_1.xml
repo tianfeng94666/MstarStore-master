@@ -238,7 +238,7 @@
         style="@style/layout_vertical"
         android:layout_weight="0.4"
         android:orientation="vertical"
-        android:gravity="bottom"
+
         >
 
         <RelativeLayout

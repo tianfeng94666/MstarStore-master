@@ -1,5 +1,7 @@
 package com.qx.mstarstoreapp.net;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -52,8 +54,10 @@ public class CookieStringtRequest extends StringRequest {
 				type = TYPE_UTF8_CHARSET;
 				response.headers.put(CONTENT_TYPE, type);
 			}
-			String jsonString = new String(response.data,
-					HttpHeaderParser.parseCharset(response.headers));
+//			String jsonString = new String(response.data,
+//					HttpHeaderParser.parseCharset(response.headers));
+			String jsonString = new String(response.data, "utf-8");
+			Log.e("respone=",jsonString);
 			 //使用正则表达式从reponse的头中提取cookie内容的子串
 			Pattern pattern = Pattern.compile("Set-Cookie.*?;");
 			Matcher m = pattern.matcher(response.headers.toString());

@@ -70,7 +70,8 @@ public class VolleyRequestUtils {
 
 	//！！！！！！！！get请求为了保证cookie一致  后来不要使用该方法！！！！！！！！！！
 	public  void getCookieRequest(Context context,String url,final HttpStringRequsetCallBack callback){
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest( Request.Method.GET, url, null,
+
+		JsonObjectRequest jsonObjectRequest = new NormalPostRequest( Request.Method.GET, url, null,
 				new Listener<JSONObject>() {
 
 					@Override

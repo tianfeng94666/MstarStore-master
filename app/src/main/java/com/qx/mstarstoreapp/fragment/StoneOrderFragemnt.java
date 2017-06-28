@@ -1,5 +1,6 @@
 package com.qx.mstarstoreapp.fragment;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
@@ -59,7 +60,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2017/5/24 0024.
  */
-
+@SuppressLint("ValidFragment")
 public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
     private List<StoneOrderStateResult.DataBean.ListBean> listData;
     private BaseAdapter adapter;

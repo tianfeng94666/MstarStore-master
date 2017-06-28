@@ -59,7 +59,6 @@
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
@@ -72,191 +71,188 @@
         <activity
             android:name=".activity.OrderActivity"
             android:alwaysRetainTaskState="true"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.RegisterActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.UpdatePassWordActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.CustomMadeActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+             />
         <!--弹出软键盘不会顶起底部-->
         <activity
             android:name=".activity.ConfirmOrderActivity"
             android:alwaysRetainTaskState="true"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.CustommadeInformationActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".activity.MainActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".activity.EndProducActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.SelectCityActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".activity.AddAddressActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+         />
         <activity
             android:name=".activity.SettingActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".activity.AddressListActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".activity.UpdatePhoneNumber"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            />
         <!--弹出软键盘顶起底部-->
         <activity
             android:name=".activity.StyleInfromationActivity"
             android:alwaysRetainTaskState="true"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.ClassifyActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            />
 
         <activity
             android:name=".activity.CustomersListActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+          />
         <activity
             android:name="zxing.activity.CaptureActivity"
             android:alwaysRetainTaskState="true"
-            android:screenOrientation="portrait"
+
             android:theme="@android:style/Theme.Black.NoTitleBar" />
 
         <activity
             android:name=".activity.ShopingAddressActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".activity.ModeOfPaymentActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            />
 
         <activity
             android:name=".activity.PaySuccessActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+           />
 
         <activity
             android:name=".activity.ProductionListActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+         />
 
         <activity
             android:name=".activity.ReceiptActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".activity.ImageBrowserActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".activity.FrogetPwdActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.DeliveryTableActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.FinishTableMoreActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.DownloadActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.FinishTableLessActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.SearchOrderActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.SearchResultActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.SearchOrderMainActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.StoneSearchInfoActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.StoneSearchResultActivity" />
@@ -264,14 +260,13 @@
             android:name=".activity.StoneQuotedPriceActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <!-- 微信支付平台的activity和receiver配置 -->
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -288,15 +283,42 @@
             android:name=".activity.StoneHistoryOrder"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.ConfirmStoneOrderActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
+
+            <intent-filter>
+                <data android:scheme="tencent1105719784" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- 调用新浪原生SDK，需要注册的回调activity -->
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!--集成line客户端登录授权，需要添如下格式的过滤器-->
+            <intent-filter>
+                <data android:scheme="line.1477692153" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

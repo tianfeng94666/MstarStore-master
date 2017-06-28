@@ -1,6 +1,7 @@
 package com.qx.mstarstoreapp.viewutils;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -91,14 +92,33 @@ public  class SideFilterDialog extends BaseFilterData {
 
     }
 
+    public boolean isScreenChange() {
 
+        Configuration mConfiguration = mContext.getResources().getConfiguration(); //获取设置的配置信息
+        int ori = mConfiguration.orientation; //获取屏幕方向
+
+        if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+
+//横屏
+            return true;
+        } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+
+//竖屏
+            return false;
+        }
+        return false;
+    }
     public void initView(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPopView = inflater.inflate(R.layout.dialog_filter_dialog, null);
         expandableGridView = (ExpandableListView) mPopView.findViewById(R.id.list);
         idTvConfirfilterr = (TextView) mPopView.findViewById(R.id.id_tv_confirfilterr);
         idTvResetfilter = (TextView) mPopView.findViewById(R.id.id_tv_resetfilter);
-        popupWindow = new PopupWindow(mPopView, getWindowWidth() - 150, getWindowHeight()-mStatusBarHeight);
+        if(isScreenChange()){
+            popupWindow = new PopupWindow(mPopView, getWindowWidth() /5*2, getWindowHeight()-mStatusBarHeight);
+        }else {
+            popupWindow = new PopupWindow(mPopView, getWindowWidth() - 150, getWindowHeight()-mStatusBarHeight);
+        }
         popupWindow.setFocusable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());     //点击外部消失这句很重要
         // 点击外面的控件也可以使得PopUpWindow dimiss

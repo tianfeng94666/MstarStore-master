@@ -89,6 +89,11 @@
         android:text="确定"
         android:textColor="@color/white"
         >
+
     </Button>
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

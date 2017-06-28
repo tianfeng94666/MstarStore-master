@@ -1280,7 +1280,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         viewHolder.idStoreNorm.setOnSelectData(new CustomSelectInput.OnselectData() {
             @Override
             public void getSelectId(String key) {
-                stoneEntity.setSpecTitle(key);
+                if(!key.equals("规格")){
+                    stoneEntity.setSpecTitle(key);
+                }
                 setStorePrice(stoneEntity);
 
                 //  adapter.setTag(viewHolder,position);

@@ -30,14 +30,17 @@ import com.qx.mstarstoreapp.alipay.PayResult;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.ALipayResult;
 import com.qx.mstarstoreapp.json.ComitOrderResult;
+import com.qx.mstarstoreapp.json.WeixinPayResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
+import com.qx.mstarstoreapp.pay.WXPayInfo;
+import com.qx.mstarstoreapp.pay.WXPayUtil;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +73,8 @@ public class ModeOfPaymentActivity extends BaseActivity {
     TextView tvMoney;
     @Bind(R.id.id_tv_1)
     TextView idTv1;
+    @Bind(R.id.tv_message)
+    TextView tvMessage;
     private int[] payDrawables;//支付方式图标
     private String[] payNames;//支付方式 名称
 
@@ -83,6 +88,9 @@ public class ModeOfPaymentActivity extends BaseActivity {
     private ComitOrderResult comitOrderResult;
     private ALipayResult aLipayResult;
     private int type;
+    private final int ALIYPAY = 0;
+    private final int WEIXINPAY = 1;
+    private WeixinPayResult weixinPayResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,15 +274,11 @@ public class ModeOfPaymentActivity extends BaseActivity {
         switch (choosePayWay) {
             case 0:
                 ToastManager.showToastReal("支付宝支付");
-                topay();
+                topay(ALIYPAY);
 
                 break;
             case 1:
-                final IWXAPI msgApi = WXAPIFactory.createWXAPI(ModeOfPaymentActivity.this, null);
-                // 将该app注册到微信
-                msgApi.registerApp("wxeb71d9304d351f4c");
-                ToastManager.showToastReal("微信支付");
-                topay();
+                topay(WEIXINPAY);
                 break;
 
         }
@@ -304,9 +308,10 @@ public class ModeOfPaymentActivity extends BaseActivity {
                         intent = new Intent(ModeOfPaymentActivity.this, PaySuccessActivity.class);
                         if (!id.equals("")) {
                             intent.putExtra("id", id);
-                            intent.putExtra("type",type+"");
+                            intent.putExtra("type", type + "");
                         }
                         startActivity(intent);
+                        finish();
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
@@ -329,13 +334,22 @@ public class ModeOfPaymentActivity extends BaseActivity {
         }
     };
 
-    private void topay() {
+    private void topay(final int i) {
         baseShowWatLoading();
         String url = "";
-        if(type==2){
-            url = AppURL.URL_GET_STONE_AILPAY + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
-        }else {
-            url = AppURL.URL_GETAILPAY + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+        if (type == 2) {
+            if (i == ALIYPAY) {
+                url = AppURL.URL_GET_STONE_AILPAY + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+            } else {
+                url = AppURL.URL_GET_STONE_WEIXIN+ "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+            }
+        } else {
+            if (i == ALIYPAY) {
+                url = AppURL.URL_GETAILPAY + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+            } else {
+                url = AppURL.URL_PAY_WEIXIN + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + id;
+            }
+
         }
 
         if (StringUtils.isEmpty(url)) {
@@ -355,8 +369,15 @@ public class ModeOfPaymentActivity extends BaseActivity {
 //                    if (comitOrderResult.getData() == null) {
 //                        return;
 //                    }
-                    aLipayResult = new Gson().fromJson(result, ALipayResult.class);
-                    aliPay();
+
+                    if (i == ALIYPAY) {
+                        aLipayResult = new Gson().fromJson(result, ALipayResult.class);
+                        aliPay();
+                    } else {
+                       tvMessage.setText(result);
+                        weixinPayResult = new Gson().fromJson(result, WeixinPayResult.class);
+                        weixinPay();
+                    }
                 } else if (error.equals("2")) {
                     loginToServer(FinishTableLessActivity.class);
                 } else {
@@ -373,6 +394,29 @@ public class ModeOfPaymentActivity extends BaseActivity {
 
         });
 
+    }
+
+    private void weixinPay() {
+        WeixinPayResult.DataBean dataBean = weixinPayResult.getData();
+        if (dataBean == null) {
+            showToastReal("后台返回数据为空！");
+            return;
+        }
+        WXPayInfo info = new WXPayInfo();
+        info.prepayId = dataBean.getPrepayid();
+        info.nonceStr = dataBean.getNoncestr();
+        info.sign = dataBean.getSign();
+        info.timeStamp = dataBean.getTimestamp() + "";
+        WXPayInfo.APP_ID = dataBean.getAppid();
+        info.PARTNER_ID = dataBean.getPartnerid();
+        WXPayUtil pay = new WXPayUtil(this, WXPayInfo.APP_ID);
+        pay.pay(info);
+        Global.id = id;
+        Global.type = type+"";
+        finish();
+    }
+    private long genTimeStamp() {
+        return System.currentTimeMillis() / 1000;
     }
 
     @Override

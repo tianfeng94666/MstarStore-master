@@ -49,13 +49,15 @@
             android:textStyle="bold" />
 
 
-        <ImageView
+        <TextView
+            android:id="@+id/tv_order_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/margin10"
-            android:src="@drawable/icon_right"></ImageView>
+            android:text="订单状态"
+            android:textColor="@color/theme_red"
+            android:layout_margin="@dimen/margin10"></TextView>
 
     </RelativeLayout>
 
@@ -202,16 +204,23 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="5dp">
-
         <TextView
-            android:textColor="@color/black"
-            android:id="@+id/tv_total_amount"
+            android:textColor="@color/text_color"
+            android:id="@+id/tv_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginRight="20dp"
             android:gravity="center"
-            android:text="总价格"
+            android:text="参考总价："
+            />
+        <TextView
+            android:textColor="@color/theme_red"
+            android:id="@+id/tv_total_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_1"
+            android:gravity="center"
+            android:text="143"
             />
 
         <TextView

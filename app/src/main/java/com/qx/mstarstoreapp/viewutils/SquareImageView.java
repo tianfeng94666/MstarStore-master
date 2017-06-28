@@ -1,8 +1,13 @@
 package com.qx.mstarstoreapp.viewutils;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.provider.Settings;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
+
+import com.qx.mstarstoreapp.base.Global;
 
 /**
  * Created by UlrichAbiguime at Shenzhen.
@@ -12,6 +17,9 @@ public class SquareImageView extends ImageView {
     private static final int SPEC = 3;
     private static int SCREENWIDTH;
     private Context mContext;
+    private int divideAmount;
+
+
 
     public SquareImageView(Context context) {
         super(context);
@@ -32,10 +40,30 @@ public class SquareImageView extends ImageView {
         this.mContext = mContext;
         SCREENWIDTH = getScreenWidth();
     }
+    public boolean isScreenChange() {
 
+        Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
+        int ori = mConfiguration.orientation; //获取屏幕方向
+
+        if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+
+//横屏
+            return true;
+        } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+
+//竖屏
+            return false;
+        }
+        return false;
+    }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = (SCREENWIDTH - dp2pix(SPEC)) / 2;
+        if( isScreenChange()){
+           divideAmount=4;
+        }else {
+          divideAmount=2;
+        }
+        int width = (SCREENWIDTH - dp2pix(SPEC)) / divideAmount;
         setMeasuredDimension(width, width);
     }
 

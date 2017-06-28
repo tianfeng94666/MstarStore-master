@@ -76,6 +76,8 @@ public class LoginActivity extends BaseActivity {
             }
             finish();
             return;
+        }else {
+            openActivity(LoginActivity.class,null);
         }
         name = BaseApplication.spUtils.getString(SpUtils.key_username);
         pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
@@ -105,53 +107,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void isNeedUpdate() {
-        String lgUrl = AppURL.URL_CODE_VERSION + "device=" + "android";
-        L.e("netLogin" + lgUrl);
-        VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-            @Override
-            public void onSuccess(String result) {
-                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                String error = jsonResult.get("error").getAsString();
-                if (error.equals("0")) {
-                    VersionResult versionResult = new Gson().fromJson(result, VersionResult.class);
-                    version = versionResult.getData().getVersion();
-                    Double versionDouble = Double.parseDouble(version);
-                    Double currentDouble = Double.parseDouble(getString(R.string.app_version));
-                    if (versionDouble>currentDouble) {
-//                        new UpdateManager(context).Update(versionResult.getData().getUrl());
-                    } else {
-                        initView();
-                    }
-                } else if (error.equals("2")) {
 
-                } else {
-                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    ToastManager.showToastWhendebug(message);
-                    L.e(message);
-                }
-            }
-
-            @Override
-            public void onFail(String fail) {
-
-            }
-
-
-        });
-
-    }
-
-    public int getVerCode(Context context) {
-        int verCode = -1;
-        try {
-            verCode = context.getPackageManager().getPackageInfo(
-                    "com.qx.mstarstoreapp", 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e("tage", e.getMessage());
-        }
-        return verCode;
-    }
 
     /*得到没登陆前的实例*/
     public void getBackIntent() {
@@ -168,12 +124,15 @@ public class LoginActivity extends BaseActivity {
         pwd = idEdPassword.getText().toString();
         code = idEdCode.getText().toString();
         if (StringUtils.isEmpty(name)) {
+            showToastReal("用户名不能为空！");
             return;
         }
         if (StringUtils.isEmpty(pwd)) {
+            showToastReal("密码不能为空！");
             return;
         }
         if (StringUtils.isEmpty(code)) {
+            showToastReal("验证码不能为空！");
             return;
         }
         baseShowWatLoading();
@@ -214,6 +173,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFail(String fail) {
+                 showToastReal(fail);
                 baseHideWatLoading();
             }
 

@@ -79,7 +79,7 @@
                         style="@style/layout_horizontal"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/margin5"
-                        android:layout_marginRight="@dimen/margin10"
+                        android:layout_marginRight="@dimen/margin5"
                         android:layout_weight="1"
                         app:tv_name="选择类型" />
 
