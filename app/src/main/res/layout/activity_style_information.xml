@@ -279,9 +279,9 @@ android:textSize="@dimen/text_size_small_medium"
         android:id="@+id/id_ig_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+
         android:layout_marginTop="5dp"
-        android:padding="15dip"
+        android:padding="10dip"
         android:src="@drawable/icon_back_white" />
 
     <LinearLayout

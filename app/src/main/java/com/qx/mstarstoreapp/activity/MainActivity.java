@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
-import com.qx.mstarstoreapp.fragment.HelpFragment;
+import com.qx.mstarstoreapp.fragment.SettingFragment;
 import com.qx.mstarstoreapp.fragment.HomeFragment;
 import com.qx.mstarstoreapp.fragment.InfromationFragment;
 import com.qx.mstarstoreapp.json.VersionResult;
@@ -243,14 +243,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case 2:
                 tvHelp.setTextColor(getResources().getColor(R.color.theme_red));
-                igHelp.setImageResource(R.drawable.icon_help_down);
+                igHelp.setImageResource(R.drawable.icon_setting_down);
                 if (helpFragment == null) {
-                    helpFragment = new HelpFragment();
+                    helpFragment = new SettingFragment();
                     fragTrans.add(R.id.content, helpFragment);
                 } else {
                     fragTrans.show(helpFragment);
                 }
-                titleText.setText("帮助");
+                titleText.setText("设置");
                 break;
         }
         nowId = index;
@@ -261,7 +261,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void resetAllFragmentView() {
         igHome.setImageResource(R.drawable.icon_home_nor);
         igInformaction.setImageResource(R.drawable.icon_infromation_nor);
-        igHelp.setImageResource(R.drawable.icon_help_nor);
+        igHelp.setImageResource(R.drawable.icon_setting_nor);
         tvHome.setTextColor(getResources().getColor(R.color.text_color3));
         tvInformaction.setTextColor(getResources().getColor(R.color.text_color3));
         tvHelp.setTextColor(getResources().getColor(R.color.text_color3));

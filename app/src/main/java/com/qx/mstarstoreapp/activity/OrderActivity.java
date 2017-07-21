@@ -39,6 +39,7 @@ import com.qx.mstarstoreapp.json.TypeFiler;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
@@ -108,7 +109,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     private int waitOrderCount;
     private ModeListResult modeListResult;
-
+    private boolean isShowPrice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,6 +235,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private void loadNetData(String url) {
+        isShowPrice =  SpUtils.getInstace(this).getBoolean("isShowPrice",true);
         showWatiNetDialog();
         L.e("开启搜索" + url);
         // 进行登录请求
@@ -249,6 +251,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                     ModeListResult.DataEntity dataEntity = modeListResult.getData();
                     if (dataEntity == null) {
                         return;
+                    }
+                    if(isShowPrice){
+                        idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color));
+                    }else {
+                        idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color3));
                     }
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
                     if (curpage == 1) {
@@ -619,9 +626,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idTvHisOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // intent = new Intent(getActivity(), CustomMadeActivity.class);
-                // startActivity(intent);
-                openActivity(CustomMadeActivity.class, null);
+                if(isShowPrice){
+                    openActivity(CustomMadeActivity.class, null);
+                }
             }
         });
 
@@ -688,7 +695,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 holder.ig.setTag(data.get(position).getPic());
             }
             if (curpage == 1) {
-                if (modeListResult.getData().getModel().getIsShowPrice() == 1) {
+                if (isShowPrice) {
                     holder.llPrice.setVisibility(View.VISIBLE);
                 } else {
                     holder.llPrice.setVisibility(View.GONE);

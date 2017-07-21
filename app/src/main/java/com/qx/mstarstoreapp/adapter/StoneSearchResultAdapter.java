@@ -24,13 +24,15 @@ import butterknife.ButterKnife;
 
 public class StoneSearchResultAdapter extends BaseAdapter {
     Context context;
+    private final boolean isShowPrice;
     List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> list;
      ChooseItemInterface  chooseItem;
 
-    public StoneSearchResultAdapter(List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> list, Context context) {
+    public StoneSearchResultAdapter(List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> list, Context context,boolean isShowPrice) {
         this.context = context;
         this.list = list;
         chooseItem = (ChooseItemInterface) context;
+        this.isShowPrice = isShowPrice;
     }
 
     @Override
@@ -70,6 +72,19 @@ public class StoneSearchResultAdapter extends BaseAdapter {
         viewHolder.tvItemCertauth.setText(bean.getCertAuth());
         viewHolder.cbIscheckStone.setChecked(bean.ischeck());
         viewHolder.tvItemPrice.setText(bean.getPrice());
+        if(isShowPrice){
+            viewHolder.tvItemPrice.setVisibility(View.VISIBLE);
+            viewHolder.tvItemQuotedPrice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chooseItem.quotedPrice(bean.getId());
+                }
+            });
+            viewHolder.tvItemQuotedPrice.setTextColor(context.getResources().getColor(R.color.theme_red));
+        }else {
+            viewHolder.tvItemPrice.setVisibility(View.GONE);
+            viewHolder.tvItemQuotedPrice.setTextColor(context.getResources().getColor(R.color.text_color));
+        }
         viewHolder.tvItemCerauthNumber.setText(bean.getCertCode());
         viewHolder.cbIscheckStone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -77,12 +92,7 @@ public class StoneSearchResultAdapter extends BaseAdapter {
                bean.setIscheck(isChecked);
             }
         });
-        viewHolder.tvItemQuotedPrice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseItem.quotedPrice(bean.getId());
-            }
-        });
+
         return view;
     }
 

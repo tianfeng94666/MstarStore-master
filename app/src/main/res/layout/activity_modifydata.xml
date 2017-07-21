@@ -8,7 +8,8 @@
     >
 
 
-    <include layout="@layout/title_layout" />
+    <include layout="@layout/title_layout"
+        android:visibility="gone"/>
 
 <ScrollView
     android:paddingBottom="20dp"

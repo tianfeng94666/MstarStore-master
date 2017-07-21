@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 
+import com.qx.mstarstoreapp.base.Global;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -28,7 +29,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 //		this.setContentView(2130903107);
-		this.api = WXAPIFactory.createWXAPI(this, com.small.pay.WXPayInfo.APP_ID);
+		this.api = WXAPIFactory.createWXAPI(this, Global.APP_ID);
 		this.api.handleIntent(this.getIntent(), this);
 	}
 

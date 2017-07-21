@@ -25,6 +25,7 @@ import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
@@ -102,6 +103,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private List<String> listTitle;
     private String orderby = "";
     int ordertimes = 0;
+    private boolean isShowPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_stone_search_result);
         ButterKnife.bind(this);
+        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
         init();
         getDate();
 
@@ -152,11 +155,19 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         lvStone.setAutoLoadEnable(false);
         lvStone.setPullRefreshEnable(false);
         lvStone.setPullLoadEnable(true);
-        tvQutedPriceAll.setOnClickListener(this);
         titleText.setText("搜索结果");
         tvItemWeight.setOnClickListener(this);
+        if(isShowPrice){
+            tvPlaceOrder.setOnClickListener(this);
+            tvQutedPriceAll.setOnClickListener(this);
+            tvPlaceOrder.setTextColor(getResources().getColor(R.color.white));
+            tvQutedPriceAll.setTextColor(getResources().getColor(R.color.white));
+        }else {
+            tvPlaceOrder.setTextColor(getResources().getColor(R.color.gray));
+            tvQutedPriceAll.setTextColor(getResources().getColor(R.color.gray));
+        }
         tvReset.setOnClickListener(this);
-        tvPlaceOrder.setOnClickListener(this);
+
     }
 
 
@@ -170,6 +181,11 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         tvIscheckStone.setText(listTitle.get(0));
         tvItemWeight.setText(listTitle.get(1));
         tvItemPrice.setText(listTitle.get(2));
+        if(isShowPrice){
+            tvItemPrice.setVisibility(View.VISIBLE);
+        }else {
+            tvItemPrice.setVisibility(View.GONE);
+        }
         tvItemShape.setText(listTitle.get(3));
         tvItemColor.setText(listTitle.get(4));
         tvItemPurity.setText(listTitle.get(5));
@@ -243,7 +259,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             tvSearchTarget.setVisibility(View.GONE);
         }
 
-        stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this);
+        stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this,isShowPrice);
         if (pullStatus == PULL_LOAD) {
             stoneSearchResultAdapter.notifyDataSetChanged();
         } else {
@@ -355,6 +371,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
 
     @Override
     public void quotedPrice(String id) {
+        if(!isShowPrice){
+            return;
+        }
         if (id.equals("")) {
             ToastManager.showToastReal("您未选择产品！");
         } else {

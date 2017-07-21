@@ -30,6 +30,7 @@
             android:id="@+id/id_ig_setting"
             android:padding="10dip"
             android:layout_margin="5dip"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -52,7 +53,7 @@
             android:id="@+id/id_ig_icon"
             android:layout_width="80dip"
             android:layout_height="80dip"
-            android:src="@drawable/icon_help_down"
+            android:src="@drawable/icon_setting_down"
             />
 
 

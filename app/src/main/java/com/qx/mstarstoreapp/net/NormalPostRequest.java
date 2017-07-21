@@ -1,5 +1,7 @@
 package com.qx.mstarstoreapp.net;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -28,7 +30,8 @@ public class NormalPostRequest extends JsonObjectRequest{
         try {
 //            String je = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             String je = new String(response.data, "utf-8");
-
+            Log.e("je",je);
+            je= je.substring(je.indexOf("{"));
             return Response.success(new JSONObject(je), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException var3) {
             return Response.error(new ParseError(var3));

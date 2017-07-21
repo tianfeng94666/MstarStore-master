@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadNetData();
+
         L.e("onResume");
     }
 
@@ -78,6 +78,7 @@ public class HomeFragment extends BaseFragment {
         view = inflater.inflate(R.layout.home_fragment, container, false);
         ButterKnife.bind(this, view);
         baseShowWatLoading();
+        loadNetData();
 
         // BaseApplication.loadNetData();
         // BaseApplication.loadNetData1();
@@ -85,6 +86,14 @@ public class HomeFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            baseShowWatLoading();
+            loadNetData();
+        }
+    }
 
     private void initView(View view) {
 

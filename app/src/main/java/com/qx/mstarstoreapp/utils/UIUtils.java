@@ -21,6 +21,8 @@ import android.widget.ListView;
 
 import com.qx.mstarstoreapp.base.BaseApplication;
 
+import java.text.DecimalFormat;
+
 
 public class UIUtils {
 	
@@ -266,6 +268,29 @@ public class UIUtils {
 		params.height = totalHeight;
 		((ViewGroup.MarginLayoutParams) params).setMargins(0, 10, 0, 10);
 		myGridView.setLayoutParams(params);
+	}
+
+	/**
+	 * 将string转成int
+	 * @param st
+	 * @return
+	 */
+	public static  int stringChangeToInt(String st){
+		int result = 0;
+		try {
+			double a = Double.parseDouble(st);
+			result = (int) a;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static  String stringChangeToTwoBitDouble(String st){
+		String string;
+		DecimalFormat df = new DecimalFormat("######0.00");
+		string = df.format(Double.parseDouble(st));
+		return string;
 	}
 }
 

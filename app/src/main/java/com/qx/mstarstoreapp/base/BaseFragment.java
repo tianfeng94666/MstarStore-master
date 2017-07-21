@@ -44,6 +44,19 @@ public class BaseFragment extends Fragment implements HttpCycleContext {
             loadingDialog = null;
         }
     }
+    /**
+     * 通过类名启动Activity，并且含有Bundle数据
+     *
+     * @param pClass
+     * @param pBundle
+     */
+    protected void openActivity(Class<?> pClass, Bundle pBundle) {
+        Intent intent = new Intent(getActivity(), pClass);
+        if (pBundle != null) {
+            intent.putExtras(pBundle);
+        }
+        startActivity(intent);
+    }
 
     /*跳转到登录页面  登录成功回调到刚刚页面*/
     public void loginToServer(Class<?> jumpTo) {

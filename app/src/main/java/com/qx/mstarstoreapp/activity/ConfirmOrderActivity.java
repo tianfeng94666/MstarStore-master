@@ -34,10 +34,8 @@ import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.inter.AdapterCallBack;
 import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.AddressEntity;
-import com.qx.mstarstoreapp.json.ComitOrderResult;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
-import com.qx.mstarstoreapp.json.CustumerKeySearchResult;
 import com.qx.mstarstoreapp.json.IsHaveCustomerResult;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
@@ -45,6 +43,7 @@ import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
@@ -147,6 +146,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     Button tvPay;
 
     protected ListView lv_list;
+    @Bind(R.id.tv_totalPrice_title)
+    TextView tvTotalPriceTitle;
 
     private int tempCurpage = 1;
     private int pullState = 1;
@@ -160,7 +161,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     private static final int PULL_LOAD = 2;
     int waitOrderCount;
     private ConfirmOrderResult confirmOrderResult;
-
+    private boolean isShowPrice;
+    private boolean ischooseEmpty;//是否选择了产品
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,6 +282,17 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                             idLayOrderDetail.setVisibility(View.GONE);
                             idLayPrice1.setVisibility(View.VISIBLE);
                             idLayPrice2.setVisibility(View.GONE);
+                        }
+                        /**
+                         * 是否显示价格处理
+                         */
+                        isShowPrice = SpUtils.getInstace(ConfirmOrderActivity.this).getBoolean("isShowPrice", true);
+                        if (isShowPrice) {
+                            tvTotalPriceTitle.setVisibility(View.VISIBLE);
+                            tvTotalPrice.setVisibility(View.VISIBLE);
+                        } else {
+                            tvTotalPriceTitle.setVisibility(View.GONE);
+                            tvTotalPrice.setVisibility(View.GONE);
                         }
                         L.e("解析成功");
                         endNetRequest();
@@ -433,7 +446,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             public void onClick(View view) {
                 boolean isFast = UIUtils.isFastDoubleClick();
                 if (!isFast) {
-                    seachCustom(idEtSeach.getText().toString());
+                    String st = idEtSeach.getText().toString();
+                    if (st.isEmpty()) {
+                        Intent intent = new Intent(ConfirmOrderActivity.this, CustomersListActivity.class);
+                        intent.putExtra("keyWord", st);
+                        startActivityForResult(intent, 11);
+                    } else {
+                        seachCustom(idEtSeach.getText().toString());
+                    }
                 }
             }
         });
@@ -446,14 +466,25 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 }
             }
         });
-        /*确定支付*/
-        btGoPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // openActivity(ModeOfPaymentActivity.class, null);
-                submitOrder();
-            }
-        });
+         /*确定支付*/
+        if (isShowPrice) {
+            btGoPay.setEnabled(true);
+            btGoPay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // openActivity(ModeOfPaymentActivity.class, null);
+                    btGoPay.setTextColor(getResources().getColor(R.color.white));
+                    if (ischooseEmpty) {
+                        submitOrder();
+                    } else {
+                        showToastReal("请选择商品！");
+                    }
+                }
+            });
+        } else {
+            btGoPay.setTextColor(getResources().getColor(R.color.text_color3));
+            btGoPay.setEnabled(false);
+        }
 
 
         /*选择地址*/
@@ -546,7 +577,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                             for (int j = 0; j < listData.size(); j++) {
                                 if (listData.get(j).getId().equals(priceList.get(i).getId())) {
                                     listData.get(j).setPrice(priceList.get(i).getPrice() + "");
-                                    listData.get(j).setNeedPayPrice(priceList.get(i).getNeedPayPrice()+"");
+                                    listData.get(j).setNeedPayPrice(priceList.get(i).getNeedPayPrice() + "");
                                 }
                             }
                         }
@@ -867,9 +898,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         //价格
         tvTotalPrice.setText(StringUtils.formatedPrice(total));
         if (checkedGoods.size() == 0) {
-            btGoPay.setEnabled(false);
+            ischooseEmpty = false;
         } else {
-            btGoPay.setEnabled(true);
+            ischooseEmpty = true;
         }
         if (checkedGoods.size() != 0) {
             mcheckId = new ArrayList<>();
@@ -948,7 +979,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     }
 
     private void updatAddress() {
-        String url = AppURL.URL_ORDER_ADRESS_CHANGE+ "tokenKey=" + BaseApplication.getToken() + "&addressId=" + isDefaultAddress.getId() +
+        String url = AppURL.URL_ORDER_ADRESS_CHANGE + "tokenKey=" + BaseApplication.getToken() + "&addressId=" + isDefaultAddress.getId() +
                 "&orderId=" + orderId;
         L.e("updateInv" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -1074,6 +1105,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
         public ConfirOrderAdapter() {
             checkedState = new HashMap<>();
+            isShowPrice = SpUtils.getInstace(ConfirmOrderActivity.this).getBoolean("isShowPrice", true);
             // L.e("ConfirOrderAdapter");
         }
 
@@ -1148,7 +1180,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 }
             });
             vh.productName.setText(listEntity.getTitle());
-            vh.productPrice.setText(listEntity.getPrice());
+            if (isShowPrice) {
+                vh.productPrice.setText(UIUtils.stringChangeToTwoBitDouble(listEntity.getPrice()));
+            } else {
+                vh.productPrice.setText("");
+            }
             vh.idTvInformation.setText(listEntity.getInfo());
             vh.productNorms.setText(listEntity.getBaseInfo());
             vh.productNumber.setText(listEntity.getNumber());
