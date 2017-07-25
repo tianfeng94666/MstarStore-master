@@ -41,34 +41,34 @@
             />
 
 
-        <FrameLayout
-            android:id="@+id/id_fr"
-            style="@style/layout_horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@null">
+    <FrameLayout
+        android:id="@+id/id_fr"
+        style="@style/layout_horizontal"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="center">
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_reset"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:orientation="vertical"
-               android:gravity="center"
-                >
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="当前订单"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_small"
 
-                <TextView
-                    android:id="@+id/tv_reset"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="当前订单"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small"
+                />
+        </LinearLayout>
+    </FrameLayout>
 
-                    />
-            </LinearLayout>
-        </FrameLayout>
     <LinearLayout
         android:layout_width="1dip"
         android:layout_height="match_parent"

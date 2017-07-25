@@ -1,11 +1,12 @@
-package com.qx.mstarstoreapp.activity;
+package com.qx.mstarstoreapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -19,12 +20,16 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
+import com.qx.mstarstoreapp.activity.StoneHistoryOrder;
+import com.qx.mstarstoreapp.activity.StoneSearchResultActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
 import com.qx.mstarstoreapp.adapter.StoneOthersAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
-import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.BaseFragment;
+import com.qx.mstarstoreapp.json.KeyTitle;
 import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -41,10 +46,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2017/4/18 0018.
+ * Created by Administrator on 2017/6/20 0020.
  */
 
-public class StoneSearchInfoActivity extends BaseActivity implements View.OnClickListener {
+public class StoneFragment extends BaseFragment implements View.OnClickListener {
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
     @Bind(R.id.title_text)
@@ -59,20 +64,8 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     TextView tvAddSpot;
     @Bind(R.id.iv_reduce)
     ImageView ivReduce;
-    @Bind(R.id.et_spot)
-    EditText etSpot;
     @Bind(R.id.iv_add)
     ImageView ivAdd;
-    @Bind(R.id.tv_weight_min)
-    TextView tvWeightMin;
-    @Bind(R.id.sb_weight)
-    RangeSeekBar sbWeight;
-    @Bind(R.id.tv_price_min)
-    TextView tvPriceMin;
-    @Bind(R.id.tv_price_max)
-    TextView tvPriceMax;
-    @Bind(R.id.sb_price)
-    RangeSeekBar sbPrice;
     @Bind(R.id.ll_shape)
     LinearLayout llShape;
     @Bind(R.id.gv_shape)
@@ -89,8 +82,6 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     TextView tvCertificate1;
     @Bind(R.id.tv_certificate_2)
     TextView tvCertificate2;
-    @Bind(R.id.tv_weight_max)
-    TextView tvWeightMax;
     @Bind(R.id.lv_others)
     ListView lvOthers;
     @Bind(R.id.tv_color)
@@ -101,6 +92,22 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     TextView tvSearch;
     @Bind(R.id.tv_reset)
     TextView idTvCurorder;
+
+    EditText etPriceMax;
+    @Bind(R.id.et_spot)
+    EditText etSpot;
+    @Bind(R.id.tv_weight_min)
+    TextView tvWeightMin;
+    @Bind(R.id.tv_weight_max)
+    TextView tvWeightMax;
+    @Bind(R.id.sb_weight)
+    RangeSeekBar sbWeight;
+    @Bind(R.id.tv_price_min)
+    TextView tvPriceMin;
+    @Bind(R.id.tv_price_max)
+    TextView tvPriceMax;
+    @Bind(R.id.sb_price)
+    RangeSeekBar sbPrice;
     private StoneSearchResult stoneSearchResult;
     private StoneSearchResult.DataBean.CertAuthBean certAuthBean;
     private StoneSearchResult.DataBean.ShapeBean shapeBean;
@@ -114,24 +121,51 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     private boolean[] purityChecks;
     private StoneSearchResult.DataBean.WeightBean weightBean;
     private StoneSearchResult.DataBean.PriceBean priceBean;
-    private String weightMax = "";
-    private String priceMax = "";
+    private boolean[] weightChecks;
+    private boolean[] priceChecks;
     private StoneOthersAdapter stoneOthersAdapter;
     private StoneSearchInfo stoneSearchInfo;
+    private int openType;//0 是正常进入，1是主石进入,2表示从StoneChooseMain进来
+    private String itemId;//产品的id
+    private String weightMax = "";
+    private String priceMax = "";
+
+    public StoneFragment() {
+    }
+
+    public StoneFragment(int openType) {
+        this.openType = openType;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = View.inflate(getActivity(), R.layout.activity_stone_storehouse, null);
+        ButterKnife.bind(this, view);
+        baseShowWatLoading();
+        loadNetData();
+        return view;
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_stone_storehouse);
-        ButterKnife.bind(this);
-        loadNetData();
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (stoneSearchResult == null) {
+            baseShowWatLoading();
+            loadNetData();
+        }
     }
 
     private void initView() {
         titleText.setText("裸石库");
+        /**
+         *
+         */
+        if (openType == 2) {
+            idRelTitle.setVisibility(View.GONE);
+        }
+        idIgBack.setVisibility(View.GONE);
         idIgBack.setOnClickListener(this);
         tvSearch.setOnClickListener(this);
         idTvCurorder.setOnClickListener(this);
@@ -147,7 +181,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     }
 
     private void initOthers() {
-        stoneOthersAdapter = new StoneOthersAdapter(this, stoneSearchResult.getData());
+        stoneOthersAdapter = new StoneOthersAdapter(getActivity(), stoneSearchResult.getData());
         lvOthers.setAdapter(stoneOthersAdapter);
     }
 
@@ -296,6 +330,13 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         });
     }
 
+    private void clearCheck(boolean[] Checks) {
+        for (int i = 0; i < Checks.length; i++) {
+            Checks[i] = false;
+        }
+    }
+
+
     private void initSpot() {
         ivAdd.setOnClickListener(this);
         ivReduce.setOnClickListener(this);
@@ -310,16 +351,15 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
 
     }
 
-    @Override
+
     public void loadNetData() {
-        baseShowWatLoading();
         String url = "";
         url = AppURL.URL_STONE_SEARCHINFO + "tokenKey=" + BaseApplication.getToken();
         if (StringUtils.isEmpty(url)) {
             return;
         }
         L.e("获取地址" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+        VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
                 baseHideWatLoading();
@@ -342,13 +382,14 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                     loginToServer(FinishTableLessActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    ToastManager.showToastWhendebug(message);
                     L.e(message);
+                    ToastManager.showToastReal("数据加载错误！");
                 }
             }
 
             @Override
             public void onFail(String fail) {
+                ToastManager.showToastReal("数据获取失败");
                 baseHideWatLoading();
             }
 
@@ -372,23 +413,27 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 reduce();
                 break;
             case R.id.id_ig_back:
-                finish();
+
                 break;
             case R.id.tv_search:
-                searchStone();
-                gotoResult();
+                if (searchStone()) {
+                    gotoResult();
+                }
                 break;
             case R.id.tv_reset:
+                reset();
+                baseShowWatLoading();
                 loadNetData();
                 break;
             case R.id.tv_right:
-                Intent intent = new Intent(this,StoneHistoryOrder.class);
+                Intent intent = new Intent(getActivity(), StoneHistoryOrder.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;
         }
     }
 
-    private void searchStone() {
+    private boolean searchStone() {
         stoneSearchInfo = new StoneSearchInfo();
         stoneSearchInfo.setCerAuth(getCerAuth());
         stoneSearchInfo.setWeight(tvWeightMin.getText().toString() + "," + weightMax);
@@ -401,6 +446,12 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         stoneSearchInfo.setSymmetric(stoneOthersAdapter.getChooseResult(2));
         stoneSearchInfo.setFluorescence(stoneOthersAdapter.getChooseResult(3));
         stoneSearchInfo.setPercent(etSpot.getText().toString());
+        return true;
+    }
+
+    private void reset() {
+        tvColor.setText("");
+        tvQuality.setText("");
     }
 
     private String getPurity() {
@@ -470,9 +521,12 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     private void gotoResult() {
         Bundle bundle = new Bundle();
         bundle.putSerializable("searchStoneInfo", stoneSearchInfo);
-        Intent intent = new Intent(this, StoneSearchResultActivity.class);
+        Intent intent = new Intent(getActivity(), StoneSearchResultActivity.class);
+        intent.putExtra("openType", openType);
+        intent.putExtra("itemId", itemId);
         intent.putExtra("stoneInfo", bundle);
         startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
     }
 
     private void reduce() {
@@ -533,5 +587,30 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         ((ViewGroup.MarginLayoutParams) params).setMargins(10, 10, 10, 10);
         myGridView.setLayoutParams(params);
     }
+
+    // 动态加载GridView 高度
+    public static void setGridViewWidthBasedOnChildren(GridView myGridView) {
+        ListAdapter listAdapter = myGridView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+        int totalWidth = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, myGridView);
+            listItem.measure(0, 0);
+            totalWidth += listItem.getMeasuredWidth();
+        }
+        ViewGroup.LayoutParams params = myGridView.getLayoutParams();
+        params.height = totalWidth + 20;
+        ((ViewGroup.MarginLayoutParams) params).setMargins(10, 10, 10, 10);
+        myGridView.setLayoutParams(params);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
 
 }

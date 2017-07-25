@@ -75,102 +75,107 @@
 
                 <TextView
                     android:id="@+id/tv_ischeck_stone"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
-                    android:layout_height="35dp"
-                    android:gravity="center" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/table_head"
+                    android:gravity="center"
+                    android:text="勾选" />
 
                 <TextView
                     android:id="@+id/tv_item_weight"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
-                    android:paddingRight="4dp"
-                    android:drawableRight="@drawable/icon_sort"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
+                    android:drawableRight="@drawable/icon_sort"
                     android:gravity="center"
-                    android:text="" />
+                    android:paddingRight="4dp"
+                    android:text="克拉" />
+
                 <TextView
                     android:id="@+id/tv_item_price"
-                    android:background="@drawable/table_head"
                     android:layout_width="80dp"
                     android:layout_height="35dp"
-                    android:gravity="center" />
+                    android:background="@drawable/table_head"
+                    android:gravity="center"
+                    android:text="价格" />
 
                 <TextView
                     android:id="@+id/tv_item_shape"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="形状" />
 
                 <TextView
                     android:id="@+id/tv_item_color"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="颜色" />
 
                 <TextView
                     android:id="@+id/tv_item_purity"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="净度" />
 
                 <TextView
                     android:id="@+id/tv_item_cut"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="切工" />
 
                 <TextView
                     android:id="@+id/tv_item_polish"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="抛光" />
 
                 <TextView
                     android:id="@+id/tv_item_symmetric"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="对称" />
 
                 <TextView
                     android:id="@+id/tv_item_fluorescence"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="荧光" />
 
                 <TextView
                     android:id="@+id/tv_item_certauth"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
-                    android:text="" />
+                    android:text="证书" />
+
                 <TextView
                     android:id="@+id/tv_item_cerauth_number"
-                    android:background="@drawable/table_head"
                     android:layout_width="120dp"
                     android:layout_height="35dp"
-                    android:gravity="center" />
+                    android:background="@drawable/table_head"
+                    android:gravity="center"
+                    android:text="证书号" />
 
                 <TextView
                     android:id="@+id/tv_item_quoted_price"
-                    android:background="@drawable/table_head"
                     android:layout_width="60dp"
                     android:layout_height="35dp"
+                    android:background="@drawable/table_head"
                     android:gravity="center"
                     android:text=""
                     android:textColor="@color/theme_red" />

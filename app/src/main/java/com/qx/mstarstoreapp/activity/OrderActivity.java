@@ -110,6 +110,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private int waitOrderCount;
     private ModeListResult modeListResult;
     private boolean isShowPrice;
+    private boolean isCustomized;//是否是用户定制
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +119,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
+        isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         context = this;
         initView();
         initListener();
@@ -350,7 +352,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         //没有数据显示
         mCustomGridView.setEmptyView(findViewById(R.id.lny_no_result));
         if( isScreenChange()){
-            mCustomGridView.setNumColumns(4);
+            mCustomGridView.setNumColumns(6);
         }else {
             mCustomGridView.setNumColumns(2);
         }
@@ -391,8 +393,8 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         try {
             // Checks the orientation of the screen
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mCustomGridView.setNumColumns(4);
-                Global.divideAmount = 4;
+                mCustomGridView.setNumColumns(6);
+                Global.divideAmount = 6;
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 mCustomGridView.setNumColumns(2);
                 Global.divideAmount = 2;
@@ -535,7 +537,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 data.get(position).getId();
-                Intent intent = new Intent(OrderActivity.this, StyleInfromationActivity.class);
+                Intent intent;
+                if (isCustomized) {
+                    intent = new Intent(OrderActivity.this, SimpleStyleInfromationActivity.class);
+                } else {
+                    intent = new Intent(OrderActivity.this, StyleInfromationActivity.class);
+                }
                 Bundle pBundle = new Bundle();
                 L.e("itemId" + data.get(position).getId());
                 pBundle.putString("itemId", data.get(position).getId());

@@ -95,12 +95,44 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="50dip"
             android:layout_marginTop="1dip"
             android:padding="5dip"
+            android:background="@color/white"
+            >
+
+            <TextView
+                android:id="@+id/tv_is_customized"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:padding="10dip"
+                android:text="是否高级定制"
+                />
+
+            <ImageView
+                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:button="@null"
+                android:id="@+id/bt_customized"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignRight="@id/tv_is_customized"
+                android:layout_alignTop="@id/tv_is_customized"
+                android:src="@drawable/icon_switch_off"
+                />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dip"
+            android:layout_marginTop="1dip"
+            android:padding="5dip"
+            android:visibility="gone"
             android:background="@color/white"
             >
 

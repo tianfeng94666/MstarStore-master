@@ -42,7 +42,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.AddressListActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
-import com.qx.mstarstoreapp.activity.DownloadActivity;
 import com.qx.mstarstoreapp.activity.LoginActivity;
 import com.qx.mstarstoreapp.activity.SettingActivity;
 import com.qx.mstarstoreapp.activity.UpdatePassWordActivity;
@@ -122,6 +121,10 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     TextView tvIsClear;
     @Bind(R.id.rl_shared)
     RelativeLayout rlShared;
+    @Bind(R.id.tv_is_customized)
+    TextView tvIsCustomized;
+    @Bind(R.id.bt_customized)
+    ImageView btCustomized;
 
     private LayoutInflater inflater;
     private String[] titles;
@@ -143,12 +146,31 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     }
 
 
+    private Boolean isCustomized = SpUtils.getInstace(getActivity()).getBoolean("isCustomized", true);
 
     private void initViews() {
+        if (isCustomized) {
+            btCustomized.setImageResource(R.drawable.icon_switch_off);
+        } else {
+            btCustomized.setImageResource(R.drawable.icon_switch_on);
+        }
+        btCustomized.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isCustomized = !isCustomized;
+                if (isCustomized) {
+                    btCustomized.setImageResource(R.drawable.icon_switch_off);
+                } else {
+                    btCustomized.setImageResource(R.drawable.icon_switch_on);
+                }
+                Global.STONE_POINT_CHANGE = 1;
+                SpUtils.getInstace(getActivity()).saveBoolean("isCustomized", isCustomized);
+            }
+        });
         ivIsShowPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SpUtils.getInstace(getActivity()).saveBoolean("isShowPrice",ivIsShowPrice.isChecked());
+                SpUtils.getInstace(getActivity()).saveBoolean("isShowPrice", ivIsShowPrice.isChecked());
                 Global.STONE_POINT_CHANGE = 1;
             }
         });
@@ -214,10 +236,10 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                             phone = jsData.get("phone").getAsString();
                             headPic = jsData.get("headPic").getAsString();
                             address = jsData.get("address").getAsString();
-                            isShowPrice = SpUtils.getInstace(getActivity()).getBoolean("isShowPrice",true);
-                            if(isShowPrice){
+                            isShowPrice = SpUtils.getInstace(getActivity()).getBoolean("isShowPrice", true);
+                            if (isShowPrice) {
                                 ivIsShowPrice.setChecked(true);
-                            }else {
+                            } else {
                                 ivIsShowPrice.setChecked(false);
                             }
                             L.e("userName:" + userName + "phone" + phone + "address:" + address);
@@ -485,7 +507,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     private String getRealPathFromURI(Uri contentURI) {
         String result;
-        Cursor cursor =getActivity().getContentResolver().query(contentURI, null, null, null, null);
+        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) { // Source is Dropbox or other similar local file path
             result = contentURI.getPath();
         } else {

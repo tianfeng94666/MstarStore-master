@@ -44,6 +44,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.dialog.ImageInitiDialog;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -99,6 +100,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     RelativeLayout rlClearMemery;
     @Bind(R.id.tv_share)
     TextView tvShare;
+    @Bind(R.id.tv_is_customized)
+    TextView tvIsCustomized;
+    @Bind(R.id.bt_customized)
+    ImageView btCustomized;
 
     private LayoutInflater inflater;
     private String[] titles;
@@ -120,8 +125,26 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         initViews();
 
     }
-
+    private Boolean isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
     private void initViews() {
+        if (isCustomized) {
+            btCustomized.setImageResource(R.drawable.icon_switch_off);
+        } else {
+            btCustomized.setImageResource(R.drawable.icon_switch_on);
+        }
+        btCustomized.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isCustomized = !isCustomized;
+                if (isCustomized) {
+                    btCustomized.setImageResource(R.drawable.icon_switch_off);
+                } else {
+                    btCustomized.setImageResource(R.drawable.icon_switch_on);
+                }
+                Global.STONE_POINT_CHANGE = 1;
+                SpUtils.getInstace(SettingActivity.this).saveBoolean("isCustomized", isCustomized);
+            }
+        });
         ivIsShowPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

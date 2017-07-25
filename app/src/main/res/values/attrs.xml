@@ -5,8 +5,15 @@
         <attr name="tv_name" format="string"></attr>
         <attr name="tv_size" format="dimension"></attr>
         <attr name="tv_color" format="color"></attr>
+        <attr name="tv_background" format="color"></attr>
     </declare-styleable>
 
+    <declare-styleable name="CustomselectStringButton">
+    <attr name="tv_string_name" format="string"></attr>
+    <attr name="tv_string_size" format="dimension"></attr>
+    <attr name="tv_string_color" format="color"></attr>
+    <attr name="tv_string_background" format="color"></attr>
+    </declare-styleable>
 
     <declare-styleable name="FlowLayout">
         <attr name="horizontalSpacing" format="dimension" />

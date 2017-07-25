@@ -32,6 +32,7 @@ public class PullToRefreshView extends LinearLayout {
 	// pull state
 	private static final int PULL_UP_STATE = 0;
 	private static final int PULL_DOWN_STATE = 1;
+	private static  final int MOVESIZE = 10;
 	/**
 	 * last y
 	 */
@@ -413,10 +414,10 @@ public class PullToRefreshView extends LinearLayout {
 		if (mScrollView != null) {
 			// 子scroll view滑动到最顶端
 			View child = mScrollView.getChildAt(0);
-			if (deltaY > 0 && mScrollView.getScrollY() == 0) {
+			if (deltaY > MOVESIZE && mScrollView.getScrollY() == 0) {
 				mPullState = PULL_DOWN_STATE;
 				return true;
-			} else if (deltaY < 0
+			} else if (deltaY < -MOVESIZE
 					&& child.getMeasuredHeight() <= getHeight()
 					+ mScrollView.getScrollY()) {
 				mPullState = PULL_UP_STATE;
