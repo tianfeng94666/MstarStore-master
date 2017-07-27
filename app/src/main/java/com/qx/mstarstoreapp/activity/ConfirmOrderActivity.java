@@ -163,6 +163,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     private ConfirmOrderResult confirmOrderResult;
     private boolean isShowPrice;
     private boolean ischooseEmpty;//是否选择了产品
+    private boolean isCustomized;//是否是用户定制
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,7 +309,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 }
                 if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    if (isCustomized) {
+                        loginToServer(SimpleStyleInfromationActivity.class);
+                    } else {
+                        loginToServer(StyleInfromationActivity.class);
+                    }
                 }
 
             }
@@ -644,6 +649,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     View listHeadView;
 
     protected void initView() {
+        isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         lnyLoadingLayout.setVisibility(View.VISIBLE);
         listData = new ArrayList<>();
         lv_list = (ListView) findViewById(android.R.id.list);
@@ -666,7 +672,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         }
 
 
-        StyleInfromationActivity.setConfirmOrderOnUpdate(this);
+        if (isCustomized) {
+            SimpleStyleInfromationActivity.setConfirmOrderOnUpdate(this);
+        } else {
+            StyleInfromationActivity.setConfirmOrderOnUpdate(this);
+        }
 
         ShopingAddressActivity.setOnRefreshOrderListener(new ShopingAddressActivity.OnRefreshOrderListener() {
             @Override
@@ -779,7 +789,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
 
                 } else if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    if (isCustomized) {
+                        loginToServer(SimpleStyleInfromationActivity.class);
+                    } else {
+                        loginToServer(StyleInfromationActivity.class);
+                    }
                 } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
@@ -863,7 +877,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    loginToServer(StyleInfromationActivity.class);
+                    if (isCustomized) {
+                        loginToServer(SimpleStyleInfromationActivity.class);
+                    } else {
+                        loginToServer(StyleInfromationActivity.class);
+                    }
                 }
             }
 
@@ -991,7 +1009,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     ToastManager.showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    loginToServer(StyleInfromationActivity.class);
+                    if (isCustomized) {
+                        loginToServer(SimpleStyleInfromationActivity.class);
+                    } else {
+                        loginToServer(StyleInfromationActivity.class);
+                    }
                 }
             }
 
@@ -1016,7 +1038,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     ToastManager.showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    loginToServer(StyleInfromationActivity.class);
+                    if (isCustomized) {
+                        loginToServer(SimpleStyleInfromationActivity.class);
+                    } else {
+                        loginToServer(StyleInfromationActivity.class);
+                    }
                 }
             }
 
@@ -1204,7 +1230,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     } else {
                         bundle.putInt("type", 1);
                     }
-                    openActivity(StyleInfromationActivity.class, bundle);
+                    if (isCustomized) {
+                        openActivity(SimpleStyleInfromationActivity.class, bundle);
+                    } else {
+                        openActivity(StyleInfromationActivity.class, bundle);
+                    }
 
                 }
             });

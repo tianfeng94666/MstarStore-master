@@ -1,5 +1,6 @@
 package com.qx.mstarstoreapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,27 +13,33 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.activity.SimpleStyleInfromationActivity;
 import com.qx.mstarstoreapp.activity.StoneChooseMainActivity;
+import com.qx.mstarstoreapp.activity.StyleInfromationActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
 import com.qx.mstarstoreapp.base.BaseFragment;
 import com.qx.mstarstoreapp.json.ModelDetailResult;
 import com.qx.mstarstoreapp.json.StoneDetail;
 import com.qx.mstarstoreapp.json.StoneEntity;
+import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.viewutils.CustomGridView;
 
+import static android.R.attr.type;
 import static com.qx.mstarstoreapp.fragment.StoneFragment.setListViewHeightBasedOnChildren;
 
 /**
  * Created by Administrator on 2017/7/21 0021.
  */
 
-public class StoneChooseFromSettingFragment extends BaseFragment {
+public class StoneChooseFromSettingFragment extends BaseFragment implements View.OnClickListener {
     StoneDetail stoneDetail;
     @Bind(R.id.tv_type)
     TextView tvType;
@@ -84,6 +91,8 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
     private boolean[] typeChecks;
     StoneEntity stoneEntity;
     boolean isShowMore = false;
+    private boolean isCustomized;
+    private StoneEntity stoneEntityold;
 
     @Nullable
     @Override
@@ -91,20 +100,88 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_stone_choose_setting, null);
         ButterKnife.bind(this, view);
         stoneDetail = ((StoneChooseMainActivity) getActivity()).getStoneDetail();
+        stoneEntityold = ((StoneChooseMainActivity) getActivity()).getStoneEntity();
+        isCustomized = SpUtils.getInstace(getActivity()).getBoolean("isCustomized", true);
         initView();
         return view;
     }
 
     private void initView() {
-        stoneEntity = new StoneEntity();
+        stoneEntity = new StoneEntity(stoneEntityold);
+        iniWeightAndAmount();
         initType();
         initPurity();
         initColor();
         initshape();
+        tvSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
+        tvReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reset();
+            }
+        });
+    }
+
+    private void reset() {
+        tvType.setText("");
+        etAmount.setText("0");
+        etAmount.setText("0");
+        tvColor.setText("");
+        tvQuality.setText("");
+        stoneEntity = new StoneEntity(stoneEntityold);
+        initView();
+    }
+
+    private void goBack() {
+        Intent intent;
+        stoneEntity.setSpecTitle(etWeight.getText().toString());
+        stoneEntity.setNumber(etAmount.getText().toString());
+        if (!isCustomized) {
+            intent = new Intent(getActivity(), StyleInfromationActivity.class);
+        } else {
+            intent = new Intent(getActivity(), SimpleStyleInfromationActivity.class);
+        }
+        Bundle pBundle = new Bundle();
+        pBundle.putString("itemId", ((StoneChooseMainActivity) getActivity()).getItemId());
+        pBundle.putInt("type", ((StoneChooseMainActivity) getActivity()).getType());
+        pBundle.putString("openType", "2");
+        pBundle.putSerializable("stoneResult", stoneEntity);
+        intent.putExtras(pBundle);
+        startActivity(intent);
+        //设置切换动画，从右边进入，左边退出
+        getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+    }
+
+    private void iniWeightAndAmount() {
+        if (stoneEntity.getNumber()!=null) {
+            etAmount.setText(stoneEntity.getNumber() + "");
+        }
+        if (stoneEntity.getSpecTitle()!=null) {
+            etWeight.setText(stoneEntity.getSpecTitle());
+        }
+
+        ivWeightAdd.setOnClickListener(this);
+        ivWeightReduce.setOnClickListener(this);
+        ivAmountAdd.setOnClickListener(this);
+        ivAmountReduce.setOnClickListener(this);
     }
 
     private void initshape() {
-        shapeChecks = new boolean[stoneDetail.getStoneShapeItem().size()];
+        final List<ModelDetailResult.DataEntity.StoneShapeEntity> list = stoneDetail.getStoneShapeItem();
+        shapeChecks = new boolean[list.size()];
+        if(stoneEntity.getShapeTitle()!=null){
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getTitle().equals(stoneEntity.getShapeTitle())) {
+                    shapeChecks[i] = true;
+                }
+            }
+        }
+
         final CommonAdapter commonAdapter = new CommonAdapter<ModelDetailResult.DataEntity.StoneShapeEntity>(stoneDetail.getStoneShapeItem(), R.layout.item_gv_shape) {
             @Override
             public void convert(final int position, final BaseViewHolder helper, final ModelDetailResult.DataEntity.StoneShapeEntity item) {
@@ -114,17 +191,6 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
                 } else {
                     helper.setImageBitmap(R.id.iv_item_shape, item.getPic());
                 }
-                helper.setViewOnclick(R.id.iv_item_shape, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        shapeChecks[position] = !shapeChecks[position];
-                        if (shapeChecks[position]) {
-                            helper.setImageBitmap(R.id.iv_item_shape, item.getPic1());
-                        } else {
-                            helper.setImageBitmap(R.id.iv_item_shape, item.getPic());
-                        }
-                    }
-                });
             }
 
 
@@ -135,20 +201,33 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!shapeChecks[position]) {
                     clearCheck(shapeChecks);
+                    stoneEntity.setShapeTitle(list.get(position).getTitle());
+                    stoneEntity.setShapeId(list.get(position).getId());
+                } else {
+                    stoneEntity.setShapeId("");
+                    stoneEntity.setShapeTitle("");
                 }
                 shapeChecks[position] = !shapeChecks[position];
-
                 commonAdapter.notifyDataSetChanged();
 
             }
         });
-        setListViewHeightBasedOnChildren(gvType, 5);
+        setListViewHeightBasedOnChildren(gvType, 6);
     }
 
     private void initType() {
-        List<ModelDetailResult.DataEntity.StoneTypeEntity> listmore = stoneDetail.getStoneTypeItme();
-        List<ModelDetailResult.DataEntity.StoneTypeEntity> listless = listmore.subList(0,9);
+        final List<ModelDetailResult.DataEntity.StoneTypeEntity> listmore = stoneDetail.getStoneTypeItme();
+        List<ModelDetailResult.DataEntity.StoneTypeEntity> listless = listmore.subList(0, 9);
         typeChecks = new boolean[listmore.size()];
+        if(stoneEntity.getTypeTitle()!=null){
+            for (int i = 0; i < listmore.size(); i++) {
+                if (listmore.get(i).getTitle().equals(stoneEntity.getTypeTitle())) {
+                    typeChecks[i] = true;
+                    tvType.setText(listmore.get(i).getTitle());
+                }
+            }
+        }
+
         final CommonAdapter commonAdapter = new CommonAdapter<ModelDetailResult.DataEntity.StoneTypeEntity>(listmore, R.layout.item_gv_text) {
             @Override
             public void convert(int position, BaseViewHolder helper, ModelDetailResult.DataEntity.StoneTypeEntity item) {
@@ -176,11 +255,17 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
                 if (!typeChecks[position]) {
                     clearCheck(typeChecks);
                     tvType.setText(stoneDetail.getStoneTypeItme().get(position).getTitle());
+                    stoneEntity.setTypeId(listmore.get(position).getId());
+                    stoneEntity.setTypeTitle(listmore.get(position).getTitle());
+
                 } else {
                     tvType.setText("");
+                    stoneEntity.setTypeId("");
+                    stoneEntity.setTypeTitle("");
                 }
                 typeChecks[position] = !typeChecks[position];
                 commonAdapter.notifyDataSetChanged();
+                commonAdapter2.notifyDataSetChanged();
 
             }
         });
@@ -188,11 +273,11 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
         tvIsshowMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isShowMore=!isShowMore;
-                if(isShowMore){
+                isShowMore = !isShowMore;
+                if (isShowMore) {
                     gvType.setAdapter(commonAdapter);
                     tvIsshowMore.setText("收起来");
-                }else {
+                } else {
                     gvType.setAdapter(commonAdapter2);
                     tvIsshowMore.setText("显示更多");
                 }
@@ -208,7 +293,17 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
     }
 
     private void initPurity() {
-        purityChecks = new boolean[stoneDetail.getStonePurityItme().size()];
+        final List<ModelDetailResult.DataEntity.StonePurityEntity> list = stoneDetail.getStonePurityItme();
+        purityChecks = new boolean[list.size()];
+        if(stoneEntity.getPurityTitle()!=null){
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getTitle().equals(stoneEntity.getPurityTitle())) {
+                    purityChecks[i] = true;
+                    tvQuality.setText(list.get(i).getTitle());
+                }
+            }
+        }
+
         final CommonAdapter commonAdapter = new CommonAdapter<ModelDetailResult.DataEntity.StonePurityEntity>(stoneDetail.getStonePurityItme(), R.layout.item_gv_text) {
             @Override
             public void convert(int position, BaseViewHolder helper, ModelDetailResult.DataEntity.StonePurityEntity item) {
@@ -225,9 +320,13 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!purityChecks[position]) {
                     clearCheck(purityChecks);
-                    tvQuality.setText(stoneDetail.getStonePurityItme().get(position).getTitle());
+                    tvQuality.setText(list.get(position).getTitle());
+                    stoneEntity.setPurityId(list.get(position).getId());
+                    stoneEntity.setPurityTitle(list.get(position).getTitle());
                 } else {
                     tvQuality.setText("");
+                    stoneEntity.setPurityId("");
+                    stoneEntity.setPurityTitle("");
                 }
                 purityChecks[position] = !purityChecks[position];
                 commonAdapter.notifyDataSetChanged();
@@ -239,8 +338,17 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
 
 
     private void initColor() {
-        List<ModelDetailResult.DataEntity.StoneColorEntity> colorList = stoneDetail.getStoneColorItme();
+        final List<ModelDetailResult.DataEntity.StoneColorEntity> colorList = stoneDetail.getStoneColorItme();
         colorChecks = new boolean[colorList.size()];
+        if(stoneEntity.getColorTitle()!=null){
+            for (int i = 0; i < colorList.size(); i++) {
+                if (colorList.get(i).getTitle().equals(stoneEntity.getColorTitle())) {
+                    colorChecks[i] = true;
+                    tvColor.setText(colorList.get(i).getTitle());
+                }
+            }
+        }
+
         final CommonAdapter colorAdapter = new CommonAdapter<ModelDetailResult.DataEntity.StoneColorEntity>(colorList, R.layout.item_gv_text) {
             @Override
             public void convert(int position, BaseViewHolder helper, ModelDetailResult.DataEntity.StoneColorEntity item) {
@@ -259,9 +367,13 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!colorChecks[position]) {
                     clearCheck(colorChecks);
-                    tvColor.setText(stoneDetail.getStoneColorItme().get(position).getTitle());
+                    tvColor.setText(colorList.get(position).getTitle());
+                    stoneEntity.setColorId(colorList.get(position).getId());
+                    stoneEntity.setColorTitle(colorList.get(position).getTitle());
                 } else {
                     tvColor.setText("");
+                    stoneEntity.setColorId("");
+                    stoneEntity.setColorTitle("");
                 }
                 colorChecks[position] = !colorChecks[position];
                 colorAdapter.notifyDataSetChanged();
@@ -275,5 +387,34 @@ public class StoneChooseFromSettingFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        double weight = Double.parseDouble(etWeight.getText().toString().equals("") ? "0" : etWeight.getText().toString());
+        int amount = Integer.parseInt(etAmount.getText().toString().equals("") ? "0" : etAmount.getText().toString());
+        switch (v.getId()) {
+            case R.id.iv_weight_add:
+                ++weight;
+                break;
+            case R.id.iv_weight_reduce:
+                if (weight > 1) {
+                    --weight;
+                }
+                break;
+            case R.id.iv_amount_add:
+                ++amount;
+                break;
+            case R.id.iv_amount_reduce:
+                if (amount > 1) {
+                    --amount;
+                }
+                break;
+        }
+        DecimalFormat df = new DecimalFormat("######0.00");
+        stoneEntity.setNumber(amount + "");
+        stoneEntity.setSpecTitle(df.format(weight) + "");
+        etWeight.setText(df.format(weight) + "");
+        etAmount.setText(amount + "");
     }
 }

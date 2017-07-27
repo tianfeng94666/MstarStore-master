@@ -21,6 +21,7 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.fragment.StoneChooseFromSettingFragment;
 import com.qx.mstarstoreapp.fragment.StoneFragment;
 import com.qx.mstarstoreapp.json.StoneDetail;
+import com.qx.mstarstoreapp.json.StoneEntity;
 
 /**
  * Created by Administrator on 2017/7/21 0021.
@@ -40,6 +41,43 @@ public class StoneChooseMainActivity extends BaseActivity {
     private PagerAdapter pagerAdapter;
     private Fragment stoneChooseFromSettingFragment,stoneChooseFromStoneHouseFragment;
     private StoneDetail stoneDetail;
+    private int openType;
+    private String itemId;
+    private int type;
+    private StoneEntity stoneEntity;
+    private int isCanSelectStone;
+
+    public StoneEntity getStoneEntity() {
+        return stoneEntity;
+    }
+
+    public void setStoneEntity(StoneEntity stoneEntity) {
+        this.stoneEntity = stoneEntity;
+    }
+
+    public int getOpenType() {
+        return openType;
+    }
+
+    public void setOpenType(int openType) {
+        this.openType = openType;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +93,11 @@ public class StoneChooseMainActivity extends BaseActivity {
 
     private void getDate() {
         stoneDetail = (StoneDetail)getIntent().getSerializableExtra("stoneDetail");
+        openType = getIntent().getIntExtra("openType", 0);
+        itemId = getIntent().getStringExtra("itemId");
+        type = getIntent().getIntExtra("type", 0);
+        isCanSelectStone = getIntent().getIntExtra("isCanSelectStone",0);
+         stoneEntity = (StoneEntity) getIntent().getSerializableExtra("stone");
     }
 
     @Override
@@ -63,21 +106,36 @@ public class StoneChooseMainActivity extends BaseActivity {
     }
 
     private void initView() {
-        stoneChooseFromStoneHouseFragment = new StoneChooseFromSettingFragment();
-        fragmentList.add(stoneChooseFromStoneHouseFragment);
-        stoneChooseFromSettingFragment = new StoneFragment(2);
-        fragmentList.add(stoneChooseFromSettingFragment);
 
+
+
+        switch (isCanSelectStone){
+            case 0:
+                stoneChooseFromStoneHouseFragment = new StoneChooseFromSettingFragment();
+                fragmentList.add(stoneChooseFromStoneHouseFragment);
+                tab.addTab(tab.newTab().setText("1"));
+                mTitleList.add("选择主石规格");
+                break;
+            case 1:
+                stoneChooseFromSettingFragment = new StoneFragment(2);
+                fragmentList.add(stoneChooseFromSettingFragment);
+                tab.addTab(tab.newTab().setText("1"));
+                mTitleList.add("从裸钻库中挑选");
+                break;
+            case 2:
+                tab.addTab(tab.newTab().setText("1"));
+                tab.addTab(tab.newTab().setText("2"));
+                //添加页卡标题
+                mTitleList.add("选择主石规格");
+                mTitleList.add("从裸钻库中挑选");
+                stoneChooseFromStoneHouseFragment = new StoneChooseFromSettingFragment();
+                fragmentList.add(stoneChooseFromStoneHouseFragment);
+                stoneChooseFromSettingFragment = new StoneFragment(2);
+                fragmentList.add(stoneChooseFromSettingFragment);
+                break;
+        }
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(pagerAdapter);
-        tab.addTab(tab.newTab().setText("1"));
-        tab.addTab(tab.newTab().setText("2"));
-        tab.addTab(tab.newTab().setText("3"));
-        tab.addTab(tab.newTab().setText("4"));
-        //添加页卡标题
-        mTitleList.add("选择主石规格");
-        mTitleList.add("从裸钻库中挑选");
-
         tab.setupWithViewPager(viewPager);
         tab.setTabsFromPagerAdapter(pagerAdapter);
         idIgBack.setOnClickListener(new View.OnClickListener() {

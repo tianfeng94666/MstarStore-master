@@ -338,49 +338,32 @@ public class StoneSearchResult {
         }
 
         public static class PriceBean {
+
             /**
-             * keyword : price
-             * maximum : 20000
-             * minimum : 0
-             * title : 价格范围(元) 0-20000
+             * list : [{"key":"0,1","title":"1克拉"},{"key":"2,4","title":"2~4克拉"}]
+             * subject : 克拉
              */
 
-            private String keyword;
-            private int maximum;
-            private int minimum;
-            private String title;
+            private String subject;
+            private List<KeyTitle> list;
 
-            public String getKeyword() {
-                return keyword;
+            public String getSubject() {
+                return subject;
             }
 
-            public void setKeyword(String keyword) {
-                this.keyword = keyword;
+            public void setSubject(String subject) {
+                this.subject = subject;
             }
 
-            public int getMaximum() {
-                return maximum;
+            public List<KeyTitle> getList() {
+                return list;
             }
 
-            public void setMaximum(int maximum) {
-                this.maximum = maximum;
+            public void setList(List<KeyTitle> list) {
+                this.list = list;
             }
 
-            public int getMinimum() {
-                return minimum;
-            }
 
-            public void setMinimum(int minimum) {
-                this.minimum = minimum;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
         }
 
         public static class PurityBean {
@@ -528,49 +511,32 @@ public class StoneSearchResult {
         }
 
         public static class WeightBean {
+
             /**
-             * keyword : weight
-             * maximum : 30
-             * minimum : 0
-             * title : 钻石重量(克拉) 0-30
+             * list : [{"key":"0,1","title":"1克拉"},{"key":"2,4","title":"2~4克拉"}]
+             * subject : 克拉
              */
 
-            private String keyword;
-            private int maximum;
-            private int minimum;
-            private String title;
+            private String subject;
+            private List<KeyTitle> list;
 
-            public String getKeyword() {
-                return keyword;
+            public String getSubject() {
+                return subject;
             }
 
-            public void setKeyword(String keyword) {
-                this.keyword = keyword;
+            public void setSubject(String subject) {
+                this.subject = subject;
             }
 
-            public int getMaximum() {
-                return maximum;
+            public List<KeyTitle> getList() {
+                return list;
             }
 
-            public void setMaximum(int maximum) {
-                this.maximum = maximum;
+            public void setList(List<KeyTitle> list) {
+                this.list = list;
             }
 
-            public int getMinimum() {
-                return minimum;
-            }
 
-            public void setMinimum(int minimum) {
-                this.minimum = minimum;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
         }
     }
 }

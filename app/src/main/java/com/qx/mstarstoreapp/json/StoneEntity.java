@@ -1,9 +1,11 @@
 package com.qx.mstarstoreapp.json;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/10/19.
  */
-public class StoneEntity implements Cloneable {
+public class StoneEntity implements Cloneable , Serializable {
 
 
     /**

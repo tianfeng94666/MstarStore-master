@@ -222,7 +222,7 @@
                     android:layout_height="wrap_content"
                     android:horizontalSpacing="4dp"
                     android:isScrollContainer="false"
-                    android:numColumns="5"
+                    android:numColumns="6"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:scrollbars="none"
@@ -330,7 +330,7 @@
                 android:layout_weight="1"
                 android:background="@color/theme_red"
                 android:gravity="center"
-                android:text="查询"
+                android:text="确定"
                 android:textColor="@color/white" />
 
             <TextView

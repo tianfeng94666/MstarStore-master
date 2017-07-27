@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
+import com.qx.mstarstoreapp.activity.StoneChooseMainActivity;
 import com.qx.mstarstoreapp.activity.StoneHistoryOrder;
 import com.qx.mstarstoreapp.activity.StoneSearchResultActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
@@ -64,6 +65,8 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     TextView tvAddSpot;
     @Bind(R.id.iv_reduce)
     ImageView ivReduce;
+    @Bind(R.id.et_weight)
+    EditText etSpot;
     @Bind(R.id.iv_add)
     ImageView ivAdd;
     @Bind(R.id.ll_shape)
@@ -92,22 +95,18 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     TextView tvSearch;
     @Bind(R.id.tv_reset)
     TextView idTvCurorder;
-
+    @Bind(R.id.gv_weight)
+    GridView gvWeight;
+    @Bind(R.id.et_weight_min)
+    EditText etWeightMin;
+    @Bind(R.id.et_weight_max)
+    EditText etWeightMax;
+    @Bind(R.id.gv_price)
+    GridView gvPrice;
+    @Bind(R.id.et_price_min)
+    EditText etPriceMin;
+    @Bind(R.id.et_price_max)
     EditText etPriceMax;
-    @Bind(R.id.et_spot)
-    EditText etSpot;
-    @Bind(R.id.tv_weight_min)
-    TextView tvWeightMin;
-    @Bind(R.id.tv_weight_max)
-    TextView tvWeightMax;
-    @Bind(R.id.sb_weight)
-    RangeSeekBar sbWeight;
-    @Bind(R.id.tv_price_min)
-    TextView tvPriceMin;
-    @Bind(R.id.tv_price_max)
-    TextView tvPriceMax;
-    @Bind(R.id.sb_price)
-    RangeSeekBar sbPrice;
     private StoneSearchResult stoneSearchResult;
     private StoneSearchResult.DataBean.CertAuthBean certAuthBean;
     private StoneSearchResult.DataBean.ShapeBean shapeBean;
@@ -121,14 +120,14 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     private boolean[] purityChecks;
     private StoneSearchResult.DataBean.WeightBean weightBean;
     private StoneSearchResult.DataBean.PriceBean priceBean;
+    private String weightkey = "";
+    private String pricekey = "";
     private boolean[] weightChecks;
     private boolean[] priceChecks;
     private StoneOthersAdapter stoneOthersAdapter;
     private StoneSearchInfo stoneSearchInfo;
     private int openType;//0 是正常进入，1是主石进入,2表示从StoneChooseMain进来
     private String itemId;//产品的id
-    private String weightMax = "";
-    private String priceMax = "";
 
     public StoneFragment() {
     }
@@ -140,7 +139,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.activity_stone_storehouse, null);
+        View view = View.inflate(getActivity(), R.layout.activity_stone_storehouse1, null);
         ButterKnife.bind(this, view);
         baseShowWatLoading();
         loadNetData();
@@ -162,7 +161,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         /**
          *
          */
-        if (openType == 2) {
+        if(openType==2){
             idRelTitle.setVisibility(View.GONE);
         }
         idIgBack.setVisibility(View.GONE);
@@ -295,39 +294,126 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     }
 
     private void initRandSeekBar() {
-        tvWeightMin.setText(weightBean.getMinimum() + "");
-        tvWeightMax.setText("-" + weightBean.getMaximum());
-        sbWeight.setRange((float) weightBean.getMinimum(), (float) weightBean.getMaximum());
-        sbWeight.setValue((float) weightBean.getMinimum(), (float) weightBean.getMaximum());
-        sbWeight.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {
+
+        final List<KeyTitle> weightList = weightBean.getList();
+        final List<KeyTitle> priceList = priceBean.getList();
+        if(weightList==null){
+            return;
+        }
+        if(priceList==null){
+            return;
+        }
+        weightChecks = new boolean[weightList.size()];
+        priceChecks = new boolean[priceList.size()];
+        gvWeight.setNumColumns(weightList.size());
+        final CommonAdapter weightAdapter = new CommonAdapter<KeyTitle>(weightList, R.layout.item_gv_text2) {
             @Override
-            public void onRangeChanged(RangeSeekBar view, float min, float max, boolean isFromUser) {
-                if (isFromUser) {
-                    tvWeightMin.setText(df.format(min) + "");
-                    weightMax = df.format(max) + "";
-                    tvWeightMax.setText("-" + df.format(max) + "");
-                    sbWeight.setLeftProgressDescription(df.format(min));
-                    sbWeight.setRightProgressDescription(df.format(max));
+            public void convert(int position, BaseViewHolder helper, KeyTitle item) {
+                if (weightChecks[position]) {
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
+                } else {
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.btn_bg_while2, getResources().getColor(R.color.text_color));
                 }
+            }
+        };
+        gvWeight.setAdapter(weightAdapter);
+        gvWeight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                etWeightMax.setText("");
+                etWeightMin.setText("");
+
+                if(weightChecks[position]){
+                    weightChecks[position] =  !weightChecks[position];
+                    weightkey = "";
+                }else {
+                    clearCheck(weightChecks);
+                    weightChecks[position] =  !weightChecks[position];
+                    weightkey = weightList.get(position).getKey();
+                }
+                weightAdapter.notifyDataSetChanged();
+            }
+        });
+        etWeightMin.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    clearCheck(weightChecks);
+                    weightAdapter.notifyDataSetChanged();
+                    weightkey = "";
+                }
+                return false;
+            }
+        });
+        etWeightMax.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    clearCheck(weightChecks);
+                    weightAdapter.notifyDataSetChanged();
+                    weightkey = "";
+                }
+                return false;
             }
         });
 
-        tvPriceMin.setText(priceBean.getMinimum() + "");
-        tvPriceMax.setText("-" + priceBean.getMaximum());
-        sbPrice.setRange((float) priceBean.getMinimum(), (float) priceBean.getMaximum());
-        sbPrice.setValue((float) priceBean.getMinimum(), (float) priceBean.getMaximum());
-        sbPrice.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {
+
+        gvPrice.setNumColumns(priceList.size());
+        final CommonAdapter priceAdapter = new CommonAdapter<KeyTitle>(priceList, R.layout.item_gv_text2) {
             @Override
-            public void onRangeChanged(RangeSeekBar view, float min, float max, boolean isFromUser) {
-                if (isFromUser) {
-                    tvPriceMin.setText(df1.format(min) + "");
-                    priceMax = df1.format(max) + "";
-                    tvPriceMax.setText("-" + df1.format(max) + "");
-                    sbWeight.setLeftProgressDescription(df1.format(min));
-                    sbWeight.setRightProgressDescription(df1.format(max));
+            public void convert(int position, BaseViewHolder helper, KeyTitle item) {
+                if (priceChecks[position]) {
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
+                } else {
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.btn_bg_while2, getResources().getColor(R.color.text_color));
                 }
             }
+
+        };
+        gvPrice.setAdapter(priceAdapter);
+        gvPrice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                etPriceMax.setText("");
+                etPriceMin.setText("");
+                if(priceChecks[position]){
+                    priceChecks[position] =  !priceChecks[position];
+                    pricekey = "";
+                }else{
+                    clearCheck(priceChecks);
+                    priceChecks[position] =  !priceChecks[position];
+                    pricekey = priceList.get(position).getKey();
+                }
+                priceAdapter.notifyDataSetChanged();
+            }
         });
+        etPriceMax.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    clearCheck(priceChecks);
+                    priceAdapter.notifyDataSetChanged();
+                    pricekey = "";
+                }
+                return false;
+            }
+        });
+        etPriceMin.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    clearCheck(priceChecks);
+                    priceAdapter.notifyDataSetChanged();
+                    pricekey = "";
+                }
+                return false;
+            }
+        });
+
+
     }
 
     private void clearCheck(boolean[] Checks) {
@@ -416,7 +502,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
 
                 break;
             case R.id.tv_search:
-                if (searchStone()) {
+                if( searchStone()){
                     gotoResult();
                 }
                 break;
@@ -436,8 +522,44 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     private boolean searchStone() {
         stoneSearchInfo = new StoneSearchInfo();
         stoneSearchInfo.setCerAuth(getCerAuth());
-        stoneSearchInfo.setWeight(tvWeightMin.getText().toString() + "," + weightMax);
-        stoneSearchInfo.setPrice(tvPriceMin.getText().toString() + "," + priceMax);
+        if (weightkey.equals("")) {
+            String weightMin,weightMax;
+            weightMin=etWeightMin.getText().toString();
+            weightMax = etWeightMax.getText().toString();
+            if(!weightMin.isEmpty()&&!weightMax.isEmpty()&&Double.parseDouble(weightMin)>Double.parseDouble(weightMax)){
+                ToastManager.showToastReal("克拉搜索输入有误！");
+                return false;
+            }
+            if(weightMax.isEmpty()){
+                weightMax = "0";
+            }
+            if(weightMin.isEmpty()){
+                weightMin = "0";
+            }
+
+            stoneSearchInfo.setWeight(weightMin + "," + weightMax);
+        } else {
+            stoneSearchInfo.setWeight(weightkey);
+        }
+        if (pricekey.equals("")) {
+            String priceMin,priceMax;
+            priceMin=etPriceMin.getText().toString();
+            priceMax = etPriceMax.getText().toString();
+            if((!priceMax.isEmpty()&&!priceMin.isEmpty())&&Double.parseDouble(priceMin)>Double.parseDouble(priceMax)){
+                ToastManager.showToastReal("价格搜索输入有误！");
+                return false;
+            }
+            if(priceMax.isEmpty()){
+                priceMax = "0";
+            }
+            if(priceMin.isEmpty()){
+                priceMin = "0";
+            }
+            stoneSearchInfo.setPrice(priceMin + "," + priceMax);
+        }else {
+            stoneSearchInfo.setPrice(pricekey);
+        }
+
         stoneSearchInfo.setShape(getShape());
         stoneSearchInfo.setColor(getStoneColor());
         stoneSearchInfo.setPurity(getPurity());
@@ -448,12 +570,16 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         stoneSearchInfo.setPercent(etSpot.getText().toString());
         return true;
     }
-
     private void reset() {
         tvColor.setText("");
         tvQuality.setText("");
+        pricekey="";
+        weightkey="";
+        etPriceMax.setText("");
+        etPriceMin.setText("");
+        etWeightMax.setText("");
+        etWeightMin.setText("");
     }
-
     private String getPurity() {
         List<String> puritys = purityBean.getValues();
         StringBuilder sb = new StringBuilder();
@@ -522,8 +648,8 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         Bundle bundle = new Bundle();
         bundle.putSerializable("searchStoneInfo", stoneSearchInfo);
         Intent intent = new Intent(getActivity(), StoneSearchResultActivity.class);
-        intent.putExtra("openType", openType);
-        intent.putExtra("itemId", itemId);
+        intent.putExtra("openType", ((StoneChooseMainActivity)getActivity()).getOpenType());
+        intent.putExtra("itemId", ((StoneChooseMainActivity)getActivity()).getItemId());
         intent.putExtra("stoneInfo", bundle);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
@@ -611,6 +737,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
 
 
 }

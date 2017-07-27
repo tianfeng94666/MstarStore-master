@@ -75,7 +75,6 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        L.e("BaseApplication onCreate");
         BaseApplication.mBaseApplication = this;
         BaseApplication.mMainThreadLooper = getMainLooper();
         BaseApplication.mMainThreadHandler = new Handler();

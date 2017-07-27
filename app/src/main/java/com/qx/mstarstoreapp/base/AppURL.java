@@ -7,7 +7,7 @@ import com.qx.mstarstoreapp.R;
  */
 public class AppURL {
 //     static String QxVersion = "&QxVersion="+ "beta"+"&";
-    static String QxVersion = "QxVersion=1.3"+"&";
+    static String QxVersion = "QxVersion=1.5"+"&";
 //    static String QxVersion = "QxVersion="+ "beta1.2"+"&"+"";
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi1.fanerweb.com/api/aproxy/";
@@ -305,6 +305,21 @@ public class AppURL {
      */
     public static String URL_STONE_CANCLE_ORDER= baseUrl+ "stoneCancelOrderDo?"+QxVersion;
 
+    //简版的
+    /**添加到当前订单*/
+    public static String URL_CURRENT_ORDER1 = baseUrl + "OrderCurrentDoModelItemForDefaultDo?"+QxVersion;
+    //OrderDoCurrentModelItemDo?productId=1&categoryId=8&number=2&handSize=3&stone=1|3|2|3|4|5&stoneA=1|2|2|3|4|5&stoneB=1|2|3|3|4|5&stoneC=1|2|3|3|4|6&tokenKey=10b588002228fa805231a59bb7976bf4
+
+    /**修改添加添加到当前订单*/
+    public static String URL_CURRENT_EDIT_ORDER1 = baseUrl + "OrderCurrentEditModelItemForDefaultDo?"+QxVersion;
+
+
+    /**订单页跳转修改页修改*/
+    public static String URL_UPDATE_ORDER_WATET1 = baseUrl + "ModelOrderWaitCheckOrderCurrentEditModelItemDo?"+QxVersion;
+    /**
+     * 获取主页图片
+     */
+    public static String URL_GET_HOME_PIC = baseUrl + "IndexPageForQxzx?"+QxVersion;
 }
 
 

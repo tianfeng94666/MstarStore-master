@@ -128,10 +128,10 @@
                             android:layout_height="match_parent"
                             android:layout_marginRight="2dp"
                             android:layout_weight="1.5"
-                            android:background="@drawable/btn_bg_while"
+                            android:background="@drawable/btn_bg_while2"
                             android:button="@null"
                             android:gravity="center"
-                            android:hint="件数"
+                            android:text="1"
                             android:inputType="numberDecimal"
                             android:textSize="14sp" />
 

@@ -83,7 +83,7 @@ public class StringUtils {
 		sb.append("&"+key+"=");
 		for (int i = 0; i < list.size(); i++) {
 			String id = list.get(i);
-			sb.append(id);
+			sb.append(id==null?"":id);
 			if(i!=list.size()-1){
 				sb.append("|");
 			}

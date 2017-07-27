@@ -6,58 +6,58 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
-import com.qx.mstarstoreapp.fragment.SettingFragment;
-import com.qx.mstarstoreapp.fragment.HomeFragment;
-import com.qx.mstarstoreapp.fragment.InfromationFragment;
+import com.qx.mstarstoreapp.base.BaseActivity;
+import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.json.MainPicResult;
 import com.qx.mstarstoreapp.json.VersionResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
+import com.recker.flybanner.FlyBanner;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener{
 
-    @Bind(R.id.id_ig_back)
-    ImageView idIgBack;
-    @Bind(R.id.title_text)
-    TextView titleText;
-    private RelativeLayout rlyTitle;
-    private int red = 0xc3272b;
-    Fragment homeFragment, informationFragment, helpFragment;
-    FragmentManager fragmentMag;
-    FrameLayout id_fl_tab1, id_fl_tab2;
-    LinearLayout id_fl_tab3;
 
-    ImageView igHome, igInformaction, igHelp;
-    TextView tvHome, tvInformaction, tvHelp;
+    //新主页
+    @Bind(R.id.fly_main)
+    FlyBanner flyMain;
+    @Bind(R.id.iv_home)
+    ImageView ivHome;
+    @Bind(R.id.iv_stone)
+    ImageView ivStone;
+    @Bind(R.id.iv_product)
+    ImageView ivProduct;
+    @Bind(R.id.iv_mine)
+    ImageView ivMine;
+
     private int nowId;
     private String version;
     private VersionResult versionResult;
+    private MainPicResult mainPics;
+    private List<String> imgesUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +65,55 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.show_main_lay);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initView();
-        setChioceFragment(0);
+//        initView();
+//        setChioceFragment(0);
+        loadNetData();
         isNeedUpdate();
     }
 
+    @Override
+    public void loadNetData() {
+        String lgUrl = AppURL.URL_GET_HOME_PIC + BaseApplication.getToken();
+        L.e("netLogin" + lgUrl);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+                    mainPics = new Gson().fromJson(result, MainPicResult.class);
+                    if (mainPics.getData() == null) {
+                        ToastManager.showToastReal("获取数据失败！");
+                        return;
+                    }
+                    initView();
 
+                } else if (error.equals("2")) {
+
+                } else {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastWhendebug(message);
+                    L.e(message);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+
+
+        });
+    }
+
+
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        initView();
+    }
 
     private void isNeedUpdate() {
         String lgUrl = AppURL.URL_CODE_VERSION + "device=" + "android";
@@ -84,14 +125,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     versionResult = new Gson().fromJson(result, VersionResult.class);
-                    if(versionResult.getData()==null){
+                    if (versionResult.getData() == null) {
                         ToastManager.showToastReal("获取数据失败！");
                         return;
                     }
                     version = versionResult.getData().getVersion();
                     Double versionDouble = Double.parseDouble(version);
                     Double currentDouble = Double.parseDouble(getString(R.string.app_version));
-                    if (versionDouble>currentDouble) {
+                    if (versionDouble > currentDouble) {
                         showNoticeDialog();
                     }
                 } else if (error.equals("2")) {
@@ -147,28 +188,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initView() {
-        idIgBack.setVisibility(View.GONE);
-        fragmentMag = getSupportFragmentManager();
-        id_fl_tab1 = (FrameLayout) findViewById(R.id.id_fl_tab1);
-        id_fl_tab2 = (FrameLayout) findViewById(R.id.id_fl_tab2);
-        id_fl_tab3 = (LinearLayout) findViewById(R.id.id_fl_tab3);
 
-        igHome = (ImageView) findViewById(R.id.id_ig_home);
-        igInformaction = (ImageView) findViewById(R.id.id_ig_information);
-        igHelp = (ImageView) findViewById(R.id.id_ig_help);
+        if (UIUtils.isScreenChange(this)) {
+            imgesUrl = mainPics.getData().getHorizontal();
+        } else {
+            imgesUrl = mainPics.getData().getVertical();
+        }
 
-
-        tvHome = (TextView) findViewById(R.id.id_tv_home);
-        tvInformaction = (TextView) findViewById(R.id.id_tv_information);
-        tvHelp = (TextView) findViewById(R.id.id_tv_help);
-
-        rlyTitle = (RelativeLayout) findViewById(R.id.id_rel_title);
-        id_fl_tab3.setOnClickListener(this);
-        id_fl_tab2.setOnClickListener(this);
-        id_fl_tab1.setOnClickListener(this);
-
-        TextView hindInformation = (TextView) findViewById(R.id.tab2_count);
-        badge1 = new BadgeView(MainActivity.this, hindInformation);// 创建一个BadgeView对象，view为你需要显示提醒的控件
+        flyMain.setImagesUrl(imgesUrl);
+        ivHome.setOnClickListener(this);
+        ivMine.setOnClickListener(this);
+        ivProduct.setOnClickListener(this);
+        ivStone.setOnClickListener(this);
     }
 
     public static BadgeView badge1;
@@ -178,141 +209,34 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (count == 0) {
             return;
         } else {
-            remind(count, badge1, true);
+//            remind(count, badge1, true);
         }
+
+    }
+
+    public void onClick(View view) {
+        Intent intent = new Intent();
+        switch (view.getId()) {
+            case R.id.iv_home:
+                intent.setClass(MainActivity.this,MainActivity.class);
+                break;
+            case R.id.iv_stone:
+                intent.setClass(MainActivity.this,StoneSearchInfoActivity.class);
+                break;
+            case R.id.iv_product:
+                intent.setClass(MainActivity.this,OrderActivity.class);
+                break;
+            case R.id.iv_mine:
+                intent.setClass(MainActivity.this,SettingActivity.class);
+                break;
+        }
+        startActivity(intent);
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 
     }
 
     public interface OnInformationCountClick {
         int getCount();
-    }
-
-    public void visableTitle() {
-        rlyTitle.setVisibility(View.VISIBLE);
-    }
-
-    public void hideTitle() {
-        rlyTitle.setVisibility(View.GONE);
-    }
-
-    private static void remind(int count, BadgeView badge, boolean isVisible) {
-        //BadgeView的具体使用
-        badge.setText(count + ""); // 需要显示的提醒类容
-        badge.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);// 显示的位置.右上角,BadgeView.POSITION_BOTTOM_LEFT,下左，还有其他几个属性
-        badge.setTextColor(Color.WHITE); // 文本颜色
-        int hint = Color.rgb(200, 39, 73);
-        badge.setBadgeBackgroundColor(hint); // 提醒信息的背景颜色，自己设置
-        badge.setTextSize(10); // 文本大小
-        badge.setBadgeMargin(3, 3); // 水平和竖直方向的间距
-        badge.setBadgeMargin(5); //各边间隔
-        if (isVisible) {
-            badge.show();// 只有显示
-        } else {
-            badge.hide();//影藏显示
-        }
-    }
-
-
-    private void setChioceFragment(int index) {
-        FragmentTransaction fragTrans = fragmentMag.beginTransaction();
-        resetAllFragmentView();
-        hideAllFragments(fragTrans);
-        visableTitle();
-        switch (index) {
-            case 0:
-                hideTitle();
-                tvHome.setTextColor(getResources().getColor(R.color.theme_red));
-                igHome.setImageResource(R.drawable.icon_home_down);
-                if (homeFragment == null) {
-                    homeFragment = new HomeFragment();
-                    fragTrans.add(R.id.content, homeFragment);
-                } else {
-                    fragTrans.show(homeFragment);
-                }
-                break;
-            case 1:
-                tvInformaction.setTextColor(getResources().getColor(R.color.theme_red));
-                igInformaction.setImageResource(R.drawable.icon_infromation_down);
-                if (informationFragment == null) {
-                    informationFragment = new InfromationFragment();
-                    fragTrans.add(R.id.content, informationFragment);
-                } else {
-                    fragTrans.show(informationFragment);
-                }
-                titleText.setText("消息");
-                break;
-            case 2:
-                tvHelp.setTextColor(getResources().getColor(R.color.theme_red));
-                igHelp.setImageResource(R.drawable.icon_setting_down);
-                if (helpFragment == null) {
-                    helpFragment = new SettingFragment();
-                    fragTrans.add(R.id.content, helpFragment);
-                } else {
-                    fragTrans.show(helpFragment);
-                }
-                titleText.setText("设置");
-                break;
-        }
-        nowId = index;
-        fragTrans.commit();
-
-    }
-
-    private void resetAllFragmentView() {
-        igHome.setImageResource(R.drawable.icon_home_nor);
-        igInformaction.setImageResource(R.drawable.icon_infromation_nor);
-        igHelp.setImageResource(R.drawable.icon_setting_nor);
-        tvHome.setTextColor(getResources().getColor(R.color.text_color3));
-        tvInformaction.setTextColor(getResources().getColor(R.color.text_color3));
-        tvHelp.setTextColor(getResources().getColor(R.color.text_color3));
-    }
-
-    private void hideAllFragments(FragmentTransaction fragTrans) {
-        if (homeFragment != null) {
-            fragTrans.hide(homeFragment);
-        }
-        if (helpFragment != null) {
-            fragTrans.hide(helpFragment);
-        }
-        if (informationFragment != null) {
-            fragTrans.hide(informationFragment);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.id_fl_tab1:
-                setChioceFragment(0);
-                break;
-            case R.id.id_fl_tab2:
-                setChioceFragment(1);
-                break;
-            case R.id.id_fl_tab3:
-                setChioceFragment(2);
-                break;
-        }
-    }
-
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 94) {
-//            int fragment_id = -1;
-//            if (data != null) {
-//                fragment_id = data.getIntExtra("fragmentid", -1);
-//            } else {
-//                fragment_id = nowId;
-//            }
-//            setChioceFragment(fragment_id);
-//        }
-//    }
-
-    private void loginToExchange(int position) {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        loginIntent.putExtra("fragmentid", position);
-        startActivityForResult(loginIntent, 94);
     }
 
 
