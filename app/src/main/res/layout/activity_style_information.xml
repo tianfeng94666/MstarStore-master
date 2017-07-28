@@ -21,42 +21,45 @@
                 style="@style/layout_vertical"
                 android:layout_weight="1">
 
-                <include layout="@layout/layout_model_informa" />
+                <com.recker.flybanner.FlyBanner
+                    android:id="@+id/flybanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.recker.flybanner.FlyBanner>
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/id_store_title"
-                    android:layout_marginLeft="@dimen/margin10"
-                    android:layout_alignParentLeft="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small_medium"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_weight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_small_medium" />
-
-            </RelativeLayout>
 
             <LinearLayout
                 style="@style/layout_vertical"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/id_store_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="@dimen/margin10"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_small_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_small_medium" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -181,24 +184,24 @@
                     <TextView
                         android:id="@+id/tv_reset"
                         android:layout_width="0dp"
-android:textSize="@dimen/text_size_small_medium"
                         android:layout_height="match_parent"
                         android:layout_weight="0.25"
                         android:drawableLeft="@drawable/icon_reset"
                         android:gravity="center_vertical"
-                        android:text="  重置" />
+                        android:text="  重置"
+                        android:textSize="@dimen/text_size_small_medium" />
 
 
                     <TextView
                         android:id="@+id/tv_del"
                         android:layout_width="0dp"
-                        android:textSize="@dimen/text_size_small_medium"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="8dp"
                         android:layout_weight="0.25"
                         android:drawableLeft="@drawable/icon_del"
                         android:gravity="center_vertical"
-                        android:text="  删除" />
+                        android:text="  删除"
+                        android:textSize="@dimen/text_size_small_medium" />
 
                     <View
                         android:layout_width="0dp"
@@ -222,9 +225,9 @@ android:textSize="@dimen/text_size_small_medium"
                         android:drawableLeft="@drawable/icon_add2"
                         android:gravity="center_vertical"
                         android:paddingLeft="8dp"
-                        android:textSize="@dimen/text_size_small_medium"
                         android:paddingRight="8dp"
-                        android:text="  添加副石" />
+                        android:text="  添加副石"
+                        android:textSize="@dimen/text_size_small_medium" />
                 </LinearLayout>
 
                 <LinearLayout

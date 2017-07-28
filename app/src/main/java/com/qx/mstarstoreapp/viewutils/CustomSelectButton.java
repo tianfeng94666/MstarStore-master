@@ -152,6 +152,7 @@ public class CustomSelectButton extends RelativeLayout {
         wheelView.setWheelData(types);
         WheelView.WheelViewStyle style = new WheelView.WheelViewStyle();
         style.selectedTextSize = 20;
+        style.selectedTextZoom=90;
         style.textSize = 16;
         wheelView.setStyle(style);
         int select = getSelect(text);

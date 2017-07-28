@@ -21,7 +21,10 @@
                 style="@style/layout_vertical"
                 android:layout_weight="1">
 
-                <include layout="@layout/layout_model_informa" />
+                <com.recker.flybanner.FlyBanner
+                    android:id="@+id/flybanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></com.recker.flybanner.FlyBanner>
             </LinearLayout>
 
             <RelativeLayout

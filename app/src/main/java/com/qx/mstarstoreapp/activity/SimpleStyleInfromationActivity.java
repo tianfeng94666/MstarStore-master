@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,7 +23,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
@@ -37,7 +34,6 @@ import com.qx.mstarstoreapp.json.ModelDetailResult;
 import com.qx.mstarstoreapp.json.StoneDetail;
 import com.qx.mstarstoreapp.json.StoneEntity;
 import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
-import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
@@ -47,10 +43,8 @@ import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.CustomLV;
 import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
-import com.qx.mstarstoreapp.viewutils.CustomSelectInput;
 import com.qx.mstarstoreapp.viewutils.CustomselectStringButton;
-import com.qx.mstarstoreapp.viewutils.MyGridView;
-import com.qx.mstarstoreapp.viewutils.SelectDotView;
+import com.recker.flybanner.FlyBanner;
 import com.wx.wheelview.widget.WheelView;
 
 import java.text.DecimalFormat;
@@ -93,8 +87,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
 
-    @Bind(R.id.id_menus)
-    LinearLayout idMenus;
+
     @Bind(R.id.tv_type)
     TextView tvType;
     @Bind(R.id.tv_reset)
@@ -108,24 +101,16 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     CustomSelectButton idCusStoreRemarkid;
     @Bind(R.id.id_tv_store_remarks)
     EditText idTvStoreRemarks;
-    @Bind(R.id.id_gv_image)
-    MyGridView idGvImage;
+
     @Bind(R.id.lny_loading_layout)
     LinearLayout lnyLoadingLayout;
-    @Bind(R.id.viewPager)
-    ViewPager viewPager;
-    @Bind(R.id.indicator_tv)
-    TextView indicatorTV;
-    @Bind(R.id.index_product_images_indicator)
-    LinearLayout newsDotsContainer;
+
     @Bind(R.id.iv_reduce)
     ImageView ivReduce;
     @Bind(R.id.iv_add)
     ImageView ivAdd;
     @Bind(R.id.id_cus_store_size)
     CustomselectStringButton idCusStoreSize;
-    @Bind(R.id.id_vipage_content)
-    RelativeLayout id_vipage_content;
     @Bind(R.id.tv_del)
     TextView tvDel;
     @Bind(R.id.tv_weight)
@@ -140,7 +125,6 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     TextView tvCertcode;
     @Bind(R.id.ll_certcode)
     LinearLayout llCertcode;
-
     WheelView mainWheelView;
     int type = 0;
     String orderId;
@@ -149,8 +133,6 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     static ConfirmOrderOnUpdate confirmOrderOnUpdate;
     @Bind(R.id.tv_price)
     TextView tvPrice;
-    @Bind(R.id.banner_layout)
-    FrameLayout bannerLayout;
     @Bind(R.id.ll_curorder)
     LinearLayout llCurorder;
     @Bind(R.id.id_fr)
@@ -161,6 +143,8 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     TextView tipsLoadingMsg;
     @Bind(R.id.id_list)
     CustomLV listView;
+    @Bind(R.id.flybanner)
+    FlyBanner flybanner;
 
 
     private View rootView;
@@ -175,6 +159,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     private ListAdapter adapter;
     private StoneEntity selectedStoneEnity;
     private ModelDetailResult modelDetail;
+    private ArrayList<String> getPics;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         SimpleStyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -213,7 +198,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         orderId = extras.getString("orderId");
         waitOrderCount = extras.getInt("waitOrderCount", 0);
         openType = extras.getString("openType");
-        selectedStoneEnity = (StoneEntity)extras.getSerializable("stoneResult");
+        selectedStoneEnity = (StoneEntity) extras.getSerializable("stoneResult");
         selectedStone = (StoneSearchInfoResult.DataBean.StoneBean.ListBean) extras.getSerializable("stone");
         if (selectedStone != null) {
             weight = selectedStone.getWeight();
@@ -253,7 +238,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             llAmount.setVisibility(View.VISIBLE);
             llCertcode.setVisibility(View.GONE);
         }
-        lymenus = (LinearLayout) findViewById(R.id.id_menus);
+
         idTvAddOrder.setOnClickListener(this);
         badge = new BadgeView(this, idTvCurorder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         remind(waitOrderCount);
@@ -344,9 +329,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         intent.putExtra("openType", 1);
         intent.putExtra("type", type);
         intent.putExtra("itemId", itemId);
-        intent.putExtra("isCanSelectStone",modelDetail.getData().getIsCanSelectStone());
-        intent.putExtra("stoneDetail",stoneDetail);
-        intent.putExtra("stone",stone);
+        intent.putExtra("isCanSelectStone", modelDetail.getData().getIsCanSelectStone());
+        intent.putExtra("stoneDetail", stoneDetail);
+        intent.putExtra("stone", stone);
         startActivity(intent);
         //设置切换动画，从右边进入，左边退出
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
@@ -442,7 +427,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
-                     modelDetail = new Gson().fromJson(result, ModelDetailResult.class);
+                    modelDetail = new Gson().fromJson(result, ModelDetailResult.class);
                     dataEntity = modelDetail.getData();
                     if (dataEntity == null) {
                         return;
@@ -473,8 +458,8 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     stonePurityItme = dataEntity.getStonePurity();
                     stoneSpecItme = dataEntity.getStoneSpec();
                     stoneShapeItem = dataEntity.getStoneShape();
-                    stoneDetail = new StoneDetail(stoneTypeItme,stoneColorItme,stonePurityItme,stoneSpecItme,stoneShapeItem);
-                    if(openType.equals("2")){
+                    stoneDetail = new StoneDetail(stoneTypeItme, stoneColorItme, stonePurityItme, stoneSpecItme, stoneShapeItem);
+                    if (openType.equals("2")) {
                         stone = selectedStoneEnity;
                         stone.setIsNotEmpty(1);
                     }
@@ -650,124 +635,37 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     }
 
 
-    String[] getPics;
-    int currentTab;
-    SelectDotView newsDots;
-
     public void initViewPager() {
-        newsDots = new SelectDotView(this);
-        newsDots.setDotNum(pics.size());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-2, -2);
-        newsDotsContainer.removeAllViews();
-        newsDotsContainer.addView(newsDots, lp);
-        final List<View> list = new ArrayList<View>();
-        LayoutInflater inflater = LayoutInflater.from(this);
+        if (!UIUtils.isScreenChange(this)) {
+            ViewGroup.LayoutParams lp = flybanner.getLayoutParams();
+            int screenWidth = UIUtils.getWindowWidth();
+            lp.height = (int) (screenWidth);
+            flybanner.setLayoutParams(lp);
+        }
         /**
          * 创建多个item （每一条viewPager都是一个item） 从服务器获取完数据（图片url地址） 后，再设置适配器
          */
-        getPics = new String[pics.size()];
+        getPics = new ArrayList<>();
         for (int i = 0; i < pics.size(); i++) {
-            getPics[i] = pics.get(i).getPicb();
-            View item = inflater.inflate(R.layout.item_product_viewpager, null);
-            list.add(item);
+            getPics.add(pics.get(i).getPicm());
         }
-        // 创建适配器， 把组装完的组件传递进去
-        MyAdapter adapter = new MyAdapter(list);
-        viewPager.setAdapter(adapter);
-        //currentTab = pics.size() * SCALE / 2;
-        currentTab = 0;
-        viewPager.setCurrentItem(currentTab, false);
-        indicatorTV.setVisibility(View.VISIBLE);
-        indicatorTV.setText("1" + "/" + list.size());
-
-        LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) id_vipage_content.getLayoutParams(); // 取控件mGrid当前的布局参数
-        L.e("getWindowHight" + UIUtils.getWindowHight() / 2);
-        if (UIUtils.getWindowHight() > 1500) {
-            linearParams.height = UIUtils.dip2px(600);// 当控件的高强制设成50象素
-        } else {
-            linearParams.height = UIUtils.dip2px(350);// 当控件的高强制设成50象素
-        }
-        linearParams.height = UIUtils.getWindowWidth();// 当控件的高强制设成50象素
-        id_vipage_content.setLayoutParams(linearParams); // 使设置好的布局参数应用到控件myGrid
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        flybanner.setImagesUrl(getPics);
+        flybanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {
             @Override
-            public void onPageSelected(int position) {
-                indicatorTV.setText(position + 1 + "/" + list.size());
-                currentTab = position;
-                newsDots.setSelectedDot(currentTab % list.size());
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
+            public void onItemClick(int position) {
+                if (pics.size() == 0 && StringUtils.isEmpty(pics.get(0).getPicb())) {
+                    return;
+                }
+                //主页图片
+                Intent intent = new Intent(SimpleStyleInfromationActivity.this,
+                        ImageBrowserActivity.class);
+                intent.putExtra("photos", getPics);
+                intent.putExtra("position", position);
+                startActivity(intent);
+                //设置切换动画，从右边进入，左边退出
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
-    }
-
-    /**
-     * 适配器，负责装配 、销毁 数据 和 组件 。
-     */
-    private class MyAdapter extends PagerAdapter {
-        private List<View> mList;
-
-        public MyAdapter(List<View> list) {
-            mList = list;
-        }
-
-        @Override
-        public int getCount() {
-            return mList.size();
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(mList.get(position));
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            View view = mList.get(position);
-            ImageView image = ((ImageView) view.findViewById(R.id.image));
-            if (image == null) {
-                return mList.get(position);
-            }
-            if (pics == null) {
-                return mList.get(position);
-            }
-            ImageLoader.getInstance().displayImage(pics.get(position).getPicm(), image, ImageLoadOptions.getOptions());
-            image.getHeight();
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (pics.size() == 0 && StringUtils.isEmpty(pics.get(0).getPicb())) {
-                        return;
-                    }
-                    //主页图片
-                    Intent intent = new Intent(SimpleStyleInfromationActivity.this,
-                            ImageBrowserActivity.class);
-                    intent.putExtra("photos", getPics);
-                    L.e("size:" + getPics.length);
-                    intent.putExtra("position", position);
-                    startActivity(intent);
-                    //设置切换动画，从右边进入，左边退出
-                    overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
-                }
-            });
-            container.removeView(mList.get(position));
-            container.addView(mList.get(position));
-            return mList.get(position);
-        }
-
     }
 
 
@@ -1227,19 +1125,19 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     }
 
     private String changeSelectedEnityToString() {
-        return "类别："+selectedStoneEnity.getTypeTitle()+"; 规格："+selectedStoneEnity.getSpecTitle()+";形状："+selectedStoneEnity.getShapeTitle()+
-                ";颜色："+selectedStoneEnity.getColorTitle()+";净度："+selectedStoneEnity.getPurityTitle()+";数量："+selectedStoneEnity.getNumber();
+        return "类别：" + selectedStoneEnity.getTypeTitle() + "; 规格：" + selectedStoneEnity.getSpecTitle() + ";形状：" + selectedStoneEnity.getShapeTitle() +
+                ";颜色：" + selectedStoneEnity.getColorTitle() + ";净度：" + selectedStoneEnity.getPurityTitle() + ";数量：" + selectedStoneEnity.getNumber();
     }
 
     private String changeSelectedStoneToString() {
 
-        return  "规格："+selectedStone.getWeight()+";形状："+selectedStone.getShape()+";颜色："+selectedStone.getColor()+";净度："+selectedStone.getPurity();
+        return "规格：" + selectedStone.getWeight() + ";形状：" + selectedStone.getShape() + ";颜色：" + selectedStone.getColor() + ";净度：" + selectedStone.getPurity();
     }
 
     private String changeStoneEntityToString(StoneEntity stoneEntity) {
 
-        return "类别："+stoneEntity.getTypeTitle()+"; 规格："+stoneEntity.getSpecTitle()+";形状："+stoneEntity.getShapeTitle()+
-                ";颜色："+stoneEntity.getColorTitle()+";净度："+stoneEntity.getPurityTitle()+";数量："+stoneEntity.getNumber();
+        return "类别：" + stoneEntity.getTypeTitle() + "; 规格：" + stoneEntity.getSpecTitle() + ";形状：" + stoneEntity.getShapeTitle() +
+                ";颜色：" + stoneEntity.getColorTitle() + ";净度：" + stoneEntity.getPurityTitle() + ";数量：" + stoneEntity.getNumber();
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {

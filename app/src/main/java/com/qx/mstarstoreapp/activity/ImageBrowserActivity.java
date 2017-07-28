@@ -23,6 +23,8 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.viewutils.CustomViewPager;
 
+import java.util.ArrayList;
+
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -38,7 +40,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 	LinearLayout layout_image;
 	private int mPosition;
 	
-	private String[] mPhotos;
+	private ArrayList mPhotos;
 	private ImageView idIgBack;
 
 	@Override
@@ -58,7 +60,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 	}
 
 	private void getIntentData() {
-		mPhotos = getIntent().getExtras().getStringArray("photos");
+		mPhotos = getIntent().getExtras().getStringArrayList("photos");
 		mPosition = getIntent().getIntExtra("position", 0);
 	}
 	
@@ -102,7 +104,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 		
 		@Override
 		public int getCount() {
-			return mPhotos.length;
+			return mPhotos.size();
 		}
 
 		@Override
@@ -125,7 +127,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 				}
 			});
 	        final ProgressBar progress = (ProgressBar)imageLayout.findViewById(R.id.progress);
-	        final String imgUrl = mPhotos[position];
+	        final String imgUrl = (String) mPhotos.get(position);
 	        ImageLoader.getInstance().displayImage(imgUrl, photoView,new SimpleImageLoadingListener() {
 				
 				@Override
