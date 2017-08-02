@@ -29,16 +29,13 @@ import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
-import com.wx.wheelview.adapter.BaseWheelAdapter;
-import com.wx.wheelview.adapter.SimpleWheelAdapter;
-import com.wx.wheelview.common.WheelData;
-import com.wx.wheelview.widget.WheelItem;
-import com.wx.wheelview.widget.WheelView;
+import com.qx.mstarstoreapp.viewutils.wheelview.widget.WheelItem;
+import com.qx.mstarstoreapp.viewutils.wheelview.widget.WheelView;
+import com.qx.mstarstoreapp.viewutils.wheelview.adapter.SimpleWheelAdapter;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.qx.mstarstoreapp.utils.UIUtils.*;
 
 /**
  * Created by Administrator on 2016/9/13.
@@ -152,7 +149,6 @@ public class CustomSelectButton extends RelativeLayout {
         wheelView.setWheelData(types);
         WheelView.WheelViewStyle style = new WheelView.WheelViewStyle();
         style.selectedTextSize = 20;
-        style.selectedTextZoom=90;
         style.textSize = 16;
         wheelView.setStyle(style);
         int select = getSelect(text);
@@ -358,7 +354,7 @@ public class CustomSelectButton extends RelativeLayout {
         View getRootView();
     }
 
-    class SimpleWheelAdapter extends com.wx.wheelview.adapter.SimpleWheelAdapter {
+    class SimpleWheelAdapter extends com.qx.mstarstoreapp.viewutils.wheelview.adapter.SimpleWheelAdapter {
 
         private Context mContext;
 

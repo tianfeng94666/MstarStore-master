@@ -37,6 +37,7 @@ import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomGridView;
 import com.qx.mstarstoreapp.viewutils.RangeSeekBar;
 
@@ -182,6 +183,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     private void initOthers() {
         stoneOthersAdapter = new StoneOthersAdapter(getActivity(), stoneSearchResult.getData());
         lvOthers.setAdapter(stoneOthersAdapter);
+        UIUtils.setListViewHeightBasedOnChildren(lvOthers);
     }
 
     private void initPurity() {
@@ -269,7 +271,18 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
 //                shapeAdapter.notifyDataSetChanged();
 //            }
 //        });
-        setListViewHeightBasedOnChildren(gvShape, 5);
+        if(UIUtils.isPad(getActivity())){
+            gvShape.setNumColumns(10);
+            setListViewHeightBasedOnChildren(gvShape, 10);
+        }else {
+            if(UIUtils.isScreenChange(getActivity())){
+                gvShape.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gvShape, 8);
+            }else {
+                gvShape.setNumColumns(5);
+                setListViewHeightBasedOnChildren(gvShape, 5);
+            }
+        }
 
     }
 

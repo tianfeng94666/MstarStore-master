@@ -33,6 +33,7 @@ import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomGridView;
 import com.qx.mstarstoreapp.viewutils.RangeSeekBar;
 
@@ -253,7 +254,19 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
 //                shapeAdapter.notifyDataSetChanged();
 //            }
 //        });
-        setListViewHeightBasedOnChildren(gvShape, 5);
+        if(UIUtils.isPad(this)){
+            gvShape.setNumColumns(10);
+            setListViewHeightBasedOnChildren(gvShape, 10);
+        }else {
+            if(UIUtils.isScreenChange(this)){
+                gvShape.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gvShape, 8);
+            }else {
+                gvShape.setNumColumns(5);
+                setListViewHeightBasedOnChildren(gvShape, 5);
+            }
+        }
+
 
     }
 

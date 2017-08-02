@@ -6,12 +6,12 @@
 
     tools:context=".activity.MainActivity">
 
-    <com.recker.flybanner.FlyBanner
+    <com.qx.mstarstoreapp.viewutils.FlyBanner
         android:id="@+id/fly_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.recker.flybanner.FlyBanner>
+    </com.qx.mstarstoreapp.viewutils.FlyBanner>
 
     <LinearLayout
         android:layout_width="match_parent"

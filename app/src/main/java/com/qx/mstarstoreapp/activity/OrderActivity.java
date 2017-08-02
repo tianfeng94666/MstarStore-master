@@ -42,6 +42,7 @@ import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
+import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.GridViewWithHeaderAndFooter;
 import com.qx.mstarstoreapp.viewutils.ListMenuDialog;
@@ -50,6 +51,7 @@ import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
 import com.qx.mstarstoreapp.viewutils.SideFilterDialog;
 import com.qx.mstarstoreapp.viewutils.SquareImageView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -695,7 +697,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
             // holder.ig.setImageResource(R.drawable.no_image);
             holder.tv.setText(data.get(position).getTitle());
-            holder.tvPrice.setText(data.get(position).getPrice());
+            holder.tvPrice.setText(UIUtils.stringChangeToTwoBitDouble(data.get(position).getPrice()));
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
                 ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());

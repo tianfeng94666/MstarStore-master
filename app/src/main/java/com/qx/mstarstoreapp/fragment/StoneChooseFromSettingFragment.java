@@ -30,6 +30,7 @@ import com.qx.mstarstoreapp.json.ModelDetailResult;
 import com.qx.mstarstoreapp.json.StoneDetail;
 import com.qx.mstarstoreapp.json.StoneEntity;
 import com.qx.mstarstoreapp.utils.SpUtils;
+import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomGridView;
 
 import static android.R.attr.type;
@@ -212,7 +213,19 @@ public class StoneChooseFromSettingFragment extends BaseFragment implements View
 
             }
         });
-        setListViewHeightBasedOnChildren(gvType, 6);
+        if(UIUtils.isPad(getActivity())){
+            gvShape.setNumColumns(10);
+            setListViewHeightBasedOnChildren(gvShape, 10);
+        }else {
+            if(UIUtils.isScreenChange(getActivity())){
+                gvShape.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gvShape, 8);
+            }else {
+                gvShape.setNumColumns(6);
+                setListViewHeightBasedOnChildren(gvShape,6);
+            }
+        }
+
     }
 
     private void initType() {

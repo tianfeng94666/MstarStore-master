@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -37,6 +37,7 @@ import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
@@ -137,14 +138,14 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     LinearLayout llCurorder;
     @Bind(R.id.id_fr)
     FrameLayout idFr;
-    @Bind(R.id.tv_price_title)
-    TextView tvPriceTitle;
     @Bind(R.id.tips_loading_msg)
     TextView tipsLoadingMsg;
     @Bind(R.id.id_list)
     CustomLV listView;
     @Bind(R.id.flybanner)
     FlyBanner flybanner;
+    @Bind(R.id.tv_price_title)
+    TextView tvPriceTitle;
 
 
     private View rootView;
@@ -160,6 +161,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     private StoneEntity selectedStoneEnity;
     private ModelDetailResult modelDetail;
     private ArrayList<String> getPics;
+    private Boolean isShowPrice;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         SimpleStyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -176,6 +178,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         setContentView(R.layout.activity_style_simple_information);
         ButterKnife.bind(this);
         rootView = View.inflate(this, R.layout.activity_style_simple_information, null);
+        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
         getIntentData();
         loadNetData();
     }
@@ -216,6 +219,13 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
 
 
     private void initView() {
+        if (isShowPrice) {
+            tvPrice.setVisibility(View.VISIBLE);
+            tvPriceTitle.setVisibility(View.VISIBLE);
+        } else {
+            tvPrice.setVisibility(View.GONE);
+            tvPriceTitle.setVisibility(View.GONE);
+        }
         // titleText.setText("款式信息");
         idTvAddOrder.setText(R.string.add_curent_order);
         idTvCurorder.setText(R.string.look_current_order);
@@ -253,6 +263,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 finish();
             }
         });
+
         ivAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -905,22 +916,22 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             list.add(stoEntity.getColorId());
             list.add(stoEntity.getPurityId());
             list.add(stoEntity.getNumber());
+            stoEntity.setIsSelfStone(0);//简版设为不是自带主石
+
         } else {
-            if (!StringUtils.isEmpty(stoEntity.getNumber()) &&
-                    !StringUtils.isEmpty(stoEntity.getPurityId()) && !StringUtils.isEmpty(stoEntity.getColorId())
-                    && !StringUtils.isEmpty(stoEntity.getTypeId()) && !StringUtils.isEmpty(stoEntity.getSpecTitle())
-                    && !StringUtils.isEmpty(stoEntity.getShapeId())) {
-                list.add(stoEntity.getTypeId());
-                list.add(stoEntity.getSpecTitle());
-                list.add(stoEntity.getShapeId());
-                list.add(stoEntity.getColorId());
-                list.add(stoEntity.getPurityId());
-                list.add(stoEntity.getNumber());
+            if (stoEntity.getStroneName() != null) {
+                list.add(!StringUtils.isEmpty(stoEntity.getTypeId()) ? stoEntity.getTypeId() : "");
+                list.add(!StringUtils.isEmpty(stoEntity.getSpecTitle()) ? stoEntity.getSpecTitle() : "");
+                list.add(!StringUtils.isEmpty(stoEntity.getShapeId()) ? stoEntity.getShapeId() : "");
+                list.add(!StringUtils.isEmpty(stoEntity.getColorId()) ? stoEntity.getColorId() : "");
+                list.add(!StringUtils.isEmpty(stoEntity.getPurityId()) ? stoEntity.getPurityId() : "");
+                list.add(!StringUtils.isEmpty(stoEntity.getNumber()) ? stoEntity.getNumber() : "");
                 if (!stoEntity.getStroneName().equals(MainStone)) {
                     list.add(0 + "");//是否自带主石
                 }
-
             }
+
+
         }
         return StringUtils.purUrlCut(key, list).toString();
     }
@@ -1036,6 +1047,12 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                                 selectStone();
                             }
                         });
+                        viewHolder.ivSelectMainStone.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                selectStone();
+                            }
+                        });
                     } else {
                         viewHolder.ivSelectMainStone.setVisibility(View.VISIBLE);
                         if (isEmptyStone(stoneEntity)) {
@@ -1044,6 +1061,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                             viewHolder.ivSelectMainStone.setVisibility(View.GONE);
                         } else {
                             viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));
+                            viewHolder.tvMainStoneDate.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
                             viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
                         }
 
@@ -1064,17 +1082,43 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     break;
                 case 1:
                     stoneEntity.setStroneName("副石A");
-                    viewHolder.tvTitle.setText("副石A");
+                    viewHolder.tvTitle.setText("副石A ");
+                    if (isEmptyStone(stoneEntity)) {
+                        viewHolder.tvMainStoneDate.setText("");
+                        viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.theme_red));
+                        viewHolder.ivSelectMainStone.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));
+                        viewHolder.tvMainStoneDate.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+                        viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
+                    }
                     viewHolder.idIsCheck.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     stoneEntity.setStroneName("副石B");
-                    viewHolder.tvTitle.setText("副石B");
+                    viewHolder.tvTitle.setText("副石B ");
+                    if (isEmptyStone(stoneEntity)) {
+                        viewHolder.tvMainStoneDate.setText("");
+                        viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.theme_red));
+                        viewHolder.ivSelectMainStone.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));
+                        viewHolder.tvMainStoneDate.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+                        viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
+                    }
                     viewHolder.idIsCheck.setVisibility(View.VISIBLE);
                     break;
                 case 3:
                     stoneEntity.setStroneName("副石C");
-                    viewHolder.tvTitle.setText("副石C");
+                    viewHolder.tvTitle.setText("副石C ");
+                    if (isEmptyStone(stoneEntity)) {
+                        viewHolder.tvMainStoneDate.setText("+ 添加主石");
+                        viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.theme_red));
+                        viewHolder.ivSelectMainStone.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));
+                        viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
+                    }
                     viewHolder.idIsCheck.setVisibility(View.VISIBLE);
 
                     break;

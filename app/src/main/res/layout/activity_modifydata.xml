@@ -177,23 +177,17 @@
                 android:padding="10dip"
                 android:text="是否显示价格"
                 />
-
-            <ToggleButton
+            <ImageView
                 android:gravity="center_vertical"
                 android:layout_alignParentRight="true"
-                android:button="@drawable/togglebutton"
+                android:button="@null"
                 android:id="@+id/iv_is_show_price"
-                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="-40dp"
-                android:text=""
-                android:textOff=""
-                android:textOn=""
+                android:layout_alignRight="@id/tv_is_show_price"
                 android:layout_alignTop="@id/tv_is_show_price"
-
+                android:src="@drawable/icon_switch_off"
                 />
-
 
         </RelativeLayout>
         <RelativeLayout

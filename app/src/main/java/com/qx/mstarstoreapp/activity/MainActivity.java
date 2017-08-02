@@ -30,7 +30,7 @@ import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
-import com.recker.flybanner.FlyBanner;
+import com.qx.mstarstoreapp.viewutils.FlyBanner;
 
 import java.util.List;
 
@@ -75,6 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void loadNetData() {
+        baseShowWatLoading();
         String lgUrl = AppURL.URL_GET_HOME_PIC + BaseApplication.getToken();
         L.e("netLogin" + lgUrl);
         VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -83,6 +84,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
+                    baseHideWatLoading();
                     mainPics = new Gson().fromJson(result, MainPicResult.class);
                     if (mainPics.getData() == null) {
                         ToastManager.showToastReal("获取数据失败！");
@@ -91,8 +93,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                     initView();
 
                 } else if (error.equals("2")) {
-
+                    baseHideWatLoading();
                 } else {
+                    baseHideWatLoading();
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     ToastManager.showToastWhendebug(message);
                     L.e(message);
@@ -101,7 +104,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
             @Override
             public void onFail(String fail) {
-
+                baseHideWatLoading();
             }
 
 

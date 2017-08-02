@@ -32,11 +32,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
-<com.wx.wheelview.widget.WheelView
+<com.qx.mstarstoreapp.viewutils.wheelview.widget.WheelView
 
     android:id="@+id/wv_popupwindwo"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</com.wx.wheelview.widget.WheelView>
+</com.qx.mstarstoreapp.viewutils.wheelview.widget.WheelView>
 </LinearLayout>

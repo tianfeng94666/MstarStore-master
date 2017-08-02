@@ -23,13 +23,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -94,8 +92,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView mTvUsername;
     @Bind(R.id.id_update_icon)
     RelativeLayout update_icon;
-    @Bind(R.id.iv_is_show_price)
-    ToggleButton ivIsShowPrice;
+
     @Bind(R.id.rl_clear_memery)
     RelativeLayout rlClearMemery;
     @Bind(R.id.tv_share)
@@ -104,12 +101,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView tvIsCustomized;
     @Bind(R.id.bt_customized)
     ImageView btCustomized;
+    @Bind(R.id.iv_is_show_price)
+    ImageView ivIsShowPrice;
 
     private LayoutInflater inflater;
     private String[] titles;
     private String temp_img_dir;
     private Uri mImageCaptureUri;
-    private int isShowPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +123,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         initViews();
 
     }
+
     private Boolean isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
+    private Boolean isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
+
     private void initViews() {
         if (isCustomized) {
             btCustomized.setImageResource(R.drawable.icon_switch_off);
@@ -145,18 +146,26 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 SpUtils.getInstace(SettingActivity.this).saveBoolean("isCustomized", isCustomized);
             }
         });
-        ivIsShowPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        if (isShowPrice) {
+            ivIsShowPrice.setImageResource(R.drawable.icon_switch_off);
+        } else {
+            ivIsShowPrice.setImageResource(R.drawable.icon_switch_on);
+        }
+        ivIsShowPrice.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int i;
-                if (isChecked) {
-                    i = 1;
+            public void onClick(View view) {
+                isShowPrice = !isShowPrice;
+                if (isShowPrice) {
+                    ivIsShowPrice.setImageResource(R.drawable.icon_switch_off);
                 } else {
-                    i = 0;
+                    ivIsShowPrice.setImageResource(R.drawable.icon_switch_on);
                 }
-                commitIsShowPrice(i);
+                Global.STONE_POINT_CHANGE = 1;
+                SpUtils.getInstace(SettingActivity.this).saveBoolean("isShowPrice", isShowPrice);
             }
         });
+
 
         rlClearMemery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,7 +228,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                             phone = jsData.get("phone").getAsString();
                             headPic = jsData.get("headPic").getAsString();
                             address = jsData.get("address").getAsString();
-                            isShowPrice = jsData.get("isShowPrice").getAsInt();
                             L.e("userName:" + userName + "phone" + phone + "address:" + address);
                             initContent(userName, headPic, phone, address);
                         }
@@ -275,11 +283,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             params.setMargins(0, 0, 0, 0);
             ivIsShowPrice.setLayoutParams(params);
         }
-        if (isShowPrice == 1) {
-            ivIsShowPrice.setChecked(true);
-        } else {
-            ivIsShowPrice.setChecked(false);
-        }
+
 
         temp_img_dir = Environment.getExternalStorageDirectory() + File.separator + "tempImage.jpg";
         ImageLoader.getInstance().displayImage(pic, idIgUserpic, ImageLoadOptions.getOptions());

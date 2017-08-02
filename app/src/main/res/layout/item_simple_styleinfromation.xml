@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="35dip"
+    android:layout_height="45dip"
     android:orientation="horizontal">
 
 
@@ -28,18 +28,19 @@ android:layout_marginLeft="@dimen/margin10"
 
     <ImageView
         android:id="@+id/iv_select_main_stone"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:padding="5dp"
+        android:layout_margin="2dp"
+        android:layout_marginLeft="@dimen/margin10"
         android:src="@drawable/icon_right"
         android:visibility="gone" />
 
     <CheckBox
         android:id="@+id/id_is_check"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
         android:layout_margin="2dp"
         android:layout_marginLeft="@dimen/margin10"
         android:button="@drawable/checkbox_style"
