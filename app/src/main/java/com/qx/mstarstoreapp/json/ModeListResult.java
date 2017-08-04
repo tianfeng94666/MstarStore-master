@@ -194,8 +194,28 @@ public class ModeListResult {
                  */
                 private String id;
                 private String pic;
+
                 private String title;
                 private String price;
+                private String picm;
+                private String picb;
+
+                public String getPicb() {
+                    return picb;
+                }
+
+                public void setPicb(String picb) {
+                    this.picb = picb;
+                }
+
+                public String getPicm() {
+                    return picm;
+                }
+
+                public void setPicm(String picm) {
+                    this.picm = picm;
+                }
+
                 public String getPrice() {
                     return price;
                 }

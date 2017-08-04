@@ -320,6 +320,21 @@ public class AppURL {
      * 获取主页图片
      */
     public static String URL_GET_HOME_PIC = baseUrl + "IndexPageForQxzx?"+QxVersion;
+    /**
+     * 是否显示成本价
+     * http://appapi0.fanerweb.com/api/Aproxy/modifyUserIsShowOriginalPriceDo?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&isShow=1
+     */
+    public static String URL_ISHOW_COST_PRICE=baseUrl + "modifyUserIsShowOriginalPriceDo?"+QxVersion;
+    /**
+     * 改变加点
+     * http://appapi0.fanerweb.com/api/Aproxy/modifyUserModelAddtionDo?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&value=3.2
+     */
+    public static String URL_MODIFY_ADDTION =baseUrl + "modifyUserModelAddtionDo?"+QxVersion;
+    /***
+     * 改变石头加点
+     * http://appapi0.fanerweb.com/api/Aproxy/modifyUserStoneAddtionDo?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&value=3.2
+     */
+    public static String URL_MODIFY_STONE_ADDTION =baseUrl + "modifyUserStoneAddtionDo?"+QxVersion;
 }
 
 

@@ -1,8 +1,11 @@
 package com.qx.mstarstoreapp.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -14,8 +17,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,6 +50,7 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.dialog.ImageInitiDialog;
+import com.qx.mstarstoreapp.json.SettingResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.BimpUtils;
@@ -70,7 +77,6 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  */
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
 
-
     private final String TAG = "MystoreActivity";
     @Bind(R.id.content)
     LinearLayout content;
@@ -81,7 +87,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView titleText;
     @Bind(R.id.id_tv_exit)
     TextView tvExit;
-
     @Bind(R.id.splitbutton)
     ImageView splitbutton;
     @Bind(R.id.id_ig_userpic)
@@ -92,22 +97,42 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView mTvUsername;
     @Bind(R.id.id_update_icon)
     RelativeLayout update_icon;
-
     @Bind(R.id.rl_clear_memery)
     RelativeLayout rlClearMemery;
     @Bind(R.id.tv_share)
     TextView tvShare;
-    @Bind(R.id.tv_is_customized)
-    TextView tvIsCustomized;
-    @Bind(R.id.bt_customized)
-    ImageView btCustomized;
-    @Bind(R.id.iv_is_show_price)
-    ImageView ivIsShowPrice;
+    @Bind(R.id.tv_right)
+    ImageView tvRight;
+    @Bind(R.id.id_rel_title)
+    RelativeLayout idRelTitle;
+    @Bind(R.id.iv_below_menu_ic)
+    ImageView ivBelowMenuIc;
+    @Bind(R.id.tv_menu_title)
+    TextView tvMenuTitle;
+    @Bind(R.id.iv_btn_expand_pressed)
+    ImageView ivBtnExpandPressed;
+    @Bind(R.id.ringagain)
+    TextView ringagain;
+    @Bind(R.id.tv_is_clear)
+    TextView tvIsClear;
+    @Bind(R.id.rl_shared)
+    RelativeLayout rlShared;
+    @Bind(R.id.tv_is_into)
+    TextView tvIsInto;
+    @Bind(R.id.rl_encryption_setting)
+    RelativeLayout rlEncryptionSetting;
+
 
     private LayoutInflater inflater;
     private String[] titles;
     private String temp_img_dir;
     private Uri mImageCaptureUri;
+    private JsonObject jsData;
+    private int PRICE_TYPE = 0;
+    private SettingResult settingResult;
+    private AlertDialog dialog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,49 +148,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         initViews();
 
     }
+    public void onBack(View view) {
+        finish();
+    }
 
-    private Boolean isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
-    private Boolean isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
 
     private void initViews() {
-        if (isCustomized) {
-            btCustomized.setImageResource(R.drawable.icon_switch_off);
-        } else {
-            btCustomized.setImageResource(R.drawable.icon_switch_on);
-        }
-        btCustomized.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isCustomized = !isCustomized;
-                if (isCustomized) {
-                    btCustomized.setImageResource(R.drawable.icon_switch_off);
-                } else {
-                    btCustomized.setImageResource(R.drawable.icon_switch_on);
-                }
-                Global.STONE_POINT_CHANGE = 1;
-                SpUtils.getInstace(SettingActivity.this).saveBoolean("isCustomized", isCustomized);
-            }
-        });
-
-        if (isShowPrice) {
-            ivIsShowPrice.setImageResource(R.drawable.icon_switch_off);
-        } else {
-            ivIsShowPrice.setImageResource(R.drawable.icon_switch_on);
-        }
-        ivIsShowPrice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isShowPrice = !isShowPrice;
-                if (isShowPrice) {
-                    ivIsShowPrice.setImageResource(R.drawable.icon_switch_off);
-                } else {
-                    ivIsShowPrice.setImageResource(R.drawable.icon_switch_on);
-                }
-                Global.STONE_POINT_CHANGE = 1;
-                SpUtils.getInstace(SettingActivity.this).saveBoolean("isShowPrice", isShowPrice);
-            }
-        });
-
 
         rlClearMemery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,40 +163,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 ToastManager.showToastReal("已经清空！");
             }
         });
-    }
-
-    private void commitIsShowPrice(int i) {
-        String url = AppURL.URL_IS_SHOW_PRICE + "tokenKey=" + BaseApplication.getToken() + "&value=" + i;
-        L.e("获取个人信息" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-            @Override
-            public void onSuccess(String result) {
-
-                L.e("loadNetData  " + result);
-                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                String error = jsonResult.get("error").getAsString();
-                if (error.equals("0")) {
-                    ToastManager.showToastReal("修改成功");
-                } else if (error.equals("2")) {
-                    loginToServer(CustomMadeActivity.class);
-                } else {
-                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    L.e(message);
-                    ToastManager.showToastReal(message);
-                }
-            }
-
-            @Override
-            public void onFail(String fail) {
-
-            }
-        });
+        rlEncryptionSetting.setOnClickListener(this);
 
     }
+
+
 
     String userName, phone, headPic, address;
 
-    @Override
     public void loadNetData() {
         String url = AppURL.URL_USER_MODIFY + "tokenKey=" + BaseApplication.getToken();
         baseShowWatLoading();
@@ -223,11 +185,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 if (error.equals("0")) {
                     try {
                         if (jsonResult.get("data") != null) {
-                            JsonObject jsData = jsonResult.get("data").getAsJsonObject();
-                            userName = jsData.get("userName").getAsString();
-                            phone = jsData.get("phone").getAsString();
-                            headPic = jsData.get("headPic").getAsString();
-                            address = jsData.get("address").getAsString();
+                            settingResult = new Gson().fromJson(result, SettingResult.class);
+
+                            userName = settingResult.getData().getUserName();
+                            phone = settingResult.getData().getPhone();
+                            headPic = settingResult.getData().getHeadPic();
+                            address = settingResult.getData().getAddress();
+
+
                             L.e("userName:" + userName + "phone" + phone + "address:" + address);
                             initContent(userName, headPic, phone, address);
                         }
@@ -236,18 +201,18 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         initContent(userName, headPic, phone, address);
                     }
 
-                    initListener();
                 } else if (error.equals("2")) {
                     loginToServer(CustomMadeActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
-                    ToastManager.showToastReal(message);
+                    ToastManager.showToastReal("数据加载错误！");
                 }
             }
 
             @Override
             public void onFail(String fail) {
+                ToastManager.showToastReal("数据获取失败");
                 baseHideWatLoading();
             }
         });
@@ -255,36 +220,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-
-    private Boolean isFlag = false;
-
-    private void initListener() {
-        splitbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isFlag) {
-                    splitbutton.setImageResource(R.drawable.icon_switch_off);
-                } else {
-                    splitbutton.setImageResource(R.drawable.icon_switch_on);
-                }
-                isFlag = !isFlag;
-            }
-        });
-    }
-
-
     private static int LIGHT_MARGIN = UIUtils.convertPxtoDip(1);
 
     private void initContent(String userName, String pic, String phone, String adress) {
         titleText.setText("个人中心");
         mTvUsername.setText("用户名：" + userName);
-        if (Build.VERSION.SDK_INT <= 19) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            params.setMargins(0, 0, 0, 0);
-            ivIsShowPrice.setLayoutParams(params);
-        }
-
-
         temp_img_dir = Environment.getExternalStorageDirectory() + File.separator + "tempImage.jpg";
         ImageLoader.getInstance().displayImage(pic, idIgUserpic, ImageLoadOptions.getOptions());
         content.removeAllViews();
@@ -324,7 +264,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 setCameraPermission();
-                ImageInitiDialog imageInitiDialog = new ImageInitiDialog(SettingActivity.this);
+                ImageInitiDialog imageInitiDialog = new ImageInitiDialog(context);
                 imageInitiDialog.showDialog(idLayRoot);
                 imageInitiDialog.setOnImageSelectListener(new ImageInitiDialog.OnImageSelectListener() {
                     @Override
@@ -338,6 +278,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
                         intent.putExtra("return-data", true);
                         startActivityForResult(intent, PICK_FROM_CAMERA);
+                       overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                     }
 
                     @Override
@@ -347,6 +288,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         intent.setAction(Intent.ACTION_PICK);
                         intent.setType("image/*");
                         startActivityForResult(intent, PICK_FROM_PHOTO);
+                        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                     }
                 });
             }
@@ -385,7 +327,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private static final int CROP_PHOTO = 3;
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK)
             return;
 
@@ -419,7 +361,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private void doCrop() {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
+        List<ResolveInfo> list = this.getPackageManager().queryIntentActivities(intent, 0);
         int size = list.size();
         if (size == 0) {
             Toast.makeText(this, "Can not find image crop app",
@@ -439,6 +381,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 i.setComponent(new ComponentName(res.activityInfo.packageName,
                         res.activityInfo.name));
                 startActivityForResult(i, CROP_PHOTO);
+                this.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         }
     }
@@ -449,9 +392,60 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             case R.id.tv_share:
                 showShare();
                 break;
+            case R.id.rl_encryption_setting:
+                goIntoEncryptionSettings();
+                break;
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void goIntoEncryptionSettings() {
+        final EditText editText = new EditText(this);
+        editText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMarginStart(64);
+        layoutParams.setMarginEnd(64);
+        editText.setLayoutParams(layoutParams);
+        LinearLayout ll = new LinearLayout(context);
+        ll.addView(editText);
+        dialog= new AlertDialog.Builder(this)
+                .setTitle("用户密码")
+                .setView(ll)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(passwordIsRight(editText.getText().toString())){
+                            Intent intent = new Intent(SettingActivity.this, EncryptionSettingsActivity.class);
+                            intent.putExtra("settingResult", settingResult);
+                            startActivity(intent);
+                        }else {
+                            ToastManager.showToastReal("密码错误！");
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private boolean passwordIsRight(String string) {
+        String pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
+        if(pwd.equals(string)){
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 
     public class CropOptionAdapter extends ArrayAdapter<CropOption> {
         private ArrayList<CropOption> mOptions;
@@ -483,7 +477,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private String getRealPathFromURI(Uri contentURI) {
         String result;
-        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        Cursor cursor = this.getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) { // Source is Dropbox or other similar local file path
             result = contentURI.getPath();
         } else {
@@ -534,6 +528,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onFailure(HttpException e, String s) {
+                ToastManager.showToastReal("数据获取失败");
             }
         });
     }
@@ -542,7 +537,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private void refreshImg(final String path) {
         final String photo = BitmapUtils.getInstace().getCompressImagePaht(path);
         final Bitmap bmp = BitmapUtils.getInstace().compressBitmapFromSrc(photo, 100);
-        runOnUiThread(new Runnable() {
+        this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 idIgUserpic.setImageBitmap(bmp);
@@ -555,7 +550,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void getItmeView() {
         viewHoder = new ViewHoder();
         if (inflater == null)
-            inflater = getLayoutInflater();
+            inflater = this.getLayoutInflater();
         View inf_rel = inflater.inflate(R.layout.item_menu, null);
         viewHoder.tv_title = (TextView) inf_rel.findViewById(R.id.tv_menu_title);
         viewHoder.tv_openning_hint = (TextView) inf_rel.findViewById(R.id.tv_expand_hint);
@@ -589,22 +584,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     break;
             }
             startActivity(intent);
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         }
     };
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     protected void initView() {
         titleText.setText("修改资料");
     }
 
 
-    public void onBack(View view) {
-        finish();
-    }
 
     private static String[] PERMISSIONS_CAMERA_AND_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -615,7 +604,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         if (Build.VERSION.SDK_INT >= 23) {
             int storagePermission = this.checkSelfPermission(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int cameraPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+            int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
             if (storagePermission != PackageManager.PERMISSION_GRANTED || cameraPermission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, PERMISSIONS_CAMERA_AND_STORAGE,
                         0x007);

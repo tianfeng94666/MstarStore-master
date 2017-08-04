@@ -1,13 +1,15 @@
 package com.qx.mstarstoreapp.json;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/4/14 0014.
  */
 
-public class SettingResult {
+public class SettingResult implements Serializable{
 
     /**
-     * data : {"address":"江苏省 淮安市 盱眙县 34567788887","headPic":"http://appapi.fanerweb.com/Uploads/Pics/2017-03-01/s_58b66ac491a61.jpg","isShowPrice":0,"phone":"15994767200","userName":"xianxianjun"}
+     * data : {"headPic":"http://appapi0.fanerweb.com/images/imageForApi/defaultHead.jpg","isMasterAccount":0,"isShowOriginalPrice":0,"isShowPrice":1,"modelAddtion":0,"phone":"13058023844","stoneAddtion":0,"userName":"tianfeng3"}
      * error : 0
      * message :
      * response :
@@ -50,20 +52,27 @@ public class SettingResult {
         this.response = response;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
-         * address : 江苏省 淮安市 盱眙县 34567788887
-         * headPic : http://appapi.fanerweb.com/Uploads/Pics/2017-03-01/s_58b66ac491a61.jpg
-         * isShowPrice : 0
-         * phone : 15994767200
-         * userName : xianxianjun
+         * headPic : http://appapi0.fanerweb.com/images/imageForApi/defaultHead.jpg
+         * isMasterAccount : 0
+         * isShowOriginalPrice : 0
+         * isShowPrice : 1
+         * modelAddtion : 0
+         * phone : 13058023844
+         * stoneAddtion : 0
+         * userName : tianfeng3
          */
 
-        private String address;
         private String headPic;
+        private int isMasterAccount;
+        private int isShowOriginalPrice;
         private int isShowPrice;
+        private String modelAddtion;
         private String phone;
+        private String stoneAddtion;
         private String userName;
+        private String address;
 
         public String getAddress() {
             return address;
@@ -81,6 +90,22 @@ public class SettingResult {
             this.headPic = headPic;
         }
 
+        public int getIsMasterAccount() {
+            return isMasterAccount;
+        }
+
+        public void setIsMasterAccount(int isMasterAccount) {
+            this.isMasterAccount = isMasterAccount;
+        }
+
+        public int getIsShowOriginalPrice() {
+            return isShowOriginalPrice;
+        }
+
+        public void setIsShowOriginalPrice(int isShowOriginalPrice) {
+            this.isShowOriginalPrice = isShowOriginalPrice;
+        }
+
         public int getIsShowPrice() {
             return isShowPrice;
         }
@@ -89,12 +114,28 @@ public class SettingResult {
             this.isShowPrice = isShowPrice;
         }
 
+        public String getModelAddtion() {
+            return modelAddtion;
+        }
+
+        public void setModelAddtion(String modelAddtion) {
+            this.modelAddtion = modelAddtion;
+        }
+
         public String getPhone() {
             return phone;
         }
 
         public void setPhone(String phone) {
             this.phone = phone;
+        }
+
+        public String getStoneAddtion() {
+            return stoneAddtion;
+        }
+
+        public void setStoneAddtion(String stoneAddtion) {
+            this.stoneAddtion = stoneAddtion;
         }
 
         public String getUserName() {
