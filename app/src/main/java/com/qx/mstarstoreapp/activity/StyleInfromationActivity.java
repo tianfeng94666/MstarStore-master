@@ -515,10 +515,15 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
 
     public void initViewPager() {
-        if(!UIUtils.isScreenChange(this)){
+        if (!UIUtils.isScreenChange(this)) {
             ViewGroup.LayoutParams lp = flybanner.getLayoutParams();
-           int  screenWidth = UIUtils.getWindowWidth();
-            lp.height = (int) (screenWidth );
+            int screenWidth = UIUtils.getWindowWidth();
+            lp.height = (int) (screenWidth);
+            flybanner.setLayoutParams(lp);
+        }else {
+            ViewGroup.LayoutParams lp = flybanner.getLayoutParams();
+            int screenhight = UIUtils.getWindowHight();
+            lp.height = (int) (screenhight*0.64);
             flybanner.setLayoutParams(lp);
         }
         /**
@@ -526,7 +531,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
          */
         getPics = new ArrayList<>();
         for (int i = 0; i < pics.size(); i++) {
-            getPics.add( pics.get(i).getPicm());
+            getPics.add( pics.get(i).getPicb());
         }
         flybanner.setImagesUrl(getPics);
         flybanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {

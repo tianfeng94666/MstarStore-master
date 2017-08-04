@@ -11,4 +11,5 @@ public class Global {
     //微信支付的类型，方式
     public  static String id;
     public static  String type;
+    public static int selectPosition;
 }

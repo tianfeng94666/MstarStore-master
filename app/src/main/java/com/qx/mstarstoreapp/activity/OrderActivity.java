@@ -35,6 +35,7 @@ import com.qx.mstarstoreapp.inter.OnSeachListener;
 import com.qx.mstarstoreapp.json.ClassTypeFilerEntity;
 import com.qx.mstarstoreapp.json.ModeListResult;
 import com.qx.mstarstoreapp.json.SearchValue;
+import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
 import com.qx.mstarstoreapp.json.TypeFiler;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -113,6 +114,8 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private ModeListResult modeListResult;
     private boolean isShowPrice;
     private boolean isCustomized;//是否是用户定制
+    private StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
+    private String openType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,12 +126,16 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         ButterKnife.bind(this);
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         context = this;
+        getDate();
         initView();
         initListener();
         loadNetData(getInitUrl());
 
     }
-
+    private void getDate() {
+        selectStone = (StoneSearchInfoResult.DataBean.StoneBean.ListBean) getIntent().getSerializableExtra("stone");
+        openType=getIntent().getStringExtra("openType");
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -161,7 +168,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage;
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage="  + curpage+"&pageNum=24";
         return url;
     }
 
@@ -549,7 +556,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 L.e("itemId" + data.get(position).getId());
                 pBundle.putString("itemId", data.get(position).getId());
                 pBundle.putInt("type", 0);
+                pBundle.putString("openType", openType + "");
                 pBundle.putInt("waitOrderCount", waitOrderCount);
+                if(selectStone!=null){
+                    pBundle.putSerializable("stone",selectStone);
+                }
                 intent.putExtras(pBundle);
                 // openActivity(StyleInfromationActivity.class, pBundle);
                 startActivityForResult(intent, 10);

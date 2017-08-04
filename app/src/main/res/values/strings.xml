@@ -20,8 +20,8 @@
 
     <string name="data_loaded">加载完成</string>
     <string name="updatepwd">修改密码</string>
-    <string name="add_curent_order">添加到当前下单</string>
-    <string name="look_current_order">查看当前下单</string>
+    <string name="add_curent_order">添加下单</string>
+    <string name="look_current_order">查看下单</string>
     <string name="confirm_update">确定修改</string>
     <string name="cancle_update">取消修改</string>
     <string name="data_error">数据错误</string>

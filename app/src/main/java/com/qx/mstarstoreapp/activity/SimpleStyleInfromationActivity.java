@@ -652,13 +652,18 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             int screenWidth = UIUtils.getWindowWidth();
             lp.height = (int) (screenWidth);
             flybanner.setLayoutParams(lp);
+        }else {
+            ViewGroup.LayoutParams lp = flybanner.getLayoutParams();
+            int screenhight = UIUtils.getWindowHight();
+            lp.height = (int) (screenhight*0.64);
+            flybanner.setLayoutParams(lp);
         }
         /**
          * 创建多个item （每一条viewPager都是一个item） 从服务器获取完数据（图片url地址） 后，再设置适配器
          */
         getPics = new ArrayList<>();
         for (int i = 0; i < pics.size(); i++) {
-            getPics.add(pics.get(i).getPicm());
+            getPics.add(pics.get(i).getPicb());
         }
         flybanner.setImagesUrl(getPics);
         flybanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {
