@@ -26,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/id_ig_nor"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="10dp"
+                android:layout_height="18dp"
                 android:layout_marginLeft="2dip"
                 android:src="@drawable/icon_list_nor"/>
         </LinearLayout>

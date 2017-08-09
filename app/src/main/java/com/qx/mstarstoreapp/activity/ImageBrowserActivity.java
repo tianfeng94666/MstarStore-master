@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
+import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.viewutils.CustomViewPager;
 

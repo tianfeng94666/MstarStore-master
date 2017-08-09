@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,7 +21,6 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.StoneSearchResultAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseApplication;
-import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -96,6 +96,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     LinearLayout llFromSearch;
     @Bind(R.id.tv_choose_product)
     TextView tvChooseProduct;
+    @Bind(R.id.tv_pager_amount)
+    TextView tvPagerAmount;
 
 
     private boolean isLandscape;
@@ -110,12 +112,14 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private int listCount;
     private List<String> listTitle;
     private String orderby = "";
-    int ordertimes = 0;
+    int orderByWeightTimes = 0;//重量排序次数
+    int orderByPriceTiems=0;//价钱排序次数
     private int openType;//0 是正常进入，1是主石进入
     private String itemId;//产品的id
     private int type;
     private boolean isShowPrice;
     private boolean isCustomized;
+    private double totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +134,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         getDate();
         init();
 
-
     }
+
+
 
     private void getDate() {
         Intent intent = getIntent();
@@ -185,6 +190,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         lvStone.setPullLoadEnable(true);
         titleText.setText("搜索结果");
         tvItemWeight.setOnClickListener(this);
+        tvItemPrice.setOnClickListener(this);
         tvReset.setOnClickListener(this);
         tvConfirmReback.setOnClickListener(this);
         tvChooseProduct.setOnClickListener(this);
@@ -251,6 +257,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                         ToastManager.showToastReal("没有数据！");
                         return;
                     }
+                    totalAmount = Integer.parseInt(stoneSearchInfoResult.getData().getStone().getList_count());
                     init();
                     setXListview(stoneSearchInfoResult);
 
@@ -286,6 +293,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             lvStone.setVisibility(View.VISIBLE);
             tvEmpty.setVisibility(View.GONE);
         }
+
         List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> templist = stoneSearchInfoResult.getData().getStone().getList();
         listCount = Integer.parseInt(stoneSearchInfoResult.getData().getStone().getList_count());
         list.addAll(templist);
@@ -306,7 +314,28 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         } else {
             lvStone.setAdapter(stoneSearchResultAdapter);
         }
+        lvStone.setOnScrollListener(new XListView.OnXScrollListener() {
+            @Override
+            public void onXScrolling(View view) {
 
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("firstVisibleItem=" + firstVisibleItem);
+                if (firstVisibleItem == 0) {
+                    firstVisibleItem = 1;
+                }
+
+                tvPagerAmount.setText((int) (Math.ceil(firstVisibleItem / 30.0)) + "/" + (int) Math.ceil(listCount / 30.0));
+
+            }
+        });
         lvStone.stopRefresh();
         lvStone.stopLoadMore();
     }
@@ -324,7 +353,10 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 quotedPrice(stoneSearchResultAdapter.getQuotedPriceId());
                 break;
             case R.id.tv_item_weight:
-                setorderBy();
+                setorderByWeight();
+                break;
+            case R.id.tv_item_price:
+                setOrderByPrice();
                 break;
             case R.id.tv_reset:
                 stoneSearchInfoResult = null;
@@ -342,6 +374,42 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 break;
         }
     }
+
+    private void setOrderByPrice() {
+        list.clear();
+        page = 1;
+        pullStatus = 0;
+        orderByWeightTimes=0;
+        orderByPriceTiems++;
+        resetOrderImage(tvItemWeight);
+        Drawable drawable = null;
+        switch (orderByPriceTiems % 3) {
+            case 0:
+                orderby = "";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort);
+                break;
+            case 1:
+                orderby = "price_asc";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort_d);
+                break;
+            case 2:
+                orderby = "price_desc";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort_u);
+                break;
+        }
+        loadNetData();
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
+        tvItemPrice.setCompoundDrawables(null, null, drawable, null);
+    }
+
+    private void resetOrderImage(TextView tvItemWeight) {
+        Drawable drawable = null;
+        drawable = this.getResources().getDrawable(R.drawable.icon_sort);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
+        tvItemWeight.setCompoundDrawables(null, null, drawable, null);
+    }
+
+
     private void chooseProduct() {
         int chooseAmount = 0;
         int seletPosition = 0;
@@ -362,7 +430,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             Intent intent;
             intent = new Intent(this, OrderActivity.class);
             Bundle pBundle = new Bundle();
-            pBundle.putString("openType","1");
+            pBundle.putString("openType", "1");
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(seletPosition);
             pBundle.putSerializable("stone", listBean);
             intent.putExtras(pBundle);
@@ -374,6 +442,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         }
 
     }
+
     private void rebackProductInfo() {
         int chooseAmount = 0;
         int seletPosition = 0;
@@ -438,13 +507,15 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         }
     }
 
-    private void setorderBy() {
+    private void setorderByWeight() {
         list.clear();
         page = 1;
         pullStatus = 0;
-        ordertimes++;
+        orderByPriceTiems=0;
+        orderByWeightTimes++;
+        resetOrderImage(tvItemPrice);
         Drawable drawable = null;
-        switch (ordertimes % 3) {
+        switch (orderByWeightTimes % 3) {
             case 0:
                 orderby = "";
                 drawable = this.getResources().getDrawable(R.drawable.icon_sort);

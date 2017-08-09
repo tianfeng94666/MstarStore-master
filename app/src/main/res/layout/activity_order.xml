@@ -8,7 +8,13 @@
     android:orientation="vertical">
 
     <include layout="@layout/seach_layout"></include>
-
+    <View
+        android:id="@+id/line0"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/id_rel_title"
+        android:background="@color/color_line"
+        android:orientation="horizontal"/>
     <LinearLayout
         android:id="@+id/id_rel1"
         android:layout_width="match_parent"
@@ -48,7 +54,7 @@
                   android:id="@+id/id_rel2"
                   android:layout_width="match_parent"
                   android:layout_height="42dip"
-                  android:layout_below="@+id/id_rel_title"
+                  android:layout_below="@+id/line0"
                   android:orientation="horizontal">
         <include layout="@layout/select_type_item"/>
         </LinearLayout>
@@ -57,7 +63,7 @@
     <View
         android:id="@+id/line1"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_below="@+id/id_rel2"
         android:background="@color/color_line"
         android:orientation="horizontal"/>
@@ -87,8 +93,8 @@
 
             <ImageView
                 android:id="@+id/id_ig_nor1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="10dp"
+                android:layout_height="18dp"
                 android:layout_marginLeft="2dip"
                 android:src="@drawable/icon_list_nor"/>
         </LinearLayout>
@@ -131,7 +137,7 @@
     <View
         android:id="@+id/line2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_below="@+id/id_rel3"
         android:background="@color/color_line"
         android:orientation="horizontal"/>
@@ -140,8 +146,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/id_rel3"
-        android:layout_marginTop="15dp"
-        android:background="@color/theme_bg"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:background="@color/white"
         android:orientation="vertical">
 
 
@@ -175,6 +182,22 @@
             android:textSize="15sp"/>
 
     </RelativeLayout>
-
+    <LinearLayout
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_pager_amount"
+            android:text="1"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/border_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </RelativeLayout>

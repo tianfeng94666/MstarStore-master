@@ -20,36 +20,48 @@
         android:layout_marginBottom="32dp"
         android:gravity="center">
 
-        <ImageView
-            android:src="@mipmap/home"
+        <TextView
             android:id="@+id/iv_home"
+            android:text="首页"
+            android:gravity="center"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/home"
             android:padding="10dp" />
 
 
 
-        <ImageView
+        <TextView
             android:id="@+id/iv_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:src="@mipmap/product"
+            android:layout_marginLeft="16dp"
+            android:drawableTop="@mipmap/product"
+           android:text="产品"
+            android:textColor="@color/white"
+            android:gravity="center"
             android:padding="10dp" />
-        <ImageView
+        <TextView
             android:id="@+id/iv_stone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:src="@mipmap/stone"
+            android:layout_marginLeft="16dp"
+            android:drawableTop="@mipmap/stone"
+            android:text="裸石库"
+            android:textColor="@color/white"
+            android:gravity="center"
             android:padding="10dp" />
 
-        <ImageView
+        <TextView
             android:id="@+id/iv_mine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:src="@mipmap/mine"
+            android:layout_marginLeft="16dp"
+            android:drawableTop="@mipmap/mine"
+            android:text="个人中心"
+            android:textColor="@color/white"
+            android:gravity="center"
             android:padding="10dp" />
     </LinearLayout>
 </RelativeLayout>

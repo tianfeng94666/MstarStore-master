@@ -160,8 +160,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     private ListAdapter adapter;
     private StoneEntity selectedStoneEnity;
     private ModelDetailResult modelDetail;
-    private ArrayList<String> getPics;
+    private ArrayList<String> getPicm;
     private Boolean isShowPrice;
+    private ArrayList<String> getPicB;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         SimpleStyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -536,10 +537,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                         idTvStoreRemarks.setText("" + remark);
                     }
                     idCusStoreSize.setTextName(handSize);
-                    tvPrice.setText("¥" + modelEntity.getPrice());
+                    tvPrice.setText("¥" + UIUtils.stringChangeToInt(modelEntity.getPrice()));
                     if (stoneprice != null) {
-                        DecimalFormat df = new DecimalFormat("######0.00");
-                        tvPrice.setText("¥" + df.format(Double.parseDouble(modelEntity.getPrice()) + Double.parseDouble(stoneprice)));
+                        tvPrice.setText("¥" + UIUtils.stringChangeToInt(Double.parseDouble(modelEntity.getPrice()) + Double.parseDouble(stoneprice) + ""));
                     }
 
                     initViewPager();
@@ -661,11 +661,18 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         /**
          * 创建多个item （每一条viewPager都是一个item） 从服务器获取完数据（图片url地址） 后，再设置适配器
          */
-        getPics = new ArrayList<>();
+        getPicm = new ArrayList<>();
+        getPicB = new ArrayList<>();
         for (int i = 0; i < pics.size(); i++) {
-            getPics.add(pics.get(i).getPicb());
+            getPicm.add(pics.get(i).getPicm());
+            getPicB.add(pics.get(i).getPicb());
         }
-        flybanner.setImagesUrl(getPics);
+        if(UIUtils.isPad(this)){
+            flybanner.setImagesUrl(getPicB);
+        }else {
+            flybanner.setImagesUrl(getPicm);
+        }
+
         flybanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -675,7 +682,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 //主页图片
                 Intent intent = new Intent(SimpleStyleInfromationActivity.this,
                         ImageBrowserActivity.class);
-                intent.putExtra("photos", getPics);
+                intent.putExtra("photos", getPicB);
                 intent.putExtra("position", position);
                 startActivity(intent);
                 //设置切换动画，从右边进入，左边退出

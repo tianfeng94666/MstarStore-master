@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -45,13 +46,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     @Bind(R.id.fly_main)
     FlyBanner flyMain;
     @Bind(R.id.iv_home)
-    ImageView ivHome;
+    TextView ivHome;
     @Bind(R.id.iv_stone)
-    ImageView ivStone;
+    TextView ivStone;
     @Bind(R.id.iv_product)
-    ImageView ivProduct;
+    TextView ivProduct;
     @Bind(R.id.iv_mine)
-    ImageView ivMine;
+    TextView ivMine;
 
     private int nowId;
     private String version;

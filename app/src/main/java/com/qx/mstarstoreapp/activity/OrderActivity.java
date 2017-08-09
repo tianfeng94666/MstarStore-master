@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -51,8 +52,8 @@ import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
 import com.qx.mstarstoreapp.viewutils.SideFilterDialog;
 import com.qx.mstarstoreapp.viewutils.SquareImageView;
+import com.qx.mstarstoreapp.viewutils.xListView.XListView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -71,15 +72,17 @@ import zxing.activity.CaptureActivity;
 public class OrderActivity extends BaseActivity implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
 
 
-    private LinearLayout layAllOrder, layFilter, layGvFileter, layout1;
-    private GridViewWithHeaderAndFooter mCustomGridView;
-    private TextView tvCclassify, tvCurentOrder, id_tv_select;
+    @Bind(R.id.tv_pager_amount)
+    TextView tvPagerAmount;
+    private LinearLayout idLyAll, idLyFilter, idGvFileter, idRel2;
+    private GridViewWithHeaderAndFooter idGvMenu;
+    private TextView idCurOrder, idTvSelect;
     private Context context;
-    private ImageView igNor, igNor1;
-    private RelativeLayout layout2, root_view;
+    private ImageView idIgNor, idIgNor1;
+    private RelativeLayout idRel3, rootView;
     private SideFilterDialog filterDialog;
     private ListMenuDialog listMenuDialog;
-    private PullToRefreshView mRefreshView;
+    private PullToRefreshView pullRefreshView;
     private GridMenuDialog gridMenuDialog;
     private List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> data = new ArrayList<>();
     /*推荐款  最新款*/
@@ -116,6 +119,8 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private boolean isCustomized;//是否是用户定制
     private StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
     private String openType;
+    private int totalAmount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,10 +137,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         loadNetData(getInitUrl());
 
     }
+
     private void getDate() {
         selectStone = (StoneSearchInfoResult.DataBean.StoneBean.ListBean) getIntent().getSerializableExtra("stone");
-        openType=getIntent().getStringExtra("openType");
+        openType = getIntent().getStringExtra("openType");
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -168,7 +175,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage="  + curpage+"&pageNum=24";
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&pageNum=24";
         return url;
     }
 
@@ -179,7 +186,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             public void onClose() {
                 L.e("onClose");
                 backgroundAlpha(1f);
-                igNor.setImageResource(R.drawable.icon_list_nor);
+                idIgNor.setImageResource(R.drawable.icon_list_nor);
             }
 
             @Override
@@ -187,7 +194,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        id_tv_select.setText(StringUtils.idgui(select.getTitle()));
+                        idTvSelect.setText(StringUtils.idgui(select.getTitle()));
                         mcategory = select.getId() + "";
                         String url = getInitUrl();
                         url += "&category=" + mcategory;
@@ -246,7 +253,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private void loadNetData(String url) {
-        isShowPrice =  SpUtils.getInstace(this).getBoolean("isShowPrice",true);
+        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
         showWatiNetDialog();
         L.e("开启搜索" + url);
         // 进行登录请求
@@ -263,11 +270,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                     if (dataEntity == null) {
                         return;
                     }
-                    if(isShowPrice){
+                    if (isShowPrice) {
                         idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color));
-                    }else {
+                    } else {
                         idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color3));
                     }
+                    totalAmount =Integer.parseInt(modeListResult.getData().getModel().getList_count());
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
                     if (curpage == 1) {
                           /*搜索过的单选历史记录*/
@@ -327,9 +335,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         mGvAdapter.notifyDataSetChanged();
         tempCurpage = curpage;
         if (pullState == PULL_LOAD) {
-            mRefreshView.onFooterRefreshComplete();
+            pullRefreshView.onFooterRefreshComplete();
         } else if (pullState == PULL_REFRESH) {
-            mRefreshView.onHeaderRefreshComplete();
+            pullRefreshView.onHeaderRefreshComplete();
         }
         pullState = 0;
     }
@@ -338,34 +346,57 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     TextView hint_txt;
 
     public void initView() {
-        mRefreshView = (PullToRefreshView) findViewById(R.id.pull_refresh_view);
-        mRefreshView.setOnHeaderRefreshListener(this);
-        mRefreshView.setOnFooterRefreshListener(this);
-        mRefreshView.setVisibility(View.VISIBLE);
-        igNor = (ImageView) findViewById(R.id.id_ig_nor);
-        igNor1 = (ImageView) findViewById(R.id.id_ig_nor1);
-        layAllOrder = (LinearLayout) findViewById(R.id.id_ly_all);
-        layGvFileter = (LinearLayout) findViewById(R.id.id_gv_fileter);
-        id_tv_select = (TextView) findViewById(R.id.id_tv_select);
-        root_view = (RelativeLayout) findViewById(R.id.root_view);
-        layout1 = (LinearLayout) findViewById(R.id.id_rel2);
-        layout2 = (RelativeLayout) findViewById(R.id.id_rel3);
+        pullRefreshView = (PullToRefreshView) findViewById(R.id.pull_refresh_view);
+        pullRefreshView.setOnHeaderRefreshListener(this);
+        pullRefreshView.setOnFooterRefreshListener(this);
+        pullRefreshView.setVisibility(View.VISIBLE);
+        idIgNor = (ImageView) findViewById(R.id.id_ig_nor);
+        idIgNor1 = (ImageView) findViewById(R.id.id_ig_nor1);
+        idLyAll = (LinearLayout) findViewById(R.id.id_ly_all);
+        idGvFileter = (LinearLayout) findViewById(R.id.id_gv_fileter);
+        idTvSelect = (TextView) findViewById(R.id.id_tv_select);
+        rootView = (RelativeLayout) findViewById(R.id.root_view);
+        idRel2 = (LinearLayout) findViewById(R.id.id_rel2);
+        idRel3 = (RelativeLayout) findViewById(R.id.id_rel3);
         //筛选
-        layFilter = (LinearLayout) findViewById(R.id.id_ly_filter);
-        tvCclassify = (TextView) findViewById(R.id.id_tv_classify);
-        tvCurentOrder = (TextView) findViewById(R.id.id_cur_order);
-        mCustomGridView = (GridViewWithHeaderAndFooter) findViewById(R.id.id_gv_menu);
+        idLyFilter = (LinearLayout) findViewById(R.id.id_ly_filter);
+        idTvClassify = (TextView) findViewById(R.id.id_tv_classify);
+        idCurOrder = (TextView) findViewById(R.id.id_cur_order);
+        idGvMenu = (GridViewWithHeaderAndFooter) findViewById(R.id.id_gv_menu);
         loadStateView = View.inflate(this, R.layout.grid_food_layout, null);
         hint_txt = (TextView) loadStateView.findViewById(R.id.tv_hint_txt);
-        //mCustomGridView.addFooterView(loadStateView);
+        //idGvMenu.addFooterView(loadStateView);
         //没有数据显示
-        mCustomGridView.setEmptyView(findViewById(R.id.lny_no_result));
-        if( isScreenChange()){
-            mCustomGridView.setNumColumns(6);
-        }else {
-            mCustomGridView.setNumColumns(2);
+        idGvMenu.setEmptyView(findViewById(R.id.lny_no_result));
+        tvPagerAmount.getBackground().setAlpha(100);
+        idGvMenu.setOnScrollListener(new XListView.OnXScrollListener() {
+            @Override
+            public void onXScrolling(View view) {
+
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("firstVisibleItem="+firstVisibleItem);
+                if(firstVisibleItem==0){
+                    firstVisibleItem=1;
+                }
+
+               tvPagerAmount.setText((int)(Math.ceil(firstVisibleItem/24.0))+"/"+(int)Math.ceil(totalAmount/24.0));
+
+            }
+        });
+        if (isScreenChange()) {
+            idGvMenu.setNumColumns(6);
+        } else {
+            idGvMenu.setNumColumns(2);
         }
-        mCustomGridView.setAdapter(mGvAdapter);
+        idGvMenu.setAdapter(mGvAdapter);
 
         badge = new BadgeView(OrderActivity.this, idTvCurOrder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         //remind(1,badge1,true);
@@ -402,10 +433,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         try {
             // Checks the orientation of the screen
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mCustomGridView.setNumColumns(6);
+                idGvMenu.setNumColumns(6);
                 Global.divideAmount = 6;
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                mCustomGridView.setNumColumns(2);
+                idGvMenu.setNumColumns(2);
                 Global.divideAmount = 2;
             }
         } catch (Exception ex) {
@@ -517,12 +548,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         });
 
         /*弹出筛选页面dialog*/
-        layFilter.setOnClickListener(new View.OnClickListener() {
+        idLyFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (filterDialog != null) {
                     backgroundAlpha(0.7f);
-                    filterDialog.showAsDropDown(root_view, getStatusBarHeight());
+                    filterDialog.showAsDropDown(rootView, getStatusBarHeight());
                 }
 
             }
@@ -530,19 +561,19 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
 
         /*弹出下拉别表搜索事件*/
-        layAllOrder.setOnClickListener(new View.OnClickListener() {
+        idLyAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listMenuDialog != null) {
                     backgroundAlpha(0.7f);
-                    listMenuDialog.showAsDropDown(layout1);
-                    igNor.setImageResource(R.drawable.icon_list);
+                    listMenuDialog.showAsDropDown(idRel2);
+                    idIgNor.setImageResource(R.drawable.icon_list);
                 }
             }
         });
 
 
-        mCustomGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        idGvMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 data.get(position).getId();
@@ -558,8 +589,8 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 pBundle.putInt("type", 0);
                 pBundle.putString("openType", openType + "");
                 pBundle.putInt("waitOrderCount", waitOrderCount);
-                if(selectStone!=null){
-                    pBundle.putSerializable("stone",selectStone);
+                if (selectStone != null) {
+                    pBundle.putSerializable("stone", selectStone);
                 }
                 intent.putExtras(pBundle);
                 // openActivity(StyleInfromationActivity.class, pBundle);
@@ -568,7 +599,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         });
 
 
-        tvCurentOrder.setOnClickListener(new View.OnClickListener() {
+        idCurOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // openActivity(CustommadeInformationActivity.class, null);
@@ -576,7 +607,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         });
 
         /*弹出 已被选中的标签dialog  GridView*/
-        layGvFileter.setOnClickListener(new View.OnClickListener() {
+        idGvFileter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gridMenuDialog = new GridMenuDialog(OrderActivity.this);
@@ -585,7 +616,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                     public void onClose() {
                         L.e("onClose");
                         backgroundAlpha(1f);
-                        igNor1.setImageResource(R.drawable.icon_list_nor);
+                        idIgNor1.setImageResource(R.drawable.icon_list_nor);
                     }
 
                     @Override
@@ -594,7 +625,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                id_tv_select.setText(select);
+                                idTvSelect.setText(select);
                             }
                         });
                     }
@@ -609,8 +640,8 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 });
 
                 backgroundAlpha(0.7f);
-                gridMenuDialog.showAsDropDown(layout2);
-                igNor1.setImageResource(R.drawable.icon_list);
+                gridMenuDialog.showAsDropDown(idRel3);
+                idIgNor1.setImageResource(R.drawable.icon_list);
             }
         });
 
@@ -646,7 +677,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idTvHisOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isShowPrice){
+                if (isShowPrice) {
                     openActivity(CustomMadeActivity.class, null);
                 }
             }
@@ -711,9 +742,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             holder.tvPrice.setText(UIUtils.stringChangeToTwoBitDouble(data.get(position).getPrice()));
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
-                if(UIUtils.isPad(OrderActivity.this)){
+                if (UIUtils.isPad(OrderActivity.this)) {
                     ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
-                }else {
+                } else {
                     ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptions());
                 }
                 holder.ig.setTag(data.get(position).getPic());
