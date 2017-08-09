@@ -6,13 +6,13 @@
         <!--android:topRightRadius="10dip"-->
         <!--android:bottomRightRadius="2dip"-->
         <!--android:bottomLeftRadius="2dip" />-->
-    <corners android:radius="10dp" />
+    <corners android:radius="5dp" />
 
     <padding
         android:left="10dip"
         android:right="10dip"
-        android:top="3dip"
-        android:bottom="3dip"
+        android:top="1dip"
+        android:bottom="1dip"
         ></padding>
 
 </shape>

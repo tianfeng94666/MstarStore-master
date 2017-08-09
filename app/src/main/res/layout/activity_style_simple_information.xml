@@ -82,7 +82,7 @@
                         android:textColor="@color/text_color"
                         android:text="男戒"
                         android:layout_marginLeft="@dimen/margin5"
-                        android:layout_marginRight="@dimen/margin5"
+                        android:layout_marginRight="@dimen/margin10"
                         android:layout_weight="1"
                         />
 
@@ -188,7 +188,7 @@
                         android:hint="手寸"
                         android:inputType="numberDecimal"
                         android:textSize="10sp"
-                        app:tv_string_background="@color/white"
+                        app:tv_string_background="@drawable/btn_bg_while"
                        />
                 </LinearLayout>
                 <View

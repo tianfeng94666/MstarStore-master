@@ -36,6 +36,7 @@ import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.AddressEntity;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
+import com.qx.mstarstoreapp.json.DefaultValue;
 import com.qx.mstarstoreapp.json.IsHaveCustomerResult;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
@@ -93,7 +94,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     CustomSelectButton idCsColor;
     @Bind(R.id.id_receipt)
     Button idReceipt;
-    @Bind(R.id.id_cs_mass)
+    @Bind(R.id.bt_qulity)
     CustomSelectButton idCsMass;
     @Bind(android.R.id.list)
     ListView list;
@@ -164,6 +165,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     private boolean isShowPrice;
     private boolean ischooseEmpty;//是否选择了产品
     private boolean isCustomized;//是否是用户定制
+    private DefaultValue defaultValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +217,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         OrderListResult.DataEntity.CurrentOrderlListEntity currentOrderlList = dataEntity.getCurrentOrderlList();
                         List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> list = currentOrderlList.getList();
                         isDefaultAddress = dataEntity.getAddress();
+
+
                         if (pullState != PULL_LOAD) {
                             confirOrderAdapter.cancelAll();
                             listData.clear();
@@ -257,6 +261,19 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 }
                                 isDefaultCustomer = dataEntity.getCustomer();
                             } else {
+                                defaultValue = dataEntity.getDefaultValue();
+                                if(defaultValue.getModelColor()!=null){
+                                    if(!defaultValue.getModelColor().getId().isEmpty()){
+                                        idCsColor.setTextName(defaultValue.getModelColor().getTitle());
+                                        purityId = defaultValue.getModelColor().getId();
+                                    }
+                                }
+                                if(defaultValue.getModelQuality()!=null){
+                                    if(!defaultValue.getModelQuality().getId().isEmpty()){
+                                        idCsMass.setTextName(defaultValue.getModelQuality().getTitle());
+                                        qualityId = defaultValue.getModelQuality().getId()+"";
+                                    }
+                                }
                                 isDefaultCustomer = dataEntity.getCustomer();
                                 if (isDefaultCustomer != null) {
                                     idEtSeach.setText(isDefaultCustomer.getCustomerName());

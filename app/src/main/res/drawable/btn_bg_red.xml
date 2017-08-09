@@ -2,10 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/theme_red"/>
 
-    <corners android:topLeftRadius="10dip"
-        android:topRightRadius="10dip"
-        android:bottomRightRadius="10dip"
-        android:bottomLeftRadius="10dip" />
+    <corners android:radius="5dp" />
 
 
     <!--圆角矩形白色背景-->

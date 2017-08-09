@@ -45,7 +45,7 @@ public class CustomSelectButton extends RelativeLayout {
     private View rootview;
     private String text;
     private Type type;
-    private Button tv;
+    private TextView tv;
     private List<Type> types;
     private List<String> stringTypes;
     private Context mContext;
@@ -59,7 +59,7 @@ public class CustomSelectButton extends RelativeLayout {
     private TextView tvCancle;
 
 
-    public Button getTv() {
+    public TextView getTv() {
         return tv;
     }
 
@@ -111,7 +111,7 @@ public class CustomSelectButton extends RelativeLayout {
         }
 
         View rootView = View.inflate(context, R.layout.custom_select_button, this);
-        tv = (Button) rootView.findViewById(R.id.id_cus_tv);
+        tv = (TextView) rootView.findViewById(R.id.id_cus_tv);
         if (!StringUtils.isEmpty(textName)) {
             tv.setText(textName);
 

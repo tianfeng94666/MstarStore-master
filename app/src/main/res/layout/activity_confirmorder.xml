@@ -140,7 +140,7 @@
                             android:textSize="@dimen/text_size_small_medium"/>
 
                         <com.qx.mstarstoreapp.viewutils.CustomSelectButton
-                            android:id="@+id/id_cs_mass"
+                            android:id="@+id/bt_qulity"
                             style="@style/layout_horizontal"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="20dip"

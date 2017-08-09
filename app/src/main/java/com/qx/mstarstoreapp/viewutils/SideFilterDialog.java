@@ -7,7 +7,11 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -17,10 +21,16 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.OrderActivity;
 import com.qx.mstarstoreapp.base.BaseFilterData;
 import com.qx.mstarstoreapp.base.MyAction;
+import com.qx.mstarstoreapp.bean.Type;
+import com.qx.mstarstoreapp.dialog.GridMenuDialog;
 import com.qx.mstarstoreapp.json.ClassTypeFilerEntity;
+import com.qx.mstarstoreapp.json.SearchValue;
+import com.qx.mstarstoreapp.json.TypeFiler;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.UIUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,9 +52,13 @@ public  class SideFilterDialog extends BaseFilterData {
     /*确定和重置按钮*/
     private TextView idTvConfirfilterr;
     private TextView idTvResetfilter;
-
     //得到 状态栏的高度
     int mStatusBarHeight;
+
+    private GridViewWithHeaderAndFooter lv;
+    private List<Type> typese;
+    private ListViewAdapter listViewAdapter = new ListViewAdapter();
+
     public SideFilterDialog(Context context, List<ClassTypeFilerEntity> typeListData, String action,int statusBarHeight) {
         this.mStatusBarHeight=statusBarHeight;
         this.mContext = context;
@@ -98,34 +112,78 @@ public  class SideFilterDialog extends BaseFilterData {
         int ori = mConfiguration.orientation; //获取屏幕方向
 
         if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
-
-//横屏
+            //横屏
             return true;
         } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
-
-//竖屏
+            //竖屏
             return false;
         }
         return false;
     }
+
+
     public void initView(Context context) {
+        initData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPopView = inflater.inflate(R.layout.dialog_filter_dialog, null);
         expandableGridView = (ExpandableListView) mPopView.findViewById(R.id.list);
+        lv = (GridViewWithHeaderAndFooter) mPopView.findViewById(R.id.id_lv_memu);
         idTvConfirfilterr = (TextView) mPopView.findViewById(R.id.id_tv_confirfilterr);
         idTvResetfilter = (TextView) mPopView.findViewById(R.id.id_tv_resetfilter);
-        if(isScreenChange()){
-            popupWindow = new PopupWindow(mPopView, getWindowWidth() /5*2, getWindowHeight()-mStatusBarHeight);
+
+        if(UIUtils.isPad(mContext)){
+            popupWindow = new PopupWindow(mPopView, UIUtils.dip2px(440), getWindowHeight());
+            lv.setNumColumns(5);
         }else {
-            popupWindow = new PopupWindow(mPopView, getWindowWidth() - 150, getWindowHeight()-mStatusBarHeight);
+            popupWindow = new PopupWindow(mPopView, UIUtils.dip2px(260), getWindowHeight());
         }
+        lv.setAdapter(listViewAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                typese.remove(i);
+                listViewAdapter.notifyDataSetChanged();
+            }
+        });
         popupWindow.setFocusable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());     //点击外部消失这句很重要
         // 点击外面的控件也可以使得PopUpWindow dimiss
         popupWindow.setOutsideTouchable(true);
 
     }
+    private void initData() {
+        typese  = new ArrayList<>();
+        if (OrderActivity.multiselectKey.size() != 0&&OrderActivity.multiselectKey != null) {
+            for (int i = 0; i < OrderActivity.multiselectKey.size(); i++) {
+                TypeFiler categoryFiler = OrderActivity.multiselectKey.get(i);
+                Type type=new Type();
+                type.setId(categoryFiler.getId());
+                type.setType(1);
+                type.setTypeName("");
+                type.setContent(categoryFiler.getTitle());
+                type.setValue(categoryFiler.getValue());
+                type.setGroupKey(categoryFiler.getGroupKey());
+                typese.add(type);
+            }
+        }
 
+        if (OrderActivity.singleKey.size()!=0&&OrderActivity.singleKey !=null){
+            for (int i = 0; i < OrderActivity.singleKey.size(); i++) {
+                SearchValue searchKeyword = OrderActivity.singleKey.get(i);
+                if (StringUtils.isEmpty(searchKeyword.getValue())){
+                    break;
+                }
+                Type type=new Type();
+                type.setId(searchKeyword.getValue());
+                type.setTypeName(searchKeyword.getName());
+                type.setContent(searchKeyword.getTxt());
+                type.setValue(searchKeyword.getValue());
+                type.setType(2);
+                typese.add(type);
+            }
+        }
+
+    }
     public void getWindowHight(){
         DisplayMetrics metric = new DisplayMetrics();
         UIUtils.getWindowManager().getMetrics(metric);
@@ -189,4 +247,42 @@ public  class SideFilterDialog extends BaseFilterData {
         return height;
     }
 
+    public class ListViewAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return typese.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return typese.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ListViewAdapter.ViewHolder viewHolder;
+            if (convertView == null) {
+                viewHolder = new ListViewAdapter.ViewHolder();
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_gridview_txt1, parent, false);
+                viewHolder.textView = (Button) convertView.findViewById(R.id.tv_item_goods_type);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ListViewAdapter.ViewHolder) convertView.getTag();
+            }
+
+            viewHolder.textView.setText("X "+typese.get(position).getContent());
+            return convertView;
+        }
+
+
+        public class ViewHolder {
+            Button textView;
+        }
+    }
 }

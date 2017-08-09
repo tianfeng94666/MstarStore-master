@@ -32,7 +32,7 @@ public class CustomSelectInput extends RelativeLayout {
 
     private String text;
     private String mValue;
-    private Button tv;
+    private TextView tv;
     private Context mContext;
     String textName;
     float textSize;
@@ -41,7 +41,7 @@ public class CustomSelectInput extends RelativeLayout {
     private ImageView ivReduce;
     private ImageView ivAdd;
 
-    public Button getTv() {
+    public TextView getTv() {
         return tv;
     }
 
@@ -98,7 +98,7 @@ public class CustomSelectInput extends RelativeLayout {
             typedArray.recycle();
         }
         View rootView = View.inflate(context, R.layout.custom_select_button, this);
-        tv = (Button) rootView.findViewById(R.id.id_cus_tv);
+        tv = (TextView) rootView.findViewById(R.id.id_cus_tv);
         if (!StringUtils.isEmpty(textName)) {
             tv.setText(textName);
         }

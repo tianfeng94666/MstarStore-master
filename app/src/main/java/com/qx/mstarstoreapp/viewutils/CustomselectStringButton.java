@@ -13,8 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qx.mstarstoreapp.R;
-import com.wx.wheelview.widget.WheelItem;
-import com.wx.wheelview.widget.WheelView;
+
+
 
 import java.util.List;
 
@@ -22,6 +22,8 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
+import com.qx.mstarstoreapp.viewutils.wheelview.widget.WheelItem;
+import com.qx.mstarstoreapp.viewutils.wheelview.widget.WheelView;
 
 /**
  * Created by Administrator on 2017/4/5 0005.
@@ -66,7 +68,7 @@ public class CustomselectStringButton extends RelativeLayout {
     public void setTextName(String textName) {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
-            tv.setTextColor(getResources().getColor(R.color.black));
+            tv.setTextColor(getResources().getColor(R.color.text_color));
             tv.setBackgroundResource(backgroundId);
         }
     }
@@ -254,7 +256,7 @@ public class CustomselectStringButton extends RelativeLayout {
         View getRootView();
     }
 
-    class SimpleWheelAdapter extends com.wx.wheelview.adapter.SimpleWheelAdapter {
+    class SimpleWheelAdapter extends com.qx.mstarstoreapp.viewutils.wheelview.adapter.SimpleWheelAdapter {
 
         private Context mContext;
 

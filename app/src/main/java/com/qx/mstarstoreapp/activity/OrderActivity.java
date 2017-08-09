@@ -47,6 +47,7 @@ import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.GridViewWithHeaderAndFooter;
+import com.qx.mstarstoreapp.viewutils.LeftPopupWindow;
 import com.qx.mstarstoreapp.viewutils.ListMenuDialog;
 import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
@@ -74,12 +75,14 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     @Bind(R.id.tv_pager_amount)
     TextView tvPagerAmount;
-    private LinearLayout idLyAll, idLyFilter, idGvFileter, idRel2;
+    @Bind(R.id.ll_isshow)
+    LinearLayout llIsshow;
+    private LinearLayout idLyAll, idLyFilter, idRel2;
     private GridViewWithHeaderAndFooter idGvMenu;
     private TextView idCurOrder, idTvSelect;
     private Context context;
-    private ImageView idIgNor, idIgNor1;
-    private RelativeLayout idRel3, rootView;
+    private ImageView idIgNor;
+    private RelativeLayout  rootView;
     private SideFilterDialog filterDialog;
     private ListMenuDialog listMenuDialog;
     private PullToRefreshView pullRefreshView;
@@ -275,7 +278,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                     } else {
                         idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color3));
                     }
-                    totalAmount =Integer.parseInt(modeListResult.getData().getModel().getList_count());
+                    totalAmount = Integer.parseInt(modeListResult.getData().getModel().getList_count());
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
                     if (curpage == 1) {
                           /*搜索过的单选历史记录*/
@@ -351,16 +354,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         pullRefreshView.setOnFooterRefreshListener(this);
         pullRefreshView.setVisibility(View.VISIBLE);
         idIgNor = (ImageView) findViewById(R.id.id_ig_nor);
-        idIgNor1 = (ImageView) findViewById(R.id.id_ig_nor1);
         idLyAll = (LinearLayout) findViewById(R.id.id_ly_all);
-        idGvFileter = (LinearLayout) findViewById(R.id.id_gv_fileter);
         idTvSelect = (TextView) findViewById(R.id.id_tv_select);
         rootView = (RelativeLayout) findViewById(R.id.root_view);
         idRel2 = (LinearLayout) findViewById(R.id.id_rel2);
-        idRel3 = (RelativeLayout) findViewById(R.id.id_rel3);
         //筛选
         idLyFilter = (LinearLayout) findViewById(R.id.id_ly_filter);
-        idTvClassify = (TextView) findViewById(R.id.id_tv_classify);
         idCurOrder = (TextView) findViewById(R.id.id_cur_order);
         idGvMenu = (GridViewWithHeaderAndFooter) findViewById(R.id.id_gv_menu);
         loadStateView = View.inflate(this, R.layout.grid_food_layout, null);
@@ -382,12 +381,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                System.out.println("firstVisibleItem="+firstVisibleItem);
-                if(firstVisibleItem==0){
-                    firstVisibleItem=1;
+                System.out.println("firstVisibleItem=" + firstVisibleItem);
+                if (firstVisibleItem == 0) {
+                    firstVisibleItem = 1;
                 }
 
-               tvPagerAmount.setText((int)(Math.ceil(firstVisibleItem/24.0))+"/"+(int)Math.ceil(totalAmount/24.0));
+                tvPagerAmount.setText((int) (Math.ceil(firstVisibleItem / 24.0)) + "/" + (int) Math.ceil(totalAmount / 24.0));
 
             }
         });
@@ -423,6 +422,17 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 return false;
             }
 
+        });
+        initPopwindow();
+    }
+
+    private void initPopwindow() {
+        final LeftPopupWindow leftPopupWindow = new LeftPopupWindow(this);
+        llIsshow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leftPopupWindow.showPop(rootView);
+            }
         });
     }
 
@@ -606,44 +616,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
         });
 
-        /*弹出 已被选中的标签dialog  GridView*/
-        idGvFileter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gridMenuDialog = new GridMenuDialog(OrderActivity.this);
-                gridMenuDialog.setOnListMenuSelectCloseClick(new GridMenuDialog.OnListMenuSelectCloseClick() {
-                    @Override
-                    public void onClose() {
-                        L.e("onClose");
-                        backgroundAlpha(1f);
-                        idIgNor1.setImageResource(R.drawable.icon_list_nor);
-                    }
 
-                    @Override
-                    public void onSelect(final String select) {
-                        L.e("当前选择" + select);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                idTvSelect.setText(select);
-                            }
-                        });
-                    }
-                });
-                gridMenuDialog.setOnSeachListener(new OnSeachListener() {
-                    @Override
-                    public void onSeach(String seachUrl) {
-                        String url = getInitUrl();
-                        url += seachUrl;
-                        loadNetData(url);
-                    }
-                });
-
-                backgroundAlpha(0.7f);
-                gridMenuDialog.showAsDropDown(idRel3);
-                idIgNor1.setImageResource(R.drawable.icon_list);
-            }
-        });
 
         /*开始搜索事件*/
         idIgSeach.setOnClickListener(new View.OnClickListener() {

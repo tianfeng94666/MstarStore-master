@@ -20,6 +20,7 @@ import com.qx.mstarstoreapp.bean.GropType;
 import com.qx.mstarstoreapp.json.SearchValue;
 import com.qx.mstarstoreapp.json.TypeFiler;
 import com.qx.mstarstoreapp.utils.StringUtils;
+import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.MyGridView;
 
 import java.util.ArrayList;
@@ -173,6 +174,11 @@ public class ExpandableGridAdapter extends BaseExpandableListAdapter implements
                     .findViewById(R.id.id_lay_custon);
             viewHodler.gridView = (MyGridView) convertView
                     .findViewById(R.id.gridview);
+            if(UIUtils.isPad(context)){
+                viewHodler.gridView.setNumColumns(5);
+            }else {
+                viewHodler.gridView.setNumColumns(3);
+            }
             viewHodler.editTextHig = (EditText) convertView.findViewById(R.id.id_ed_hig);
             viewHodler.editTextLow = (EditText) convertView.findViewById(R.id.id_ed_low);
             convertView.setTag(viewHodler);

@@ -97,16 +97,16 @@
             />
 
 
-        <TextView
-            android:id="@+id/id_classify"
-            style="@style/layout_horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="分类"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_small"/>
+    <TextView
+        android:id="@+id/id_classify"
+        style="@style/layout_horizontal"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="分类"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_small" />
 
-            <LinearLayout
+    <LinearLayout
                 android:layout_width="1dip"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="3dip"

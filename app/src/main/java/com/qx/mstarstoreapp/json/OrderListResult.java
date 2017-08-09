@@ -67,6 +67,15 @@ public class OrderListResult {
         private OrderInfoEntity orderInfo;
         private Double totalPrice;
         private Double totalNeedPayPrice;
+        private DefaultValue defaultValue;
+
+        public DefaultValue getDefaultValue() {
+            return defaultValue;
+        }
+
+        public void setDefaultValue(DefaultValue defaultValue) {
+            this.defaultValue = defaultValue;
+        }
 
         public OrderInfoEntity getOrderInfo() {
             return orderInfo;
