@@ -26,6 +26,7 @@ import com.qx.mstarstoreapp.adapter.StoneOthersAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.KeyTitle;
 import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchResult;
@@ -62,7 +63,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     TextView tvAddSpot;
     @Bind(R.id.iv_reduce)
     ImageView ivReduce;
-    @Bind(R.id.et_weight)
+    @Bind(R.id.et_ring_amount)
     EditText etSpot;
     @Bind(R.id.iv_add)
     ImageView ivAdd;
@@ -162,6 +163,15 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         initColor();
         initPurity();
         initOthers();
+        if(Global.isShowPopup!=0&&Global.ring!=null&&Global.ring.getRingWeightRange()!=null){
+            String st = Global.ring.getRingWeightRange().getValue();
+            String [] sts = st.split(",");
+            if(sts.length==2){
+                etWeightMin.setText(sts[0]);
+                etWeightMax.setText(sts[1]);
+            }
+
+        }
     }
 
     private void initOthers() {
@@ -190,7 +200,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 tvQuality.setText(getselectPurity());
             }
         });
-        setListViewHeightBasedOnChildren(gvQuality, 5);
+        setGvNum(gvQuality);
     }
 
     private void initColor() {
@@ -216,9 +226,29 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 tvColor.setText(getselectColor());
             }
         });
-        setListViewHeightBasedOnChildren(gvColor, 7);
+        setGvNum(gvColor);
     }
 
+    public  void setGvNum(GridView gv){
+        if(UIUtils.isPad(this)){
+            if(UIUtils.isScreenChange(this)){
+                gv.setNumColumns(10);
+                setListViewHeightBasedOnChildren(gv, 10);
+            }else {
+                gv.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gv, 10);
+            }
+
+        }else {
+            if(UIUtils.isScreenChange(this)){
+                gv.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gv, 8);
+            }else {
+                gv.setNumColumns(5);
+                setListViewHeightBasedOnChildren(gv, 5);
+            }
+        }
+    }
     private void initShape() {
         List<StoneSearchResult.DataBean.ShapeBean.ValuesBean> shapeList = shapeBean.getValues();
         shapeChecks = new boolean[shapeList.size()];
@@ -317,16 +347,21 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         gvWeight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String value = weightList.get(position).getKey();
+                String[] values = value.split(",");
+                etWeightMin.setText(values[0]);
+                if (values[1].equals("0")) {
+                    etWeightMax.setText("");
+                } else {
+                    etWeightMax.setText(values[1]);
+                }
 
-                etWeightMax.setText("");
-                etWeightMin.setText("");
-
-                if(weightChecks[position]){
-                    weightChecks[position] =  !weightChecks[position];
+                if (weightChecks[position]) {
+                    weightChecks[position] = !weightChecks[position];
                     weightkey = "";
-                }else {
+                } else {
                     clearCheck(weightChecks);
-                    weightChecks[position] =  !weightChecks[position];
+                    weightChecks[position] = !weightChecks[position];
                     weightkey = weightList.get(position).getKey();
                 }
                 weightAdapter.notifyDataSetChanged();
@@ -373,8 +408,15 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         gvPrice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                etPriceMax.setText("");
-                etPriceMin.setText("");
+                String st = priceList.get(position).getKey();
+                String[] values = st.split(",");
+                etPriceMin.setText(values[0]);
+                if (values[1].equals("0")) {
+                    etPriceMax.setText("");
+                } else {
+                    etPriceMax.setText(values[1]);
+                }
+
                 if(priceChecks[position]){
                     priceChecks[position] =  !priceChecks[position];
                     pricekey = "";
@@ -528,7 +570,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     private boolean searchStone() {
         stoneSearchInfo = new StoneSearchInfo();
         stoneSearchInfo.setCerAuth(getCerAuth());
-        if (weightkey.equals("")) {
+
             String weightMin,weightMax;
             weightMin=etWeightMin.getText().toString();
             weightMax = etWeightMax.getText().toString();
@@ -544,10 +586,8 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
             }
 
             stoneSearchInfo.setWeight(weightMin + "," + weightMax);
-        } else {
-            stoneSearchInfo.setWeight(weightkey);
-        }
-        if (pricekey.equals("")) {
+
+
             String priceMin,priceMax;
             priceMin=etPriceMin.getText().toString();
             priceMax = etPriceMax.getText().toString();
@@ -562,9 +602,6 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 priceMin = "0";
             }
             stoneSearchInfo.setPrice(priceMin + "," + priceMax);
-        }else {
-            stoneSearchInfo.setPrice(pricekey);
-        }
 
         stoneSearchInfo.setShape(getShape());
         stoneSearchInfo.setColor(getStoneColor());

@@ -41,7 +41,7 @@ import java.util.List;
  *
  */
 
-public  class SideFilterDialog extends BaseFilterData {
+public class SideFilterDialog extends BaseFilterData {
 
     private View mPopView;
     private Context mContext;
@@ -59,15 +59,14 @@ public  class SideFilterDialog extends BaseFilterData {
     private List<Type> typese;
     private ListViewAdapter listViewAdapter = new ListViewAdapter();
 
-    public SideFilterDialog(Context context, List<ClassTypeFilerEntity> typeListData, String action,int statusBarHeight) {
-        this.mStatusBarHeight=statusBarHeight;
+    public SideFilterDialog(Context context, List<ClassTypeFilerEntity> typeListData, String action, int statusBarHeight) {
+        this.mStatusBarHeight = statusBarHeight;
         this.mContext = context;
         this.mTypeListData = typeListData;
         initView(context);
         initBaseFilterData(context, action);
         initListener();
     }
-
 
 
     private void initListener() {
@@ -131,17 +130,17 @@ public  class SideFilterDialog extends BaseFilterData {
         idTvConfirfilterr = (TextView) mPopView.findViewById(R.id.id_tv_confirfilterr);
         idTvResetfilter = (TextView) mPopView.findViewById(R.id.id_tv_resetfilter);
 
-        if(UIUtils.isPad(mContext)){
+        if (UIUtils.isPad(mContext)) {
             popupWindow = new PopupWindow(mPopView, UIUtils.dip2px(440), getWindowHeight());
             lv.setNumColumns(5);
-        }else {
+        } else {
             popupWindow = new PopupWindow(mPopView, UIUtils.dip2px(260), getWindowHeight());
         }
         lv.setAdapter(listViewAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                typese.remove(i);
+                removeActivity(i);
                 listViewAdapter.notifyDataSetChanged();
             }
         });
@@ -151,12 +150,36 @@ public  class SideFilterDialog extends BaseFilterData {
         popupWindow.setOutsideTouchable(true);
 
     }
+
+    private void removeActivity(int n) {
+
+        if (OrderActivity.multiselectKey.size() != 0 && OrderActivity.multiselectKey != null) {
+            for (int i = 0; i < OrderActivity.multiselectKey.size(); i++) {
+                if (OrderActivity.multiselectKey.get(i).getTitle().equals(typese.get(n).getContent())) {
+                    OrderActivity.multiselectKey.remove(i);
+                }
+            }
+        }
+        if (OrderActivity.singleKey.size() != 0 && OrderActivity.singleKey != null) {
+            for (int i = 0; i < OrderActivity.singleKey.size(); i++) {
+                SearchValue searchKeyword = OrderActivity.singleKey.get(i);
+                if (StringUtils.isEmpty(searchKeyword.getValue())) {
+                    break;
+                }
+                if (searchKeyword.getTxt().equals(typese.get(n).getContent())) {
+                        OrderActivity.singleKey.remove(i);
+                }
+            }
+        }
+        typese.remove(n);
+    }
+
     private void initData() {
-        typese  = new ArrayList<>();
-        if (OrderActivity.multiselectKey.size() != 0&&OrderActivity.multiselectKey != null) {
+        typese = new ArrayList<>();
+        if (OrderActivity.multiselectKey.size() != 0 && OrderActivity.multiselectKey != null) {
             for (int i = 0; i < OrderActivity.multiselectKey.size(); i++) {
                 TypeFiler categoryFiler = OrderActivity.multiselectKey.get(i);
-                Type type=new Type();
+                Type type = new Type();
                 type.setId(categoryFiler.getId());
                 type.setType(1);
                 type.setTypeName("");
@@ -167,13 +190,13 @@ public  class SideFilterDialog extends BaseFilterData {
             }
         }
 
-        if (OrderActivity.singleKey.size()!=0&&OrderActivity.singleKey !=null){
+        if (OrderActivity.singleKey.size() != 0 && OrderActivity.singleKey != null) {
             for (int i = 0; i < OrderActivity.singleKey.size(); i++) {
                 SearchValue searchKeyword = OrderActivity.singleKey.get(i);
-                if (StringUtils.isEmpty(searchKeyword.getValue())){
+                if (StringUtils.isEmpty(searchKeyword.getValue())) {
                     break;
                 }
-                Type type=new Type();
+                Type type = new Type();
                 type.setId(searchKeyword.getValue());
                 type.setTypeName(searchKeyword.getName());
                 type.setContent(searchKeyword.getTxt());
@@ -184,7 +207,8 @@ public  class SideFilterDialog extends BaseFilterData {
         }
 
     }
-    public void getWindowHight(){
+
+    public void getWindowHight() {
         DisplayMetrics metric = new DisplayMetrics();
         UIUtils.getWindowManager().getMetrics(metric);
         int width = metric.widthPixels;     // 屏幕宽度（像素）
@@ -276,7 +300,7 @@ public  class SideFilterDialog extends BaseFilterData {
                 viewHolder = (ListViewAdapter.ViewHolder) convertView.getTag();
             }
 
-            viewHolder.textView.setText("X "+typese.get(position).getContent());
+            viewHolder.textView.setText("X " + typese.get(position).getContent());
             return convertView;
         }
 

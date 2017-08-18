@@ -54,15 +54,22 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 	@Override
 	public void onResp(BaseResp resp) {
 		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
- 			Toast.makeText(this, "支付结果："+resp.errCode+"-->"+resp.errStr, Toast.LENGTH_SHORT).show();
+
 			Intent intent;
-			intent = new Intent(this, PaySuccessActivity.class);
-			if (!Global.id.equals("")) {
-				intent.putExtra("id", Global.id);
-				intent.putExtra("type", Global.type + "");
+			if(resp.errCode==0){
+				intent = new Intent(this, PaySuccessActivity.class);
+				if (!Global.id.equals("")) {
+					intent.putExtra("id", Global.id);
+					intent.putExtra("type", Global.type + "");
+				}
+				startActivity(intent);
+				Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
+				finish();
+			}else {
+				Toast.makeText(this, "支付失败", Toast.LENGTH_SHORT).show();
+				finish();
 			}
-			startActivity(intent);
-			finish();
+
 		}
 	}
 }

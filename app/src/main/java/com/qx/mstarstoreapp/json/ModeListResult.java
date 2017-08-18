@@ -200,6 +200,15 @@ public class ModeListResult {
                 private String picm;
                 private String picb;
 
+                private ModelWeightRange stoneWeightRange;
+
+                public ModelWeightRange getWeightRange() {
+                    return stoneWeightRange;
+                }
+
+                public void setWeightRange(ModelWeightRange weightRange) {
+                    this.stoneWeightRange = weightRange;
+                }
                 public String getPicb() {
                     return picb;
                 }

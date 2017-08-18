@@ -18,16 +18,42 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_banner"
                 style="@style/layout_vertical"
                 android:layout_weight="1">
 
-                <com.recker.flybanner.FlyBanner
-                    android:id="@+id/flybanner"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></com.recker.flybanner.FlyBanner>
+                    android:layout_height="match_parent">
+
+                    <com.recker.flybanner.FlyBanner
+                        android:id="@+id/flybanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></com.recker.flybanner.FlyBanner>
+                    <ImageView
+                        android:id="@+id/iv_preview"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/preview"
+                        android:visibility="gone"
+                        android:layout_width="150dp"
+                        android:layout_height="77dp" />
+                    <TextView
+                        android:id="@+id/tv_preview_title"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
+                        android:text="nihaoma"
+                        android:visibility="gone"
+                        android:maxEms="5"
+                        android:textSize="10sp"
+                        android:layout_width="150dp"
+                        android:layout_height="77dp" />
+                </RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -45,6 +71,8 @@
 
                 <TextView
                     android:id="@+id/tv_weight"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -53,13 +81,42 @@
                     android:textSize="@dimen/text_size_small_medium" />
 
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_top2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/id_store_title2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/margin10"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small_medium" />
+
+                <TextView
+                    android:id="@+id/tv_weight2"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_small_medium" />
+
+            </RelativeLayout>
             <LinearLayout
                 style="@style/layout_vertical"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/ll_type"
                     android:layout_width="match_parent"
                     android:layout_height="35dip"
                     android:orientation="horizontal">
@@ -87,6 +144,38 @@
                         />
 
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dip"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/margin10"
+                        android:layout_marginRight="@dimen/margin10"
+
+                        android:text="成    色"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_small_medium" />
+
+                    <com.qx.mstarstoreapp.viewutils.CustomSelectButton
+                        android:id="@+id/tv_product_color"
+                        style="@style/layout_horizontal"
+                        android:layout_marginLeft="@dimen/margin10"
+                        android:layout_marginRight="@dimen/margin5"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:hint="成色"
+                        android:inputType="numberDecimal"
+                        android:textSize="10sp"
+                        app:tv_string_background="@drawable/btn_bg_while"
+                        app:tv_style="1"
+                        app:tv_name="请选择成色"/>
+
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
@@ -94,7 +183,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="35dip"
-                    android:layout_marginTop="@dimen/margin10"
+                    android:layout_marginTop="@dimen/margin5"
+                    android:layout_marginBottom="@dimen/margin5"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -126,7 +216,7 @@
                             android:src="@drawable/icon_acc" />
 
                         <EditText
-                            android:id="@+id/et_weight"
+                            android:id="@+id/et_ring_amount"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginRight="2dp"
@@ -134,8 +224,8 @@
                             android:background="@drawable/btn_bg_while2"
                             android:button="@null"
                             android:gravity="center"
-                            android:text="1"
                             android:inputType="numberDecimal"
+                            android:text="1"
                             android:textSize="14sp" />
 
                         <ImageView
@@ -192,8 +282,65 @@
                        />
                 </LinearLayout>
                 <View
+                    android:id="@+id/line_making"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="5dp"
+                    android:layout_height="1px"
+                    android:background="@color/color_line" />
+
+                <LinearLayout
+                    android:id="@+id/ll_making"
+                    android:layout_marginTop="@dimen/margin5"
+                    android:layout_marginBottom="@dimen/margin5"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dip"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/margin10"
+                        android:layout_marginRight="@dimen/margin10"
+                        android:text="字    印"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_small_medium" />
+
+                    <EditText
+                        android:id="@+id/et_making"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/margin5"
+                        android:background="@drawable/btn_bg_while"
+                        android:gravity="center"
+                        android:hint="字印"
+                        android:maxLength="5"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_color" />
+                    <ImageView
+                        android:id="@+id/iv_heart"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/heart"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/iv_yu"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/yu"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_preview"
+                        android:text="预览"
+                        android:paddingLeft="10dp"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />
                 <com.qx.mstarstoreapp.viewutils.CustomLV
@@ -409,5 +556,5 @@
     </LinearLayout>
 
     <include layout="@layout/progress_layout" />
-
+    <include layout="@layout/btn_popupwindow" />
 </RelativeLayout>

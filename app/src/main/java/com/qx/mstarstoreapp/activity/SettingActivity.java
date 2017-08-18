@@ -401,7 +401,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void goIntoEncryptionSettings() {
         final EditText editText = new EditText(this);
-        editText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMarginStart(64);
         layoutParams.setMarginEnd(64);

@@ -97,11 +97,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                       android:layout_toLeftOf="@id/et_weight"
+                       android:layout_toLeftOf="@id/et_ring_amount"
                         android:src="@drawable/icon_acc" />
 
                     <EditText
-                        android:id="@+id/et_weight"
+                        android:id="@+id/et_ring_amount"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="2dp"

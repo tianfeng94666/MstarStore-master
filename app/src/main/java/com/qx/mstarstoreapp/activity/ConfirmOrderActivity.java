@@ -1101,7 +1101,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     public boolean canScrollVertically(int direction) {
         boolean isSroll = (lv_list != null && lv_list.canScrollVertically(direction));
         if (isSroll) {
-            tabs.setImageView(R.drawable.icon_downp2x);
+            tabs.setImageView(R.drawable.icon_down);
         } else {
             tabs.setImageView(R.drawable.icon_up);
         }

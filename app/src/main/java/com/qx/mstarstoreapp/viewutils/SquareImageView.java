@@ -59,7 +59,7 @@ public class SquareImageView extends ImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if( isScreenChange()){
-           divideAmount=6;
+           divideAmount=4;
         }else {
           divideAmount=2;
         }

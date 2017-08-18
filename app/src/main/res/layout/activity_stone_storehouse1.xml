@@ -140,7 +140,7 @@
                     android:src="@drawable/icon_acc" />
 
                 <EditText
-                    android:id="@+id/et_weight"
+                    android:id="@+id/et_ring_amount"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="2dp"
@@ -207,9 +207,11 @@
 
                         <GridView
                             android:id="@+id/gv_weight"
-                            android:layout_width="600dp"
+                            android:layout_width="1800dp"
                             android:layout_height="fill_parent"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
+                            android:columnWidth="120dp"
+                            android:numColumns="auto_fit"
                             android:listSelector="@android:color/transparent"
                             android:stretchMode="columnWidth"></GridView>
                     </LinearLayout>

@@ -30,9 +30,9 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.base.MyAction;
+import com.qx.mstarstoreapp.bean.Ring;
 import com.qx.mstarstoreapp.dialog.GridMenuDialog;
 import com.qx.mstarstoreapp.inter.ClassifyOnSeachListener;
-import com.qx.mstarstoreapp.inter.OnSeachListener;
 import com.qx.mstarstoreapp.json.ClassTypeFilerEntity;
 import com.qx.mstarstoreapp.json.ModeListResult;
 import com.qx.mstarstoreapp.json.SearchValue;
@@ -75,7 +75,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     @Bind(R.id.tv_pager_amount)
     TextView tvPagerAmount;
-    @Bind(R.id.ll_isshow)
+    @Bind(R.id.ll_show_less)
     LinearLayout llIsshow;
     private LinearLayout idLyAll, idLyFilter, idRel2;
     private GridViewWithHeaderAndFooter idGvMenu;
@@ -123,6 +123,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
     private String openType;
     private int totalAmount;
+    String mcategory="";   /*下啦筛选关键字*/
+    String myAction="";   /*判断是哪个页面的action*/
+    BadgeView badge;
+    private LeftPopupWindow leftPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,9 +182,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&pageNum=24";
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + getCheckBoxUrl()+ getRadioGroupUrl()+ "&pageNum=24";
         return url;
     }
+
 
     private void initListMenuDialog(List<ModeListResult.DataEntity.CustomList> customList) {
         listMenuDialog = new ListMenuDialog(OrderActivity.this, customList);
@@ -208,6 +213,13 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+       if(leftPopupWindow!=null){
+           leftPopupWindow.initPopupView();
+       }
+    }
 
     private void initFilterDialog(List<ClassTypeFilerEntity> typeList) {
         filterDialog = new SideFilterDialog(context, typeList, MyAction.filterDialogAction, getStatusBarHeight());
@@ -391,7 +403,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
         });
         if (isScreenChange()) {
-            idGvMenu.setNumColumns(6);
+                idGvMenu.setNumColumns(4);
         } else {
             idGvMenu.setNumColumns(2);
         }
@@ -423,11 +435,17 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
 
         });
-        initPopwindow();
+        if(Global.isShowPopup!=0){
+            llIsshow.setVisibility(View.VISIBLE);
+            initPopwindow();
+        }else {
+            llIsshow.setVisibility(View.GONE);
+        }
+
     }
 
     private void initPopwindow() {
-        final LeftPopupWindow leftPopupWindow = new LeftPopupWindow(this);
+       leftPopupWindow = new LeftPopupWindow(this);
         llIsshow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -443,22 +461,21 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         try {
             // Checks the orientation of the screen
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                idGvMenu.setNumColumns(6);
-                Global.divideAmount = 6;
+                idGvMenu.setNumColumns(4);
+                Global.divideAmount = 4;
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 idGvMenu.setNumColumns(2);
                 Global.divideAmount = 2;
             }
+            idGvMenu.setAdapter(mGvAdapter);
         } catch (Exception ex) {
 
         }
 
     }
 
-    BadgeView badge;
 
-    String mcategory;   /*下啦筛选关键字*/
-    String myAction;   /*判断是哪个页面的action*/
+
 
     public String getCheckBoxUrl() {
         List<TypeFiler> filterList;
@@ -586,6 +603,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idGvMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setPopupWindowDate(data.get(position));
                 data.get(position).getId();
                 Intent intent;
                 if (isCustomized) {
@@ -676,6 +694,16 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
         });
 
+    }
+
+    private void setPopupWindowDate(ModeListResult.DataEntity.ModelEntity.ModelListEntity modelListEntity) {
+        if( Global.ring==null){
+            Global.ring= new Ring();
+        }
+        Global.ring.setImageUrl(modelListEntity.getPic());
+        Global.ring.setItemId(modelListEntity.getId());
+        Global.ring.setRingNumber(modelListEntity.getTitle());
+        Global.ring.setRingWeightRange(modelListEntity.getWeightRange());
     }
 
 

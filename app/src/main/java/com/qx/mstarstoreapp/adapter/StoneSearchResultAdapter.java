@@ -5,13 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qx.mstarstoreapp.R;
-import com.qx.mstarstoreapp.activity.StoneSearchResultActivity;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
-import com.qx.mstarstoreapp.utils.ToastManager;
 
 import java.util.List;
 
@@ -26,9 +25,9 @@ public class StoneSearchResultAdapter extends BaseAdapter {
     Context context;
     private final boolean isShowPrice;
     List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> list;
-     ChooseItemInterface  chooseItem;
+    ChooseItemInterface chooseItem;
 
-    public StoneSearchResultAdapter(List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> list, Context context,boolean isShowPrice) {
+    public StoneSearchResultAdapter(List<StoneSearchInfoResult.DataBean.StoneBean.ListBean> list, Context context, boolean isShowPrice) {
         this.context = context;
         this.list = list;
         chooseItem = (ChooseItemInterface) context;
@@ -61,6 +60,12 @@ public class StoneSearchResultAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        if (Global.isShowPopup != 0) {
+            viewHolder.cbIscheckStone.setText("定制");
+            viewHolder.cbIscheckStone.setTextColor(context.getResources().getColor(R.color.theme_red));
+        } else {
+            viewHolder.cbIscheckStone.setText("");
+        }
         viewHolder.tvItemWeight.setText(bean.getWeight());
         viewHolder.tvItemShape.setText(bean.getShape());
         viewHolder.tvItemColor.setText(bean.getColor());
@@ -72,7 +77,7 @@ public class StoneSearchResultAdapter extends BaseAdapter {
         viewHolder.tvItemCertauth.setText(bean.getCertAuth());
         viewHolder.cbIscheckStone.setChecked(bean.ischeck());
         viewHolder.tvItemPrice.setText(bean.getPrice());
-        if(isShowPrice){
+        if (isShowPrice) {
             viewHolder.tvItemPrice.setVisibility(View.VISIBLE);
             viewHolder.tvItemQuotedPrice.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,23 +86,51 @@ public class StoneSearchResultAdapter extends BaseAdapter {
                 }
             });
             viewHolder.tvItemQuotedPrice.setTextColor(context.getResources().getColor(R.color.theme_red));
-        }else {
+        } else {
             viewHolder.tvItemPrice.setVisibility(View.GONE);
             viewHolder.tvItemQuotedPrice.setTextColor(context.getResources().getColor(R.color.text_color));
         }
-        viewHolder.tvItemCerauthNumber.setText(bean.getCertCode());
-        viewHolder.cbIscheckStone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               bean.setIscheck(isChecked);
-            }
-        });
+        if (bean.ischeck()) {
 
+            viewHolder.tvItemWeight.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemShape.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemColor.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemPurity.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemCut.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemPolish.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemSymmetric.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemFluorescence.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemCertauth.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemPrice.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemQuotedPrice.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.tvItemCerauthNumber.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+            viewHolder.llCheck.setBackground(context.getResources().getDrawable(R.drawable.table_head_gray));
+        } else {
+            viewHolder.tvItemWeight.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemShape.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemColor.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemPurity.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemCut.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemPolish.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemSymmetric.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemFluorescence.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemCertauth.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemPrice.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemQuotedPrice.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.tvItemCerauthNumber.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+            viewHolder.llCheck.setBackground(context.getResources().getDrawable(R.drawable.table_head));
+        }
+        viewHolder.tvItemCerauthNumber.setText(bean.getCertCode());
+//        viewHolder.cbIscheckStone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//               bean.setIscheck(isChecked);
+//            }
+//        });
         return view;
     }
 
-    public String getQuotedPriceId()
-    {
+    public String getQuotedPriceId() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean bean = list.get(i);
@@ -114,11 +147,17 @@ public class StoneSearchResultAdapter extends BaseAdapter {
     }
 
 
+
+
     class ViewHolder {
         @Bind(R.id.cb_ischeck_stone)
         CheckBox cbIscheckStone;
+        @Bind(R.id.ll_check)
+        LinearLayout llCheck;
         @Bind(R.id.tv_item_weight)
         TextView tvItemWeight;
+        @Bind(R.id.tv_item_price)
+        TextView tvItemPrice;
         @Bind(R.id.tv_item_shape)
         TextView tvItemShape;
         @Bind(R.id.tv_item_color)
@@ -135,12 +174,11 @@ public class StoneSearchResultAdapter extends BaseAdapter {
         TextView tvItemFluorescence;
         @Bind(R.id.tv_item_certauth)
         TextView tvItemCertauth;
-        @Bind(R.id.tv_item_price)
-        TextView tvItemPrice;
         @Bind(R.id.tv_item_cerauth_number)
         TextView tvItemCerauthNumber;
         @Bind(R.id.tv_item_quoted_price)
         TextView tvItemQuotedPrice;
+
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

@@ -9,13 +9,13 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -24,6 +24,10 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
+import com.qx.mstarstoreapp.bean.Ring;
+import com.qx.mstarstoreapp.json.CustomerEntity;
+import com.qx.mstarstoreapp.json.GetAddressResult;
 import com.qx.mstarstoreapp.json.MainPicResult;
 import com.qx.mstarstoreapp.json.VersionResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -32,15 +36,14 @@ import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.FlyBanner;
+import com.qx.mstarstoreapp.viewutils.LeftPopupWindow;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
-
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     //新主页
     @Bind(R.id.fly_main)
@@ -53,12 +56,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     TextView ivProduct;
     @Bind(R.id.iv_mine)
     TextView ivMine;
+    @Bind(R.id.iv_ring_stone)
+    ImageView ivRingStone;
+    @Bind(R.id.iv_stone_ring)
+    ImageView ivStoneRing;
+    @Bind(R.id.ll_main)
+    LinearLayout llMain;
+    @Bind(R.id.ll_banner)
+    LinearLayout llBanner;
+    @Bind(R.id.ll_show_less)
+    LinearLayout llShowLess;
 
     private int nowId;
     private String version;
     private VersionResult versionResult;
     private MainPicResult mainPics;
     private List<String> imgesUrl;
+    private boolean isShowPic;
+    private LeftPopupWindow leftPopupWindow;
+    private CustomerEntity isDefaultCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +88,55 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 //        setChioceFragment(0);
         loadNetData();
         isNeedUpdate();
+        getAddress();
+    }
+
+    private void getAddress() {
+        baseShowWatLoading();
+        String lgUrl = AppURL.URL_GET_ADDRESS + "tokenKey=" + BaseApplication.getToken();
+        L.e("netLogin" + lgUrl);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+                    GetAddressResult getAddressResult = new Gson().fromJson(result, GetAddressResult.class);
+                    if(getAddressResult.getData()==null){
+                        return;
+                    }
+                    if (Global.ring == null) {
+                        Global.ring = new Ring();
+                    }
+                    Global.ring.setAddressEntity(getAddressResult.getData().getAddress());
+                    isDefaultCustomer = getAddressResult.getData().getCustomerEntity();
+                    if (isDefaultCustomer != null) {
+                        Global.ring.setCustomerEntity(isDefaultCustomer);
+                    }
+                } else if (error.equals("2")) {
+                    baseHideWatLoading();
+                } else {
+                    baseHideWatLoading();
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastWhendebug(message);
+                    L.e(message);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+                baseHideWatLoading();
+            }
+
+
+        });
+
     }
 
     @Override
     public void loadNetData() {
         baseShowWatLoading();
-        String lgUrl = AppURL.URL_GET_HOME_PIC + BaseApplication.getToken();
+        String lgUrl = AppURL.URL_GET_HOME_PIC + "tokenKey=" + BaseApplication.getToken();
         L.e("netLogin" + lgUrl);
         VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -111,7 +170,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
         });
     }
-
 
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -191,6 +249,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         return verCode;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Global.isShowPopup != 0) {
+            if (leftPopupWindow != null) {
+                leftPopupWindow.initPopupView();
+            }
+        }
+    }
+
+
     private void initView() {
 
         if (UIUtils.isScreenChange(this)) {
@@ -204,6 +273,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         ivMine.setOnClickListener(this);
         ivProduct.setOnClickListener(this);
         ivStone.setOnClickListener(this);
+        ivRingStone.setOnClickListener(this);
+        ivStoneRing.setOnClickListener(this);
+        llShowLess.setOnClickListener(this);
     }
 
     public static BadgeView badge1;
@@ -219,24 +291,81 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
     public void onClick(View view) {
-        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.iv_home:
-                intent.setClass(MainActivity.this,MainActivity.class);
+                if (Global.isShowPopup != 0) {
+                    Global.isShowPopup = 0;
+                    if (leftPopupWindow != null) {
+                        leftPopupWindow.closePopupWindow();
+                        llShowLess.setVisibility(View.GONE);
+                    }
+                } else {
+                    Global.isShowPopup = 2;
+                    showMakingRing();
+                }
                 break;
             case R.id.iv_stone:
-                intent.setClass(MainActivity.this,StoneSearchInfoActivity.class);
+                cancleMaking();
+                openActivity(StoneSearchInfoActivity.class, null);
                 break;
             case R.id.iv_product:
-                intent.setClass(MainActivity.this,OrderActivity.class);
+                cancleMaking();
+                openActivity(OrderActivity.class, null);
                 break;
             case R.id.iv_mine:
-                intent.setClass(MainActivity.this,SettingActivity.class);
+                openActivity(SettingActivity.class, null);
+                break;
+            case R.id.iv_stone_ring:
+                openActivity(StoneSearchInfoActivity.class, null);
+                Global.isShowPopup = 2;
+                break;
+            case R.id.iv_ring_stone:
+                openActivity(OrderActivity.class, null);
+                Global.isShowPopup = 2;
+                break;
+            case R.id.ll_show_less:
+                initPopwindow();
                 break;
         }
-        startActivity(intent);
-        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+    }
 
+    private void cancleMaking() {
+        Global.isShowPopup = 0;
+        llShowLess.setVisibility(View.GONE);
+    }
+
+    private void initPopwindow() {
+        if (leftPopupWindow == null) {
+            leftPopupWindow = new LeftPopupWindow(this);
+        }
+        llShowLess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leftPopupWindow.showPop(flyMain);
+            }
+        });
+    }
+
+    private void showMakingRing() {
+//        if (!isShowPic) {
+//            llBanner.setAlpha(80);
+//            llBanner.setVisibility(View.VISIBLE);
+//            ivStoneRing.setVisibility(View.VISIBLE);
+//            ivRingStone.setVisibility(View.VISIBLE);
+//            isShowPic = true;
+//        } else {
+//
+//            llBanner.setVisibility(View.GONE);
+//            ivStoneRing.setVisibility(View.GONE);
+//            ivRingStone.setVisibility(View.GONE);
+//            isShowPic = false;
+//        }
+
+        llShowLess.setVisibility(View.VISIBLE);
+        if (leftPopupWindow == null) {
+            leftPopupWindow = new LeftPopupWindow(this);
+        }
+        leftPopupWindow.showPop(flyMain);
     }
 
     public interface OnInformationCountClick {

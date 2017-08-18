@@ -89,15 +89,14 @@
 
         <ImageView
             android:gravity="center_vertical"
-            android:layout_alignParentRight="true"
             android:button="@null"
             android:id="@+id/iv_is_show_cost_price"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignRight="@id/tv_is_show_cost_price"
-            android:layout_alignTop="@id/tv_is_show_cost_price"
             android:src="@drawable/icon_switch_off"
-            />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
     <RelativeLayout

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/10/18.
  */
-public class ModelDetailResult implements Serializable{
+public class ModelDetailResult implements Serializable {
 
     /**
      * data : {"stoneColor":[{"id":"1","title":"H+"},{"id":"2","title":"I-J"},{"id":"3","title":"H-I"},{"id":"4","title":"H-K"}],"stoneSpec":[{"id":"1","title":"10"},{"id":"2","title":"20"},{"id":"3","title":"30"},{"id":"4","title":"40"}],"stonePurity":[{"id":"1","title":"SI"},{"id":"2","title":"VS"},{"id":"3","title":"VS-VSS"}],"goldenPrice":[{"price":"355/g","title":"pt"},{"price":"356/g","title":"18k"}],"stoneShape":[{"id":"1","title":"圆形"},{"id":"2","title":"心形"},{"id":"3","title":"马形"},{"id":"4","title":"方形"},{"id":"5","title":"梯形"}],"stoneType":[{"id":"1","title":"钻石"},{"id":"2","title":"碎钻"},{"id":"3","title":"方钻"},{"id":"4","title":"锑钻"},{"id":"5","title":"马眼钻"}],"model":{"price":"5000","categoryTitle":"手镯","stoneA":{"specId":"3","number":null,"shapeId":"2","purityTitle":"SI","shapeTitle":"心形","colorId":"1","typeId":"1","specTitle":"30","colorTitle":"H+","typeTitle":"钻石","purityId":"1"},"stoneB":{"specId":null,"number":null,"shapeId":null,"purityTitle":"","shapeTitle":"","colorId":null,"typeId":"1","specTitle":"","colorTitle":"","typeTitle":"钻石","purityId":null},"stoneC":{"specId":null,"number":null,"shapeId":null,"purityTitle":"","shapeTitle":"","colorId":null,"typeId":"5","specTitle":"","colorTitle":"","typeTitle":"马眼钻","purityId":null},"title":"心安」 PT950铂金手镯( A36670-40)","pics":[{"id":"2","pic":"http://192.168.1.240:9112/Uploads/Pics/2016-09-21/dddd0.jpg"},{"id":"33","pic":"http://192.168.1.240:9112/Uploads/Pics/2016-09-21/5721b4f2N39738c83.jpg"}],"categoryId":"11","stone":{"specId":"1","number":null,"shapeId":"3","purityTitle":"SI","shapeTitle":"马形","colorId":"1","typeId":"1","specTitle":"10","colorTitle":"H+","typeTitle":"钻石","purityId":"1"}},"remarks":[{"id":"1","title":"提取信息","content":"不方便拿，请邮寄给我"},{"id":"2","title":"邮寄地址","content":"深圳市水贝工业区52号xx收"},{"id":"3","title":"没有这么办","content":"可以等待货到付款"}]}
@@ -51,7 +51,7 @@ public class ModelDetailResult implements Serializable{
         return message;
     }
 
-    public class DataEntity implements Serializable{
+    public class DataEntity implements Serializable {
         /**
          * stoneColor : [{"id":"1","title":"H+"},{"id":"2","title":"I-J"},{"id":"3","title":"H-I"},{"id":"4","title":"H-K"}]
          * stoneSpec : [{"id":"1","title":"10"},{"id":"2","title":"20"},{"id":"3","title":"30"},{"id":"4","title":"40"}]
@@ -68,11 +68,20 @@ public class ModelDetailResult implements Serializable{
         private List<GoldenPriceEntity> goldenPrice;
         private List<StoneShapeEntity> stoneShape;
         private List<StoneTypeEntity> stoneType;
+        private List<ModelPuritys> modelPuritys;
         private ModelEntity model;
         private List<RemarksEntity> remarks;
         private String[] handSizeData;
         private int IsCanSelectStone;
         private JewelStone jewelStone;
+
+        public List<ModelPuritys> getModelPuritys() {
+            return modelPuritys;
+        }
+
+        public void setModelPuritys(List<ModelPuritys> modelPuritys) {
+            this.modelPuritys = modelPuritys;
+        }
 
         public int getIsCanSelectStone() {
             return IsCanSelectStone;
@@ -162,7 +171,7 @@ public class ModelDetailResult implements Serializable{
             return remarks;
         }
 
-        public class StoneColorEntity implements Serializable{
+        public class ModelPuritys implements Serializable {
             /**
              * id : 1
              * title : H+
@@ -187,7 +196,32 @@ public class ModelDetailResult implements Serializable{
             }
         }
 
-        public class StoneSpecEntity implements Serializable{
+        public class StoneColorEntity implements Serializable {
+            /**
+             * id : 1
+             * title : H+
+             */
+            private String id;
+            private String title;
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+        }
+
+        public class StoneSpecEntity implements Serializable {
             /**
              * id : 1
              * title : 10
@@ -212,7 +246,7 @@ public class ModelDetailResult implements Serializable{
             }
         }
 
-        public class StonePurityEntity implements Serializable{
+        public class StonePurityEntity implements Serializable {
             /**
              * id : 1
              * title : SI
@@ -237,7 +271,7 @@ public class ModelDetailResult implements Serializable{
             }
         }
 
-        public class GoldenPriceEntity implements Serializable{
+        public class GoldenPriceEntity implements Serializable {
             /**
              * price : 355/g
              * title : pt
@@ -262,7 +296,7 @@ public class ModelDetailResult implements Serializable{
             }
         }
 
-        public class StoneShapeEntity implements Serializable{
+        public class StoneShapeEntity implements Serializable {
             /**
              * id : 1
              * title : 圆形
@@ -287,6 +321,7 @@ public class ModelDetailResult implements Serializable{
             public void setPic(String pic) {
                 this.pic = pic;
             }
+
             public void setId(String id) {
                 this.id = id;
             }
@@ -329,7 +364,7 @@ public class ModelDetailResult implements Serializable{
             }
         }
 
-        public class ModelEntity implements Serializable{
+        public class ModelEntity implements Serializable {
             /**
              * price : 5000
              * categoryTitle : 手镯
@@ -468,28 +503,28 @@ public class ModelDetailResult implements Serializable{
                 return stone;
             }
 
-            public class StoneAEntity extends StoneEntity implements Serializable{
+            public class StoneAEntity extends StoneEntity implements Serializable {
 
                 public StoneAEntity(StoneEntity stoneEntity) {
                     super(stoneEntity);
                 }
             }
 
-            public class StoneBEntity extends StoneEntity implements Serializable{
+            public class StoneBEntity extends StoneEntity implements Serializable {
 
                 public StoneBEntity(StoneEntity stoneEntity) {
                     super(stoneEntity);
                 }
             }
 
-            public class StoneCEntity extends StoneEntity implements Serializable{
+            public class StoneCEntity extends StoneEntity implements Serializable {
 
                 public StoneCEntity(StoneEntity stoneEntity) {
                     super(stoneEntity);
                 }
             }
 
-            public class PicsEntity implements Serializable{
+            public class PicsEntity implements Serializable {
                 /**
                  * id : 2
                  * pic : http://192.168.1.240:9112/Uploads/Pics/2016-09-21/dddd0.jpg
@@ -534,7 +569,7 @@ public class ModelDetailResult implements Serializable{
 
         }
 
-        public class RemarksEntity implements Serializable{
+        public class RemarksEntity implements Serializable {
             /**
              * id : 1
              * title : 提取信息

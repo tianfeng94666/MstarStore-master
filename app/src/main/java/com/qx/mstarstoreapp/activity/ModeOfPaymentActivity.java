@@ -413,7 +413,6 @@ public class ModeOfPaymentActivity extends BaseActivity {
         pay.pay(info);
         Global.id = id;
         Global.type = type+"";
-        finish();
     }
     private long genTimeStamp() {
         return System.currentTimeMillis() / 1000;

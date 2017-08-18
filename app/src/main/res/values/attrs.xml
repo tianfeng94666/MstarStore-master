@@ -6,6 +6,7 @@
         <attr name="tv_size" format="dimension"></attr>
         <attr name="tv_color" format="color"></attr>
         <attr name="tv_background" format="color"></attr>
+        <attr name="tv_style" format="integer"></attr>
     </declare-styleable>
 
     <declare-styleable name="CustomselectStringButton">

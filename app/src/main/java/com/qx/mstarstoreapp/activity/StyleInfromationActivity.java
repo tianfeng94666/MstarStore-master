@@ -522,8 +522,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             flybanner.setLayoutParams(lp);
         }else {
             ViewGroup.LayoutParams lp = flybanner.getLayoutParams();
-            int screenhight = UIUtils.getWindowHight();
-            lp.height = (int) (screenhight*0.64);
+            int screenHeight = UIUtils.getWindowHight();
+            lp.height = screenHeight - UIUtils.dip2px(50);
+            lp.width = screenHeight - UIUtils.dip2px(50);
             flybanner.setLayoutParams(lp);
         }
         /**

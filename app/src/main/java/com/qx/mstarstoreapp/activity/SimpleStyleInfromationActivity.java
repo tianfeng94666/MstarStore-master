@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -27,6 +28,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.JewelStone;
@@ -45,10 +47,10 @@ import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.CustomLV;
 import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
 import com.qx.mstarstoreapp.viewutils.CustomselectStringButton;
+import com.qx.mstarstoreapp.viewutils.LeftPopupWindow;
 import com.recker.flybanner.FlyBanner;
 import com.wx.wheelview.widget.WheelView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,8 +96,8 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     @Bind(R.id.tv_reset)
     TextView tvReset;
     @Bind(R.id.tv_search)
-    TextView idTvAddOrder;
-    @Bind(R.id.et_weight)
+    TextView tvSearch;
+    @Bind(R.id.et_ring_amount)
     EditText idCusStoreNumber;
     String categoryTitle, storeNumber, storeSize, categoryId;
     @Bind(R.id.id_cus_store_remarkid)
@@ -146,6 +148,40 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     FlyBanner flybanner;
     @Bind(R.id.tv_price_title)
     TextView tvPriceTitle;
+    @Bind(R.id.ll_banner)
+    LinearLayout llBanner;
+    @Bind(R.id.ll_show_less)
+    LinearLayout llShowLess;
+    @Bind(R.id.tv_product_color)
+    CustomSelectButton tvProductColor;
+    @Bind(R.id.ll_color)
+    LinearLayout llColor;
+    @Bind(R.id.et_making)
+    EditText etMaking;
+    @Bind(R.id.iv_heart)
+    ImageView ivHeart;
+    @Bind(R.id.iv_yu)
+    ImageView ivYu;
+    @Bind(R.id.tv_preview)
+    TextView tvPreview;
+    @Bind(R.id.ll_making)
+    LinearLayout llMaking;
+    @Bind(R.id.rl_top)
+    RelativeLayout rlTop;
+    @Bind(R.id.id_store_title2)
+    TextView idStoreTitle2;
+    @Bind(R.id.tv_weight2)
+    TextView tvWeight2;
+    @Bind(R.id.rl_top2)
+    RelativeLayout rlTop2;
+    @Bind(R.id.ll_type)
+    LinearLayout llType;
+    @Bind(R.id.iv_preview)
+    ImageView ivPreview;
+    @Bind(R.id.tv_preview_title)
+    TextView tvPreviewTitle;
+    @Bind(R.id.line_making)
+    View lineMaking;
 
 
     private View rootView;
@@ -163,6 +199,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     private ArrayList<String> getPicm;
     private Boolean isShowPrice;
     private ArrayList<String> getPicB;
+    private List<ModelDetailResult.DataEntity.ModelPuritys> modelPuritys;
+    private boolean isnumberCanChange = true;
+    private LeftPopupWindow leftPopupWindow;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         SimpleStyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -228,21 +267,23 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             tvPriceTitle.setVisibility(View.GONE);
         }
         // titleText.setText("款式信息");
-        idTvAddOrder.setText(R.string.add_curent_order);
+        tvSearch.setText(R.string.add_curent_order);
         idTvCurorder.setText(R.string.look_current_order);
 //        idCusStoreSize.setBackgroundId(R.color.white);
 
         if (type == 1 || type == 2) {
-            idTvAddOrder.setText(R.string.confirm_update);
+            tvSearch.setText(R.string.confirm_update);
             idTvCurorder.setText(R.string.cancle_update);
         }
         if (openType != null) {
             if (openType.equals("1")) {
-                tvAmountTitle.setText("证书编号");
-                llAmount.setVisibility(View.GONE);
-                llCertcode.setVisibility(View.VISIBLE);
-                tvCertcode.setText(certCode);
+//                tvAmountTitle.setText("证书编号");
+//                llAmount.setVisibility(View.GONE);
+//                llCertcode.setVisibility(View.VISIBLE);
+//                tvCertcode.setText(certCode);
+                isnumberCanChange = false;
                 idCusStoreNumber.setText("1");
+                idCusStoreNumber.setEnabled(false);
             }
         } else {
             tvAmountTitle.setText("件    数");
@@ -250,7 +291,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             llCertcode.setVisibility(View.GONE);
         }
 
-        idTvAddOrder.setOnClickListener(this);
+        tvSearch.setOnClickListener(this);
         badge = new BadgeView(this, idTvCurorder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         remind(waitOrderCount);
         adapter = new ListAdapter(stoneEntities);
@@ -300,37 +341,57 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 }
             }
         });
+        initCustomselect();
 
-        idCusStoreRemarkid.setOnSelectData(new CustomSelectButton.OnselectData() {
-            @Override
-            public List<Type> getData() {
-                List<Type> list = new ArrayList<>();
-                for (int i = 0; i < remarksEntity.size(); i++) {
-                    Type type = new Type();
-                    type.setId(remarksEntity.get(i).getId());
-                    type.setTypeName(remarksEntity.get(i).getTitle());
-                    type.setContent(remarksEntity.get(i).getContent());
-                    list.add(type);
+//快速定制
+        //快速定制
+        if (type == 0) {        //避免修改时进来
+            if (Global.isShowPopup != 0) {
+                llShowLess.setVisibility(View.VISIBLE);
+                llColor.setVisibility(View.VISIBLE);
+                llMaking.setVisibility(View.VISIBLE);
+                rlTop2.setVisibility(View.VISIBLE);
+                lineMaking.setVisibility(View.VISIBLE);
+                rlTop.setVisibility(View.GONE);
+                llType.setVisibility(View.GONE);
+                idFr.setVisibility(View.GONE);
+                initPopwindow();
+                tvSearch.setText(R.string.confirm_making_order);
+                if (Global.ring.getRingPurityId() != null) {
+                    tvProductColor.setTextName(Global.ring.getRingPurityId());
                 }
-                return list;
+                if (Global.ring.getHandSize() != null) {
+                    idCusStoreSize.setTextName(Global.ring.getHandSize());
+                }
+                if (Global.ring.getWord() != null) {
+                    etMaking.setText(Global.ring.getWord());
+                }
+
+                Global.ring.setRingPrice(dataEntity.getModel().getPrice());
+            } else {
+                llShowLess.setVisibility(View.GONE);
+                llColor.setVisibility(View.GONE);
+                llMaking.setVisibility(View.GONE);
+                rlTop2.setVisibility(View.GONE);
+                lineMaking.setVisibility(View.GONE);
+                rlTop.setVisibility(View.VISIBLE);
+                llType.setVisibility(View.VISIBLE);
+                idFr.setVisibility(View.VISIBLE);
+                tvSearch.setText(R.string.add_curent_order);
             }
+        }
 
+        tvPreview.setOnClickListener(this);
+        ivHeart.setOnClickListener(this);
+        ivYu.setOnClickListener(this);
+    }
+
+    private void initPopwindow() {
+        leftPopupWindow = new LeftPopupWindow(this);
+        llShowLess.setOnClickListener(new View.OnClickListener() {
             @Override
-            public View getRootView() {
-                return rootView;
-            }
-
-
-            @Override
-            public void getSelectId(Type type) {
-                remar = type;
-                String curentRemar = idTvStoreRemarks.getText().toString();
-                idTvStoreRemarks.setText(curentRemar + type.getContent());
-            }
-
-            @Override
-            public String getTitle() {
-                return "选择备注";
+            public void onClick(View v) {
+                leftPopupWindow.showPop(rootView);
             }
         });
     }
@@ -350,6 +411,10 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     }
 
     private void reduce() {
+        if (!isnumberCanChange) {
+            ToastManager.showToastReal("主石为裸石库中选择的，数量不能修改！");
+            return;
+        }
         String st = idCusStoreNumber.getText().toString();
         double amount;
         if (st.equals("")) {
@@ -372,6 +437,10 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     }
 
     private void add() {
+        if (!isnumberCanChange) {
+            ToastManager.showToastReal("主石为裸石库中选择的，数量不能修改！");
+            return;
+        }
         String st = idCusStoreNumber.getText().toString();
         double amount;
         if (st.equals("") || st.equals("0.0")) {
@@ -444,10 +513,11 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     if (dataEntity == null) {
                         return;
                     }
-                    initCustomselectString();
+                    initCustomselect();
                     List<ModelDetailResult.DataEntity.GoldenPriceEntity> goldenPrice = dataEntity.getGoldenPrice();
                     remarksEntity = dataEntity.getRemarks();
                     modelEntity = dataEntity.getModel();
+                    modelPuritys = dataEntity.getModelPuritys();
                     categoryTitle = modelEntity.getCategoryTitle();
                     categoryId = modelEntity.getCategoryId();
                     /*是否自带主石*/
@@ -530,6 +600,15 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     idStoreTitle.setText(modelEntity.getTitle());
                     tvWeight.setText(modelEntity.getWeight());
                     tvType.setText(categoryTitle);
+                    //快速定制
+                    if (!modelEntity.getCategoryTitle().contains("戒")) {
+                        tvPreview.setVisibility(View.GONE);
+                    } else {
+                        tvPreview.setVisibility(View.VISIBLE);
+                    }
+                    idStoreTitle2.setText(modelEntity.getTitle() + " " + categoryTitle);
+                    tvWeight2.setText(modelEntity.getWeight());
+
                     if (!StringUtils.isEmpty(number)) {
                         idCusStoreNumber.setText("" + number);
                     }
@@ -615,7 +694,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         return isEmpty;
     }
 
-    private void initCustomselectString() {
+    private void initCustomselect() {
         idCusStoreSize.setDefaultText("手寸");
         idCusStoreSize.setOnSelectData(new CustomselectStringButton.OnselectData() {
             @Override
@@ -626,6 +705,10 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             @Override
             public void getSelectId(String type) {
                 idCusStoreSize.setTextName(type);
+                //快速设置设置手寸大小
+                if (Global.isShowPopup != 0) {
+                    Global.ring.setHandSize(type);
+                }
             }
 
             @Override
@@ -643,8 +726,80 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 return rootView;
             }
         });
+
+        idCusStoreRemarkid.setOnSelectData(new CustomSelectButton.OnselectData() {
+            @Override
+            public List<Type> getData() {
+                List<Type> list = new ArrayList<>();
+                for (int i = 0; i < remarksEntity.size(); i++) {
+                    Type type = new Type();
+                    type.setId(remarksEntity.get(i).getId());
+                    type.setTypeName(remarksEntity.get(i).getTitle());
+                    type.setContent(remarksEntity.get(i).getContent());
+                    list.add(type);
+                }
+                return list;
+            }
+
+            @Override
+            public View getRootView() {
+                return rootView;
+            }
+
+
+            @Override
+            public void getSelectId(Type type) {
+                remar = type;
+                String curentRemar = idTvStoreRemarks.getText().toString();
+                idTvStoreRemarks.setText(curentRemar + type.getContent());
+
+            }
+
+            @Override
+            public String getTitle() {
+                return "选择备注";
+            }
+        });
+
+        tvProductColor.setOnSelectData(new CustomSelectButton.OnselectData() {
+            @Override
+            public List<Type> getData() {
+                List<Type> list = new ArrayList<>();
+                for (int i = 0; i < modelPuritys.size(); i++) {
+                    Type type = new Type();
+                    type.setId(modelPuritys.get(i).getId());
+                    type.setTypeName(modelPuritys.get(i).getTitle());
+                    list.add(type);
+                }
+                return list;
+            }
+
+            @Override
+            public View getRootView() {
+                return rootView;
+            }
+
+
+            @Override
+            public void getSelectId(Type type) {
+                tvProductColor.setText(type.getTypeName());
+                Global.ring.setRingPurity(type.getTypeName());
+                Global.ring.setRingPurityId(type.getId());
+            }
+
+            @Override
+            public String getTitle() {
+                return "选择成色";
+            }
+        });
     }
 
+    protected void onResume() {
+        super.onResume();
+        if (leftPopupWindow != null) {
+            leftPopupWindow.initPopupView();
+        }
+    }
 
     public void initViewPager() {
         if (!UIUtils.isScreenChange(this)) {
@@ -652,11 +807,13 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             int screenWidth = UIUtils.getWindowWidth();
             lp.height = (int) (screenWidth);
             flybanner.setLayoutParams(lp);
-        }else {
-            ViewGroup.LayoutParams lp = flybanner.getLayoutParams();
-            int screenhight = UIUtils.getWindowHight();
-            lp.height = (int) (screenhight*0.64);
-            flybanner.setLayoutParams(lp);
+        } else {
+            ViewGroup.LayoutParams lp = llBanner.getLayoutParams();
+
+            int screenHeight = UIUtils.getWindowHight();
+            lp.height = screenHeight - UIUtils.dip2px(50);
+            lp.width = screenHeight - UIUtils.dip2px(50);
+            llBanner.setLayoutParams(lp);
         }
         /**
          * 创建多个item （每一条viewPager都是一个item） 从服务器获取完数据（图片url地址） 后，再设置适配器
@@ -667,9 +824,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             getPicm.add(pics.get(i).getPicm());
             getPicB.add(pics.get(i).getPicb());
         }
-        if(UIUtils.isPad(this)){
+        if (UIUtils.isPad(this)) {
             flybanner.setImagesUrl(getPicB);
-        }else {
+        } else {
             flybanner.setImagesUrl(getPicm);
         }
 
@@ -696,16 +853,55 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
-                addCurentOrder();
+                if (Global.isShowPopup != 0) {
+                    Global.ring.setNumber(idCusStoreNumber.getText().toString());
+                    Global.ring.setWord(etMaking.getText().toString());
+                    isFinishChooseRing();
+                } else {
+                    addCurentOrder();
+                }
                 break;
             case R.id.tv_reset:
                 reset();
                 break;
-
             case R.id.tv_del:
                 delStone();
                 break;
+            case R.id.tv_preview:
+                showPreview();
+                break;
+            case R.id.iv_heart:
+                etMaking.setText(etMaking.getText().toString() + "❤");
+                break;
+            case R.id.iv_yu:
+                etMaking.setText(etMaking.getText().toString() + "&");
+                break;
         }
+    }
+
+    private void isFinishChooseRing() {
+        if (Global.ring.getRingPurity() == null) {
+            showToastReal("请选择成色");
+            return;
+        }
+        if (leftPopupWindow != null) {
+            leftPopupWindow.showPop(rootView);
+        }
+        if (Global.ring.getStoneEntity() == null) {
+            showToastReal("请选择裸石");
+            return;
+        }
+        if (Global.ring.getAddressEntity() == null || Global.ring.getCustomerEntity() == null) {
+            showToastReal("请选择信息");
+            return;
+        }
+        showToastReal("请确认定制");
+    }
+
+    private void showPreview() {
+        tvPreviewTitle.setText(etMaking.getText().toString());
+        tvPreviewTitle.setVisibility(View.VISIBLE);
+        ivPreview.setVisibility(View.VISIBLE);
     }
 
     public StoneEntity copyStone(StoneEntity stoneEntity) {
@@ -862,7 +1058,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             public void onSuccess(String result) {
                 L.e("提交订单 result" + result);
                 if (new Gson().fromJson(result, JsonObject.class).get("error").getAsString().equals("0")) {
-                    idTvAddOrder.setEnabled(true);
+                    tvSearch.setEnabled(true);
                     if (type == 1 || type == 2) {
                         ToastManager.showToastReal("修改成功");
                         if (confirmOrderOnUpdate != null) {
@@ -875,7 +1071,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                         L.e("waitOrderCount" + waitOrderCount);
                         ToastManager.showToastReal("添加成功");
                         remind(waitOrderCount);
-                        idTvAddOrder.setEnabled(true);
+                        tvSearch.setEnabled(true);
                         return;
                     }
                     //finish();
@@ -883,7 +1079,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
                     ToastManager.showToastReal(message);
-                    idTvAddOrder.setEnabled(true);
+                    tvSearch.setEnabled(true);
                 }
             }
 
@@ -1049,7 +1245,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
 
             switch (i) {
                 case 0:
-                    if (openType.equals("1")) {
+                    if (openType.equals("1") && Global.isShowPopup == 0) {
                         viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
                         viewHolder.tvMainStoneDate.setText(changeSelectedStoneToString());
                         viewHolder.ivSelectMainStone.setVisibility(View.VISIBLE);
@@ -1077,13 +1273,15 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                             viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
                         }
 
+                        if (Global.isShowPopup == 0) {//快速定制时不能改主石
+                            viewHolder.tvMainStoneDate.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    selectStone();
+                                }
+                            });
+                        }
 
-                        viewHolder.tvMainStoneDate.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                selectStone();
-                            }
-                        });
 
                     }
                     stoneEntity.setStroneName(MainStone);
@@ -1180,10 +1378,6 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         }
     }
 
-    private String changeSelectedEnityToString() {
-        return "类别：" + selectedStoneEnity.getTypeTitle() + "; 规格：" + selectedStoneEnity.getSpecTitle() + ";形状：" + selectedStoneEnity.getShapeTitle() +
-                ";颜色：" + selectedStoneEnity.getColorTitle() + ";净度：" + selectedStoneEnity.getPurityTitle() + ";数量：" + selectedStoneEnity.getNumber();
-    }
 
     private String changeSelectedStoneToString() {
 

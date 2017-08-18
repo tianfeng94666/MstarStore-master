@@ -24,7 +24,6 @@ public class WXPayUtil {
 		boolean isPaySupported = api.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
 		if(isPaySupported){
 			api.registerApp(WXPayInfo.APP_ID);
-			System.out.println(result);
 			sendPayReq(result);
 			Toast.makeText(activity, "微信已启动",Toast.LENGTH_SHORT).show();
 		}else{

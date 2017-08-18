@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">千禧之星珠宝</string>
-    <string name="app_version">1.5</string>
-    <string name="app_version_detail">B 1.5</string>
+    <string name="app_version">1.6</string>
+    <string name="app_version_detail">B 1.6</string>
     <string name="version">4</string>
 
     <string name="pull_to_refresh_pull_label">下拉刷新</string>
@@ -20,6 +20,7 @@
 
     <string name="data_loaded">加载完成</string>
     <string name="updatepwd">修改密码</string>
+    <string name="confirm_making_order">确认定制</string>
     <string name="add_curent_order">添加下单</string>
     <string name="look_current_order">查看下单</string>
     <string name="confirm_update">确定修改</string>

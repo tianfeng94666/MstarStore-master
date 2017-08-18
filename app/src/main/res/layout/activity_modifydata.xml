@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="50dp">
             <TextView
                 android:id="@+id/tv_username"
                 android:layout_width="match_parent"
@@ -134,18 +134,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dip"
                 android:layout_marginTop="1dip"
-                android:padding="5dip"
                 android:background="@color/white"
                 >
 
                 <TextView
                     android:id="@+id/tv_is_into"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:clickable="false"
                     android:gravity="center_vertical"
-                    android:padding="10dip"
-                    android:text="高级设置"
+                    android:paddingLeft="10dp"
+                    android:text="设置"
                     />
 
 
@@ -164,17 +163,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dip"
                 android:layout_marginTop="1dip"
-                android:padding="5dip"
                 android:background="@color/white"
                 >
 
                 <TextView
                     android:id="@+id/tv_is_clear"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:clickable="false"
                     android:gravity="center_vertical"
-                    android:padding="10dip"
+                    android:paddingLeft="10dp"
                     android:text="是否清空图片缓存"
                     />
 
@@ -194,17 +192,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dip"
                 android:layout_marginTop="1dip"
-                android:padding="5dip"
                 android:background="@color/white"
                 >
 
                 <TextView
                     android:id="@+id/tv_share"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:clickable="false"
                     android:gravity="center_vertical"
-                    android:padding="10dip"
+                    android:paddingLeft="10dp"
                     android:text="一键分享"
                     />
 

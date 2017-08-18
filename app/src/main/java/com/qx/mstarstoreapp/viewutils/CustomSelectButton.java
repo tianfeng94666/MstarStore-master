@@ -57,6 +57,7 @@ public class CustomSelectButton extends RelativeLayout {
     private TextView tvConfirm;
     private int defaultPosition = 5;
     private TextView tvCancle;
+    private int style;
 
 
     public TextView getTv() {
@@ -71,7 +72,11 @@ public class CustomSelectButton extends RelativeLayout {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
             tv.setTextColor(getResources().getColor(R.color.black));
-            tv.setBackgroundResource(R.drawable.btn_bg_while);
+            if (style == 0) {
+                tv.setBackgroundResource(R.drawable.btn_bg_while);
+            } else {
+                tv.setBackgroundResource(R.color.white);
+            }
         }
     }
 
@@ -106,17 +111,22 @@ public class CustomSelectButton extends RelativeLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomSelectButton);
         try {
             textName = typedArray.getString(R.styleable.CustomSelectButton_tv_name);
+            style = typedArray.getInteger(R.styleable.CustomSelectButton_tv_style, 0);
         } finally {
             typedArray.recycle();
         }
-
-        View rootView = View.inflate(context, R.layout.custom_select_button, this);
+        View rootView;
+        if (style == 0) {
+            rootView = View.inflate(context, R.layout.custom_select_button, this);
+        } else {
+            rootView = View.inflate(context, R.layout.custom_select_textview_right, this);
+        }
         tv = (TextView) rootView.findViewById(R.id.id_cus_tv);
         if (!StringUtils.isEmpty(textName)) {
             tv.setText(textName);
 
         }
-         tv.setTextSize(14);
+        tv.setTextSize(14);
         tv.setOnClickListener(new RadioClickListener());
     }
 
@@ -126,7 +136,7 @@ public class CustomSelectButton extends RelativeLayout {
         public void onClick(View v) {
             if (onSelectData != null) {
                 types = onSelectData.getData();
-                if(types!=null){
+                if (types != null) {
                     showPopupWindow();
                 }
 //                showDialog();
@@ -141,7 +151,7 @@ public class CustomSelectButton extends RelativeLayout {
         wheelView = (WheelView) view.findViewById(R.id.wv_popupwindwo);
         tvTitle = (TextView) view.findViewById(R.id.tv_title_popupwindow);
         tvConfirm = (TextView) view.findViewById(R.id.tv_confirm);
-        tvCancle = (TextView)view.findViewById(R.id.tv_cancle);
+        tvCancle = (TextView) view.findViewById(R.id.tv_cancle);
         tvTitle.setText(onSelectData.getTitle() + "");
         SimpleWheelAdapter arrayWheelAdapter = new SimpleWheelAdapter(mContext);
         wheelView.setWheelAdapter(arrayWheelAdapter);

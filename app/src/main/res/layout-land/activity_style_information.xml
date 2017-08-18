@@ -12,19 +12,18 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_height="match_parent"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:background="@color/white"
             android:layout_marginBottom="50dip"
-            android:layout_weight="0.56">
+            >
 
             <com.recker.flybanner.FlyBanner
                 android:id="@+id/flybanner"
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="match_parent"></com.recker.flybanner.FlyBanner>
         </LinearLayout>
         <com.qx.mstarstoreapp.viewutils.MyScrollView
-            android:layout_width="0dp"
-            android:layout_weight="0.44"
+            android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_marginBottom="50dip"
             android:background="@color/white"

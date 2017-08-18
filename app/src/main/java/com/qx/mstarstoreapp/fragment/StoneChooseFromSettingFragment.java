@@ -33,7 +33,6 @@ import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomGridView;
 
-import static android.R.attr.type;
 import static com.qx.mstarstoreapp.fragment.StoneFragment.setListViewHeightBasedOnChildren;
 
 /**
@@ -52,7 +51,7 @@ public class StoneChooseFromSettingFragment extends BaseFragment implements View
     TextView tvWeight;
     @Bind(R.id.iv_weight_reduce)
     ImageView ivWeightReduce;
-    @Bind(R.id.et_weight)
+    @Bind(R.id.et_ring_amount)
     EditText etWeight;
     @Bind(R.id.iv_weight_add)
     ImageView ivWeightAdd;

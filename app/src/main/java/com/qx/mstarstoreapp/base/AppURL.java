@@ -7,7 +7,7 @@ import com.qx.mstarstoreapp.R;
  */
 public class AppURL {
 //     static String QxVersion = "&QxVersion="+ "beta"+"&";
-    static String QxVersion = "QxVersion=1.5"+"&";
+    static String QxVersion = "QxVersion=1.6"+"&";
 //    static String QxVersion = "QxVersion="+ "beta1.2"+"&"+"";
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi1.fanerweb.com/api/aproxy/";
@@ -335,6 +335,19 @@ public class AppURL {
      * http://appapi0.fanerweb.com/api/Aproxy/modifyUserStoneAddtionDo?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&value=3.2
      */
     public static String URL_MODIFY_STONE_ADDTION =baseUrl + "modifyUserStoneAddtionDo?"+QxVersion;
+
+
+    /**
+     * 获取默认地址
+     *http://appapi1.fanerweb.com/api/Aproxy/InitDataForQxzx?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&QxVersion=1.7
+     */
+    public static String URL_GET_ADDRESS =baseUrl + "InitDataForQxzx?"+QxVersion;
+    /**
+     * 快速定制
+     * http://appapi1.fanerweb.com/api/Aproxy/OrderCurrentSubmitQuickNowDo?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&productId=4609&modelPurityId=2&modelQualityId=1&number=2&word=
+     *
+     */
+    public static String URL_QUICK_MAKING=baseUrl + "OrderCurrentSubmitQuickNowDo?"+QxVersion;
 }
 
 

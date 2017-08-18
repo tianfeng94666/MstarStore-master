@@ -39,7 +39,6 @@ import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomGridView;
-import com.qx.mstarstoreapp.viewutils.RangeSeekBar;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -66,7 +65,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     TextView tvAddSpot;
     @Bind(R.id.iv_reduce)
     ImageView ivReduce;
-    @Bind(R.id.et_weight)
+    @Bind(R.id.et_ring_amount)
     EditText etSpot;
     @Bind(R.id.iv_add)
     ImageView ivAdd;

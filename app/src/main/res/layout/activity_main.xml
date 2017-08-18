@@ -12,8 +12,37 @@
         android:layout_height="match_parent">
 
     </com.qx.mstarstoreapp.viewutils.FlyBanner>
-
     <LinearLayout
+        android:id="@+id/ll_banner"
+        android:background="#a0000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="horizontal">
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_ring_stone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/iv_stone_ring"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ring_stone"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_stone_ring"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_main"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/stone_ring"
+        android:visibility="gone" />
+    <LinearLayout
+        android:id="@+id/ll_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -22,7 +51,7 @@
 
         <TextView
             android:id="@+id/iv_home"
-            android:text="首页"
+            android:text="快速定制"
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
@@ -64,4 +93,6 @@
             android:gravity="center"
             android:padding="10dp" />
     </LinearLayout>
+    <include layout="@layout/btn_popupwindow"
+        android:visibility="gone"/>
 </RelativeLayout>
