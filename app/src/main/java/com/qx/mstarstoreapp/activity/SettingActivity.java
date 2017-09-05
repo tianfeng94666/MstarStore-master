@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
@@ -48,7 +47,6 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
-import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.dialog.ImageInitiDialog;
 import com.qx.mstarstoreapp.json.SettingResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
@@ -60,6 +58,7 @@ import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BitmapUtils;
+import com.qx.mstarstoreapp.viewutils.CircleImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Bind(R.id.splitbutton)
     ImageView splitbutton;
     @Bind(R.id.id_ig_userpic)
-    ImageView idIgUserpic;
+    CircleImageView idIgUserpic;
     @Bind(R.id.id_lay_root)
     LinearLayout idLayRoot;
     @Bind(R.id.tv_username)
@@ -121,6 +120,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView tvIsInto;
     @Bind(R.id.rl_encryption_setting)
     RelativeLayout rlEncryptionSetting;
+    @Bind(R.id.tv_last_version)
+    TextView tvLastVersion;
+    @Bind(R.id.rl_last_version)
+    RelativeLayout rlLastVersion;
 
 
     private LayoutInflater inflater;
@@ -131,7 +134,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private int PRICE_TYPE = 0;
     private SettingResult settingResult;
     private AlertDialog dialog;
-
 
 
     @Override
@@ -148,6 +150,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         initViews();
 
     }
+
     public void onBack(View view) {
         finish();
     }
@@ -165,8 +168,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         });
         rlEncryptionSetting.setOnClickListener(this);
 
-    }
+        rlLastVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(DownloadActivity.class,null);
+            }
+        });
 
+    }
 
 
     String userName, phone, headPic, address;
@@ -278,7 +287,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
                         intent.putExtra("return-data", true);
                         startActivityForResult(intent, PICK_FROM_CAMERA);
-                       overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                     }
 
                     @Override
@@ -300,23 +309,23 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
         // title标题，印象笔记、邮箱、信息、微信、人人网、QQ和QQ空间使用
-        oks.setTitle("标题");
+        oks.setTitle("千禧之星App");
         // titleUrl是标题的网络链接，仅在Linked-in,QQ和QQ空间使用
         oks.setTitleUrl("http://sharesdk.cn");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText("我是分享文本");
+        oks.setText("Androidapp下载地址");
         //分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
-        oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+        oks.setImageUrl("http://appapi1.fanerweb.com/images/other/AndroidApp.png");
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl("http://sharesdk.cn");
+        oks.setUrl("https://www.pgyer.com/IGab");
         // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-        oks.setComment("我是测试评论文本");
+        oks.setComment("Androidapp下载地址");
         // site是分享此内容的网站名称，仅在QQ空间使用
         oks.setSite("ShareSDK");
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-        oks.setSiteUrl("http://sharesdk.cn");
+        oks.setSiteUrl("https://www.pgyer.com/IGab");
 
 // 启动分享GUI
         oks.show(this);
@@ -401,24 +410,24 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void goIntoEncryptionSettings() {
         final EditText editText = new EditText(this);
-        editText.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMarginStart(64);
         layoutParams.setMarginEnd(64);
         editText.setLayoutParams(layoutParams);
         LinearLayout ll = new LinearLayout(context);
         ll.addView(editText);
-        dialog= new AlertDialog.Builder(this)
+        dialog = new AlertDialog.Builder(this)
                 .setTitle("用户密码")
                 .setView(ll)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(passwordIsRight(editText.getText().toString())){
+                        if (passwordIsRight(editText.getText().toString())) {
                             Intent intent = new Intent(SettingActivity.this, EncryptionSettingsActivity.class);
                             intent.putExtra("settingResult", settingResult);
                             startActivity(intent);
-                        }else {
+                        } else {
                             ToastManager.showToastReal("密码错误！");
                         }
                     }
@@ -434,7 +443,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private boolean passwordIsRight(String string) {
         String pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
-        if(pwd.equals(string)){
+        if (pwd.equals(string)) {
             return true;
         }
         return false;
@@ -592,7 +601,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     protected void initView() {
         titleText.setText("修改资料");
     }
-
 
 
     private static String[] PERMISSIONS_CAMERA_AND_STORAGE = {

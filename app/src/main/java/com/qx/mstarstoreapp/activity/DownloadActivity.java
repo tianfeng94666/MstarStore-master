@@ -46,24 +46,18 @@ public class DownloadActivity extends BaseActivity {
 
     private void getData() {
         Intent intent = getIntent();
-        type = intent.getStringExtra("type");
+
     }
 
     private void initView() {
         final String st;
-        if (type.equals("1")) {
+
             tvDownloadName.setText("安卓最新版");
 //            SpannableString ss = new SpannableString("");
             tvWebsit.setText(R.string.android_download);
             st = "https://www.pgyer.com/IGab";
             ivDownlaoad.setImageResource(R.drawable.android_download);
-        } else {
-            tvDownloadName.setText("IOS最新版");
-//            SpannableString ss = new SpannableString("");
-            tvWebsit.setText(R.string.ios_download);
-            st = "https://www.pgyer.com/2H57";
-            ivDownlaoad.setImageResource(R.drawable.ios_download);
-        }
+
         tvWebsit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

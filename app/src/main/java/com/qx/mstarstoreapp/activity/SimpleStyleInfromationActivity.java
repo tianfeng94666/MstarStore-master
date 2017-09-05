@@ -47,8 +47,8 @@ import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.CustomLV;
 import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
 import com.qx.mstarstoreapp.viewutils.CustomselectStringButton;
+import com.qx.mstarstoreapp.viewutils.FlyBanner;
 import com.qx.mstarstoreapp.viewutils.LeftPopupWindow;
-import com.recker.flybanner.FlyBanner;
 import com.wx.wheelview.widget.WheelView;
 
 import java.util.ArrayList;
@@ -379,6 +379,19 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 idFr.setVisibility(View.VISIBLE);
                 tvSearch.setText(R.string.add_curent_order);
             }
+        }else{
+            if(Global.isShowPopup==0&&leftPopupWindow!=null){
+                leftPopupWindow.closePopupWindow();
+                llShowLess.setVisibility(View.GONE);
+            }
+            llShowLess.setVisibility(View.GONE);
+            llColor.setVisibility(View.GONE);
+            llMaking.setVisibility(View.GONE);
+            rlTop2.setVisibility(View.GONE);
+            lineMaking.setVisibility(View.GONE);
+            rlTop.setVisibility(View.VISIBLE);
+            llType.setVisibility(View.VISIBLE);
+            idFr.setVisibility(View.VISIBLE);
         }
 
         tvPreview.setOnClickListener(this);
@@ -547,9 +560,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     }
                     if (jewelStone != null) {
 //                        openType ="1";//修改订单的主石是选的
-                        tvAmountTitle.setText("证书编号");
-                        llAmount.setVisibility(View.GONE);
-                        llCertcode.setVisibility(View.VISIBLE);
+//                        tvAmountTitle.setText("证书编号");
+//                        llAmount.setVisibility(View.GONE);
+//                        llCertcode.setVisibility(View.VISIBLE);
                         selectedStone = new StoneSearchInfoResult.DataBean.StoneBean.ListBean();
                         selectedStone.setId(jewelStone.getJewelStoneId());
                         tvCertcode.setText(jewelStone.getJewelStoneCode());
@@ -567,6 +580,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                         stone.setColorId(stoneColorItme.get(0).getId());
                         stone.setPurityId(stonePurityItme.get(0).getId());
                         stone.setIsNotEmpty(1);
+                        stone.setStoneCode(jewelStone.getJewelStoneCode());
                     } else {
                         tvAmountTitle.setText("件    数");
                         llAmount.setVisibility(View.VISIBLE);
@@ -669,9 +683,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         stoneCTemp = copyStone(stoneC);
         stoneEntitiesTemp.add(stoneCTemp);
 
-        if (stone.getIsNotEmpty() == 1) {
+
             stoneEntities.add(stone);
-        }
+
         if (stoneA.getIsNotEmpty() == 1) {
             stoneEntities.add(stoneA);
         }
@@ -825,9 +839,15 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             getPicB.add(pics.get(i).getPicb());
         }
         if (UIUtils.isPad(this)) {
-            flybanner.setImagesUrl(getPicB);
+            if(getPicB!=null&&getPicB.size()!=0){
+                flybanner.setImagesUrl(getPicB);
+            }
+
         } else {
-            flybanner.setImagesUrl(getPicm);
+            if(getPicm!=null&&getPicm.size()!=0){
+                flybanner.setImagesUrl(getPicm);
+            }
+
         }
 
         flybanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {
@@ -1245,49 +1265,59 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
 
             switch (i) {
                 case 0:
-                    if (openType.equals("1") && Global.isShowPopup == 0) {
-                        viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
-                        viewHolder.tvMainStoneDate.setText(changeSelectedStoneToString());
-                        viewHolder.ivSelectMainStone.setVisibility(View.VISIBLE);
-                        viewHolder.tvMainStoneDate.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                selectStone();
-                            }
-                        });
-                        viewHolder.ivSelectMainStone.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                selectStone();
-                            }
-                        });
-                    } else {
-                        viewHolder.ivSelectMainStone.setVisibility(View.VISIBLE);
-                        if (isEmptyStone(stoneEntity)) {
+                    if (isEmptyStone(stoneEntity)) {
+                        if(Global.isShowPopup==0){
                             viewHolder.tvMainStoneDate.setText("+ 添加主石");
                             viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.theme_red));
-                            viewHolder.ivSelectMainStone.setVisibility(View.GONE);
-                        } else {
-                            viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));
-                            viewHolder.tvMainStoneDate.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-                            viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
-                        }
-
-                        if (Global.isShowPopup == 0) {//快速定制时不能改主石
                             viewHolder.tvMainStoneDate.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     selectStone();
                                 }
                             });
+                        }else {
+                            viewHolder.tvMainStoneDate.setText("+ 请在悬浮框中添加主石");
+                            viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
+                        }
+                        viewHolder.ivSelectMainStone.setVisibility(View.GONE);
+                    } else{
+                        if (Global.isShowPopup == 0) {
+                            //从石头搜索回来，不显示浮框
+                            viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
+                            if(openType.equals("1")){
+                                viewHolder.tvMainStoneDate.setText(changeSelectedStoneToString());
+                            }else  {
+                                viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));
+                            }
+
+                            viewHolder.ivSelectMainStone.setVisibility(View.VISIBLE);
+                            viewHolder.tvMainStoneDate.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    selectStone();
+                                }
+                            });
+                            viewHolder.ivSelectMainStone.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    selectStone();
+                                }
+                            });
+                        } else {
+                            viewHolder.ivSelectMainStone.setVisibility(View.VISIBLE);
+                            viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));
+                            viewHolder.tvMainStoneDate.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+                            viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.text_color));
+                            if(Global.isShowPopup!=0){
+                                viewHolder.ivSelectMainStone.setVisibility(View.GONE);
+                            }
                         }
 
-
                     }
+
+
                     stoneEntity.setStroneName(MainStone);
                     viewHolder.tvTitle.setText(MainStone);
-                    Drawable dra = getResources().getDrawable(R.drawable.icon_add2);
-                    dra.setBounds(0, 0, dra.getMinimumWidth(), dra.getMinimumHeight());
                     viewHolder.idIsCheck.setVisibility(View.GONE);
                     break;
                 case 1:
@@ -1322,7 +1352,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     stoneEntity.setStroneName("副石C");
                     viewHolder.tvTitle.setText("副石C ");
                     if (isEmptyStone(stoneEntity)) {
-                        viewHolder.tvMainStoneDate.setText("+ 添加主石");
+                        viewHolder.tvMainStoneDate.setText("");
                         viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.theme_red));
                         viewHolder.ivSelectMainStone.setVisibility(View.GONE);
                     } else {
@@ -1387,7 +1417,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     private String changeStoneEntityToString(StoneEntity stoneEntity) {
 
         return "类别：" + stoneEntity.getTypeTitle() + "; 规格：" + stoneEntity.getSpecTitle() + ";形状：" + stoneEntity.getShapeTitle() +
-                ";颜色：" + stoneEntity.getColorTitle() + ";净度：" + stoneEntity.getPurityTitle() + ";数量：" + stoneEntity.getNumber();
+                ";颜色：" + stoneEntity.getColorTitle() + ";净度：" + stoneEntity.getPurityTitle() + ";数量：" + stoneEntity.getNumber()+(stoneEntity.getStoneCode()!=null&&(!openType.equals("2"))?";证书号："+stoneEntity.getStoneCode():"");
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {

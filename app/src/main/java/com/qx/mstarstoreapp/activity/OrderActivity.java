@@ -138,6 +138,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         ButterKnife.bind(this);
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         context = this;
+        addStoneRang();
         getDate();
         initView();
         initListener();
@@ -186,7 +187,21 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         return url;
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        addStoneRang();
 
+    }
+    private void addStoneRang() {
+        if(Global.isShowPopup!=0&&Global.ring.getStoneEntity()!=null){
+            for(int i =0 ;i<singleKey.size();i++){
+                if(singleKey.get(i).getName().equals(Global.ring.getStoneEntity().getModelWeightRange().getKey())){
+                    singleKey.get(i).setValue(Global.ring.getStoneEntity().getModelWeightRange().getValue());
+                }
+            }
+        }
+    }
     private void initListMenuDialog(List<ModeListResult.DataEntity.CustomList> customList) {
         listMenuDialog = new ListMenuDialog(OrderActivity.this, customList);
         listMenuDialog.setOnListMenuSelectCloseClick(new ListMenuDialog.OnListMenuSelectCloseClick() {

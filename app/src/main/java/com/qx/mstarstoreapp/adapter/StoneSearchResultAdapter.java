@@ -132,6 +132,7 @@ public class StoneSearchResultAdapter extends BaseAdapter {
 
     public String getQuotedPriceId() {
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < list.size(); i++) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean bean = list.get(i);
             if (bean.ischeck()) {

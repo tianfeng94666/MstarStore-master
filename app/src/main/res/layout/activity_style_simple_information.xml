@@ -26,10 +26,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.recker.flybanner.FlyBanner
+                    <com.qx.mstarstoreapp.viewutils.FlyBanner
                         android:id="@+id/flybanner"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"></com.recker.flybanner.FlyBanner>
+                        android:layout_height="match_parent"></com.qx.mstarstoreapp.viewutils.FlyBanner>
                     <ImageView
                         android:id="@+id/iv_preview"
                         android:layout_alignParentRight="true"
@@ -556,5 +556,5 @@
     </LinearLayout>
 
     <include layout="@layout/progress_layout" />
-    <include layout="@layout/btn_popupwindow" />
+    <include layout="@layout/btn_popupwindow"  android:visibility="gone"/>
 </RelativeLayout>

@@ -466,9 +466,9 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         stoneCTemp = copyStone(stoneC);
         stoneEntitiesTemp.add(stoneCTemp);
 
-        if (stone.getIsNotEmpty() == 1) {
+
             stoneEntities.add(stone);
-        }
+
         if (stoneA.getIsNotEmpty() == 1) {
             stoneEntities.add(stoneA);
         }

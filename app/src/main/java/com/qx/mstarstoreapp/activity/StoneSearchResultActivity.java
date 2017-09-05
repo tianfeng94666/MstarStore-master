@@ -142,7 +142,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_stone_search_result);
         ButterKnife.bind(this);
-        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
+        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowStonePrice", true);
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         getDate();
         init();
@@ -393,7 +393,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 finish();
                 break;
             case R.id.tv_quoted_price_all:
-                quotedPrice(stoneSearchResultAdapter.getQuotedPriceId());
+                if(list.size()!=0){
+                    quotedPrice(stoneSearchResultAdapter.getQuotedPriceId());
+                }
                 break;
             case R.id.tv_item_weight:
                 setorderByWeight();
@@ -424,6 +426,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void chooseStone() {
         int chooseAmount = 0;
         int seletPosition = 0;
+        if(list.size()==0){
+            return;
+        }
         for (int i = 0; i < list.size(); i++) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(i);
             if (listBean.ischeck()) {
@@ -499,6 +504,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void chooseProduct() {
         int chooseAmount = 0;
         int seletPosition = 0;
+        if(list.size()==0){
+            return;
+        }
         for (int i = 0; i < list.size(); i++) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(i);
             if (listBean.ischeck()) {
@@ -532,6 +540,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void rebackProductInfo() {
         int chooseAmount = 0;
         int seletPosition = 0;
+        if(list.size()==0){
+            return;
+        }
         for (int i = 0; i < list.size(); i++) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(i);
             if (listBean.ischeck()) {

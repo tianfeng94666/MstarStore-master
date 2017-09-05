@@ -226,7 +226,7 @@ public class LeftPopupWindow implements View.OnClickListener {
 
             String lgUrl = AppURL.URL_QUICK_MAKING + "tokenKey=" + BaseApplication.getToken() + "&productId=" + ring.getItemId() + "&modelPurityId=" + ring.getRingPurityId()
                     + "&modelQualityId=1" + "&number=" + ring.getNumber() + "&jewelStoneId=" + ring.getStoneEntity().getId() + "&word=" + ring.getWord() + "&customerID="
-                    + ring.getCustomerEntity().getCustomerID();
+                    + ring.getCustomerEntity().getCustomerID()+"&handSize=" + ring.getHandSize() ;
             L.e("netLogin" + lgUrl);
             VolleyRequestUtils.getInstance().getCookieRequest(context, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
                 @Override

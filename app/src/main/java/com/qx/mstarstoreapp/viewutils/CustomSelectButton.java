@@ -135,7 +135,11 @@ public class CustomSelectButton extends RelativeLayout {
         @Override
         public void onClick(View v) {
             if (onSelectData != null) {
-                types = onSelectData.getData();
+                try {
+                    types = onSelectData.getData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if (types != null) {
                     showPopupWindow();
                 }

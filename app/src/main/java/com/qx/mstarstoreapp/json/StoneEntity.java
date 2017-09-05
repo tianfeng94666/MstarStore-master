@@ -40,7 +40,25 @@ public class StoneEntity implements Cloneable , Serializable {
     private int isSelfStone;
     private int isNotEmpty;
     private String stoneOut;
+    private String stoneCode;
+    private String CertAuth;
 
+    public String getCertAuth() {
+        return CertAuth;
+    }
+
+    public void setCertAuth(String certAuth) {
+        CertAuth = certAuth;
+    }
+
+
+    public String getStoneCode() {
+        return stoneCode;
+    }
+
+    public void setStoneCode(String stoneCode) {
+        this.stoneCode = stoneCode;
+    }
     public StoneEntity() {
     }
 
@@ -65,7 +83,11 @@ public class StoneEntity implements Cloneable , Serializable {
         this.stoneOut = stoneEntity.getStoneOut();
     }
     public int getIsNotEmpty() {
-        return isNotEmpty;
+        if((this.typeId==null||typeId.isEmpty())&&(this.shapeId==null||this.shapeId.isEmpty())){
+            return 0;
+        }else {
+            return 1;
+        }
     }
 
     public void setIsNotEmpty(int isNotEmpty) {

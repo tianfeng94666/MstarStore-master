@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="45dip"
+    android:layout_height="wrap_content"
     android:paddingRight="10dp"
     android:paddingLeft="10dp"
     android:orientation="horizontal">
@@ -19,12 +19,17 @@
 
     <TextView
         android:id="@+id/tv_main_stone_date"
-        style="@style/layout_horizontal"
+     android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin5"
         android:layout_marginRight="@dimen/margin5"
         android:layout_weight="1"
         android:gravity="center"
+        android:lines="2"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
         android:text="+ 添加主石"
+        android:textSize="12sp"
         android:textColor="@color/theme_red" />
 
     <ImageView
@@ -43,6 +48,7 @@
         android:layout_height="45dp"
         android:layout_margin="2dp"
         android:layout_marginLeft="@dimen/margin10"
+        android:layout_gravity="center_vertical"
         android:button="@drawable/checkbox_style"
         android:gravity="center"
         android:text="封石"
