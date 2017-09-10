@@ -81,6 +81,10 @@ public class LeftPopupWindow implements View.OnClickListener {
     TextView tvChooseCustomer;
     @Bind(R.id.tv_reset)
     Button tvReset;
+    @Bind(R.id.tv_ring_price)
+    TextView tvRingPrice;
+    @Bind(R.id.tv_stone_price)
+    TextView tvStonePrice;
     private PopupWindow popupWindow;
     Context context;
     private View view;
@@ -171,7 +175,7 @@ public class LeftPopupWindow implements View.OnClickListener {
         if (ring != null) {
             ImageLoader.getInstance().displayImage(ring.getImageUrl(), ivRing, ImageLoadOptions.getOptionsHight());
             tvRingNumber.setText(ring.getRingNumber() == null ? "" : ring.getRingNumber());
-            tvHandSize.setText(ring.getHandSize() != null ?"手寸："+ ring.getHandSize() : "");
+            tvHandSize.setText(ring.getHandSize() != null ? "手寸：" + ring.getHandSize() : "");
             tvRingDetail.setText(ring.getItemId() == null ? "" : "质量等级：精品");
             tvRingPurity.setText(ring.getRingPurity() == null ? "" : "成色：" + ring.getRingPurity());
             tvStoneDetail.setText(ring.getStoneDetail());
@@ -181,6 +185,8 @@ public class LeftPopupWindow implements View.OnClickListener {
             tvTotalPrice.setText((ringPrice + stonePrice) + "");
             tvAddress.setText(ring.getAddressEntity() != null ? ring.getAddressEntity().getAddr() : "");
             tvCustomer.setText(ring.getCustomerEntity() != null ? ring.getCustomerEntity().getCustomerName() : "");
+            tvRingPrice.setText(ringPrice==0?"":"戒托价格："+ringPrice);
+            tvStonePrice.setText(stonePrice==0?"":"裸石价格："+stonePrice);
         }
     }
 
@@ -225,8 +231,8 @@ public class LeftPopupWindow implements View.OnClickListener {
         if (canCommit()) {
 
             String lgUrl = AppURL.URL_QUICK_MAKING + "tokenKey=" + BaseApplication.getToken() + "&productId=" + ring.getItemId() + "&modelPurityId=" + ring.getRingPurityId()
-                    + "&modelQualityId=1" + "&number=" + ring.getNumber() + "&jewelStoneId=" + ring.getStoneEntity().getId() + "&word=" + ring.getWord() + "&customerID="
-                    + ring.getCustomerEntity().getCustomerID()+"&handSize=" + ring.getHandSize() ;
+                    + "&modelQualityId=1" + "&number=" + 1 + "&jewelStoneId=" + ring.getStoneEntity().getId() + "&word=" + ring.getWord() + "&customerID="
+                    + ring.getCustomerEntity().getCustomerID() + "&handSize=" + ring.getHandSize();
             L.e("netLogin" + lgUrl);
             VolleyRequestUtils.getInstance().getCookieRequest(context, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
                 @Override

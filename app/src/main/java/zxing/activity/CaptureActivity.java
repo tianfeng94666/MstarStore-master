@@ -15,13 +15,18 @@
  */
 package zxing.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -81,7 +86,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+        setCameraPermission();
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_capture);
@@ -102,7 +107,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         animation.setRepeatMode(Animation.RESTART);
         scanLine.startAnimation(animation);
     }
+    private static String[] PERMISSIONS_CAMERA_AND_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA};
 
+    public void setCameraPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int storagePermission = this.checkSelfPermission(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+            if (storagePermission != PackageManager.PERMISSION_GRANTED || cameraPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_CAMERA_AND_STORAGE,
+                        0x007);
+            }
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();

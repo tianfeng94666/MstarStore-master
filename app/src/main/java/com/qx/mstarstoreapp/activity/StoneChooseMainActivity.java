@@ -91,6 +91,12 @@ public class StoneChooseMainActivity extends BaseActivity {
         initView();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
+
     private void getDate() {
         stoneDetail = (StoneDetail)getIntent().getSerializableExtra("stoneDetail");
         openType = getIntent().getIntExtra("openType", 0);

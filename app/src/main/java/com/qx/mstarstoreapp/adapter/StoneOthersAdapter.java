@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.json.StoneSearchResult;
 import com.qx.mstarstoreapp.utils.UIUtils;
+import com.qx.mstarstoreapp.viewutils.CustomGridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +82,7 @@ public class StoneOthersAdapter extends BaseAdapter {
         for (int i = 0; i < item.size(); i++) {
             TextView textView = addTExt(item.get(i), ischecks[i]);
             textView.setTag(i + "");
-            viewHolder.llItem.addView(textView, i );
+            viewHolder.llItem.addView(textView, i);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,6 +91,23 @@ public class StoneOthersAdapter extends BaseAdapter {
                 }
             });
         }
+        viewHolder.gv.setAdapter(new CommonAdapter<String>(item,R.layout.item_gv_text) {
+            @Override
+            public void convert(int position, BaseViewHolder helper, String item) {
+                if (ischecks[position]) {
+                    helper.setText(R.id.tv_item_text, item, R.drawable.corners_red_bg, context.getResources().getColor(R.color.white));
+                } else {
+                    helper.setText(R.id.tv_item_text, item, R.drawable.corners_white_bg,context.getResources().getColor(R.color.text_color));
+                }
+            }
+        });
+        viewHolder.gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ischecks[position] = !ischecks[position];
+                notifyDataSetChanged();
+            }
+        });
         viewHolder.tvTitle.setText(titleList.get(position));
         return view;
     }
@@ -99,7 +118,7 @@ public class StoneOthersAdapter extends BaseAdapter {
         tv.setTextColor(context.getResources().getColor(R.color.text_color));
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, UIUtils.dip2px(30), 1);
-        params.setMargins(10,10,10,10);
+        params.setMargins(10, 10, 10, 10);
         tv.setLayoutParams(params);
         tv.setGravity(Gravity.CENTER);
         if (isCheck) {
@@ -113,26 +132,31 @@ public class StoneOthersAdapter extends BaseAdapter {
         return tv;
     }
 
-    public String getChooseResult(int j){
+    public String getChooseResult(int j) {
         StringBuilder sb = new StringBuilder();
         boolean[] ischeck = isCheckList.get(j);
         List<String> listString = list.get(j);
-        for(int i =0;i<ischeck.length;i++){
-            if(ischeck[i]){
-                if(sb.toString().equals("")){
+        for (int i = 0; i < ischeck.length; i++) {
+            if (ischeck[i]) {
+                if (sb.toString().equals("")) {
                     sb.append(listString.get(i));
-                }else {
-                    sb.append(","+listString.get(i));
+                } else {
+                    sb.append("," + listString.get(i));
                 }
             }
         }
         return sb.toString();
     }
+
+
+
     class ViewHolder {
         @Bind(R.id.tv_title)
         TextView tvTitle;
         @Bind(R.id.ll_item)
         LinearLayout llItem;
+        @Bind(R.id.gv)
+        CustomGridView gv;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -87,7 +87,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        initView();
 //        setChioceFragment(0);
         loadNetData();
-        isNeedUpdate();
         getAddress();
     }
 
@@ -109,7 +108,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         Global.ring = new Ring();
                     }
                     Global.ring.setAddressEntity(getAddressResult.getData().getAddress());
-                    isDefaultCustomer = getAddressResult.getData().getCustomerEntity();
+                    isDefaultCustomer = getAddressResult.getData().getDefaultCustomer();
                     if (isDefaultCustomer != null) {
                         Global.ring.setCustomerEntity(isDefaultCustomer);
                     }
@@ -177,66 +176,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
     }
 
-    private void isNeedUpdate() {
-        String lgUrl = AppURL.URL_CODE_VERSION + "device=" + "android";
-        L.e("netLogin" + lgUrl);
-        VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-            @Override
-            public void onSuccess(String result) {
-                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                String error = jsonResult.get("error").getAsString();
-                if (error.equals("0")) {
-                    versionResult = new Gson().fromJson(result, VersionResult.class);
-                    if (versionResult.getData() == null) {
-                        ToastManager.showToastReal("获取数据失败！");
-                        return;
-                    }
-                    version = versionResult.getData().getVersion();
-                    Double versionDouble = Double.parseDouble(version);
-                    Double currentDouble = Double.parseDouble(getString(R.string.app_version));
-                    if (versionDouble > currentDouble) {
-                        showNoticeDialog();
-                    }
-                } else if (error.equals("2")) {
-
-                } else {
-                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    ToastManager.showToastWhendebug(message);
-                    L.e(message);
-                }
-            }
-
-            @Override
-            public void onFail(String fail) {
-
-            }
 
 
-        });
 
-    }
-
-    /**
-     * 显示软件更新对话框
-     */
-    private void showNoticeDialog() {
-        // 构造对话框
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.soft_update_title);
-        builder.setMessage(R.string.soft_update_info);
-        // 更新
-        builder.setPositiveButton(R.string.soft_update_updatebtn, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionResult.getData().getUrl()));
-                startActivity(intent);
-            }
-        });
-
-        Dialog noticeDialog = builder.create();
-        noticeDialog.setCanceledOnTouchOutside(false);
-        noticeDialog.show();
-    }
 
     public int getVerCode(Context context) {
         int verCode = -1;

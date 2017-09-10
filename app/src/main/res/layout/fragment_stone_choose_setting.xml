@@ -88,7 +88,7 @@
                         android:layout_alignParentLeft="true"
                         android:gravity="center_vertical"
                         android:src="@drawable/icon_acc"
-                        android:text="规格"
+                        android:text="重量"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/text_size_small_medium" />
 

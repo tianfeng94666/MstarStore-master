@@ -591,6 +591,12 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         etPriceMin.setText("");
         etWeightMax.setText("");
         etWeightMin.setText("");
+        certAuthBeanIsChooselist[0] = false;
+        tvCertificate1.setTextColor(getResources().getColor(R.color.text_color));
+        tvCertificate1.setBackgroundResource(R.drawable.corners_white_bg);
+        certAuthBeanIsChooselist[1] = false;
+        tvCertificate2.setTextColor(getResources().getColor(R.color.text_color));
+        tvCertificate2.setBackgroundResource(R.drawable.corners_white_bg);
     }
     private String getPurity() {
         List<String> puritys = purityBean.getValues();
@@ -660,6 +666,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         Bundle bundle = new Bundle();
         bundle.putSerializable("searchStoneInfo", stoneSearchInfo);
         Intent intent = new Intent(getActivity(), StoneSearchResultActivity.class);
+        intent.putExtra("type",((StoneChooseMainActivity) getActivity()).getType());
         intent.putExtra("openType", ((StoneChooseMainActivity)getActivity()).getOpenType());
         intent.putExtra("itemId", ((StoneChooseMainActivity)getActivity()).getItemId());
         intent.putExtra("stoneInfo", bundle);

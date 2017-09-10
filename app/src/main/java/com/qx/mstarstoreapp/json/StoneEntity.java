@@ -61,8 +61,7 @@ public class StoneEntity implements Cloneable , Serializable {
     }
     public StoneEntity() {
     }
-
-    public StoneEntity(StoneEntity stoneEntity) {
+    private void toStoneEntity(StoneEntity stoneEntity) {
         this.isChecked = stoneEntity.isChecked();
         this.stroneName = stoneEntity.getStroneName();
         this.price = stoneEntity.getPrice();
@@ -81,6 +80,13 @@ public class StoneEntity implements Cloneable , Serializable {
         this.isSelfStone = stoneEntity.getIsSelfStone();
         this.isNotEmpty = stoneEntity.getIsNotEmpty();
         this.stoneOut = stoneEntity.getStoneOut();
+    }
+
+    public void changetoStone(StoneEntity stoneEntity) {
+        toStoneEntity(stoneEntity);
+    }
+    public StoneEntity(StoneEntity stoneEntity) {
+       toStoneEntity(stoneEntity);
     }
     public int getIsNotEmpty() {
         if((this.typeId==null||typeId.isEmpty())&&(this.shapeId==null||this.shapeId.isEmpty())){

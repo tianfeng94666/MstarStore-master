@@ -1,13 +1,14 @@
 package com.qx.mstarstoreapp.base;
 
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.utils.UIUtils;
 
 /**
  * Created by Administrator on 2016/9/21.
  */
 public class AppURL {
 //     static String QxVersion = "&QxVersion="+ "beta"+"&";
-    static String QxVersion = "QxVersion=1.6"+"&";
+    static String QxVersion = "QxVersion="+ UIUtils.getResources().getString(R.string.app_version)+"&";
 //    static String QxVersion = "QxVersion="+ "beta1.2"+"&"+"";
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi1.fanerweb.com/api/aproxy/";
@@ -348,6 +349,11 @@ public class AppURL {
      *
      */
     public static String URL_QUICK_MAKING=baseUrl + "OrderCurrentSubmitQuickNowDo?"+QxVersion;
+    /**
+     * 获取是否更新
+     * getUpdateVersionForMstar
+     */
+    public static String URL_GET_UPDATE_VERSION="http://appapi1.fanerweb.com/api/Public/" + "getUpdateVersionForMstar?";
 }
 
 

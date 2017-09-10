@@ -95,6 +95,7 @@
         <activity
             android:name=".activity.ConfirmOrderActivity"
             android:alwaysRetainTaskState="true"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
             android:windowSoftInputMode="adjustPan" />
         <activity

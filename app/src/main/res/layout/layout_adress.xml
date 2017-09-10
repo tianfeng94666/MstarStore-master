@@ -36,14 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@+id/id_tv1"
-                android:text="杨明智"
+                android:text=""
                 android:textColor="@color/black" />
 
 
             <TextView
                 android:textSize="@dimen/text_size_small"
                 android:layout_toRightOf="@+id/id_tv_name"
-                android:text="13177008821"
+                android:text=""
                 android:id="@+id/phone_tv"
                 android:layout_marginLeft="@dimen/margin15"
                 android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:minLines="2"
-                android:text="广东省深圳市罗湖区"
+                android:text=""
                 android:textColor="@color/black" />
 
         </LinearLayout>

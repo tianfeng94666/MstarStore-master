@@ -367,7 +367,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     for (int i = 0; i < modelColorItme.size(); i++) {
                         Type type = new Type();
                         type.setId(modelColorItme.get(i).getId());
-                        type.setTypeName(modelColorItme.get(i).getTitle() + "  " + modelColorItme.get(i).getPrice() + "/g");
+                        type.setTypeName(modelColorItme.get(i).getTitle() + "  " + modelColorItme.get(i).getPrice());
                         list.add(type);
                     }
                     return list;
