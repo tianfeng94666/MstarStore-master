@@ -134,7 +134,7 @@ public class EndProducActivity extends BaseActivity implements View.OnClickListe
             } catch (Exception e) {
 
             }
-            images.get(position % images.size()).setImageResource(R.drawable.no_image);
+            images.get(position % images.size()).setImageResource(R.mipmap.white);
             //ImageLoader.getInstance().displayImage(homePageItem.pic.get(position % images.size()), images.get(position % images.size()), ImageLoadOptions.getOptions());
             /**
              * 添加轮播点击事件

@@ -337,7 +337,19 @@
         android:background="@color/theme_bg"
         android:visibility="gone">
 
-
+            <TextView
+                android:id="@+id/tv_reset2"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:drawableLeft="@drawable/ic_refresh"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="重置选中"
+                android:textColor="@color/text_color" />
 
 
 

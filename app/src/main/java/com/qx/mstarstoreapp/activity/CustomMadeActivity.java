@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.fragment.FragOrderListFragment;
 import com.qx.mstarstoreapp.json.OrderWaitResult;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
@@ -69,7 +70,13 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     public void onBack(View view) {
-        openActivity(OrderActivity.class,null);
+        if(Global.GO_HOEM){
+            Global.GO_HOEM= false;
+            openActivity(MainActivity.class,null);
+        }else {
+            openActivity(OrderActivity.class,null);
+        }
+
         finish();
     }
 

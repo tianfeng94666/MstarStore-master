@@ -245,6 +245,9 @@ public class LeftPopupWindow implements View.OnClickListener {
                         if (orderListResult.getData() == null) {
                             return;
                         }
+                        Global.isShowPopup = 0;
+                        //直接从历史回到Mainctvity
+                        Global.GO_HOEM =true;
                         resetStoneAndRing();
                         Bundle bundle = new Bundle();
                         bundle.putInt("type", 2);

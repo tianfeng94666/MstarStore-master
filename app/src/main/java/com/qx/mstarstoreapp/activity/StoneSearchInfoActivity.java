@@ -32,6 +32,7 @@ import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
@@ -135,6 +136,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     private String itemId;//产品的id
     private int type;//是否是修改订单
     private LeftPopupWindow leftPopupWindow;
+    private boolean isShowPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +154,19 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         openType = getIntent().getIntExtra("openType", 0);
         itemId = getIntent().getStringExtra("itemId");
         type = getIntent().getIntExtra("type", 0);
+        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowStonePrice", true);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Global.isShowPopup != 0) {
+            llShowLess.setVisibility(View.VISIBLE);
+            initPopwindow();
+        } else {
+            llShowLess.setVisibility(View.GONE);
+        }
     }
 
     private void initView() {

@@ -28,7 +28,7 @@
             android:layout_width="80dip"
             android:layout_height="80dip"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/no_image" />
+            android:src="@mipmap/white" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -20,6 +20,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.fragment.StoneChooseFromSettingFragment;
 import com.qx.mstarstoreapp.fragment.StoneFragment;
+import com.qx.mstarstoreapp.json.ModelWeightRange;
 import com.qx.mstarstoreapp.json.StoneDetail;
 import com.qx.mstarstoreapp.json.StoneEntity;
 
@@ -46,6 +47,24 @@ public class StoneChooseMainActivity extends BaseActivity {
     private int type;
     private StoneEntity stoneEntity;
     private int isCanSelectStone;
+    private ModelWeightRange modelWeightRange;
+    private String orderId;//订单id
+
+    public ModelWeightRange getModelWeightRange() {
+        return modelWeightRange;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setModelWeightRange(ModelWeightRange modelWeightRange) {
+        this.modelWeightRange = modelWeightRange;
+    }
 
     public StoneEntity getStoneEntity() {
         return stoneEntity;

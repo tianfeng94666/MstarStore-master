@@ -133,17 +133,11 @@ public class ModeOfPaymentActivity extends BaseActivity {
                 choosePayWay = position;
             }
         });
-        idIgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBack();
-            }
-        });
         tvMoney.setText(comitOrderResult.getData().getNeedPayPrice());
         idTv1.setText(comitOrderResult.getData().getTitle());
     }
 
-    public void onBack() {
+    public void onBack(View view) {
         finish();
     }
 

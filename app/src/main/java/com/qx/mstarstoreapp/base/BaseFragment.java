@@ -60,7 +60,7 @@ public class BaseFragment extends Fragment implements HttpCycleContext {
 
     /*跳转到登录页面  登录成功回调到刚刚页面*/
     public void loginToServer(Class<?> jumpTo) {
-        BaseApplication.spUtils.saveString(SpUtils.key_tokenKey,"");
+//        BaseApplication.spUtils.saveString(SpUtils.key_tokenKey,"");
         Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
         if (jumpTo == null)
             getActivity().startActivityForResult(loginIntent, 2);

@@ -316,7 +316,7 @@ public class AppURL {
 
 
     /**订单页跳转修改页修改*/
-    public static String URL_UPDATE_ORDER_WATET1 = baseUrl + "ModelOrderWaitCheckOrderCurrentEditModelItemDo?"+QxVersion;
+    public static String URL_UPDATE_ORDER_WATET1 = baseUrl + "ModelOrderWaitCheckOrderCurrentEditModelItemForDefaultDo?"+QxVersion;
     /**
      * 获取主页图片
      */
@@ -354,6 +354,11 @@ public class AppURL {
      * getUpdateVersionForMstar
      */
     public static String URL_GET_UPDATE_VERSION="http://appapi1.fanerweb.com/api/Public/" + "getUpdateVersionForMstar?";
+    /**
+     * 通过款号获取产品详情
+     *http://appapi1.fanerweb.com/api/Aproxy/InitDataForQxzx?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&QxVersion=1.7
+     */
+    public static String URL_GET_PRODUCTINFO_BY_MODENUM =baseUrl + "ModelDetailPageGetInfoByModelNum?"+QxVersion;
 }
 
 

@@ -1,5 +1,7 @@
 package com.qx.mstarstoreapp.json;
 
+import com.qx.mstarstoreapp.utils.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -229,7 +231,7 @@ public class StoneEntity implements Cloneable , Serializable {
     }
 
     public String getTypeTitle() {
-        return typeTitle;
+        return StringUtils.isEmpty(typeTitle) ? "" : typeTitle;
     }
 
     public String getPurityId() {

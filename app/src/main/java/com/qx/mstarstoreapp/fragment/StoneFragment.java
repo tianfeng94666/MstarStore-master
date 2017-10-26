@@ -669,6 +669,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         intent.putExtra("type",((StoneChooseMainActivity) getActivity()).getType());
         intent.putExtra("openType", ((StoneChooseMainActivity)getActivity()).getOpenType());
         intent.putExtra("itemId", ((StoneChooseMainActivity)getActivity()).getItemId());
+        intent.putExtra("orderId", ((StoneChooseMainActivity) getActivity()).getOrderId());
         intent.putExtra("stoneInfo", bundle);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);

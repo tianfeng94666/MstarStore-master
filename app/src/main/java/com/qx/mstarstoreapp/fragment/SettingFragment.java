@@ -333,7 +333,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
+//                BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
                 openActivity(LoginActivity.class, null);
             }
         });

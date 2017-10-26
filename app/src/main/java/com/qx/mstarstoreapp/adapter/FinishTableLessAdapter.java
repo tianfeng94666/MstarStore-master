@@ -16,8 +16,10 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.activity.DeliveryTableActivity;
 import com.qx.mstarstoreapp.activity.FinishTableLessActivity;
 import com.qx.mstarstoreapp.activity.FinishTableMoreActivity;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.FinishTableLessResult;
 import com.qx.mstarstoreapp.json.RecListBean;
+import com.qx.mstarstoreapp.utils.ToastManager;
 
 import java.util.List;
 
@@ -30,13 +32,15 @@ import butterknife.ButterKnife;
 
 public class FinishTableLessAdapter extends BaseAdapter {
     private final String type;
+
     Context context;
     List<RecListBean> list;
 
-    public FinishTableLessAdapter(Context context, List<RecListBean> list,String type) {
+    public FinishTableLessAdapter(Context context, List<RecListBean> list, String type) {
         this.context = context;
         this.list = list;
         this.type = type;
+
     }
 
     @Override
@@ -71,16 +75,27 @@ public class FinishTableLessAdapter extends BaseAdapter {
         viewHolder.tvFinishQuality.setText("成色：" + recListBean.getPurityName());
         viewHolder.tvFinishAmount.setText("数量：" + recListBean.getNumber());
         viewHolder.tvFinisShSumMoney.setText("¥" + recListBean.getTotalPrice());
-
-        FinishTableLessTwoAdapter finishTableLessTwoAdapter = new FinishTableLessTwoAdapter(context, recListBean.getMoList(),type);
+        if ("1".equals(Global.isMainAccount)&&1==Global.isShowCost) {
+            viewHolder.tvFinisShSumMoney.setVisibility(View.VISIBLE);
+            viewHolder.tvFinishSumMoneyTv.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.tvFinisShSumMoney.setVisibility(View.GONE);
+            viewHolder.tvFinishSumMoneyTv.setVisibility(View.GONE);
+        }
+        FinishTableLessTwoAdapter finishTableLessTwoAdapter = new FinishTableLessTwoAdapter(context, recListBean.getMoList(), type);
         viewHolder.lvSendingTables.setAdapter(finishTableLessTwoAdapter);
         viewHolder.rlGotoFinishMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, FinishTableMoreActivity.class);
-                intent.putExtra("recNumber", recListBean.getRecNum() + "");
-                intent.putExtra("type",type);
-                ((Activity) context).startActivity(intent);
+                if(1==Global.isShowCost){
+                    Intent intent = new Intent(context, FinishTableMoreActivity.class);
+                    intent.putExtra("recNumber", recListBean.getRecNum() + "");
+                    intent.putExtra("type", type);
+                    ((Activity) context).startActivity(intent);
+                }else {
+                    ToastManager.showToastReal("未显示价钱，无权限查看");
+                }
+
             }
         });
         return view;

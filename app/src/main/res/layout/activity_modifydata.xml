@@ -159,6 +159,35 @@
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rl_order"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:layout_marginTop="1dip"
+                android:background="@color/white"
+                >
+
+                <TextView
+                    android:id="@+id/tv_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="订单审核"
+                    />
+
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/icon_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+            <RelativeLayout
                 android:id="@+id/rl_clear_memery"
                 android:layout_width="wrap_content"
                 android:layout_height="50dip"
@@ -192,6 +221,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dip"
                 android:layout_marginTop="1dip"
+                android:visibility="gone"
                 android:background="@color/white"
                 >
 
@@ -202,6 +232,7 @@
                     android:clickable="false"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
+
                     android:text="一键分享"
                     />
 
@@ -266,7 +297,21 @@
                 android:layout_height="40dip"
                 android:textColor="@color/white"
                 />
-
+            <RelativeLayout
+                android:layout_marginTop="60dp"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="20dip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/text_color"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/app_version_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

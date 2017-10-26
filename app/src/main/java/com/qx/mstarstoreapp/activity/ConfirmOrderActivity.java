@@ -96,17 +96,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     Button idReceipt;
     @Bind(R.id.bt_qulity)
     CustomSelectButton idCsMass;
-    @Bind(android.R.id.list)
-    ListView list;
     @Bind(R.id.pull_refresh_view)
     PullToRefreshView pullRefreshView;
     @Bind(R.id.rel_shopping_car_bottom_action)
     RelativeLayout relShoppingCarBottomAction;
-    /*选择成色的ItME*/
-    List<OrderListResult.DataEntity.ModelColorEntity> modelColorItme;
-    /*选择质量等级的Item*/
-    List<OrderListResult.DataEntity.ModelQualityEntity> modelQualityItem;
-    List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> listData;
     @Bind(R.id.id_lay_order_detail)
     LinearLayout idLayOrderDetail;
     @Bind(R.id.id_et_seach)
@@ -121,8 +114,6 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     TextView phoneTv;
     @Bind(R.id.lny_loading_layout)
     LinearLayout lnyLoadingLayout;
-    AddressEntity isDefaultAddress;
-    CustomerEntity isDefaultCustomer;
     @Bind(R.id.id_ed_word)
     EditText idEdWord;
     @Bind(R.id.id_ed_remarks)
@@ -145,11 +136,18 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     ImageView ivDelete;
     @Bind(R.id.tv_pay)
     Button tvPay;
-
-    protected ListView lv_list;
     @Bind(R.id.tv_totalPrice_title)
     TextView tvTotalPriceTitle;
+    @Bind(R.id.lv_order)
+    ListView lvOrder;
 
+    /*选择成色的ItME*/
+    List<OrderListResult.DataEntity.ModelColorEntity> modelColorItme;
+    /*选择质量等级的Item*/
+    List<OrderListResult.DataEntity.ModelQualityEntity> modelQualityItem;
+    List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> listData;
+    AddressEntity isDefaultAddress;
+    CustomerEntity isDefaultCustomer;
     private int tempCurpage = 1;
     private int pullState = 1;
     private int curpage = 1;
@@ -175,7 +173,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_confirmorder);
         ButterKnife.bind(this);
-        getActivityType();
+        getActivityType(getIntent());
         initView();
         initScroll();
         loadNetData();
@@ -183,8 +181,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     }
 
-    public int getActivityType() {
-        Bundle bundle = getIntent().getExtras();
+    public int getActivityType(Intent intent) {
+        Bundle bundle = intent.getExtras();
         if (bundle == null) {
             return 0;
         }
@@ -262,16 +260,16 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 isDefaultCustomer = dataEntity.getCustomer();
                             } else {
                                 defaultValue = dataEntity.getDefaultValue();
-                                if(defaultValue.getModelColor()!=null){
-                                    if(!defaultValue.getModelColor().getId().isEmpty()){
+                                if (defaultValue.getModelColor() != null) {
+                                    if (!defaultValue.getModelColor().getId().isEmpty()) {
                                         idCsColor.setTextName(defaultValue.getModelColor().getTitle());
                                         purityId = defaultValue.getModelColor().getId();
                                     }
                                 }
-                                if(defaultValue.getModelQuality()!=null){
-                                    if(!defaultValue.getModelQuality().getId().isEmpty()){
+                                if (defaultValue.getModelQuality() != null) {
+                                    if (!defaultValue.getModelQuality().getId().isEmpty()) {
                                         idCsMass.setTextName(defaultValue.getModelQuality().getTitle());
-                                        qualityId = defaultValue.getModelQuality().getId()+"";
+                                        qualityId = defaultValue.getModelQuality().getId() + "";
                                     }
                                 }
                                 isDefaultCustomer = dataEntity.getCustomer();
@@ -313,6 +311,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                             tvTotalPrice.setVisibility(View.GONE);
                         }
                         L.e("解析成功");
+                        //清空是否选中
+                        if (type != 2) {
+                            confirOrderAdapter.clearCheckedState();
+                            mchecked.clear();
+                        }
                         endNetRequest();
                         initListener();
                         L.e("mchecked" + mchecked.size());
@@ -354,10 +357,17 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         orderDate.setText("下单日期：" + orderInfo.getOrderDate());
         orderStatus.setText("状态：" + orderInfo.getOrderStatus());
         goodprice.setText("金价：" + orderInfo.getGoldPrice());
-        lv_list.addHeaderView(listHeadView);
+        lvOrder.addHeaderView(listHeadView);
     }
 
-
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getActivityType(intent);
+        initView();
+        initScroll();
+        loadNetData();
+    }
     private void initListener() {
         if (idCsColor != null)
             idCsColor.setOnSelectData(new CustomSelectButton.OnselectData() {
@@ -555,7 +565,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
-                    showToastReal("提交成功");
+                    showToastReal(" 取消成功");
                     setResult(11);
                     finish();
                 }
@@ -668,12 +678,13 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     protected void initView() {
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         lnyLoadingLayout.setVisibility(View.VISIBLE);
-        listData = new ArrayList<>();
-        lv_list = (ListView) findViewById(android.R.id.list);
+        if (listData == null) {
+            listData = new ArrayList<>();
+        }
         confirOrderAdapter = new ConfirOrderAdapter();
         confirOrderAdapter.setOnAdapterCallBack(this);
-        lv_list.setEmptyView(findViewById(R.id.lny_no_result));
-        lv_list.setAdapter(confirOrderAdapter);
+        lvOrder.setEmptyView(findViewById(R.id.lny_no_result));
+        lvOrder.setAdapter(confirOrderAdapter);
         pullRefreshView.setOnFooterRefreshListener(this);
         pullRefreshView.setOnHeaderRefreshListener(this);
           /*发票*/
@@ -785,14 +796,6 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 //                    }
 
                     if (isErpOrder == 1) {
-                        //生产中详情说
-//                        intent = new Intent(ConfirmOrderActivity.this, CustomMadeActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putInt("type", 2);
-//                        bundle.putString("orderNum", id);
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
-                        // "orderNum":"AP2017021316476
                         String orderNum = jsonObject.get("orderNum").getAsString();
                         ProgressDialog progressDialog = new ProgressDialog(ConfirmOrderActivity.this, orderNum, 1);
                         progressDialog.showAsDropDown(rootView);
@@ -1099,7 +1102,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     @Override
     public boolean canScrollVertically(int direction) {
-        boolean isSroll = (lv_list != null && lv_list.canScrollVertically(direction));
+        boolean isSroll = (lvOrder != null && lvOrder.canScrollVertically(direction));
         if (isSroll) {
             tabs.setImageView(R.drawable.icon_down);
         } else {
@@ -1110,8 +1113,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     @Override
     public void onFlingOver(int y, long duration) {
-        if (lv_list != null) {
-            lv_list.smoothScrollBy(y, (int) duration);
+        if (lvOrder != null) {
+            lvOrder.smoothScrollBy(y, (int) duration);
         }
     }
 
@@ -1152,6 +1155,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             // L.e("ConfirOrderAdapter");
         }
 
+        public void clearCheckedState() {
+            checkedState.clear();
+        }
 
         public void selectAll() {
             for (OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity t : listData) {

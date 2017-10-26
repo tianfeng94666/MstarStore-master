@@ -1,5 +1,7 @@
 package com.qx.mstarstoreapp.json;
 
+import com.qx.mstarstoreapp.utils.StringUtils;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -160,7 +162,7 @@ public class StoneSearchInfoResult extends Object implements Serializable {
                 }
 
                 public String getCertCode() {
-                    return CertCode;
+                    return StringUtils.isEmpty(CertCode) ? "" : CertCode;
                 }
 
                 public void setCertCode(String certCode) {
@@ -192,7 +194,7 @@ public class StoneSearchInfoResult extends Object implements Serializable {
                 }
 
                 public String getWeight() {
-                    return Weight;
+                    return StringUtils.isEmpty(Weight) ? "" : Weight;
                 }
 
                 public void setWeight(String Weight) {
@@ -208,7 +210,7 @@ public class StoneSearchInfoResult extends Object implements Serializable {
                 }
 
                 public String getShape() {
-                    return Shape;
+                    return StringUtils.isEmpty(Shape) ? "" : Shape;
                 }
 
                 public void setShape(String Shape) {
@@ -216,7 +218,7 @@ public class StoneSearchInfoResult extends Object implements Serializable {
                 }
 
                 public String getColor() {
-                    return Color;
+                    return StringUtils.isEmpty(Color) ? "" : Color;
                 }
 
                 public void setColor(String Color) {
@@ -224,7 +226,7 @@ public class StoneSearchInfoResult extends Object implements Serializable {
                 }
 
                 public String getPurity() {
-                    return Purity;
+                    return StringUtils.isEmpty(Purity) ? "" : Purity;
                 }
 
                 public void setPurity(String Purity) {

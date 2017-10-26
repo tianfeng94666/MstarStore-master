@@ -217,10 +217,17 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        multiselectKey.clear();
                         idTvSelect.setText(StringUtils.idgui(select.getTitle()));
-                        mcategory = select.getId() + "";
+                        TypeFiler typeFiler = new TypeFiler();
+                        typeFiler.setCheck(true);
+                        typeFiler.setGroupKey("custom");
+                        typeFiler.setName(select.getTitle());
+                        typeFiler.setValue(select.getId());
+                        typeFiler.setId(select.getId());
+                        multiselectKey.add(typeFiler);
+                        curpage =1;
                         String url = getInitUrl();
-                        url += "&category=" + mcategory;
                         loadNetData(url);
                     }
                 });
@@ -408,12 +415,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                System.out.println("firstVisibleItem=" + firstVisibleItem);
+                System.out.println("+visibleItemCount=" + visibleItemCount);
                 if (firstVisibleItem == 0) {
                     firstVisibleItem = 1;
                 }
 
-                tvPagerAmount.setText((int) (Math.ceil(firstVisibleItem / 24.0)) + "/" + (int) Math.ceil(totalAmount / 24.0));
+                tvPagerAmount.setText((int) (Math.ceil((firstVisibleItem +visibleItemCount)/ 24.0)) + "/" + (int) Math.ceil(totalAmount / 24.0)+"页");
 
             }
         });

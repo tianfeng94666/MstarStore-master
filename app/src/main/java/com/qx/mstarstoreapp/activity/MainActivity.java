@@ -86,8 +86,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ButterKnife.bind(this);
 //        initView();
 //        setChioceFragment(0);
-        loadNetData();
-        getAddress();
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(leftPopupWindow!=null){
+            leftPopupWindow.initPopupView();
+        }
     }
 
     private void getAddress() {
@@ -107,6 +114,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     if (Global.ring == null) {
                         Global.ring = new Ring();
                     }
+                    Global.isMainAccount = getAddressResult.getData().getIsMasterAccount();
                     Global.ring.setAddressEntity(getAddressResult.getData().getAddress());
                     isDefaultCustomer = getAddressResult.getData().getDefaultCustomer();
                     if (isDefaultCustomer != null) {
@@ -194,6 +202,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        loadNetData();
+        getAddress();
         if (Global.isShowPopup != 0) {
             if (leftPopupWindow != null) {
                 leftPopupWindow.initPopupView();

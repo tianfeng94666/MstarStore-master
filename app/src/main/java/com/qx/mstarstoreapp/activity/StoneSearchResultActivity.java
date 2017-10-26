@@ -110,6 +110,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     LinearLayout llShowLess;
     @Bind(R.id.rl_stone_search_result)
     RelativeLayout rlStoneSearchResult;
+    @Bind(R.id.tv_reset2)
+    TextView tvReset2;
 
 
     private boolean isLandscape;
@@ -133,6 +135,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private boolean isCustomized;
     private double totalAmount;
     private LeftPopupWindow leftPopupWindow;
+    private String orderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +157,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         Intent intent = getIntent();
         openType = intent.getIntExtra("openType", 0);
         itemId = intent.getStringExtra("itemId");
+        orderId=intent.getStringExtra("orderId");
         type = intent.getIntExtra("type", 0);
         Bundle stoneBundle = null;
         Bundle bundle = intent.getBundleExtra("stoneInfo");
@@ -195,6 +199,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             tvChooseProduct.setVisibility(View.VISIBLE);
         }
 
+        tvReset2.setOnClickListener(this);
         idIgBack.setOnClickListener(this);
         lvStone.setXListViewListener(this);
         lvStone.setAutoLoadEnable(false);
@@ -393,7 +398,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 finish();
                 break;
             case R.id.tv_quoted_price_all:
-                if(list.size()!=0){
+                if (list.size() != 0) {
                     quotedPrice(stoneSearchResultAdapter.getQuotedPriceId());
                 }
                 break;
@@ -404,6 +409,11 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 setOrderByPrice();
                 break;
             case R.id.tv_reset:
+                stoneSearchInfoResult = null;
+                list.clear();
+                loadNetData();
+                break;
+            case R.id.tv_reset2:
                 stoneSearchInfoResult = null;
                 list.clear();
                 loadNetData();
@@ -426,7 +436,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void chooseStone() {
         int chooseAmount = 0;
         int seletPosition = 0;
-        if(list.size()==0){
+        if (list.size() == 0) {
             return;
         }
         for (int i = 0; i < list.size(); i++) {
@@ -444,18 +454,18 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             showToastReal("您忘记了石头，请选择一个！");
         } else if (chooseAmount == 1) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(seletPosition);
-            if(Global.ring==null){
+            if (Global.ring == null) {
                 Global.ring = new Ring();
             }
             Global.ring.setStoneEntity(listBean);
-            if(leftPopupWindow!=null){
+            if (leftPopupWindow != null) {
                 leftPopupWindow.showPop(rlStoneSearchResult);
             }
-            if(Global.ring.getItemId()==null){
+            if (Global.ring.getItemId() == null) {
                 showToastReal("请选择戒托");
                 return;
             }
-            if(Global.ring.getAddressEntity()==null||Global.ring.getCustomerEntity()==null){
+            if (Global.ring.getAddressEntity() == null || Global.ring.getCustomerEntity() == null) {
                 showToastReal("请选择信息");
                 return;
             }
@@ -504,7 +514,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void chooseProduct() {
         int chooseAmount = 0;
         int seletPosition = 0;
-        if(list.size()==0){
+        if (list.size() == 0) {
             return;
         }
         for (int i = 0; i < list.size(); i++) {
@@ -540,7 +550,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void rebackProductInfo() {
         int chooseAmount = 0;
         int seletPosition = 0;
-        if(list.size()==0){
+        if (list.size() == 0) {
             return;
         }
         for (int i = 0; i < list.size(); i++) {
@@ -565,6 +575,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             }
             Bundle pBundle = new Bundle();
             pBundle.putString("itemId", itemId);
+            pBundle.putString("orderId",orderId);
             pBundle.putInt("type", type);
             pBundle.putString("openType", openType + "");
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(seletPosition);

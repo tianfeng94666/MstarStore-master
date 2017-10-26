@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -56,37 +57,61 @@ public class LoginActivity extends BaseActivity {
     private VersionResult versionResult;
     private UpdataVersionResult updataVersionResult;
     private int updateValue;
+    private FingerprintManagerCompat manager;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login_1);
         ButterKnife.bind(this);
+        manager = FingerprintManagerCompat.from(this);
         isNeedUpdate();
         getBackIntent();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initView();
 
 
     }
 
     private void initView() {
-        String token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
+        token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
         if (!StringUtils.isEmpty(token)) {
             BaseApplication.setToken(token);
-            openActivity(MainActivity.class, null);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (!manager.isHardwareDetected()) {
+                //是否支持指纹识别
+//                showToastReal("不支持指纹登入，请验证登入");
+                openActivity(MainActivity.class, null);
+            } else if (!manager.hasEnrolledFingerprints()) {
+                //是否已注册指纹
+//                showToastReal("请录入指纹在手机，方便快速登录");
+                openActivity(MainActivity.class, null);
+            } else {
+                try {
+                    //这里去新建一个结果的回调，里面回调显示指纹验证的信息
+                    manager.authenticate(null, 0, null, new MyCallBack(), null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            finish();
-            return;
-        }else {
-            openActivity(LoginActivity.class,null);
+
+        } else {
+            showToastReal("要验证登录");
         }
+
         name = BaseApplication.spUtils.getString(SpUtils.key_username);
         pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
         if (!StringUtils.isEmpty(name)) {
@@ -113,9 +138,38 @@ public class LoginActivity extends BaseActivity {
                 getNetCode();
             }
         });
+
+
     }
 
+    public class MyCallBack extends FingerprintManagerCompat.AuthenticationCallback {
+        private static final String TAG = "MyCallBack";
 
+        // 当出现错误的时候回调此函数，比如多次尝试都失败了的时候，errString是错误信息
+        @Override
+        public void onAuthenticationError(int errMsgId, CharSequence errString) {
+            Log.d(TAG, "onAuthenticationError: " + errString);
+        }
+
+        // 当指纹验证失败的时候会回调此函数，失败之后允许多次尝试，失败次数过多会停止响应一段时间然后再停止sensor的工作
+        @Override
+        public void onAuthenticationFailed() {
+            Log.d(TAG, "onAuthenticationFailed: " + "验证失败");
+            showToastReal("验证失败");
+        }
+
+        @Override
+        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+            Log.d(TAG, "onAuthenticationHelp: " + helpString);
+        }
+
+        // 当验证的指纹成功时会回调此函数，然后不再监听指纹sensor
+        @Override
+        public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult
+                                                      result) {
+            openActivity(MainActivity.class, null);
+        }
+    }
 
     /*得到没登陆前的实例*/
     public void getBackIntent() {
@@ -126,7 +180,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void isNeedUpdate() {
-        String lgUrl = AppURL.URL_GET_UPDATE_VERSION + "device=" + "android"+"&version="+getResources().getString(R.string.app_version);
+        String lgUrl = AppURL.URL_GET_UPDATE_VERSION + "device=" + "android" + "&version=" + getResources().getString(R.string.app_version);
         L.e("netLogin" + lgUrl);
         VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -134,15 +188,15 @@ public class LoginActivity extends BaseActivity {
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
-                    updataVersionResult = new Gson().fromJson(result,UpdataVersionResult.class);
-                    if(updataVersionResult.getData()==null){
+                    updataVersionResult = new Gson().fromJson(result, UpdataVersionResult.class);
+                    if (updataVersionResult.getData() == null) {
                         return;
                     }
-                   updateValue = updataVersionResult.getData().getValue();
-                    if(updateValue==1){
-                        showNoticeDialog(true,updataVersionResult.getData().getMessage());
-                    }else if (updateValue==2){
-                        showNoticeDialog(false,updataVersionResult.getData().getMessage());
+                    updateValue = updataVersionResult.getData().getValue();
+                    if (updateValue == 1) {
+                        showNoticeDialog(true, updataVersionResult.getData().getMessage());
+                    } else if (updateValue == 2) {
+                        showNoticeDialog(false, updataVersionResult.getData().getMessage());
                     }
 
                 } else if (error.equals("2")) {
@@ -167,7 +221,7 @@ public class LoginActivity extends BaseActivity {
     /**
      * 显示软件更新对话框
      */
-    private void showNoticeDialog(boolean isNeed,String string) {
+    private void showNoticeDialog(boolean isNeed, String string) {
         // 构造对话框
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.soft_update_title);
@@ -185,6 +239,7 @@ public class LoginActivity extends BaseActivity {
         noticeDialog.setCanceledOnTouchOutside(isNeed);
         noticeDialog.show();
     }
+
     @Override
     public void loadNetData() {
         name = idEdName.getText().toString();
@@ -240,7 +295,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFail(String fail) {
-                 showToastReal(fail);
+                showToastReal(fail);
                 baseHideWatLoading();
             }
 

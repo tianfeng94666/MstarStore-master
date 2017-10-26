@@ -14,7 +14,7 @@
         android:id="@+id/tv_item_finish_delivery_number"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
-        android:text="出库单号 1654120001"
+        android:text=""
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -23,7 +23,7 @@
     android:layout_below="@+id/tv_item_finish_delivery_number"
     android:layout_marginTop="8dp"
     android:layout_marginLeft="16dp"
-    android:text="出库日期:2017/03/06"
+    android:text=""
     android:textColor="@color/text_color"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
@@ -37,7 +37,7 @@
 
             android:layout_marginTop="8dp"
             android:layout_marginLeft="16dp"
-            android:text="价格：1350元"
+            android:text=""
             android:textColor="@color/theme_red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -45,7 +45,7 @@
             android:id="@+id/tv_item_finish_delivery_amount"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="16dp"
-            android:text="数量：2件"
+            android:text=""
             android:textColor="@color/text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

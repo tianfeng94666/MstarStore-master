@@ -57,6 +57,15 @@ public class GetAddressResult {
 
         private AddressEntity address;
         private CustomerEntity DefaultCustomer;
+        private String IsMasterAccount;
+
+        public String getIsMasterAccount() {
+            return IsMasterAccount;
+        }
+
+        public void setIsMasterAccount(String isMasterAccount) {
+            IsMasterAccount = isMasterAccount;
+        }
 
         public AddressEntity getAddress() {
             return address;

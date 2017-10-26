@@ -47,6 +47,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.dialog.ImageInitiDialog;
 import com.qx.mstarstoreapp.json.SettingResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
@@ -124,6 +125,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView tvLastVersion;
     @Bind(R.id.rl_last_version)
     RelativeLayout rlLastVersion;
+    @Bind(R.id.tv_order)
+    TextView tvOrder;
+    @Bind(R.id.rl_order)
+    RelativeLayout rlOrder;
 
 
     private LayoutInflater inflater;
@@ -171,7 +176,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         rlLastVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity(DownloadActivity.class,null);
+                openActivity(DownloadActivity.class, null);
             }
         });
 
@@ -211,7 +216,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     }
 
                 } else if (error.equals("2")) {
-                    loginToServer(CustomMadeActivity.class);
+                    loginToServer(LoginActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
@@ -264,7 +269,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
+
+//                BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
+                Global.ring =null;
                 openActivity(LoginActivity.class, null);
             }
         });
@@ -302,6 +309,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 });
             }
         });
+        rlOrder.setOnClickListener(this);
     }
 
     private void showShare() {
@@ -403,6 +411,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.rl_encryption_setting:
                 goIntoEncryptionSettings();
+                break;
+            case R.id.rl_order:
+               openActivity(OrderExamineActivity.class,null);
                 break;
         }
     }
