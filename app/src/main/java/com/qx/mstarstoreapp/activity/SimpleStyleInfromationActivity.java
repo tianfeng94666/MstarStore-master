@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -33,6 +34,7 @@ import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
+import com.qx.mstarstoreapp.json.GetProductInfoByNumResult;
 import com.qx.mstarstoreapp.json.JewelStone;
 import com.qx.mstarstoreapp.json.ModelDetailResult;
 import com.qx.mstarstoreapp.json.StoneDetail;
@@ -233,6 +235,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         //透明导航栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -240,12 +243,13 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         if (Global.isShowPopup != 0 && leftPopupWindow != null) {
             leftPopupWindow.initPopupView();
         }
-        if ((type == 2 || type == 1)&&!openType.equals("2")) {
+        if ((type == 2 || type == 1) && !openType.equals("2")) {
             loadNetData();
         }
 
         initView();
     }
+
     private void getIntentData(Intent intent) {
         Bundle extras = intent.getExtras();
         itemId = extras.getString("itemId");
@@ -308,6 +312,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     }
 
     private void initView() {
+        idCusStoreNumber.requestFocus();
         if (isShowPrice) {
             tvPrice.setVisibility(View.VISIBLE);
             tvPriceTitle.setVisibility(View.VISIBLE);
@@ -376,7 +381,69 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 }
             }
         });
+
         initCustomselect();
+        idStoreTitle.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+
+                    if (idStoreTitle.isFocused()) {
+                        seachProduct();
+                    }
+                    return true;
+                }
+//                else if (keyCode == KeyEvent.KEYCODE_TAB && event.getAction() == KeyEvent.ACTION_UP) {
+//                    if (idStoreTitle.isFocused()) {
+//                        idCusStoreNumber.requestFocus();
+//                    }
+//                    return true;
+//                }
+                return false;
+            }
+        });
+
+        idTvStoreRemarks.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (idTvStoreRemarks.isFocused()) {
+                        //提交订单
+                        addCurentOrder();
+                        idStoreTitle.requestFocus();
+                    }
+                    return true;
+                } else if (keyCode == KeyEvent.KEYCODE_TAB && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (idTvStoreRemarks.isFocused()) {
+                        idStoreTitle.requestFocus();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        idCusStoreNumber.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (idCusStoreNumber.isFocused()) {
+                        idCusStoreNumber.clearFocus();
+                        idTvStoreRemarks.requestFocus();
+                        idCusStoreSize.showPopupWindow();
+                    }
+                    return true;
+                } else if (keyCode == KeyEvent.KEYCODE_TAB && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (idCusStoreNumber.isFocused()) {
+                        idCusStoreNumber.clearFocus();
+                        idCusStoreNumber.setFocusable(false);
+                        idCusStoreSize.showPopupWindow();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         //快速定制
         if (type == 0) {        //避免修改时进来
@@ -550,14 +617,14 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
 
         //BadgeView的具体使用
         badge.setBadgeText(count + ""); // 需要显示的提醒类容
-        badge.setBadgeGravity(Gravity.END|Gravity.TOP);// 显示的位置.右上角,BadgeView.POSITION_BOTTOM_LEFT,下左，还有其他几个属性
+        badge.setBadgeGravity(Gravity.END | Gravity.TOP);// 显示的位置.右上角,BadgeView.POSITION_BOTTOM_LEFT,下左，还有其他几个属性
         badge.setBadgeTextColor(Color.WHITE); // 文本颜色
         int hint = Color.rgb(200, 39, 73);
         badge.setBadgeBackgroundColor(hint); // 提醒信息的背景颜色，自己设置
-        badge.setBadgeTextSize(10,true); // 文本大小
-        badge.setBadgePadding(3,true); // 水平和竖直方向的间距+-
+        badge.setBadgeTextSize(10, true); // 文本大小
+        badge.setBadgePadding(3, true); // 水平和竖直方向的间距+-
         if (isVisible) {
-          badge.setVisibility(View.VISIBLE);  // 只有显示
+            badge.setVisibility(View.VISIBLE);  // 只有显示
         } else {
             badge.setVisibility(View.GONE);//影藏显示
         }
@@ -580,146 +647,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             @Override
             public void onSuccess(String result) {
                 Log.e("success", result);
-                stoneEntities.clear();
-                lnyLoadingLayout.setVisibility(View.GONE);
-                L.e(result);
-                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
-                if (error == 0) {
-                    modelDetail = new Gson().fromJson(result, ModelDetailResult.class);
-                    dataEntity = modelDetail.getData();
-                    if (dataEntity == null) {
-                        return;
-                    }
-                    initCustomselect();
-                    List<ModelDetailResult.DataEntity.GoldenPriceEntity> goldenPrice = dataEntity.getGoldenPrice();
-                    remarksEntity = dataEntity.getRemarks();
-                    modelEntity = dataEntity.getModel();
-                    modelPuritys = dataEntity.getModelPuritys();
-                    categoryTitle = modelEntity.getCategoryTitle();
-                    categoryId = modelEntity.getCategoryId();
-                    /*是否自带主石*/
-
-                    //L.e("服务器返回是否自带主石头"+isSelfStone);
-                    /*得到数量*/
-                    if (modelEntity.getNumber() == null) {
-                        modelEntity.setNumber("1");
-                    }
-                    String number = modelEntity.getNumber();
-                    String remark = modelEntity.getRemark();
-                    String handSize = modelEntity.getHandSize();
-
-                    pics = modelEntity.getPics();
-                    stone = modelEntity.getStone();
-                    stoneA = modelEntity.getStoneA();
-                    stoneB = modelEntity.getStoneB();
-                    stoneC = modelEntity.getStoneC();
-                    jewelStone = dataEntity.getJewelStone();
-
-                    stoneTypeItme = dataEntity.getStoneType();
-                    stoneColorItme = dataEntity.getStoneColor();
-                    stonePurityItme = dataEntity.getStonePurity();
-                    stoneSpecItme = dataEntity.getStoneSpec();
-                    stoneShapeItem = dataEntity.getStoneShape();
-                    stoneDetail = new StoneDetail(stoneTypeItme, stoneColorItme, stonePurityItme, stoneSpecItme, stoneShapeItem);
-
-                    if (type == 2 && selectedStone.getCertCode() != null) {
-                        if(jewelStone!=null){
-                            jewelStone.setJewelStoneId(selectedStone.getId());
-                        }
-                        stoneprice = selectedStone.getPrice();
-                    } else if (selectedStone.getCertCode() == null && jewelStone != null) {
-                        stoneprice = jewelStone.getJewelStonePrice();
-                        selectedStone.setId(jewelStone.getJewelStoneId());
-                    }
-                    if (jewelStone != null) {
-                        certCode = jewelStone.getJewelStoneCode();
-                        tvCertcode.setText(jewelStone.getJewelStoneCode());
-                        idCusStoreNumber.setText("1");
-                        stone.setColorTitle(jewelStone.getJewelStoneColor());
-                        stone.setPurityTitle(jewelStone.getJewelStonePurity());
-                        stone.setPrice(jewelStone.getJewelStonePrice());
-                        stone.setSpecTitle(jewelStone.getJewelStoneWeight());
-                        stone.setTypeId(stoneTypeItme.get(0).getId());
-                        stone.setTypeTitle(stoneTypeItme.get(0).getTitle());
-                        stone.setShapeId(stoneShapeItem.get(0).getId());
-                        stone.setShapeTitle(stoneShapeItem.get(0).getTitle());
-                        stone.setNumber("1");
-                        stone.setSpecTitle("1");
-                        stone.setColorId(stoneColorItme.get(0).getId());
-                        stone.setPurityId(stonePurityItme.get(0).getId());
-                        stone.setIsNotEmpty(1);
-                        stone.setStoneCode(jewelStone.getJewelStoneCode());
-                    } else {
-                        tvAmountTitle.setText("件    数");
-                        llAmount.setVisibility(View.VISIBLE);
-                        llCertcode.setVisibility(View.GONE);
-                    }
-                    stone.setIsSelfStone(modelEntity.getIsSelfStone());
-                    if (modelEntity.getIsSelfStone() == 1) {
-                        stone.setChecked(true);
-                    }
-                    if (stoneA.getStoneOut().equals("1")) {
-                        stoneA.setChecked(true);
-                        stoneA.setIsSelfStone(modelEntity.getIsSelfStone());
-                    }
-                    if (stoneB.getStoneOut().equals("1")) {
-                        stoneB.setChecked(true);
-                        stoneB.setIsSelfStone(modelEntity.getIsSelfStone());
-                    }
-                    if (stoneC.getStoneOut().equals("1")) {
-                        stoneC.setChecked(true);
-                        stoneC.setIsSelfStone(modelEntity.getIsSelfStone());
-                    }
-                    if (openType.equals("2")) {
-                        stone.setIsNotEmpty(1);
-                    }
-                    addEntities(stone, stoneA, stoneB, stoneC);
-
-
-                    setStorePrice(stone);
-                    setStorePrice(stoneA);
-                    setStorePrice(stoneB);
-                    setStorePrice(stoneC);
-
-                    L.e("categoryTitle" + categoryTitle);
-                    idStoreTitle.setText(modelEntity.getTitle());
-                    tvWeight.setText(modelEntity.getWeight());
-                    tvType.setText(categoryTitle);
-                    //快速定制
-                    if (!modelEntity.getCategoryTitle().contains("戒")) {
-                        tvPreview.setVisibility(View.GONE);
-                    } else {
-                        tvPreview.setVisibility(View.VISIBLE);
-                    }
-                    idStoreTitle2.setText(modelEntity.getTitle() + " " + categoryTitle);
-                    tvWeight2.setText(modelEntity.getWeight());
-
-                    if (!StringUtils.isEmpty(number)) {
-                        idCusStoreNumber.setText("" + number);
-                    }
-                    if (!StringUtils.isEmpty(remark)) {
-                        idTvStoreRemarks.setText("" + remark);
-                    }
-                    idCusStoreSize.setTextName(handSize);
-                    tvPrice.setText("¥" + UIUtils.stringChangeToInt(Double.parseDouble(toEmpty(modelEntity.getPrice())) * Double.parseDouble(toEmpty(modelEntity.getNumber())) + Double.parseDouble(toEmpty(stoneprice)) + ""));
-
-
-                    initViewPager();
-                    StringBuffer sb = new StringBuffer();
-                    for (int i = 0; i < goldenPrice.size(); i++) {
-                        sb.append(goldenPrice.get(i).getTitle() + " " + goldenPrice.get(i).getPrice() + "      ");
-                    }
-
-                    initView();
-                    adapter.notifyDataSetChanged();
-                } else if (error == 2) {
-                    ToastManager.showToastReal(getString(R.string.data_error));
-                } else {
-                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    L.e(message);
-                    ToastManager.showToastReal("数据加载错误:+" + message);
-                }
-
+                dealData(result);
             }
 
             @Override
@@ -732,6 +660,148 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         });
 
 
+    }
+
+    private void dealData(String result) {
+        stoneEntities.clear();
+        lnyLoadingLayout.setVisibility(View.GONE);
+        L.e(result);
+        int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+        if (error == 0) {
+            modelDetail = new Gson().fromJson(result, ModelDetailResult.class);
+            dataEntity = modelDetail.getData();
+            if (dataEntity == null) {
+                return;
+            }
+            initCustomselect();
+            List<ModelDetailResult.DataEntity.GoldenPriceEntity> goldenPrice = dataEntity.getGoldenPrice();
+            remarksEntity = dataEntity.getRemarks();
+            modelEntity = dataEntity.getModel();
+            modelPuritys = dataEntity.getModelPuritys();
+            categoryTitle = modelEntity.getCategoryTitle();
+            categoryId = modelEntity.getCategoryId();
+                    /*是否自带主石*/
+
+            //L.e("服务器返回是否自带主石头"+isSelfStone);
+                    /*得到数量*/
+            if (modelEntity.getNumber() == null) {
+                modelEntity.setNumber("1");
+            }
+            String number = modelEntity.getNumber();
+            String remark = modelEntity.getRemark();
+            String handSize = modelEntity.getHandSize();
+
+            pics = modelEntity.getPics();
+            stone = modelEntity.getStone();
+            stoneA = modelEntity.getStoneA();
+            stoneB = modelEntity.getStoneB();
+            stoneC = modelEntity.getStoneC();
+            jewelStone = dataEntity.getJewelStone();
+
+            stoneTypeItme = dataEntity.getStoneType();
+            stoneColorItme = dataEntity.getStoneColor();
+            stonePurityItme = dataEntity.getStonePurity();
+            stoneSpecItme = dataEntity.getStoneSpec();
+            stoneShapeItem = dataEntity.getStoneShape();
+            stoneDetail = new StoneDetail(stoneTypeItme, stoneColorItme, stonePurityItme, stoneSpecItme, stoneShapeItem);
+
+            if (type == 2 && selectedStone.getCertCode() != null) {
+                if (jewelStone != null) {
+                    jewelStone.setJewelStoneId(selectedStone.getId());
+                }
+                stoneprice = selectedStone.getPrice();
+            } else if (selectedStone.getCertCode() == null && jewelStone != null) {
+                stoneprice = jewelStone.getJewelStonePrice();
+                selectedStone.setId(jewelStone.getJewelStoneId());
+            }
+            if (jewelStone != null) {
+                certCode = jewelStone.getJewelStoneCode();
+                tvCertcode.setText(jewelStone.getJewelStoneCode());
+                idCusStoreNumber.setText("1");
+                stone.setColorTitle(jewelStone.getJewelStoneColor());
+                stone.setPurityTitle(jewelStone.getJewelStonePurity());
+                stone.setPrice(jewelStone.getJewelStonePrice());
+                stone.setSpecTitle(jewelStone.getJewelStoneWeight());
+                stone.setTypeId(stoneTypeItme.get(0).getId());
+                stone.setTypeTitle(stoneTypeItme.get(0).getTitle());
+                stone.setShapeId(stoneShapeItem.get(0).getId());
+                stone.setShapeTitle(stoneShapeItem.get(0).getTitle());
+                stone.setNumber("1");
+                stone.setSpecTitle("1");
+                stone.setColorId(stoneColorItme.get(0).getId());
+                stone.setPurityId(stonePurityItme.get(0).getId());
+                stone.setIsNotEmpty(1);
+                stone.setStoneCode(jewelStone.getJewelStoneCode());
+            } else {
+                tvAmountTitle.setText("件    数");
+                llAmount.setVisibility(View.VISIBLE);
+                llCertcode.setVisibility(View.GONE);
+            }
+            stone.setIsSelfStone(modelEntity.getIsSelfStone());
+            if (modelEntity.getIsSelfStone() == 1) {
+                stone.setChecked(true);
+            }
+            if (stoneA.getStoneOut().equals("1")) {
+                stoneA.setChecked(true);
+                stoneA.setIsSelfStone(modelEntity.getIsSelfStone());
+            }
+            if (stoneB.getStoneOut().equals("1")) {
+                stoneB.setChecked(true);
+                stoneB.setIsSelfStone(modelEntity.getIsSelfStone());
+            }
+            if (stoneC.getStoneOut().equals("1")) {
+                stoneC.setChecked(true);
+                stoneC.setIsSelfStone(modelEntity.getIsSelfStone());
+            }
+            if (openType.equals("2")) {
+                stone.setIsNotEmpty(1);
+            }
+            addEntities(stone, stoneA, stoneB, stoneC);
+
+
+            setStorePrice(stone);
+            setStorePrice(stoneA);
+            setStorePrice(stoneB);
+            setStorePrice(stoneC);
+
+            L.e("categoryTitle" + categoryTitle);
+            idStoreTitle.setText(modelEntity.getTitle());
+            tvWeight.setText(modelEntity.getWeight());
+            tvType.setText(categoryTitle);
+            //快速定制
+            if (!modelEntity.getCategoryTitle().contains("戒")) {
+                tvPreview.setVisibility(View.GONE);
+            } else {
+                tvPreview.setVisibility(View.VISIBLE);
+            }
+            idStoreTitle2.setText(modelEntity.getTitle() + " " + categoryTitle);
+            tvWeight2.setText(modelEntity.getWeight());
+
+            if (!StringUtils.isEmpty(number)) {
+                idCusStoreNumber.setText("" + number);
+            }
+            if (!StringUtils.isEmpty(remark)) {
+                idTvStoreRemarks.setText("" + remark);
+            }
+            idCusStoreSize.setTextName(handSize);
+            tvPrice.setText("¥" + UIUtils.stringChangeToInt(Double.parseDouble(toEmpty(modelEntity.getPrice())) * Double.parseDouble(toEmpty(modelEntity.getNumber())) + Double.parseDouble(toEmpty(stoneprice)) + ""));
+
+
+            initViewPager();
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < goldenPrice.size(); i++) {
+                sb.append(goldenPrice.get(i).getTitle() + " " + goldenPrice.get(i).getPrice() + "      ");
+            }
+
+            initView();
+            adapter.notifyDataSetChanged();
+        } else if (error == 2) {
+            ToastManager.showToastReal(getString(R.string.data_error));
+        } else {
+            String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+            L.e(message);
+            ToastManager.showToastReal("数据加载错误:+" + message);
+        }
     }
 
     /**
@@ -779,36 +849,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
 
     private void initCustomselect() {
         idCusStoreSize.setDefaultText("手寸");
-        idCusStoreSize.setOnSelectData(new CustomselectStringButton.OnselectData() {
-            @Override
-            public List<String> getData() {
-                return Arrays.asList(dataEntity.getHandSizeData());
-            }
-
-            @Override
-            public void getSelectId(String type) {
-                idCusStoreSize.setTextName(type);
-                //快速设置设置手寸大小
-                if (Global.isShowPopup != 0) {
-                    Global.ring.setHandSize(type);
-                }
-            }
-
-            @Override
-            public int defaultPosition() {
-                return 22;
-            }
-
-            @Override
-            public String getTitle() {
-                return "手寸";
-            }
-
-            @Override
-            public View getRootView() {
-                return rootView;
-            }
-        });
+        idCusStoreSize.setOnSelectData(getHandSizeData());
 
         idCusStoreRemarkid.setOnSelectData(new CustomSelectButton.OnselectData() {
             @Override
@@ -877,6 +918,40 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 return "选择成色";
             }
         });
+    }
+
+    private CustomselectStringButton.OnselectData getHandSizeData() {
+        CustomselectStringButton.OnselectData onselectData = new CustomselectStringButton.OnselectData() {
+            @Override
+            public List<String> getData() {
+                return Arrays.asList(dataEntity.getHandSizeData());
+            }
+
+            @Override
+            public void getSelectId(String type) {
+                idCusStoreSize.setTextName(type);
+                //快速设置设置手寸大小
+                if (Global.isShowPopup != 0) {
+                    Global.ring.setHandSize(type);
+                }
+            }
+
+            @Override
+            public int defaultPosition() {
+                return 22;
+            }
+
+            @Override
+            public String getTitle() {
+                return "手寸";
+            }
+
+            @Override
+            public View getRootView() {
+                return rootView;
+            }
+        };
+        return onselectData;
     }
 
     protected void onResume() {
@@ -1189,6 +1264,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                     ToastManager.showToastReal(message);
                     tvSearch.setEnabled(true);
                 }
+
             }
 
             @Override
@@ -1511,13 +1587,40 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             finish();
             return true;
         }
-        if(keyCode == KeyEvent.KEYCODE_ENTER){
-            if(idStoreTitle.isFocused()){
-                //提交订单
-            }
-        }
-        L.e("keycode",keyCode+"  -- "+event.getAction());
+
+        L.e("keycode", keyCode + "  -- " + event.getAction());
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void seachProduct() {
+        String url;
+        url = AppURL.URL_GET_PRODUCTINFO_BY_MODENUM + "tokenKey=" + BaseApplication.getToken() + "&modelNum=" + idStoreTitle.getText().toString();
+        L.e("获取款号" + url + "    Type=   " + type);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e("success", result);
+                GetProductInfoByNumResult getProductInfoByNumResult = new Gson().fromJson(result, GetProductInfoByNumResult.class);
+                if (new Gson().fromJson(result, JsonObject.class).get("error").getAsString().equals("0")) {
+                    if (getProductInfoByNumResult.getData() == null) {
+                        return;
+                    }
+                    orderId = getProductInfoByNumResult.getData().getId();
+                    loadNetData();
+                } else {
+                    showToastReal(getProductInfoByNumResult.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFail(String fail) {
+                lnyLoadingLayout.setVisibility(View.GONE);
+                showToastReal(fail);
+                showToastReal("数据获取失败");
+            }
+
+        });
     }
 
 }

@@ -77,6 +77,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="@dimen/margin10"
+                        android:singleLine="true"
+                        android:selectAllOnFocus="true"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/text_size_small_medium" />
 
@@ -241,6 +243,7 @@
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text="1"
+                                android:selectAllOnFocus="true"
                                 android:textSize="14sp" />
 
                             <ImageView
@@ -290,6 +293,7 @@
                             android:layout_marginRight="@dimen/margin5"
                             android:layout_weight="1"
                             android:button="@null"
+                            android:gravity="center"
                             android:hint="手寸"
                             android:inputType="numberDecimal"
                             android:textSize="10sp"
@@ -331,7 +335,7 @@
                             android:layout_marginTop="2dp"
                             android:background="@drawable/btn_bg_while"
 
-
+                            android:selectAllOnFocus="true"
                             android:gravity="center"
                             android:hint="字印"
                             android:maxLength="5"
@@ -468,6 +472,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/btn_bg_while2"
                             android:button="@null"
+                            android:selectAllOnFocus="true"
                             android:hint="填写备注！"
                             android:padding="5dp"
                             android:textSize="12sp" />

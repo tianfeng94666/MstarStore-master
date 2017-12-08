@@ -199,7 +199,7 @@
             android:clickable="false"
             android:gravity="center_vertical"
             android:padding="10dip"
-            android:text="裸石倍率（%）"
+            android:text="裸石(0--0.49)倍率（%）"
             />
 
 
@@ -231,6 +231,116 @@
 
         <ImageView
             android:id="@+id/iv_stone_add"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_add" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_stone_addtion2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dip"
+        android:layout_marginTop="1dip"
+        android:padding="5dip"
+        android:background="@color/white"
+        >
+
+        <TextView
+            android:id="@+id/tv_is_stone_point2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:padding="10dip"
+            android:text="裸石(0.50-0.99)倍率（%）"
+            />
+
+
+        <ImageView
+            android:id="@+id/iv_stone_reduce2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:src="@drawable/icon_acc"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/et_stones_spot2"
+            android:layout_toStartOf="@+id/et_stones_spot2" />
+
+        <EditText
+            android:id="@+id/et_stones_spot2"
+            android:layout_width="50dp"
+            android:layout_toLeftOf="@+id/iv_stone_add2"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1.5"
+            android:digits="1234567890"
+            android:background="@color/white"
+            android:button="@null"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:text="0"
+            android:textSize="@dimen/text_size_small_medium" />
+
+
+        <ImageView
+            android:id="@+id/iv_stone_add2"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_add" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_stone_addtion3"
+        android:layout_width="wrap_content"
+        android:layout_height="50dip"
+        android:layout_marginTop="1dip"
+        android:padding="5dip"
+        android:background="@color/white"
+        >
+
+        <TextView
+            android:id="@+id/tv_is_stone_point3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:padding="10dip"
+            android:text="裸石(1以上)倍率（%）"
+            />
+
+
+        <ImageView
+            android:id="@+id/iv_stone_reduce3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:src="@drawable/icon_acc"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/et_stones_spot3"
+            android:layout_toStartOf="@+id/et_stones_spot3" />
+
+        <EditText
+            android:id="@+id/et_stones_spot3"
+            android:layout_width="50dp"
+            android:layout_toLeftOf="@+id/iv_stone_add3"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1.5"
+            android:digits="1234567890"
+            android:background="@color/white"
+            android:button="@null"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:text="0"
+            android:textSize="@dimen/text_size_small_medium" />
+
+
+        <ImageView
+            android:id="@+id/iv_stone_add3"
             android:padding="5dp"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"

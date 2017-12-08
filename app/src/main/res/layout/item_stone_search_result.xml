@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/ll_check"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="@null">
@@ -28,14 +28,14 @@
     <TextView
         android:id="@+id/tv_item_weight"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
     <TextView
         android:id="@+id/tv_item_price"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:paddingRight="10dp"
         android:background="@drawable/table_head"
         android:textSize="13sp"
@@ -46,7 +46,7 @@
     <TextView
         android:id="@+id/tv_item_shape"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -54,7 +54,7 @@
     <TextView
         android:id="@+id/tv_item_color"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -62,7 +62,7 @@
     <TextView
         android:id="@+id/tv_item_purity"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -70,7 +70,7 @@
     <TextView
         android:id="@+id/tv_item_cut"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -78,7 +78,7 @@
     <TextView
         android:id="@+id/tv_item_polish"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -86,7 +86,7 @@
     <TextView
         android:id="@+id/tv_item_symmetric"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -94,7 +94,7 @@
     <TextView
         android:id="@+id/tv_item_fluorescence"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -102,7 +102,7 @@
     <TextView
         android:id="@+id/tv_item_certauth"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -110,7 +110,7 @@
         android:id="@+id/tv_item_cerauth_number"
         android:layout_width="120dp"
         android:textSize="13sp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="克拉" />
@@ -118,7 +118,7 @@
     <TextView
         android:id="@+id/tv_item_quoted_price"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="报价"

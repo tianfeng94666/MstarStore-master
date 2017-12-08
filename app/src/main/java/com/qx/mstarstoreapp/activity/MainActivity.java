@@ -1,13 +1,9 @@
 package com.qx.mstarstoreapp.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -66,6 +62,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     LinearLayout llBanner;
     @Bind(R.id.ll_show_less)
     LinearLayout llShowLess;
+    @Bind(R.id.iv_make)
+    TextView ivMake;
 
     private int nowId;
     private String version;
@@ -92,7 +90,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if(leftPopupWindow!=null){
+        if (leftPopupWindow != null) {
             leftPopupWindow.initPopupView();
         }
     }
@@ -108,7 +106,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 String error = jsonResult.get("error").getAsString();
                 if (error.equals("0")) {
                     GetAddressResult getAddressResult = new Gson().fromJson(result, GetAddressResult.class);
-                    if(getAddressResult.getData()==null){
+                    if (getAddressResult.getData() == null) {
                         return;
                     }
                     if (Global.ring == null) {
@@ -185,9 +183,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
-
-
     public int getVerCode(Context context) {
         int verCode = -1;
         try {
@@ -227,6 +222,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ivStone.setOnClickListener(this);
         ivRingStone.setOnClickListener(this);
         ivStoneRing.setOnClickListener(this);
+        ivMake.setOnClickListener(this);
         llShowLess.setOnClickListener(this);
     }
 
@@ -277,6 +273,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.ll_show_less:
                 initPopwindow();
+                break;
+            case R.id.iv_make:
+                openActivity(MakingActivity.class, null);
+
                 break;
         }
     }

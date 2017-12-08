@@ -71,8 +71,26 @@ public class SettingResult implements Serializable{
         private String modelAddtion;
         private String phone;
         private String stoneAddtion;
+        private String stoneAddtion1;
+        private String stoneAddtion2;
         private String userName;
         private String address;
+
+        public String getStoneAddtion1() {
+            return stoneAddtion1;
+        }
+
+        public void setStoneAddtion1(String stoneAddtion1) {
+            this.stoneAddtion1 = stoneAddtion1;
+        }
+
+        public String getStoneAddtion2() {
+            return stoneAddtion2;
+        }
+
+        public void setStoneAddtion2(String stoneAddtion2) {
+            this.stoneAddtion2 = stoneAddtion2;
+        }
 
         public String getAddress() {
             return address;

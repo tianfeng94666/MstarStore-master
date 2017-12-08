@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ public class CustomselectStringButton extends RelativeLayout {
     private TextView tvCancle;
     private boolean isAbleOnclick = true;
     private int backgroundId;
+    private EditText etAmount;
 
     public int getBackgroundId() {
         return backgroundId;
@@ -149,12 +152,29 @@ public class CustomselectStringButton extends RelativeLayout {
         View view = View.inflate(mContext, R.layout.popupwindow_bottom, null);
         wheelView = (WheelView) view.findViewById(R.id.wv_popupwindwo);
         tvTitle = (TextView) view.findViewById(R.id.tv_title_popupwindow);
+        etAmount = (EditText)view.findViewById(R.id.et_amount);
         tvTitle.setText(onSelectData.getTitle());
         tvConfirm = (TextView) view.findViewById(R.id.tv_confirm);
         tvCancle = (TextView) view.findViewById(R.id.tv_cancle);
         SimpleWheelAdapter arrayWheelAdapter = new SimpleWheelAdapter(mContext);
         wheelView.setWheelAdapter(arrayWheelAdapter);
         wheelView.setWheelSize(5);
+        if (onSelectData != null&&types==null) {
+            types = onSelectData.getData();
+        }
+        etAmount.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+
+                    setTextName(etAmount.getText().toString());
+                    setText(etAmount.getText().toString());
+                    closePupupWindow();
+                    return true;
+                }
+                return false;
+            }
+        });
         wheelView.setWheelData(types);
         WheelView.WheelViewStyle style = new WheelView.WheelViewStyle();
         style.selectedTextSize = 20;

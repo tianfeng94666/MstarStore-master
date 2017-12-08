@@ -69,6 +69,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
+
 /*
  * 创建人：Yangshao
  * 创建时间：2016/9/29 15:45
@@ -151,9 +152,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         titles = new String[]{getString(R.string.updatepwd), getString(R.string.update_phone), getString(R.string.adress_manager)};
         context = this;
         ButterKnife.bind(this);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         loadNetData();
         initViews();
-
     }
 
     public void onBack(View view) {
@@ -269,8 +276,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
+                BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
                 Global.ring =null;
                 openActivity(LoginActivity.class, null);
             }

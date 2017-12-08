@@ -54,44 +54,59 @@
             android:text="快速定制"
             android:gravity="center"
             android:textColor="@color/white"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:drawableTop="@mipmap/home"
-            android:padding="10dp" />
+            android:padding="5dp" />
 
 
 
         <TextView
             android:id="@+id/iv_product"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="4dp"
             android:drawableTop="@mipmap/product"
            android:text="产品"
             android:textColor="@color/white"
             android:gravity="center"
-            android:padding="10dp" />
+            android:padding="5dp" />
         <TextView
             android:id="@+id/iv_stone"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="4dp"
             android:drawableTop="@mipmap/stone"
             android:text="裸石库"
             android:textColor="@color/white"
             android:gravity="center"
-            android:padding="10dp" />
+            android:padding="5dp" />
 
         <TextView
             android:id="@+id/iv_mine"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="4dp"
             android:drawableTop="@mipmap/mine"
             android:text="个人中心"
             android:textColor="@color/white"
             android:gravity="center"
-            android:padding="10dp" />
+            android:padding="5dp" />
+        <TextView
+            android:id="@+id/iv_make"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:drawableTop="@mipmap/mine"
+            android:text="个人定制"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:padding="5dp" />
     </LinearLayout>
     <include layout="@layout/btn_popupwindow"
         android:visibility="gone"/>

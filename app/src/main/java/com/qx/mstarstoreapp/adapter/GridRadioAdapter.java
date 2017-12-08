@@ -110,7 +110,7 @@ public class GridRadioAdapter extends BaseAdapter {
                 searchKeyword.setValue("");
             }
         }
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     public void setOnCleanEditText(GridRadioAdapter.onCleanEditText onCleanEditText) {

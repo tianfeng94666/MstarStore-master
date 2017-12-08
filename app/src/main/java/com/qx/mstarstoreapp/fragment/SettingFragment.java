@@ -125,6 +125,18 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     TextView tvIsCustomized;
     @Bind(R.id.bt_customized)
     ImageView btCustomized;
+    @Bind(R.id.tv_is_into)
+    TextView tvIsInto;
+    @Bind(R.id.rl_encryption_setting)
+    RelativeLayout rlEncryptionSetting;
+    @Bind(R.id.tv_order)
+    TextView tvOrder;
+    @Bind(R.id.rl_order)
+    RelativeLayout rlOrder;
+    @Bind(R.id.tv_last_version)
+    TextView tvLastVersion;
+    @Bind(R.id.rl_last_version)
+    RelativeLayout rlLastVersion;
 
     private LayoutInflater inflater;
     private String[] titles;
@@ -183,6 +195,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 ToastManager.showToastReal("已经清空！");
             }
         });
+        rlOrder.setOnClickListener(this);
     }
 
     private void commitIsShowPrice(int i) {

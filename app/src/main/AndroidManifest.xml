@@ -342,6 +342,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden"
             />
         <activity android:name=".activity.OrderExamineActivity"/>
+        <activity android:name=".activity.MakingActivity"/>
     </application>
 
 </manifest>

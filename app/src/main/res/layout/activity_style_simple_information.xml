@@ -66,6 +66,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="@dimen/margin10"
+                    android:singleLine="true"
+                    android:selectAllOnFocus="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_small_medium" />
 
@@ -221,6 +223,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginRight="2dp"
                             android:layout_weight="1.5"
+                            android:selectAllOnFocus="true"
                             android:background="@drawable/btn_bg_while2"
                             android:button="@null"
                             android:gravity="center"
@@ -272,6 +275,7 @@
                         android:id="@+id/id_cus_store_size"
                         style="@style/layout_horizontal"
                         android:layout_marginLeft="@dimen/margin10"
+                        android:gravity="center"
                         android:layout_marginRight="@dimen/margin5"
                         android:layout_weight="1"
                         android:button="@null"
@@ -314,6 +318,7 @@
                         android:gravity="center"
                         android:hint="字印"
                         android:maxLength="5"
+                        android:selectAllOnFocus="true"
                         android:textSize="14sp"
                         android:textColor="@color/text_color" />
                     <ImageView
@@ -436,6 +441,7 @@
                         style="@style/layout_horizontal"
                         android:layout_marginRight="@dimen/margin15"
                         android:layout_weight="1"
+                        android:selectAllOnFocus="true"
                         android:background="@drawable/btn_bg_while2"
                         android:button="@null"
                         android:hint="填写备注！"
