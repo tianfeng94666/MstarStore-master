@@ -71,7 +71,9 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
         }
         //SystemClock.sleep(1000);
     }
-
+    public void onBack(View v) {
+        finish();
+    }
     public void baseHideWatLoading() {
         if (loadingDialog == null) return;
         if (loadingDialog != null || loadingDialog.isShowing()) {

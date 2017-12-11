@@ -17,37 +17,63 @@ import java.util.ArrayList;
 
 public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPartAdapter.ViewHolder> {
     private ArrayList<String> list;
-    public RecycleViewPartAdapter(ArrayList<String> list) {
+    private MyItemClickListener myItemClickListener;
+
+
+    public RecycleViewPartAdapter(ArrayList<String> list,MyItemClickListener myItemClickListener) {
         this.list = list;
+        this.myItemClickListener = myItemClickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_part,null);
-        ViewHolder viewHolder = new ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_part, null);
+        ViewHolder viewHolder = new ViewHolder(view,myItemClickListener);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-          holder.mIv.setImageResource(R.mipmap.dz_03);
+        holder.mIv.setImageResource(R.mipmap.dz_03);
 
     }
 
     @Override
     public int getItemCount() {
-        return list==null?0:list.size();
+        return list == null ? 0 : list.size();
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mIv;
+        View rootView;
+        private MyItemClickListener mListener;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView,MyItemClickListener listener) {
             super(itemView);
             mIv = (ImageView) itemView.findViewById(R.id.iv_item_part);
-
+            rootView = itemView.findViewById(R.id.root_view);
+            this.mListener = listener;
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mListener!=null){
+                        mListener.onItemClick(v, getPosition());
+                    }
+                }
+            });
         }
+
+
+
+
     }
 
+
+
+
+    public interface MyItemClickListener {
+        public void onItemClick(View view, int postion);
+    }
 
 }
