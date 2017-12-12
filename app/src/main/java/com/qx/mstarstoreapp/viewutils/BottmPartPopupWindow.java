@@ -73,16 +73,16 @@ public class BottmPartPopupWindow {
         for (int i = 0; i < 10; i++) {
             list.add("1");
         }
-        RecycleViewPartAdapter recycleViewPartAdapter = new RecycleViewPartAdapter(list, new RecycleViewPartAdapter.MyItemClickListener() {
-            @Override
-            public void onItemClick(View view, int postion) {
-                ToastManager.showToastReal(postion);
-                closePopupWindow();
-            }
-        });
+//        RecycleViewPartAdapter recycleViewPartAdapter = new RecycleViewPartAdapter(list, new RecycleViewPartAdapter.MyItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int postion) {
+//                ToastManager.showToastReal(postion);
+//                closePopupWindow();
+//            }
+//        });
         //设置item间距，30dp
         rvPart.addItemDecoration(new SpaceItemDecoration(4));
-        rvPart.setAdapter(recycleViewPartAdapter);
+//        rvPart.setAdapter(recycleViewPartAdapter);
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
     }
     public void closePopupWindow() {

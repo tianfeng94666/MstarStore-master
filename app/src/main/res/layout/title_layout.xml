@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/id_rel_title"
     android:layout_width="match_parent"
-    android:layout_height="50dip"
+    android:layout_height="40dip"
     android:background="@drawable/title_shadow_style"
     android:orientation="horizontal">
 
@@ -14,13 +14,13 @@
         android:layout_marginTop="5dip"
         android:layout_marginBottom="5dip"
         android:onClick="onBack"
-        android:padding="10dip"
+        android:padding="5dip"
 
         android:src="@drawable/icon_return" />
 
     <TextView
         android:id="@+id/title_text"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/text_color"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,7 +33,7 @@
         android:layout_marginRight="16dip"
         android:layout_marginTop="5dip"
         android:layout_marginBottom="5dip"
-        android:padding="10dip"
+        android:padding="5dip"
         android:src="@drawable/icon_search"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />

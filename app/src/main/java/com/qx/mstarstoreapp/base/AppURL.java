@@ -359,6 +359,14 @@ public class AppURL {
      *http://appapi1.fanerweb.com/api/Aproxy/InitDataForQxzx?tokenKey=be5fc01f10a42d5d8d5d4537ed808bad&QxVersion=1.7
      */
     public static String URL_GET_PRODUCTINFO_BY_MODENUM =baseUrl + "ModelDetailPageGetInfoByModelNum?"+QxVersion;
+    /**
+     * 	新建定制详情页
+     */
+    public static String URL_GET_PART =baseUrl + "CreateCustomItem?"+QxVersion;
+    /**
+     * 3.2	获取配件列表页(带选择后的产品信息)
+     */
+    public static String URL_GET_PART_SOURCE =baseUrl + "CustomPartsList?"+QxVersion;
 }
 
 
