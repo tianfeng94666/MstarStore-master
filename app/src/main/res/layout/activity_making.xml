@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:id="@+id/root_view"
-
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
-        android:layout_marginBottom="40dp"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="40dp"
+        android:orientation="vertical">
+
         <LinearLayout
+
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:layout_height="0dp"
-            android:layout_weight="1">
-            <include layout="@layout/title_layout"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <include layout="@layout/title_layout" />
+
             <com.qx.mstarstoreapp.viewutils.FlyBanner
                 android:id="@+id/flybanner"
                 android:layout_width="match_parent"
@@ -25,9 +30,11 @@
         </LinearLayout>
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <android.support.v7.widget.RecyclerView
 
                 android:id="@+id/rv_part"
@@ -35,18 +42,51 @@
                 android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_line"/>
-<TextView
-    android:layout_alignParentBottom="true"
-    android:gravity="center"
-    android:id="@+id/tv_finish"
-    android:text="完成"
-    android:layout_width="match_parent"
-    android:layout_height="40dp" />
-<ViewStub
-    android:layout_width="wrap_content"
-    android:layout_height="40dp" />
+        android:layout_alignTop="@+id/tv_finish"
+        android:background="@color/color_line" />
+
+    <TextView
+        android:id="@+id/tv_finish"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="完成" />
+
+    <LinearLayout
+        android:id="@+id/ll_after_finish"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <com.qx.mstarstoreapp.viewutils.CustomselectStringButton
+            android:id="@+id/tv_choose_handsize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/theme_bg"
+            android:textSize="@dimen/text_size_small_medium" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/color_line" />
+
+        <TextView
+            android:id="@+id/tv_buy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="购买"
+            android:gravity="center"
+            android:background="@color/theme_red"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small_medium" />
+    </LinearLayout>
 </RelativeLayout>

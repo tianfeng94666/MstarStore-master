@@ -367,6 +367,41 @@ public class AppURL {
      * 3.2	获取配件列表页(带选择后的产品信息)
      */
     public static String URL_GET_PART_SOURCE =baseUrl + "CustomPartsList?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/OrderCurrentDoModelItemForCustomDo?tokenKey=7ed5b95366a465ab65a2a66c283d6e9d&productId=104930&number=1&handSize=10&QxVersion=1.8
+     添加到当前订单
+     */
+    public static String URL_PERSON_ADD_ORDER= baseUrl+ "OrderCurrentDoModelItemForCustomDo?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/OrderListCustomPage?tokenKey=7ed5b95366a465ab65a2a66c283d6e9d&QxVersion=1.8
+     获取订单列表
+     */
+    public static String URL_PERSON_GET_ORDER_LIST= baseUrl+ "OrderListCustomPage?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/CustomDetailPageForCurrentOrderEditPage?tokenKey=7ed5b95366a465ab65a2a66c283d6e9d&itemId=13390&QxVersion=1.8
+     当前订单页面修改款号转到详情页
+     */
+    public static String URL_PERSON_ORDER_INFOMATION= baseUrl+ "CustomDetailPageForCurrentOrderEditPage?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/OrderCurrentEditModelItemForCustomDo?tokenKey=7ed5b95366a465ab65a2a66c283d6e9d&itemId=13390&number=2&number=1&handSize=2.5&QxVersion=1.8
+     当前订单页面确定修改款号确定修改
+     */
+    public static String URL_PERSON_EDIT_ORDER= baseUrl+ "OrderCurrentEditModelItemForCustomDo?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/OrderCurrentSubmitCustomDo?tokenKey=7ed5b95366a465ab65a2a66c283d6e9d&purityId=49&customerID=23651&QxVersion=1.8
+     生成订单
+     */
+    public static String URL_PERSON_ORDER= baseUrl+ "OrderCurrentSubmitCustomDo?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/CustomDetailPageForWaitCheckEditPage?tokenKey=7ed5b95366a465ab65a2a66c283d6e9d&itemId=13390&QxVersion=1.8
+     待审核页面修改款号转到详细页
+     */
+    public static String URL_PERSON_ORDER_FROM_WAIT_TO_INFOMATION= baseUrl+ "CustomDetailPageForWaitCheckEditPage?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/CustomDetailPageForWaitCheckEditDo?tokenKey=7ed5b95366a465ab65a2a66c283d6e9d&itemId=13390&productId=104929&handSize=2.5&number=4&QxVersion=1.8
+     待审核页面修改款号确定修改
+     */
+    public static String URL_PERSON_ORDER_FROM_WAIT_TO_INFOMATION_EDIT= baseUrl+ "CustomDetailPageForWaitCheckEditDo?"+QxVersion;
 }
 
 

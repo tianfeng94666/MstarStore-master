@@ -35,18 +35,18 @@ public class FitGridLayoutManager extends GridLayoutManager {
     @Override
     public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
         super.onMeasure(recycler, state, widthSpec, heightSpec);
-        try {
-            for(int i = 0 ;i <getItemCount();i++){
-                View view = recycler.getViewForPosition(i);
-               ViewGroup.LayoutParams p =view.getLayoutParams();
-                p.width =100;
-                p.height = UIUtils.getWindowWidth()/2;
-                view.setLayoutParams(p);
-                recycler.recycleView(view);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            for(int i = 0 ;i <getItemCount();i++){
+//                View view = recycler.getViewForPosition(i);
+//               ViewGroup.LayoutParams p =view.getLayoutParams();
+//                p.width =100;
+//                p.height = UIUtils.getWindowWidth()/2;
+//                view.setLayoutParams(p);
+//                recycler.recycleView(view);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 }

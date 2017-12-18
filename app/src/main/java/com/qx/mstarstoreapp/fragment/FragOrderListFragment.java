@@ -404,15 +404,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 addMenuLayout(listEntity.getPics(), viewHolder.layImages);
             }
 
-//
-//
-//          if ( viewHolder.customListViewAdapter==null){
-//              viewHolder.customListViewAdapter = new CustomTypeListViewAdapter(listEntity.getPicsEntity(), viewHolder.customListView);
-//          }
-//            viewHolder.customListView.setAdapter(viewHolder.customListViewAdapter);
-//            viewHolder.customListView.setClickable(false);
-//            viewHolder.customListView.setPressed(false);
-//            viewHolder.customListView.setEnabled(false);
+
             return convertView;
         }
 

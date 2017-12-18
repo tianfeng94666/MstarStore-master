@@ -132,7 +132,7 @@ public class FrogetPwdActivity extends BaseActivity {
     }
 
     public void netUpdatePwd() {
-        pwd = idEdPwd.getText().toString();
+        pwd = idEdPwd.getText().toString().trim();
         code = idEdCode.getText().toString();
         phone = idEPhone.getText().toString();
         if (StringUtils.isEmpty(pwd)) {

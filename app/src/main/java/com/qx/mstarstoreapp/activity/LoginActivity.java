@@ -242,8 +242,8 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void loadNetData() {
-        name = idEdName.getText().toString();
-        pwd = idEdPassword.getText().toString();
+        name = idEdName.getText().toString().trim();
+        pwd = idEdPassword.getText().toString().trim();
         code = idEdCode.getText().toString();
         if (StringUtils.isEmpty(name)) {
             showToastReal("用户名不能为空！");
@@ -327,8 +327,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void getNetCode() {
-        name = idEdName.getText().toString();
-        pwd = idEdPassword.getText().toString();
+        name = idEdName.getText().toString().trim();
+        pwd = idEdPassword.getText().toString().trim();
         if (StringUtils.isEmpty(name)) {
             return;
         }

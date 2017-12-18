@@ -8,19 +8,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import com.qx.mstarstoreapp.ItemDecoration.SpaceItemDecoration;
 import com.qx.mstarstoreapp.R;
-import com.qx.mstarstoreapp.adapter.RecycleViewPartAdapter;
+import com.qx.mstarstoreapp.adapter.RecycleViewPartListAdapter;
+import com.qx.mstarstoreapp.json.ModelPartsBean;
 import com.qx.mstarstoreapp.manager.FitGridLayoutManager;
-import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/12/11 0011.
@@ -29,10 +31,22 @@ import butterknife.ButterKnife;
 public class BottmPartPopupWindow {
     @Bind(R.id.rv_part)
     RecyclerView rvPart;
+    @Bind(R.id.iv_cancle)
+    ImageView ivCancle;
+    @Bind(R.id.iv_comfirm)
+    ImageView ivComfirm;
+    @Bind(R.id.header)
+    View header;
     private Context context;
     private View view;
     private PopupWindow popupWindow;
     private FitGridLayoutManager mLayoutManager;
+    List<ModelPartsBean> partList;
+    private int choosePosition = -1;
+    public RecycleViewPartListAdapter recycleViewPartAdapter;
+    RecycleViewPartListAdapter.PartListItemClickListener itemClickListener;
+    private View.OnClickListener comfirmClickListerner;
+    private View rootView;
 
     public BottmPartPopupWindow(Context context) {
         this.context = context;
@@ -43,9 +57,18 @@ public class BottmPartPopupWindow {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.bottom_popup_window, null);
         ButterKnife.bind(this, view);
-        int width = UIUtils.getWindowWidth();
-        popupWindow = new PopupWindow(view, width, width);
+        if (UIUtils.isScreenChange(context)) {
+            rvPart.setPadding(0,0,0,0);
+            header.setVisibility(View.GONE);
+            int width = UIUtils.getWindowHight();
 
+            popupWindow = new PopupWindow(view, width, width);
+        } else {
+            rvPart.setPadding(0,UIUtils.dip2px(20),0,0);
+            header.setVisibility(View.VISIBLE);
+            int width = UIUtils.getWindowWidth();
+            popupWindow = new PopupWindow(view, width, width);
+        }
         popupWindow.setFocusable(false);
         popupWindow.setOutsideTouchable(false);
         popupWindow.setTouchInterceptor(new View.OnTouchListener() {
@@ -65,27 +88,59 @@ public class BottmPartPopupWindow {
 
     }
 
-    public void showPop(View view) {
-
-        mLayoutManager = new FitGridLayoutManager(context, rvPart, 2, GridLayoutManager.HORIZONTAL, false);
-        rvPart.setLayoutManager(mLayoutManager);
-        ArrayList list = new ArrayList();
-        for (int i = 0; i < 10; i++) {
-            list.add("1");
-        }
-//        RecycleViewPartAdapter recycleViewPartAdapter = new RecycleViewPartAdapter(list, new RecycleViewPartAdapter.MyItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int postion) {
-//                ToastManager.showToastReal(postion);
-//                closePopupWindow();
-//            }
-//        });
-        //设置item间距，30dp
-        rvPart.addItemDecoration(new SpaceItemDecoration(4));
-//        rvPart.setAdapter(recycleViewPartAdapter);
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+    public void setData(List<ModelPartsBean> partList, RecycleViewPartListAdapter.PartListItemClickListener listItemClickListener, View.OnClickListener comfimrClickListener, View view) {
+        this.partList = partList;
+        this.itemClickListener = listItemClickListener;
+        this.comfirmClickListerner = comfimrClickListener;
+        showPop(view);
     }
+
+    public void showPop(View view) {
+        rootView = view;
+        choosePosition = -1;//恢复到初始化
+
+        if (UIUtils.isScreenChange(context)) {
+            mLayoutManager = new FitGridLayoutManager(context, rvPart, 2, GridLayoutManager.VERTICAL, false);
+            rvPart.setLayoutManager(mLayoutManager);
+            recycleViewPartAdapter = new RecycleViewPartListAdapter(partList, itemClickListener);
+            //设置item间距，30dp
+            rvPart.addItemDecoration(new SpaceItemDecoration(4));
+            rvPart.setAdapter(recycleViewPartAdapter);
+            popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.RIGHT, 0, 0);
+        } else {
+            mLayoutManager = new FitGridLayoutManager(context, rvPart, 2, GridLayoutManager.HORIZONTAL, false);
+            rvPart.setLayoutManager(mLayoutManager);
+            recycleViewPartAdapter = new RecycleViewPartListAdapter(partList, itemClickListener);
+            //设置item间距，30dp
+            rvPart.addItemDecoration(new SpaceItemDecoration(4));
+            rvPart.setAdapter(recycleViewPartAdapter);
+            popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        }
+
+    }
+
     public void closePopupWindow() {
         popupWindow.dismiss();
+    }
+
+    @OnClick({R.id.iv_cancle, R.id.iv_comfirm})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_cancle:
+                closePopupWindow();
+                break;
+            case R.id.iv_comfirm:
+                comfirmClickListerner.onClick(view);
+                break;
+        }
+    }
+
+    public int getChoosePosition() {
+        return choosePosition;
+    }
+
+    public void setChoosePosition(int choosePosition) {
+        this.choosePosition = choosePosition;
+        recycleViewPartAdapter.setChoose(choosePosition);
     }
 }

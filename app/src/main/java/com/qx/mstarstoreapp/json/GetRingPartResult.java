@@ -12,7 +12,7 @@ public class GetRingPartResult {
      * response :
      * error : 0
      * message :
-     * data : {"modelItem":{"id":"","title":"","price":"","handSize":"","word":"","modelPic":[{"pics":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePics.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicm.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicb.png"}]},"modelParts":[{"pid":"","partSort":"1","partCount":"3","price":"","title":"头","pics":"http://192.168.1.240:9112/images/imageForApi/custom//partsExamplePics1.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicm1.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicb1.png"},{"pid":"","partSort":"2","partCount":"2","price":"","title":"接口","pics":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePics2.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicm2.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicb2.png"},{"pid":"","partSort":"3","partCount":"3","price":"","title":"圈","pics":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePics3.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicm3.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicb3.png"}],"modelpartCount":["3","2","3"],"modelPuritys":[{"id":49,"title":"14K黄白分色"},{"id":8,"title":"Au750白"},{"id":5,"title":"G18K白"},{"id":4,"title":"G18K黄"},{"id":6,"title":"G18K玫瑰金"},{"id":7,"title":"G18K玫瑰金分色"},{"id":9,"title":"G750白"},{"id":3,"title":"Pd950"},{"id":1,"title":"PT900"},{"id":2,"title":"PT950"},{"id":47,"title":"千足黄金"}]}
+     * data : {"modelItem":{"id":"","title":"","price":"","handSize":"","word":"","modelPic":[{"pics":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePics.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePicm.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePicb.png"}]},"modelParts":[{"pid":"","partSort":"1","partCount":"3","price":"","title":"头","pics":"http://appapi1.fanerweb.com/images/imageForApi/custom//partsExamplePics1.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicm1.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicb1.png"},{"pid":"","partSort":"2","partCount":"2","price":"","title":"接口","pics":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePics2.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicm2.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicb2.png"},{"pid":"","partSort":"3","partCount":"3","price":"","title":"圈","pics":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePics3.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicm3.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicb3.png"}],"modelpartCount":["3","2","3"],"modelPuritys":[{"id":49,"title":"14K黄白分色"},{"id":8,"title":"Au750白"},{"id":5,"title":"G18K白"},{"id":4,"title":"G18K黄"},{"id":6,"title":"G18K玫瑰金"},{"id":7,"title":"G18K玫瑰金分色"},{"id":9,"title":"G750白"},{"id":3,"title":"Pd950"},{"id":1,"title":"PT900"},{"id":2,"title":"PT950"},{"id":47,"title":"千足黄金"}]}
      */
 
     private String response;
@@ -54,8 +54,8 @@ public class GetRingPartResult {
 
     public static class DataBean {
         /**
-         * modelItem : {"id":"","title":"","price":"","handSize":"","word":"","modelPic":[{"pics":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePics.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicm.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicb.png"}]}
-         * modelParts : [{"pid":"","partSort":"1","partCount":"3","price":"","title":"头","pics":"http://192.168.1.240:9112/images/imageForApi/custom//partsExamplePics1.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicm1.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicb1.png"},{"pid":"","partSort":"2","partCount":"2","price":"","title":"接口","pics":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePics2.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicm2.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicb2.png"},{"pid":"","partSort":"3","partCount":"3","price":"","title":"圈","pics":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePics3.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicm3.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicb3.png"}]
+         * modelItem : {"id":"","title":"","price":"","handSize":"","word":"","modelPic":[{"pics":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePics.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePicm.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePicb.png"}]}
+         * modelParts : [{"pid":"","partSort":"1","partCount":"3","price":"","title":"头","pics":"http://appapi1.fanerweb.com/images/imageForApi/custom//partsExamplePics1.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicm1.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicb1.png"},{"pid":"","partSort":"2","partCount":"2","price":"","title":"接口","pics":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePics2.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicm2.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicb2.png"},{"pid":"","partSort":"3","partCount":"3","price":"","title":"圈","pics":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePics3.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicm3.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/partsExamplePicb3.png"}]
          * modelpartCount : ["3","2","3"]
          * modelPuritys : [{"id":49,"title":"14K黄白分色"},{"id":8,"title":"Au750白"},{"id":5,"title":"G18K白"},{"id":4,"title":"G18K黄"},{"id":6,"title":"G18K玫瑰金"},{"id":7,"title":"G18K玫瑰金分色"},{"id":9,"title":"G750白"},{"id":3,"title":"Pd950"},{"id":1,"title":"PT900"},{"id":2,"title":"PT950"},{"id":47,"title":"千足黄金"}]
          */
@@ -64,6 +64,15 @@ public class GetRingPartResult {
         private List<ModelPartsBean> modelParts;
         private List<String> modelpartCount;
         private List<ModelPuritysBean> modelPuritys;
+        private List<String> handSizeData;
+
+        public List<String> getHandSizeData() {
+            return handSizeData;
+        }
+
+        public void setHandSizeData(List<String> handSizeData) {
+            this.handSizeData = handSizeData;
+        }
 
         public ModelItemBean getModelItem() {
             return modelItem;
@@ -104,7 +113,7 @@ public class GetRingPartResult {
              * price :
              * handSize :
              * word :
-             * modelPic : [{"pics":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePics.png","picm":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicm.png","picb":"http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicb.png"}]
+             * modelPic : [{"pics":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePics.png","picm":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePicm.png","picb":"http://appapi1.fanerweb.com/images/imageForApi/custom/modelExamplePicb.png"}]
              */
 
             private String id;
@@ -162,128 +171,9 @@ public class GetRingPartResult {
                 this.modelPic = modelPic;
             }
 
-            public static class ModelPicBean {
-                /**
-                 * pics : http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePics.png
-                 * picm : http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicm.png
-                 * picb : http://192.168.1.240:9112/images/imageForApi/custom/modelExamplePicb.png
-                 */
-
-                private String pics;
-                private String picm;
-                private String picb;
-
-                public String getPics() {
-                    return pics;
-                }
-
-                public void setPics(String pics) {
-                    this.pics = pics;
-                }
-
-                public String getPicm() {
-                    return picm;
-                }
-
-                public void setPicm(String picm) {
-                    this.picm = picm;
-                }
-
-                public String getPicb() {
-                    return picb;
-                }
-
-                public void setPicb(String picb) {
-                    this.picb = picb;
-                }
-            }
         }
 
-        public static class ModelPartsBean {
-            /**
-             * pid :
-             * partSort : 1
-             * partCount : 3
-             * price :
-             * title : 头
-             * pics : http://192.168.1.240:9112/images/imageForApi/custom//partsExamplePics1.png
-             * picm : http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicm1.png
-             * picb : http://192.168.1.240:9112/images/imageForApi/custom/partsExamplePicb1.png
-             */
 
-            private String pid;
-            private String partSort;
-            private String partCount;
-            private String price;
-            private String title;
-            private String pics;
-            private String picm;
-            private String picb;
-
-            public String getPid() {
-                return pid;
-            }
-
-            public void setPid(String pid) {
-                this.pid = pid;
-            }
-
-            public String getPartSort() {
-                return partSort;
-            }
-
-            public void setPartSort(String partSort) {
-                this.partSort = partSort;
-            }
-
-            public String getPartCount() {
-                return partCount;
-            }
-
-            public void setPartCount(String partCount) {
-                this.partCount = partCount;
-            }
-
-            public String getPrice() {
-                return price;
-            }
-
-            public void setPrice(String price) {
-                this.price = price;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public String getPics() {
-                return pics;
-            }
-
-            public void setPics(String pics) {
-                this.pics = pics;
-            }
-
-            public String getPicm() {
-                return picm;
-            }
-
-            public void setPicm(String picm) {
-                this.picm = picm;
-            }
-
-            public String getPicb() {
-                return picb;
-            }
-
-            public void setPicb(String picb) {
-                this.picb = picb;
-            }
-        }
 
         public static class ModelPuritysBean {
             /**

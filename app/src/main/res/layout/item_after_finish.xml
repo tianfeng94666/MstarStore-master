@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="40dp">
+<com.qx.mstarstoreapp.viewutils.CustomSelectButton
+    android:id="@+id/tv_choose_handsize"
+    android:background="@color/theme_bg"
+    android:textSize="@dimen/text_size_small_medium"
+    android:layout_weight="1"
+    android:layout_width="0dp"
+    android:layout_height="match_parent" />
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/color_line"/>
+
+    <TextView
+        android:id="@+id/tv_buy"
+        android:background="@color/theme_red"
+        android:textSize="@dimen/text_size_small_medium"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:textColor="@color/white"
+        android:layout_height="match_parent" />
+</LinearLayout>

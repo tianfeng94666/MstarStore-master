@@ -372,6 +372,15 @@ public class OrderListResult {
                 private String info;
                 private String needPayPrice;
                 private Boolean isCheck;
+                private String showPageType;
+
+                public String getShowPageType() {
+                    return showPageType;
+                }
+
+                public void setShowPageType(String showPageType) {
+                    this.showPageType = showPageType;
+                }
 
                 public Boolean getCheck() {
                     return isCheck;
