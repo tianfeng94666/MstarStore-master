@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <include layout="@layout/title_layout" />
+
 
             <com.qx.mstarstoreapp.viewutils.FlyBanner
                 android:id="@+id/flybanner"
@@ -46,16 +46,35 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_alignTop="@+id/tv_finish"
+        android:layout_alignTop="@+id/ll_finish"
         android:background="@color/color_line" />
 
-    <TextView
-        android:id="@+id/tv_finish"
+    <LinearLayout
+        android:id="@+id/ll_finish"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:text="完成" />
+        >
+        <TextView
+            android:id="@+id/tv_reset"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@color/gray"
+            android:layout_height="40dp"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="重置" />
+        <TextView
+            android:id="@+id/tv_finish"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="完成" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/ll_after_finish"
@@ -89,4 +108,12 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_small_medium" />
     </LinearLayout>
+    <ImageView
+        android:id="@+id/id_ig_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="5dp"
+        android:padding="10dip"
+        android:src="@drawable/icon_back_white" />
 </RelativeLayout>

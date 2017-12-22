@@ -223,7 +223,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     }
 
                 } else if (error.equals("2")) {
-                    loginToServer(LoginActivity.class);
+                    loginToServer(SettingActivity.class);
+
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);

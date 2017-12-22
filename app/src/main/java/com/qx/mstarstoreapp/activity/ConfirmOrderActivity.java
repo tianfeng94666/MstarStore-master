@@ -333,11 +333,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 }
                 if (error == 2) {
-                    if (isCustomized) {
-                        loginToServer(SimpleStyleInfromationActivity.class);
-                    } else {
-                        loginToServer(StyleInfromationActivity.class);
-                    }
+                    loginToServer(ConfirmOrderActivity.class);
                 }
 
             }
@@ -574,7 +570,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     finish();
                 }
                 if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    loginToServer(ConfirmOrderActivity.class);
                 }
             }
 
@@ -638,7 +634,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
                 }
                 if (error == 2) {
-                    loginToServer(StyleInfromationActivity.class);
+                    loginToServer(ConfirmOrderActivity.class);
                 }
             }
 
@@ -818,11 +814,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     }
 
                 } else if (error == 2) {
-                    if (isCustomized) {
-                        loginToServer(SimpleStyleInfromationActivity.class);
-                    } else {
-                        loginToServer(StyleInfromationActivity.class);
-                    }
+                    loginToServer(ConfirmOrderActivity.class);
                 } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
@@ -873,7 +865,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         startActivityForResult(intent, 11);
                     }
                 } else if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    loginToServer(ConfirmOrderActivity.class);
                 } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
@@ -906,11 +898,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    if (isCustomized) {
-                        loginToServer(SimpleStyleInfromationActivity.class);
-                    } else {
-                        loginToServer(StyleInfromationActivity.class);
-                    }
+                    loginToServer(ConfirmOrderActivity.class);
                 }
             }
 
@@ -1038,11 +1026,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     ToastManager.showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    if (isCustomized) {
-                        loginToServer(SimpleStyleInfromationActivity.class);
-                    } else {
-                        loginToServer(StyleInfromationActivity.class);
-                    }
+                    loginToServer(ConfirmOrderActivity.class);
                 }
             }
 
@@ -1067,11 +1051,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     ToastManager.showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    if (isCustomized) {
-                        loginToServer(SimpleStyleInfromationActivity.class);
-                    } else {
-                        loginToServer(StyleInfromationActivity.class);
-                    }
+                    loginToServer(ConfirmOrderActivity.class);
                 }
             }
 
@@ -1375,7 +1355,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         loadNetData();
                     }
                     if (error == 2) {
-                        loginToServer(OrderActivity.class);
+                        loginToServer(ConfirmOrderActivity.class);
                     }
                     if (error == 1) {
                         String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();

@@ -427,7 +427,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                         startActivityForResult(intent, 11);
                     }
                 } else if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    loginToServer(SearchOrderActivity.class);
                 } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }

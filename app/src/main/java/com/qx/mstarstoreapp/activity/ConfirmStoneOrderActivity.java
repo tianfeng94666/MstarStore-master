@@ -348,7 +348,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                     Set<Map.Entry<String, StoneBean>> entries = mchecked.entrySet();
                 }
                 if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    loginToServer(ConfirmStoneOrderActivity.class);
                 }
 
             }
@@ -483,7 +483,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                     finish();
                 }
                 if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    loginToServer(ConfirmStoneOrderActivity.class);
                 }
             }
 
@@ -531,7 +531,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
                 }
                 if (error == 2) {
-                    loginToServer(StyleInfromationActivity.class);
+                  loginToServer(ConfirmStoneOrderActivity.class);
                 }
             }
 
@@ -678,7 +678,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                     finish();
 
                 } else if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    loginToServer(ConfirmStoneOrderActivity.class);
                 } else {
                     showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
@@ -729,7 +729,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                         startActivityForResult(intent, 11);
                     }
                 } else if (error == 2) {
-                    loginToServer(OrderActivity.class);
+                    loginToServer(ConfirmStoneOrderActivity.class);
                 } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }
@@ -762,7 +762,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                     showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    loginToServer(StyleInfromationActivity.class);
+                  loginToServer(ConfirmStoneOrderActivity.class);
                 }
             }
 
@@ -854,7 +854,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                     ToastManager.showToastReal("更新成功");
                 }
                 if (error == 2) {
-                    loginToServer(StyleInfromationActivity.class);
+                  loginToServer(ConfirmStoneOrderActivity.class);
                 }
             }
 

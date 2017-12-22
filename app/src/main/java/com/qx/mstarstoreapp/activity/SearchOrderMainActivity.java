@@ -161,7 +161,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
                     }
 
                 } else if (error == 2) {
-                    loginToServer(SearchResultActivity.class);
+                    loginToServer(SearchOrderMainResult.class);
                 } else {
                     ToastManager.showToastReal(OKHttpRequestUtils.getmInstance().getErrorMsg(result));
                 }

@@ -15,7 +15,6 @@
             android:orientation="vertical"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <include layout="@layout/title_layout"/>
             <com.qx.mstarstoreapp.viewutils.FlyBanner
                 android:id="@+id/flybanner"
                 android:layout_width="match_parent"
@@ -35,17 +34,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
             <View
-                android:layout_alignTop="@+id/tv_finish"
+                android:layout_alignTop="@+id/ll_finish"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/color_line"/>
-            <TextView
+
+            <LinearLayout
                 android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:id="@+id/tv_finish"
-                android:text="完成"
+                android:id="@+id/ll_finish"
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                >
+                <TextView
+                    android:id="@+id/tv_reset"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:text="重置" />
+                <TextView
+                    android:id="@+id/tv_finish"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:text="完成" />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/ll_after_finish"
                 android:layout_width="match_parent"
@@ -81,5 +97,12 @@
         </RelativeLayout>
 
     </LinearLayout>
+    <ImageView
+        android:id="@+id/id_ig_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
+        android:layout_marginTop="5dp"
+        android:padding="10dip"
+        android:src="@drawable/icon_back_white" />
 </RelativeLayout>

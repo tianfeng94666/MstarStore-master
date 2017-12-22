@@ -264,6 +264,11 @@ public class StoneSearchInfoResult extends Object implements Serializable {
                 public void setFluorescence(String Fluorescence) {
                     this.Fluorescence = Fluorescence;
                 }
+                public String changeStoneEntityToString() {
+
+                    return "类别："   +  ";形状：" + getShape() +
+                            ";颜色：" + getColor() + ";净度：" + getPurity() +  ";证书号：" + getCertCode();
+                }
             }
         }
     }

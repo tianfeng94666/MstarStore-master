@@ -117,6 +117,15 @@ public class ModelPartsBean {
         private String handSize;
         private String word;
         private List<ModelPicBean> modelPic;
+        private ValueRange stoneWeightRange;
+
+        public ValueRange getStoneWeightRange() {
+            return stoneWeightRange;
+        }
+
+        public void setStoneWeightRange(ValueRange stoneWeightRange) {
+            this.stoneWeightRange = stoneWeightRange;
+        }
 
         public String getId() {
             return id;

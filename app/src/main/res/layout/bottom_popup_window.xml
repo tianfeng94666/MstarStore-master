@@ -17,8 +17,14 @@
         android:layout_height="match_parent"
         android:paddingBottom="40dp"
         android:paddingTop="20dp"></android.support.v7.widget.RecyclerView>
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1px"
+    android:layout_alignTop="@+id/ll_finish"
+    android:background="@color/color_line"/>
     <LinearLayout
+        android:id="@+id/ll_finish"
+        android:paddingTop="1px"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"

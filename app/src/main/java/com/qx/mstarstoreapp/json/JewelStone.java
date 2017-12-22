@@ -20,6 +20,15 @@ public class JewelStone {
     private String jewelStonePrice;
     private String jewelStonePurity;
     private String jewelStoneWeight;
+    private String jewelStoneShape;
+
+    public String getJewelStoneShape() {
+        return jewelStoneShape;
+    }
+
+    public void setJewelStoneShape(String jewelStoneShape) {
+        this.jewelStoneShape = jewelStoneShape;
+    }
 
     public String getJewelStoneCode() {
         return jewelStoneCode;
@@ -67,5 +76,9 @@ public class JewelStone {
 
     public void setJewelStoneWeight(String jewelStoneWeight) {
         this.jewelStoneWeight = jewelStoneWeight;
+    }
+
+    public String getTotalString() {
+        return "形状：" + getJewelStoneShape() + ";净度：" + getJewelStonePurity() + ";价格：" + getJewelStonePrice() + ";重量：" + getJewelStoneWeight() + ";证书编号：" + getJewelStoneCode();
     }
 }

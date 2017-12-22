@@ -257,7 +257,11 @@ public class StoneEntity implements Cloneable , Serializable {
                 ", specSelectTitle='" + specSelectTitle + '\'' +
                 '}';
     }
+    public String changeStoneEntityToString() {
 
+        return "类别：" + typeTitle + "; 规格：" + specTitle+ ";形状：" + shapeTitle +
+                ";颜色：" + colorTitle + ";净度：" + purityTitle + ";数量：" + number +  ";证书号：" + stoneCode;
+    }
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

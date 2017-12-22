@@ -41,6 +41,16 @@ public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPart
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        //stone位置
+        if(countList.size()==position){
+            holder.mTvStone.setVisibility(View.VISIBLE);
+            holder.mTvAmount.setVisibility(View.GONE);
+            holder.mTvStone.setText(list.get(position).getTitle());
+            return;
+        }else {
+            holder.mTvStone.setVisibility(View.GONE);
+            holder.mTvAmount.setVisibility(View.VISIBLE);
+        }
         ImageLoader.getInstance().displayImage(list.get(position).getPicm(),holder.mIv, ImageLoadOptions.getOptionsHight());
         if(StringUtils.isEmpty(countList.get(position))){
             holder.mTvAmount.setVisibility(View.GONE);
@@ -62,6 +72,7 @@ public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPart
         ImageView mIv;
         TextView mTvAmount;
         TextView mTvName;
+        TextView mTvStone;
         View rootView;
         private MyItemClickListener mListener;
 
@@ -70,6 +81,7 @@ public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPart
             mIv = (ImageView) itemView.findViewById(R.id.iv_item_part);
             mTvAmount =(TextView)itemView.findViewById(R.id.tv_amount) ;
             mTvName =(TextView)itemView.findViewById(R.id.tv_name) ;
+            mTvStone =(TextView)itemView.findViewById(R.id.tv_stone) ;
             rootView = itemView.findViewById(R.id.root_view);
             this.mListener = listener;
             rootView.setOnClickListener(new View.OnClickListener() {

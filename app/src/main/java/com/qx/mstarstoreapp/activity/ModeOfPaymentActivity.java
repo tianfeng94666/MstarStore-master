@@ -170,7 +170,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
                     }
                     initView();
                 } else if (error.equals("2")) {
-                    loginToServer(FinishTableLessActivity.class);
+                    loginToServer(ModeOfPaymentActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     ToastManager.showToastWhendebug(message);
@@ -373,7 +373,7 @@ public class ModeOfPaymentActivity extends BaseActivity {
                         weixinPay();
                     }
                 } else if (error.equals("2")) {
-                    loginToServer(FinishTableLessActivity.class);
+                    loginToServer(ModeOfPaymentActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     ToastManager.showToastWhendebug(message);

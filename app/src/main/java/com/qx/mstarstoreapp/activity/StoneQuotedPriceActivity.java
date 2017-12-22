@@ -126,7 +126,7 @@ public class StoneQuotedPriceActivity extends BaseActivity {
                         }
                     });
                 } else if (error.equals("2")) {
-                    loginToServer(FinishTableLessActivity.class);
+                    loginToServer(StoneQuotedPriceActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     ToastManager.showToastWhendebug(message);

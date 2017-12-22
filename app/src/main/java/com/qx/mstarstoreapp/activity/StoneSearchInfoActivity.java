@@ -30,6 +30,7 @@ import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.KeyTitle;
 import com.qx.mstarstoreapp.json.StoneSearchInfo;
 import com.qx.mstarstoreapp.json.StoneSearchResult;
+import com.qx.mstarstoreapp.json.ValueRange;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.SpUtils;
@@ -137,6 +138,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     private int type;//是否是修改订单
     private LeftPopupWindow leftPopupWindow;
     private boolean isShowPrice;
+    private ValueRange stoneValueRang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +157,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         itemId = getIntent().getStringExtra("itemId");
         type = getIntent().getIntExtra("type", 0);
         isShowPrice = SpUtils.getInstace(this).getBoolean("isShowStonePrice", true);
+        stoneValueRang = (ValueRange) getIntent().getSerializableExtra("stoneValueRange");
 
     }
 
@@ -197,6 +200,17 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 etWeightMax.setText(sts[1]);
             }
 
+        }
+        //来自个人定制
+        if(type>2){
+            if(stoneValueRang!=null){
+                String st = stoneValueRang.getValue();
+                String[] sts = st.split(",");
+                if (sts.length == 2) {
+                    etWeightMin.setText(sts[0]);
+                    etWeightMax.setText(sts[1]);
+                }
+            }
         }
     }
 
@@ -546,7 +560,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                     priceBean = stoneSearchResult.getData().getPrice();
                     initView();
                 } else if (error.equals("2")) {
-                    loginToServer(FinishTableLessActivity.class);
+                    loginToServer(StoneSearchInfoActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);

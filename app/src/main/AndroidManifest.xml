@@ -347,12 +347,8 @@
             android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <activity
-            android:name=".activity.MakingConfirmOrderActivity"
-            android:alwaysRetainTaskState="true"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
-            android:windowSoftInputMode="adjustPan" />
+
+
     </application>
 
 </manifest>

@@ -157,7 +157,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         Intent intent = getIntent();
         openType = intent.getIntExtra("openType", 0);
         itemId = intent.getStringExtra("itemId");
-        orderId=intent.getStringExtra("orderId");
+        orderId = intent.getStringExtra("orderId");
         type = intent.getIntExtra("type", 0);
         Bundle stoneBundle = null;
         Bundle bundle = intent.getBundleExtra("stoneInfo");
@@ -187,7 +187,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     }
 
     private void init() {
-        if (openType == 1) {
+        //来自个人定制type=11
+        if (openType == 1||type==11) {
             tvQutedPriceAll.setVisibility(View.GONE);
             tvPlaceOrder.setVisibility(View.GONE);
             tvConfirmReback.setVisibility(View.VISIBLE);
@@ -545,6 +546,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             showToastReal("主石只能有一个！");
         }
 
+
     }
 
     private void rebackProductInfo() {
@@ -568,14 +570,20 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             showToastReal("您忘记了石头，请选择一个！");
         } else if (chooseAmount == 1) {
             Intent intent;
-            if (!isCustomized) {
-                intent = new Intent(this, StyleInfromationActivity.class);
-            } else {
-                intent = new Intent(this, SimpleStyleInfromationActivity.class);
+            //判断是否要去个人定制
+            if(type ==11){
+                intent = new Intent(this, MakingActivity.class);
+            }else {
+                if (!isCustomized) {
+                    intent = new Intent(this, StyleInfromationActivity.class);
+                } else {
+                    intent = new Intent(this, SimpleStyleInfromationActivity.class);
+                }
             }
+
             Bundle pBundle = new Bundle();
             pBundle.putString("itemId", itemId);
-            pBundle.putString("orderId",orderId);
+            pBundle.putString("orderId", orderId);
             pBundle.putInt("type", type);
             pBundle.putString("openType", openType + "");
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(seletPosition);

@@ -65,6 +65,15 @@ public class GetRingPartResult {
         private List<String> modelpartCount;
         private List<ModelPuritysBean> modelPuritys;
         private List<String> handSizeData;
+        private JewelStone jewelStone;
+
+        public JewelStone getJewelStone() {
+            return jewelStone;
+        }
+
+        public void setJewelStone(JewelStone jewelStone) {
+            this.jewelStone = jewelStone;
+        }
 
         public List<String> getHandSizeData() {
             return handSizeData;

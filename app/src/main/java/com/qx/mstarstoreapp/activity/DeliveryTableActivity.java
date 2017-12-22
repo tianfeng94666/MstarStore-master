@@ -137,7 +137,7 @@ public class DeliveryTableActivity extends BaseActivity {
                         }
                     }
                 } else if (error.equals("2")) {
-                    loginToServer(CustomMadeActivity.class);
+                    loginToServer(DeliveryTableActivity.class);
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     ToastManager.showToastWhendebug(message);

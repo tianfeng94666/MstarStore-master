@@ -131,7 +131,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
                     ToastManager.showToastReal(message);
                 }
                 if (error == 2) {
-                    loginToServer(AddressListActivity.class);
+                    loginToServer(ProductionListActivity.class);
                 }
 
             }
@@ -168,7 +168,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
                     ToastManager.showToastReal(message);
                 }
                 if (error == 2) {
-                    loginToServer(AddressListActivity.class);
+                    loginToServer(ProductionListActivity.class);
                 }
 
             }

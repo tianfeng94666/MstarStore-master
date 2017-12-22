@@ -136,7 +136,7 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
 
     /*跳转到登录页面  登录成功回调到刚刚页面*/
     public void loginToServer(Class<?> c) {
-//        BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
+        BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
         Intent loginIntent = new Intent(this, LoginActivity.class);
         loginIntent.putExtra(JUMP_TO_ACTIVITY, c);
         startActivity(loginIntent);
