@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
+
 
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
@@ -74,8 +76,8 @@ public class FlyBanner extends RelativeLayout {
     private List<String> mTipsDatas;
     //指示点是否可见
     private boolean mPointsIsVisible = true;
-
-
+    //图片适配方式
+    private int scaleType;
     private Handler mAutoPlayHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -84,6 +86,7 @@ public class FlyBanner extends RelativeLayout {
             mAutoPlayHandler.sendEmptyMessageDelayed(WHAT_AUTO_PLAY, mAutoPalyTime);
         }
     };
+
 
     public FlyBanner(Context context) {
         this(context, null);
@@ -101,13 +104,13 @@ public class FlyBanner extends RelativeLayout {
 
     private void init(Context context, AttributeSet attrs) {
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FlyBanner);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FlyBanner2);
 
-        mPointsIsVisible = a.getBoolean(R.styleable.FlyBanner_points_visibility, true);
-        mPointPosition = a.getInt(R.styleable.FlyBanner_points_position, CENTER);
+        mPointsIsVisible = a.getBoolean(R.styleable.FlyBanner2_points_visibility, true);
+        mPointPosition = a.getInt(R.styleable.FlyBanner2_points_position, CENTER);
         mPointContainerBackgroundDrawable
-                = a.getDrawable(R.styleable.FlyBanner_points_container_background);
-
+                = a.getDrawable(R.styleable.FlyBanner2_points_container_background);
+        scaleType = a.getInt(R.styleable.FlyBanner2_scale_type, 0);
         a.recycle();
 
         setLayout(context);
@@ -161,6 +164,7 @@ public class FlyBanner extends RelativeLayout {
 
     /**
      * 设置本地图片
+     *
      * @param images
      */
     public void setImages(List<Integer> images) {
@@ -175,6 +179,7 @@ public class FlyBanner extends RelativeLayout {
 
     /**
      * 设置网络图片
+     *
      * @param urls
      */
     public void setImagesUrl(List<String> urls) {
@@ -189,6 +194,7 @@ public class FlyBanner extends RelativeLayout {
 
     /**
      * 设置指示点是否可见
+     *
      * @param isVisible
      */
     public void setPointsIsVisible(boolean isVisible) {
@@ -203,6 +209,7 @@ public class FlyBanner extends RelativeLayout {
 
     /**
      * 对应三个位置 CENTER,RIGHT,LEFT
+     *
      * @param position
      */
     public void setPoinstPosition(int position) {
@@ -218,11 +225,11 @@ public class FlyBanner extends RelativeLayout {
 
     private void initViewPager() {
         //当图片多于1张时添加指示点
-        if(!mIsOneImg) {
+        if (!mIsOneImg) {
             addPoints();
         }
         //设置ViewPager
-       FlyPageAdapter adapter = new FlyPageAdapter();
+        FlyPageAdapter adapter = new FlyPageAdapter();
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
         //跳转到首页
@@ -236,6 +243,7 @@ public class FlyBanner extends RelativeLayout {
 
     /**
      * 返回真实的位置
+     *
      * @param position
      * @return
      */
@@ -274,10 +282,10 @@ public class FlyBanner extends RelativeLayout {
         public void onPageScrollStateChanged(int state) {
             if (state == ViewPager.SCROLL_STATE_IDLE) {
                 int current = mViewPager.getCurrentItem();
-                int lastReal = mViewPager.getAdapter().getCount()-2;
+                int lastReal = mViewPager.getAdapter().getCount() - 2;
                 if (current == 0) {
                     mViewPager.setCurrentItem(lastReal, false);
-                } else if (current == lastReal+1) {
+                } else if (current == lastReal + 1) {
                     mViewPager.setCurrentItem(1, false);
                 }
             }
@@ -296,7 +304,7 @@ public class FlyBanner extends RelativeLayout {
             if (mIsImageUrl)
                 return mImageUrls.size() + 2;
             //当为本地图片，返回本地图片长度
-            return mImages.size()+2;
+            return mImages.size() + 2;
         }
 
         @Override
@@ -307,6 +315,12 @@ public class FlyBanner extends RelativeLayout {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             ImageView imageView = new ImageView(getContext());
+            if(scaleType == 0){
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }else if(scaleType==1){
+                imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            }
+
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -315,20 +329,22 @@ public class FlyBanner extends RelativeLayout {
                     }
                 }
             });
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
             if (mIsImageUrl) {
                 ImageLoader.getInstance().displayImage(mImageUrls.get(toRealPosition(position)), imageView, ImageLoadOptions.getOptionsHight());
             } else {
                 imageView.setImageResource(mImages.get(toRealPosition(position)));
             }
-            container.addView(imageView);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.gravity = Gravity.CENTER;
+            container.addView(imageView, layoutParams);
 
             return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View)object);
+            container.removeView((View) object);
             if (object != null)
                 object = null;
         }
@@ -356,6 +372,7 @@ public class FlyBanner extends RelativeLayout {
 
     /**
      * 切换指示器
+     *
      * @param currentPoint
      */
     private void switchToPoint(final int currentPoint) {

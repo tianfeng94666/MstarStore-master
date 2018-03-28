@@ -1,33 +1,44 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.adapter.BaseViewHolder;
+import com.qx.mstarstoreapp.adapter.CommonAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.bean.Ring;
+import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.json.CustomerEntity;
 import com.qx.mstarstoreapp.json.GetAddressResult;
 import com.qx.mstarstoreapp.json.MainPicResult;
 import com.qx.mstarstoreapp.json.VersionResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
+import com.qx.mstarstoreapp.utils.SpUtils;
+import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.BadgeView;
@@ -73,18 +84,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean isShowPic;
     private LeftPopupWindow leftPopupWindow;
     private CustomerEntity isDefaultCustomer;
+    private String memberAreaId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-//        initView();
-//        setChioceFragment(0);
-
     }
 
     @Override
@@ -112,6 +118,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     if (Global.ring == null) {
                         Global.ring = new Ring();
                     }
+                    if (getAddressResult.getData().getIsHaveSelectArea() == 0) {
+                        showChooseAearDialog(getAddressResult.getData().getMemberArealist());
+                    }
                     Global.isMainAccount = getAddressResult.getData().getIsMasterAccount();
                     Global.ring.setAddressEntity(getAddressResult.getData().getAddress());
                     isDefaultCustomer = getAddressResult.getData().getDefaultCustomer();
@@ -136,6 +145,90 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         });
 
+    }
+
+
+    /**
+     * 显示选择区域对话框
+     */
+    private void showChooseAearDialog(final List<Type> list) {
+        memberAreaId=null;
+        View view = View.inflate(this, R.layout.list_itme, null);
+        ListView listView = (ListView) view.findViewById(R.id.lv_aear);
+        TextView tvComfirm = (TextView) view.findViewById(R.id.tv_comfirm);
+        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        CommonAdapter commonAdapter = new CommonAdapter<Type>(list, R.layout.item_gv_text) {
+            @Override
+            public void convert(int position, BaseViewHolder helper, Type item) {
+                helper.setText(R.id.tv_item_text, list.get(position).getTitle());
+            }
+        };
+        listView.setAdapter(commonAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                memberAreaId = list.get(position).getId();
+            }
+        });
+
+        // 构造对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        tvTitle.setText("请选择该用户所属区域");
+        builder.setView(view);
+        final Dialog noticeDialog = builder.create();
+        tvComfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(commitAear()){
+                    noticeDialog.dismiss();
+                }
+            }
+        });
+        noticeDialog.setCanceledOnTouchOutside(false);
+        noticeDialog.show();
+    }
+
+    private boolean commitAear() {
+         boolean isOk = true;
+        if (StringUtils.isEmpty(memberAreaId)) {
+            showToastReal("所属区域未选择");
+            return false;
+        }
+        String url = AppURL.URL_GET_PLACE_CHANGE + "tokenKey=" + BaseApplication.getToken() + "&memberAreaId=" + memberAreaId;
+        L.e(url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                L.e(result);
+                Gson gson = new Gson();
+                int error = gson.fromJson(result, JsonObject.class).get("error").getAsInt();
+                L.e("error" + error);
+                if (error == 0) {
+                    L.e("成功");
+                    showToastReal("所属区域选择成功");
+                }
+                if (error == 1) {
+                    String message = gson.fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastReal(message);
+                    L.e(message);
+                }
+                if (error == 2) {
+                    L.e("重新登录");
+                }
+                if (error == 3) {
+                    L.e("未审核");
+                } else {
+                    L.e("操作失败");
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+
+        });
+        return true;
     }
 
     @Override
@@ -224,6 +317,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ivStoneRing.setOnClickListener(this);
         ivMake.setOnClickListener(this);
         llShowLess.setOnClickListener(this);
+        ivProduct.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Bundle bundle =  new Bundle();
+                openActivity(QuickStyleInfromationActivity.class,bundle);
+                return false;
+            }
+        });
     }
 
     public static BadgeView badge1;

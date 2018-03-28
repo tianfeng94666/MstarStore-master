@@ -4,24 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@drawable/gray_changeto_white" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_part"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="40dp"
+        android:layout_marginBottom="40dp"
         android:paddingTop="20dp"></android.support.v7.widget.RecyclerView>
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1px"
-    android:layout_alignTop="@+id/ll_finish"
-    android:background="@color/color_line"/>
+    <View
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/gray_changeto_white" />
     <LinearLayout
         android:id="@+id/ll_finish"
         android:paddingTop="1px"
@@ -36,7 +32,19 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="12dp"
-            android:src="@mipmap/cancle" />
+            android:src="@mipmap/back_black" />
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/color_line" />
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:src="@mipmap/delete_black" />
 
         <View
             android:layout_width="1px"
@@ -49,6 +57,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="12dp"
-            android:src="@mipmap/comfirm" />
+            android:src="@mipmap/comfirm_black" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignTop="@+id/ll_finish"
+        android:background="@color/color_line"/>
 </RelativeLayout>

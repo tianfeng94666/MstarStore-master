@@ -31,7 +31,7 @@
             android:textColor="@color/text_color3"
             android:layout_centerHorizontal="true"
             android:layout_width="80dp"
-            android:hint="手寸"
+            android:hint=""
             android:singleLine="true"
             android:textSize="14sp"
             android:gravity="center"

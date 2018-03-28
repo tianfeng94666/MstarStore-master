@@ -11,7 +11,7 @@
         android:gravity="right|center_vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/gray"
+        android:textColor="@color/color_text_can_click"
         android:background="@color/white"
         android:drawablePadding="4dp"
         android:drawableRight="@drawable/icon_right"

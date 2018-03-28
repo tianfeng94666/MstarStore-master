@@ -26,8 +26,17 @@ public class ModelPartsBean {
     private String pics;
     private String picm;
     private String picb;
+    private String partCount;
     private SelectProItemBean selectProItem;
     private List<String> modelPartCount;
+
+    public String getPartCount() {
+        return partCount;
+    }
+
+    public void setPartCount(String partCount) {
+        this.partCount = partCount;
+    }
 
     public String getPid() {
         return pid;

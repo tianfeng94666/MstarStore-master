@@ -91,7 +91,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     TextView tvColor;
     @Bind(R.id.tv_quality)
     TextView tvQuality;
-    @Bind(R.id.tv_search)
+    @Bind(R.id.tv_confirm)
     TextView tvSearch;
     @Bind(R.id.tv_reset)
     TextView idTvCurorder;
@@ -513,7 +513,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
             case R.id.id_ig_back:
 
                 break;
-            case R.id.tv_search:
+            case R.id.tv_confirm:
                 if( searchStone()){
                     gotoResult();
                 }

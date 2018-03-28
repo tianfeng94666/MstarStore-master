@@ -27,6 +27,7 @@ import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
 import com.qx.mstarstoreapp.base.BaseFragment;
 import com.qx.mstarstoreapp.json.ModelDetailResult;
+import com.qx.mstarstoreapp.json.PurityEntity;
 import com.qx.mstarstoreapp.json.StoneDetail;
 import com.qx.mstarstoreapp.json.StoneEntity;
 import com.qx.mstarstoreapp.utils.SpUtils;
@@ -79,7 +80,7 @@ public class StoneChooseFromSettingFragment extends BaseFragment implements View
     LinearLayout llQuality;
     @Bind(R.id.gv_quality)
     GridView gvQuality;
-    @Bind(R.id.tv_search)
+    @Bind(R.id.tv_confirm)
     TextView tvSearch;
     @Bind(R.id.tv_reset)
     TextView tvReset;
@@ -306,7 +307,7 @@ public class StoneChooseFromSettingFragment extends BaseFragment implements View
     }
 
     private void initPurity() {
-        final List<ModelDetailResult.DataEntity.StonePurityEntity> list = stoneDetail.getStonePurityItme();
+        final List<PurityEntity> list = stoneDetail.getStonePurityItme();
         purityChecks = new boolean[list.size()];
         if(stoneEntity.getPurityTitle()!=null){
             for (int i = 0; i < list.size(); i++) {
@@ -317,9 +318,9 @@ public class StoneChooseFromSettingFragment extends BaseFragment implements View
             }
         }
 
-        final CommonAdapter commonAdapter = new CommonAdapter<ModelDetailResult.DataEntity.StonePurityEntity>(stoneDetail.getStonePurityItme(), R.layout.item_gv_text) {
+        final CommonAdapter commonAdapter = new CommonAdapter<PurityEntity>(stoneDetail.getStonePurityItme(), R.layout.item_gv_text) {
             @Override
-            public void convert(int position, BaseViewHolder helper, ModelDetailResult.DataEntity.StonePurityEntity item) {
+            public void convert(int position, BaseViewHolder helper, PurityEntity item) {
                 if (purityChecks[position]) {
                     helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.corners_red_bg, getResources().getColor(R.color.white));
                 } else {

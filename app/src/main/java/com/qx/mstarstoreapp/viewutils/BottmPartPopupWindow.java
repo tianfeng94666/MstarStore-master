@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
-import com.qx.mstarstoreapp.ItemDecoration.SpaceItemDecoration;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.RecycleViewPartListAdapter;
 import com.qx.mstarstoreapp.json.ModelPartsBean;
@@ -37,6 +36,8 @@ public class BottmPartPopupWindow {
     ImageView ivComfirm;
     @Bind(R.id.header)
     View header;
+    @Bind(R.id.iv_delete)
+    ImageView ivDelete;
     private Context context;
     private View view;
     private PopupWindow popupWindow;
@@ -47,6 +48,7 @@ public class BottmPartPopupWindow {
     RecycleViewPartListAdapter.PartListItemClickListener itemClickListener;
     private View.OnClickListener comfirmClickListerner;
     private View rootView;
+    private View.OnClickListener deleteClickListerner;
 
     public BottmPartPopupWindow(Context context) {
         this.context = context;
@@ -58,16 +60,17 @@ public class BottmPartPopupWindow {
         view = inflater.inflate(R.layout.bottom_popup_window, null);
         ButterKnife.bind(this, view);
         if (UIUtils.isScreenChange(context)) {
-            rvPart.setPadding(0,0,0,0);
+            rvPart.setPadding(0, 0, 0, 0);
             header.setVisibility(View.GONE);
-            int width = UIUtils.getWindowHight();
+            int width = UIUtils.getWindowWidth();
 
-            popupWindow = new PopupWindow(view, width, width);
+
+            popupWindow = new PopupWindow(view, width / 2, UIUtils.getWindowHight());
         } else {
-            rvPart.setPadding(0,UIUtils.dip2px(20),0,0);
+            rvPart.setPadding(0, UIUtils.dip2px(20), 0, 0);
             header.setVisibility(View.VISIBLE);
             int width = UIUtils.getWindowWidth();
-            popupWindow = new PopupWindow(view, width, width);
+            popupWindow = new PopupWindow(view, width, width+UIUtils.dip2px(60));
         }
         popupWindow.setFocusable(false);
         popupWindow.setOutsideTouchable(false);
@@ -88,10 +91,11 @@ public class BottmPartPopupWindow {
 
     }
 
-    public void setData(List<ModelPartsBean> partList, RecycleViewPartListAdapter.PartListItemClickListener listItemClickListener, View.OnClickListener comfimrClickListener, View view) {
+    public void setData(List<ModelPartsBean> partList, RecycleViewPartListAdapter.PartListItemClickListener listItemClickListener, View.OnClickListener comfimrClickListener,View.OnClickListener deleteClickListener, View view) {
         this.partList = partList;
         this.itemClickListener = listItemClickListener;
         this.comfirmClickListerner = comfimrClickListener;
+        this.deleteClickListerner = deleteClickListener;
         showPop(view);
     }
 
@@ -102,17 +106,17 @@ public class BottmPartPopupWindow {
         if (UIUtils.isScreenChange(context)) {
             mLayoutManager = new FitGridLayoutManager(context, rvPart, 2, GridLayoutManager.VERTICAL, false);
             rvPart.setLayoutManager(mLayoutManager);
-            recycleViewPartAdapter = new RecycleViewPartListAdapter(partList, itemClickListener);
+            recycleViewPartAdapter = new RecycleViewPartListAdapter(context, partList, itemClickListener);
             //设置item间距，30dp
-            rvPart.addItemDecoration(new SpaceItemDecoration(4));
+//            rvPart.addItemDecoration(new SpaceItemDecoration(4));
             rvPart.setAdapter(recycleViewPartAdapter);
             popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.RIGHT, 0, 0);
         } else {
             mLayoutManager = new FitGridLayoutManager(context, rvPart, 2, GridLayoutManager.HORIZONTAL, false);
             rvPart.setLayoutManager(mLayoutManager);
-            recycleViewPartAdapter = new RecycleViewPartListAdapter(partList, itemClickListener);
+            recycleViewPartAdapter = new RecycleViewPartListAdapter(context, partList, itemClickListener);
             //设置item间距，30dp
-            rvPart.addItemDecoration(new SpaceItemDecoration(4));
+//            rvPart.addItemDecoration(new SpaceItemDecoration(4));
             rvPart.setAdapter(recycleViewPartAdapter);
             popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
         }
@@ -123,7 +127,7 @@ public class BottmPartPopupWindow {
         popupWindow.dismiss();
     }
 
-    @OnClick({R.id.iv_cancle, R.id.iv_comfirm})
+    @OnClick({R.id.iv_cancle, R.id.iv_comfirm,R.id.iv_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_cancle:
@@ -131,6 +135,10 @@ public class BottmPartPopupWindow {
                 break;
             case R.id.iv_comfirm:
                 comfirmClickListerner.onClick(view);
+                break;
+            case R.id.iv_delete:
+                deleteClickListerner.onClick(view);
+                closePopupWindow();
                 break;
         }
     }

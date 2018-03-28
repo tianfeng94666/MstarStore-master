@@ -71,7 +71,7 @@ public class CustomSelectButton extends RelativeLayout {
     public void setTextName(String textName) {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
-            tv.setTextColor(getResources().getColor(R.color.black));
+            tv.setTextColor(getResources().getColor(R.color.color_text_can_click));
             if (style == 0) {
                 tv.setBackgroundResource(R.drawable.btn_bg_while);
             } else {
@@ -83,7 +83,9 @@ public class CustomSelectButton extends RelativeLayout {
     public void setDefaultText(String textName) {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
-            this.tv.setTextColor(getResources().getColor(R.color.text_color2));
+            this.tv.setTextColor(getResources().getColor(R.color.color_text_can_click));
+        }else {
+            this.tv.setText("请选择成色");
         }
     }
 
@@ -112,6 +114,7 @@ public class CustomSelectButton extends RelativeLayout {
         try {
             textName = typedArray.getString(R.styleable.CustomSelectButton_tv_name);
             style = typedArray.getInteger(R.styleable.CustomSelectButton_tv_style, 0);
+            textSize = typedArray.getDimension(R.styleable.CustomSelectButton_tv_size,14);
         } finally {
             typedArray.recycle();
         }
@@ -126,7 +129,7 @@ public class CustomSelectButton extends RelativeLayout {
             tv.setText(textName);
 
         }
-        tv.setTextSize(14);
+        tv.setTextSize(textSize);
         tv.setOnClickListener(new RadioClickListener());
     }
 
@@ -266,7 +269,7 @@ public class CustomSelectButton extends RelativeLayout {
         });
         if (onSelectData != null) {
             titleView.setText(onSelectData.getTitle());
-            titleView.setTextColor(getResources().getColor(R.color.black));
+            titleView.setTextColor(getResources().getColor(R.color.color_text_can_click));
         }
         final CustomListAdapter adapter = new CustomListAdapter(types);
         listView.setAdapter(adapter);

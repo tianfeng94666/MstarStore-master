@@ -52,17 +52,19 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     private FragOrderListFragment productingFragment;//生产中
     private FragOrderListFragment sendingFragment;//已发货
     private FragOrderListFragment finishedFragment;//已完成
+    private int isCheckErpOrder;
+    private int pagerNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_custom_made);
         ButterKnife.bind(this);
         initView();
     }
+
+
 
     @Override
     public void loadNetData() {
@@ -70,11 +72,11 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     public void onBack(View view) {
-        if(Global.GO_HOEM){
-            Global.GO_HOEM= false;
-            openActivity(MainActivity.class,null);
-        }else {
-            openActivity(OrderActivity.class,null);
+        if (Global.GO_HOEM) {
+            Global.GO_HOEM = false;
+            openActivity(MainActivity.class, null);
+        } else {
+            openActivity(OrderActivity.class, null);
         }
 
         finish();
@@ -137,7 +139,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
         viewPager.setOffscreenPageLimit(3);
 
         //显示第几个Fragment
-        int pagerNumber = getIntent().getIntExtra("pageNumber", 0);
+         pagerNumber = getIntent().getIntExtra("pageNumber", 0);
         viewPager.setCurrentItem(pagerNumber);
         ivRight.setVisibility(View.VISIBLE);
         ivRight.setOnClickListener(this);

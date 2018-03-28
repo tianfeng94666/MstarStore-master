@@ -50,6 +50,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 @SuppressLint("ValidFragment")
 public class FragOrderListFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
     private List<OrderWaitResult.DataBean.OrderListBean.ListBean> listData;
@@ -60,7 +61,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private int pullStatus;
     private int cpage = 1;
     private int tempCurpage;
-    private int fragType;
+    private int fragType=1;
     private int listCount = 0;
     private boolean isflag;
     LinearLayout spContent;
@@ -69,17 +70,19 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private final int PRODUCTING_CODE = 2;
     private final int SENDING_CODE = 3;
     private final int FINISHED_CODE = 4;
-    private List<SendingResult.DataBean.OrderListBean> sendinglist =new ArrayList<>();
+    private List<SendingResult.DataBean.OrderListBean> sendinglist = new ArrayList<>();
     private String tokenKey;
     private ListView listView;
     private LoadingWaitDialog dialog;
     JsonObject jsonResult;
+
     public FragOrderListFragment(int fragType) {
         this.fragType = fragType;
     }
 
     public FragOrderListFragment() {
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,7 +98,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             //相当于Fragment的onResume
-            if(jsonResult==null){
+            if (jsonResult == null) {
                 loadNetData();
             }
         } else {
@@ -104,7 +107,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     }
 
     private void initView(View view) {
-    listView = (ListView) view.findViewById(R.id.listview);
+        listView = (ListView) view.findViewById(R.id.listview);
         oullRefreshView = (PullToRefreshView) view.findViewById(R.id.pull_refresh_view);
         spContent = (LinearLayout) view.findViewById(R.id.specifiction_content);
 
@@ -121,7 +124,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                 listView.setAdapter(adapter);
                 break;
             case SENDING_CODE:
-                if(sendinglist!=null){
+                if (sendinglist != null) {
                     adapter = new SendingListAdater(getActivity(), sendinglist);
                     listView.setAdapter(adapter);
                 }
@@ -154,8 +157,8 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                         break;
                     case SENDING_CODE:
                         intent = new Intent(getActivity(), FinishTableLessActivity.class);
-                        intent.putExtra("orderNumber",sendinglist.get(i).getOrderNum());
-                        intent.putExtra("type","1");
+                        intent.putExtra("orderNumber", sendinglist.get(i).getOrderNum());
+                        intent.putExtra("type", "1");
                         startActivity(intent);
                         break;
 
@@ -173,11 +176,11 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     }
 
 
-
     public void showWatiNetDialog() {
         dialog = new LoadingWaitDialog(getActivity());
         dialog.show();
     }
+
     public void dismissWatiNetDialog() {
         if (dialog != null) {
             dialog.cancel();
@@ -185,25 +188,30 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
             dialog = null;
         }
     }
+
     private void loadNetData() {
-        showWatiNetDialog();
+        baseShowWatLoading();
         String url = "";
         tokenKey = BaseApplication.getToken();
         switch (fragType) {
             case CHECKING_CODE:
-                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" +tokenKey  + "&cpage=" + cpage;
+                url = AppURL.URL_ORDER_WAITCHECK + "tokenKey=" + tokenKey + "&cpage=" + cpage;
                 break;
             case PRODUCTING_CODE:
                 url = AppURL.URL_ORDER_MODEL_LIST + "tokenKey=" + tokenKey + "&cpage=" + cpage;
                 // ModelOrderProduceListPage?tokenKey=10b588002228fa805231a59bb7976bf4&cpage=2
                 break;
             case SENDING_CODE:
-                url = AppURL.URL_CODE_SENDING + "tokenKey=" + tokenKey+ "&cpage=" + cpage;
+                url = AppURL.URL_CODE_SENDING + "tokenKey=" + tokenKey + "&cpage=" + cpage;
                 break;
             case FINISHED_CODE:
-                url="";
-                dismissWatiNetDialog();
+                url = "";
+                baseHideWatLoading();
                 break;
+            default:
+                baseHideWatLoading();
+                break;
+
         }
 
         if (StringUtils.isEmpty(url)) {
@@ -213,9 +221,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-                dismissWatiNetDialog();
+                baseHideWatLoading();
                 L.e("loadNetData  " + result);
-                 jsonResult = new Gson().fromJson(result, JsonObject.class);
+                jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
                 //待审核及生产中 返回结果
                 OrderWaitResult orderWaitResult;
@@ -229,15 +237,15 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                     switch (fragType) {
                         case CHECKING_CODE:
                             orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
-                            if(orderWaitResult.getData()==null){
+                            if (orderWaitResult.getData() == null) {
                                 break;
                             }
-                           OrderWaitResult.DataBean.StatusCountBean statusCountBean = orderWaitResult.getData().getStatusCount();
+                            OrderWaitResult.DataBean.StatusCountBean statusCountBean = orderWaitResult.getData().getStatusCount();
                             setBadge(statusCountBean);
                             orderList = orderWaitResult.getData().getOrderList();
 
                             list = orderList.getList();
-                            if(list!=null){
+                            if (list != null) {
                                 listCount = Integer.valueOf(orderList.getList_count());
                             }
                             break;
@@ -245,23 +253,23 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
                             orderWaitResult = new Gson().fromJson(result, OrderWaitResult.class);
                             orderList = orderWaitResult.getData().getOrderList();
                             list = orderList.getList();
-                            if(list!=null){
+                            if (list != null) {
                                 listCount = Integer.valueOf(orderList.getList_count());
                             }
                             break;
                         case SENDING_CODE:
                             sendingResult = new Gson().fromJson(result, SendingResult.class);
-                            if(sendingResult.getData()!=null){
+                            if (sendingResult.getData() != null) {
                                 List<SendingResult.DataBean.OrderListBean> templist = sendingResult.getData().getOrderList();
-                                if(templist !=null){
+                                if (templist != null) {
                                     sendinglist.addAll(templist);
                                 }
-                            }else {
+                            } else {
                                 break;
                             }
                             adapter = new SendingListAdater(getActivity(), sendinglist);
                             listView.setAdapter(adapter);
-                            if(sendinglist!=null){
+                            if (sendinglist != null) {
                                 listCount = Integer.valueOf(sendingResult.getData().getList_count());
                             }
                             break;
@@ -286,15 +294,15 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
             @Override
             public void onFail(String fail) {
-                dismissWatiNetDialog();
+                baseHideWatLoading();
             }
 
         });
     }
 
-    private void setBadge( OrderWaitResult.DataBean.StatusCountBean statusCountBean) {
-        if(statusCountBean!=null){
-                    ((CustomMadeActivity)getActivity()).onFragOrderCount(statusCountBean);
+    private void setBadge(OrderWaitResult.DataBean.StatusCountBean statusCountBean) {
+        if (statusCountBean != null) {
+            ((CustomMadeActivity) getActivity()).onFragOrderCount(statusCountBean);
         }
     }
 
@@ -312,7 +320,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
 
     public void endNetRequest() {
-        if(adapter!=null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
         tempCurpage = cpage;
@@ -347,7 +355,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         pullStatus = PULL_REFRESH;
         listData.clear();
         sendinglist.clear();
-      loadNetData();
+        loadNetData();
 
     }
 

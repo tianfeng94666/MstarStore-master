@@ -1,11 +1,8 @@
 package com.qx.mstarstoreapp.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
+import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.SettingResult;
@@ -30,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/8/4 0004.
  */
 
-public class EncryptionSettingsActivity extends Activity implements View.OnClickListener {
+public class EncryptionSettingsActivity extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.tv_is_customized)
     TextView tvIsCustomized;
@@ -98,6 +96,8 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
     ImageView ivStoneAdd3;
     @Bind(R.id.rl_stone_addtion3)
     RelativeLayout rlStoneAddtion3;
+    @Bind(R.id.tv_comfirm)
+    TextView tvComfirm;
     private boolean isShowStonePrice = SpUtils.getInstace(this).getBoolean("isShowStonePrice", true);
     private boolean isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
     private boolean isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
@@ -109,13 +109,16 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_enctyption_settings);
         ButterKnife.bind(this);
         getDate();
         initView();
+    }
+
+    @Override
+    public void loadNetData() {
+
     }
 
 
@@ -126,6 +129,7 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
 
 
     private void initView() {
+        titleText.setText("高级设置");
         if (isCustomized) {
             btCustomized.setImageResource(R.drawable.icon_switch_off);
         } else {
@@ -263,9 +267,9 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
             commitAddtion(value, 0);
             Global.STONE_POINT_CHANGE = 1;
         }
-        boolean spot2IsChange =!etStonesSpot2.getText().toString().equals(settingResult.getData().getStoneAddtion1());
-        boolean spot3IsChange =!etStonesSpot3.getText().toString().equals(settingResult.getData().getStoneAddtion2());
-        if (!etStonesSpot.getText().toString().equals(settingResult.getData().getStoneAddtion())||spot2IsChange||spot3IsChange) {
+        boolean spot2IsChange = !etStonesSpot2.getText().toString().equals(settingResult.getData().getStoneAddtion1());
+        boolean spot3IsChange = !etStonesSpot3.getText().toString().equals(settingResult.getData().getStoneAddtion2());
+        if (!etStonesSpot.getText().toString().equals(settingResult.getData().getStoneAddtion()) || spot2IsChange || spot3IsChange) {
             String value = etStonesSpot.getText().toString();
             commitAddtion(value, 1);
             Global.STONE_POINT_CHANGE = 1;
@@ -274,7 +278,7 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
     }
 
     public void onBack(View view) {
-        isCommitaddtion();
+//        isCommitaddtion();
         finish();
     }
 
@@ -287,6 +291,7 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
         ivStoneReduce2.setOnClickListener(this);
         ivStoneAdd3.setOnClickListener(this);
         ivStoneReduce3.setOnClickListener(this);
+        tvComfirm.setOnClickListener(this);
     }
 
     private void commitAddtion(String value, int i) {
@@ -294,8 +299,8 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
         if (i == 0) {
             url = AppURL.URL_MODIFY_ADDTION + "tokenKey=" + BaseApplication.getToken() + "&value=" + value;
         } else {
-            url = AppURL.URL_MODIFY_STONE_ADDTION + "tokenKey=" + BaseApplication.getToken() + "&value=" + value+
-                    "&value1="+etStonesSpot2.getText().toString()+"&value2="+etStonesSpot3.getText().toString();
+            url = AppURL.URL_MODIFY_STONE_ADDTION + "tokenKey=" + BaseApplication.getToken() + "&value=" + value +
+                    "&value1=" + etStonesSpot2.getText().toString() + "&value2=" + etStonesSpot3.getText().toString();
         }
 
         L.e("获取个人信息" + url);
@@ -370,6 +375,10 @@ public class EncryptionSettingsActivity extends Activity implements View.OnClick
                     --stonePoint3;
                 }
                 etStonesSpot3.setText(stonePoint3 + "");
+                break;
+            case R.id.tv_comfirm:
+                isCommitaddtion();
+                finish();
                 break;
         }
     }

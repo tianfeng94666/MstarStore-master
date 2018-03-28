@@ -26,7 +26,7 @@
             android:button="@drawable/radio_style"
             android:checked="false"
             android:paddingBottom="8dp"
-            android:paddingLeft="20dp"
+            android:paddingLeft="25dp"
             android:paddingTop="10dp"
             android:textColor="@color/black"
             android:textSize="15sp" />
@@ -180,6 +180,8 @@
         android:layout_below="@id/id_view_line"
         android:layout_marginLeft="@dimen/margin10"
         android:layout_marginRight="@dimen/margin10"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
         android:layout_marginTop="3dip"
         android:gravity="center_vertical"
         android:lines="2"

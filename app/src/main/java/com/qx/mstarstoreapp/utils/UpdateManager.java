@@ -26,12 +26,13 @@ import android.widget.ProgressBar;
 
 import com.qx.mstarstoreapp.R;
 
+
+
 /**
  * @author coolszy
  * @date 2012-4-26
  * @blog http://blog.92coding.com
  */
-
 public class UpdateManager {
     /* 下载中 */
     private static final int DOWNLOAD = 1;

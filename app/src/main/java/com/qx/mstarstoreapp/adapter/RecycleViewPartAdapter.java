@@ -1,5 +1,7 @@
 package com.qx.mstarstoreapp.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
-import com.qx.mstarstoreapp.json.GetRingPartResult;
 import com.qx.mstarstoreapp.json.ModelPartsBean;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.utils.StringUtils;
@@ -21,13 +22,15 @@ import java.util.List;
  */
 
 public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPartAdapter.ViewHolder> {
+    private final Context context;
     private List<ModelPartsBean> list;
     private List<String> countList;
     private MyItemClickListener myItemClickListener;
 
 
-    public RecycleViewPartAdapter(List<ModelPartsBean> list, List<String> countList, MyItemClickListener myItemClickListener) {
+    public RecycleViewPartAdapter(Context context ,List<ModelPartsBean> list, List<String> countList, MyItemClickListener myItemClickListener) {
         this.list = list;
+        this.context =context;
         this.countList = countList;
         this.myItemClickListener = myItemClickListener;
     }
@@ -35,31 +38,36 @@ public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPart
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_part, null);
-        ViewHolder viewHolder = new ViewHolder(view,myItemClickListener);
+        ViewHolder viewHolder = new ViewHolder(view, myItemClickListener);
         return viewHolder;
     }
+
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //stone位置
-        if(countList.size()==position){
+        if (list.size() - 1 == position) {
             holder.mTvStone.setVisibility(View.VISIBLE);
-            holder.mTvAmount.setVisibility(View.GONE);
             holder.mTvStone.setText(list.get(position).getTitle());
             return;
-        }else {
+        } else {
             holder.mTvStone.setVisibility(View.GONE);
-            holder.mTvAmount.setVisibility(View.VISIBLE);
-        }
-        ImageLoader.getInstance().displayImage(list.get(position).getPicm(),holder.mIv, ImageLoadOptions.getOptionsHight());
-        if(StringUtils.isEmpty(countList.get(position))){
-            holder.mTvAmount.setVisibility(View.GONE);
-        }else {
-            holder.mTvAmount.setVisibility(View.VISIBLE);
-            holder.mTvAmount.setText(countList.get(position));
         }
 
-        holder.mTvName.setText(list.get(position).getTitle());
+
+        ImageLoader.getInstance().displayImage(list.get(position).getPicm(), holder.mProduct, ImageLoadOptions.getOptionsHight());
+
+        if (StringUtils.isEmpty(list.get(position).getPid())) {
+            holder.mTvName.setTextColor(context.getResources().getColor(R.color.text_color3));
+        }else {
+            holder.mTvName.setTextColor(context.getResources().getColor(R.color.text_color));
+        }
+
+        if (StringUtils.isEmpty(countList.get(position))) {
+            holder.mTvName.setText(list.get(position).getTitle());
+        } else {
+            holder.mTvName.setText(list.get(position).getTitle()+"/"+countList.get(position));
+        }
     }
 
     @Override
@@ -69,25 +77,25 @@ public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPart
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView mIv;
-        TextView mTvAmount;
+        ImageView mProduct;
+
+//        TextView mTvAmount;
         TextView mTvName;
         TextView mTvStone;
         View rootView;
         private MyItemClickListener mListener;
 
-        public ViewHolder(View itemView,MyItemClickListener listener) {
+        public ViewHolder(View itemView, MyItemClickListener listener) {
             super(itemView);
-            mIv = (ImageView) itemView.findViewById(R.id.iv_item_part);
-            mTvAmount =(TextView)itemView.findViewById(R.id.tv_amount) ;
-            mTvName =(TextView)itemView.findViewById(R.id.tv_name) ;
-            mTvStone =(TextView)itemView.findViewById(R.id.tv_stone) ;
+            mProduct = (ImageView) itemView.findViewById(R.id.iv_item_part);
+            mTvName = (TextView) itemView.findViewById(R.id.tv_name);
+            mTvStone = (TextView) itemView.findViewById(R.id.tv_stone);
             rootView = itemView.findViewById(R.id.root_view);
             this.mListener = listener;
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mListener!=null){
+                    if (mListener != null) {
                         mListener.onItemClick(v, getPosition());
                     }
                 }
@@ -95,8 +103,6 @@ public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPart
         }
 
     }
-
-
 
 
     public interface MyItemClickListener {

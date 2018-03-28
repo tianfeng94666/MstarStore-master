@@ -38,7 +38,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin5"
         android:src="@drawable/icon_right"
         android:visibility="gone" />
 

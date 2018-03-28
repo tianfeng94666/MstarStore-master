@@ -1,13 +1,27 @@
 package com.qx.mstarstoreapp.activity;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,6 +44,7 @@ import com.qx.mstarstoreapp.Scrollable.TabsLayout;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.inter.AdapterCallBack;
 import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
@@ -43,6 +58,8 @@ import com.qx.mstarstoreapp.json.PriceResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
+import com.qx.mstarstoreapp.utils.ExcelManager;
+import com.qx.mstarstoreapp.utils.ExcelUtil;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
@@ -51,6 +68,8 @@ import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
 import com.qx.mstarstoreapp.viewutils.PullToRefreshView;
 
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +78,7 @@ import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 
 /*
  * 创建人：Yangshao
@@ -91,11 +111,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     @Bind(R.id.id_tv_address)
     TextView idTvAddress;
     @Bind(R.id.id_cs_color)
-    CustomSelectButton idCsColor;
+    CustomSelectButton idPurity;
     @Bind(R.id.id_receipt)
     Button idReceipt;
     @Bind(R.id.bt_qulity)
-    CustomSelectButton idCsMass;
+    CustomSelectButton btQuality;
     @Bind(R.id.pull_refresh_view)
     PullToRefreshView pullRefreshView;
     @Bind(R.id.rel_shopping_car_bottom_action)
@@ -148,6 +168,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> listData;
     AddressEntity isDefaultAddress;
     CustomerEntity isDefaultCustomer;
+    @Bind(R.id.tv_customer)
+    TextView tvCustomer;
+    @Bind(R.id.tv_quality)
+    TextView tvQuality;
+    @Bind(R.id.tv_color)
+    TextView tvColor;
+    @Bind(R.id.tv_right)
+    ImageView tvRight;
     private int tempCurpage = 1;
     private int pullState = 1;
     private int curpage = 1;
@@ -158,19 +186,22 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     private int list_count = -1;
     private static final int PULL_REFRESH = 1;
     private static final int PULL_LOAD = 2;
-    int waitOrderCount;
     private ConfirmOrderResult confirmOrderResult;
     private boolean isShowPrice;
     private boolean ischooseEmpty;//是否选择了产品
     private boolean isCustomized;//是否是用户定制
     private DefaultValue defaultValue;
+    String purityId, qualityId;//选中的成色id,质量等级id
+    List<String> mcheckIds;//选中的产品id集合
+    String invTitle, invType;
+    private int GET_EXCEL_FILE=10;
+    private int GET_CUSTOMER=11;
+    private int GET_ADDRESS=12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_confirmorder);
         ButterKnife.bind(this);
         getActivityType(getIntent());
@@ -188,22 +219,37 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         }
         type = bundle.getInt("type");
         orderId = bundle.getString("itemId");
-        waitOrderCount = getIntent().getIntExtra("waitOrderCount", 0);
+        dealExcel(intent);
         return type;
     }
 
+    public void setListHeadView(OrderListResult.DataEntity.OrderInfoEntity orderInfo) {
+        listHeadView = LayoutInflater.from(this).inflate(R.layout.order_header_view, null);
+        TextView orderNum = (TextView) listHeadView.findViewById(R.id.id_order_num);
+        TextView orderDate = (TextView) listHeadView.findViewById(R.id.id_order_date);
+        TextView orderStatus = (TextView) listHeadView.findViewById(R.id.id_order_status);
+        TextView goodprice = (TextView) listHeadView.findViewById(R.id.id_order_goodprice);
+        orderNum.setText("订单编号：" + orderInfo.getOrderNum());
+        orderDate.setText("下单日期：" + orderInfo.getOrderDate());
+        orderStatus.setText("状态：" + orderInfo.getOrderStatus());
+        goodprice.setText("金价：" + orderInfo.getGoldPrice());
+        lvOrder.addHeaderView(listHeadView);
+    }
+
+
     @Override
     public void loadNetData() {
-        String url="";
+
+        String url = "";
         if (type == 2) {
             url = AppURL.URL_ORDER_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&orderId=" + orderId;
-        } else if(type==0||type==1){
+        } else if (type == 0 || type == 1) {
             url = AppURL.URL_ORDER_LIST + "tokenKey=" + BaseApplication.getToken() + "&purityId=" + purityId +
                     "&qualityId=" + qualityId + "&cpage=" + curpage;
         } else if (type == 5) {
             url = AppURL.URL_ORDER_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&orderId=" + orderId;
-        } else  if(type==3||type==4) {
-            url = AppURL.URL_PERSON_GET_ORDER_LIST + "tokenKey=" + BaseApplication.getToken()+ "&cpage=" + curpage;
+        } else if (type == 3 || type == 4) {
+            url = AppURL.URL_PERSON_GET_ORDER_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage;
         }
         L.e("获取订单信息" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -241,13 +287,13 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                             phoneTv.setText(isDefaultAddress.getPhone());
                         }
                         if (isFirst) {
-                            if (type == 2||type==5) {
+                            if (type == 2 || type == 5) {
                                 OrderListResult.DataEntity.OrderInfoEntity orderInfo = dataEntity.getOrderInfo();
                                 Double totalPrice = dataEntity.getTotalPrice();
                                 Double totalNeedPayPrice = dataEntity.getTotalNeedPayPrice();
                                 L.e("orderInfo" + orderInfo.toString() + "totalPrice:" + totalPrice + "totalNeedPayPrice:" + totalNeedPayPrice);
-                                idCsColor.setTextName(orderInfo.getPurityName());
-                                idCsMass.setTextName(orderInfo.getQualityName());
+                                idPurity.setTextName(orderInfo.getPurityName());
+                                btQuality.setTextName(orderInfo.getQualityName());
                                 idEdWord.setText(orderInfo.getWord());
                                 idEdRemarks.setText(orderInfo.getOrderNote());
                                 idEtSeach.setText(orderInfo.getCustomerName());
@@ -266,13 +312,13 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 defaultValue = dataEntity.getDefaultValue();
                                 if (defaultValue.getModelColor() != null) {
                                     if (!defaultValue.getModelColor().getId().isEmpty()) {
-                                        idCsColor.setTextName(defaultValue.getModelColor().getTitle());
+                                        idPurity.setTextName(defaultValue.getModelColor().getTitle());
                                         purityId = defaultValue.getModelColor().getId();
                                     }
                                 }
                                 if (defaultValue.getModelQuality() != null) {
                                     if (!defaultValue.getModelQuality().getId().isEmpty()) {
-                                        idCsMass.setTextName(defaultValue.getModelQuality().getTitle());
+                                        btQuality.setTextName(defaultValue.getModelQuality().getTitle());
                                         qualityId = defaultValue.getModelQuality().getId() + "";
                                     }
                                 }
@@ -292,7 +338,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 }
                             }
                         }
-                        if (type == 2||type==5) {
+                        if (type == 2 || type == 5) {
                             btGoPay.setVisibility(View.GONE);
                             idLayOrderDetail.setVisibility(View.VISIBLE);
                             idLayPrice1.setVisibility(View.GONE);
@@ -316,7 +362,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         }
                         L.e("解析成功");
                         //清空是否选中
-                        if (type != 2||type!=5) {
+                        if (type != 2 || type != 5) {
                             confirOrderAdapter.clearCheckedState();
                             mchecked.clear();
                         }
@@ -340,24 +386,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
             @Override
             public void onFail(String fail) {
-
             }
 
         });
-    }
-
-
-    public void setListHeadView(OrderListResult.DataEntity.OrderInfoEntity orderInfo) {
-        listHeadView = LayoutInflater.from(this).inflate(R.layout.order_header_view, null);
-        TextView orderNum = (TextView) listHeadView.findViewById(R.id.id_order_num);
-        TextView orderDate = (TextView) listHeadView.findViewById(R.id.id_order_date);
-        TextView orderStatus = (TextView) listHeadView.findViewById(R.id.id_order_status);
-        TextView goodprice = (TextView) listHeadView.findViewById(R.id.id_order_goodprice);
-        orderNum.setText("订单编号：" + orderInfo.getOrderNum());
-        orderDate.setText("下单日期：" + orderInfo.getOrderDate());
-        orderStatus.setText("状态：" + orderInfo.getOrderStatus());
-        goodprice.setText("金价：" + orderInfo.getGoldPrice());
-        lvOrder.addHeaderView(listHeadView);
     }
 
     @Override
@@ -368,9 +399,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         initScroll();
         loadNetData();
     }
+
     private void initListener() {
-        if (idCsColor != null)
-            idCsColor.setOnSelectData(new CustomSelectButton.OnselectData() {
+        if (idPurity != null)
+            idPurity.setOnSelectData(new CustomSelectButton.OnselectData() {
                 @Override
                 public List<Type> getData() {
                     List<Type> list = new ArrayList<>();
@@ -385,14 +417,15 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 @Override
                 public void getSelectId(Type type) {
-                    idCsColor.setText(type.getTypeName());
+                    idPurity.setText(type.getTypeName());
                     purityId = type.getId();
-//                    queryPricefoServer(qualityId, purityId);
+                    queryPricefoServer(qualityId, purityId);
+                    showPurityDialog(type.getTypeName());
                 }
 
                 @Override
                 public String getTitle() {
-                    return "选择质量等级";
+                    return "选择成色";
                 }
 
                 @Override
@@ -414,8 +447,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             }
         });
 
-        if (idCsMass != null)
-            idCsMass.setOnSelectData(new CustomSelectButton.OnselectData() {
+        if (btQuality != null)
+            btQuality.setOnSelectData(new CustomSelectButton.OnselectData() {
                 @Override
                 public List<Type> getData() {
                     List<Type> list = new ArrayList<>();
@@ -435,14 +468,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 @Override
                 public void getSelectId(Type type) {
-                    idCsMass.setText(type.getTypeName());
+                    btQuality.setText(type.getTypeName());
                     qualityId = type.getId();
-//                    queryPricefoServer(qualityId, purityId);
+                    queryPricefoServer(qualityId, purityId);
                 }
 
                 @Override
                 public String getTitle() {
-                    return "选择成色";
+                    return "选择质量等级";
                 }
             });
 
@@ -482,7 +515,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     if (st.isEmpty()) {
                         Intent intent = new Intent(ConfirmOrderActivity.this, CustomersListActivity.class);
                         intent.putExtra("keyWord", st);
-                        startActivityForResult(intent, 11);
+                        startActivityForResult(intent, GET_CUSTOMER);
                     } else {
                         seachCustom(idEtSeach.getText().toString());
                     }
@@ -525,10 +558,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             public void onClick(View view) {
                 //openActivity(ShopingAddressActivity.class,null);
                 // Intent intent = new Intent(ConfirmOrderActivity.this, ShopingAddressActivity.class);
-                // startActivityForResult(intent, 12);
+                // startActivityForResult(intent, GET_ADDRESS);
                 Intent intent = new Intent(ConfirmOrderActivity.this, AddressListActivity.class);
                 intent.putExtra("type", 2);
-                startActivityForResult(intent, 12);
+                startActivityForResult(intent, GET_ADDRESS);
             }
         });
 
@@ -553,6 +586,70 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     }
 
+    private void showPurityDialog(String purity) {
+        if (mcheckIds == null || mcheckIds.size() == 0) {
+            showDialog("对当前显示的所有订单成色改为" + purity, 1);
+        } else {
+            showDialog("对当前选中的订单成色改为" + purity, 0);
+        }
+    }
+
+    private void showDialog(String st, final int j) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请做出选择")
+                .setMessage(st)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {// 积极
+
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        // TODO Auto-generated method stub
+                        changePurity(j);
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {// 消极
+
+            @Override
+            public void onClick(DialogInterface dialog,
+                                int which) {
+                // TODO Auto-generated method stub
+                finish();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void changePurity(int j) {
+        List<String> changPurityList = new ArrayList<>();
+        if (j == 1) {
+            for (int i = 0; i < listData.size(); i++) {
+                changPurityList.add(listData.get(i).getId());
+            }
+        } else {
+            changPurityList = new ArrayList<>(mcheckIds);
+        }
+        String ids = StringUtils.purUrlCut("itemIds", changPurityList).toString();
+        String url = AppURL.URL_GET_MODELDETAIL_FORSCAN_MODIFY_PURITY + "tokenKey=" + BaseApplication.getToken() + ids + "&purityId=" + purityId;
+        L.e(url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                L.e(result);
+                int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
+                if (error == 0) {
+                    showToastReal(new Gson().fromJson(result, JsonObject.class).get("message").getAsString());
+                }
+                if (error == 2) {
+                    loginToServer(ConfirmOrderActivity.class);
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+        });
+    }
+
     /*
     * @version  取消订单
     */
@@ -566,7 +663,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
                     showToastReal(" 取消成功");
-                    setResult(11);
+                    setResult(GET_CUSTOMER);
                     finish();
                 }
                 if (error == 2) {
@@ -647,14 +744,13 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
 
     public void onBack(View view) {
-        L.e("删除后" + waitOrderCount);
+
         Intent intent = new Intent();
-        intent.putExtra("waitOrderCount", waitOrderCount);
         if (type == 2) {
             intent.setClass(this, CustomMadeActivity.class);
             startActivity(intent);
         } else {
-            setResult(12, intent);
+            setResult(GET_ADDRESS, intent);
         }
 
         finish();
@@ -665,8 +761,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
             Intent intent = new Intent();
-            intent.putExtra("waitOrderCount", waitOrderCount);
-            setResult(12, intent);
+            setResult(GET_ADDRESS, intent);
             finish();
             return true;
         }
@@ -689,13 +784,43 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         pullRefreshView.setOnHeaderRefreshListener(this);
           /*发票*/
         idReceipt.setText(R.string.write_a_receip);
+        lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //订单详情有一个头部
+                if (lvOrder.getChildCount() > listData.size()) {
+                    gotoEdit(position - 1);
+                } else {
+                    gotoEdit(position);
+                }
 
+            }
+        });
+        if (type == 0) {
+            tvRight.setVisibility(View.VISIBLE);
+            tvRight.setImageDrawable(getResources().getDrawable(R.drawable.icon_add2));
+            tvRight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    startActivityForResult(intent,GET_EXCEL_FILE);
+                }
+            });
+        }else {
+            tvRight.setVisibility(View.GONE);
+        }
 
-        if (type == 2||type==5) {
+        if (type == 2 || type == 5) {
             ckCheckall.setVisibility(View.GONE);
             titleText.setText(R.string.order_detail);
             idCancleOrder.setText(R.string.cancle_order);
         } else {
+            String st = " *";
+            setMustFill("客       户", st, tvCustomer);
+            setMustFill("质量等级", st, tvQuality);
+//            setMustFill(st, tvColor);
             titleText.setText(R.string.confirm_order);
         }
 
@@ -720,22 +845,26 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         });
     }
 
+    private void setMustFill(String first, String st, TextView tv) {
+
+        SpannableStringBuilder builder = new SpannableStringBuilder(tv.getText().toString() + st);
+        builder.setSpan(new ForegroundColorSpan(Color.RED),
+                tv.getText().toString().length(), (st + tv.getText().toString()).length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        tv.setText(builder);
+    }
+
     //OrderCurrentSubmitDo?itemId=1|2|3&addressId=1&purityId=3&qualityId=2&tokenKey=944df2f27ffce557042887589986c193
-    String purityId, qualityId;
-    List<String> mcheckId;
-
-
-    String invTitle, invType;
 
     /*
      * @version  提交订单
      */
     public void submitOrder() {
+        baseShowWatLoading();
         String url;
-        if(type>2){
+        if (type > 2) {
             url = AppURL.URL_PERSON_ORDER + "&tokenKey=" + BaseApplication.getToken();
-        }else {
-            url = AppURL.URL_ORDER_SUBMIT + "&tokenKey=" + BaseApplication.getToken();
+        } else {
+            url = AppURL.URL_GET_MODELDETAIL_FORSCAN_COMMIT_ORDER + "&tokenKey=" + BaseApplication.getToken();
         }
         String word = idEdWord.getText().toString();
         String remarks = idEdRemarks.getText().toString();
@@ -751,10 +880,10 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         String addressId = isDefaultAddress.getId();
         String customerID = isDefaultCustomer.getCustomerID() + "";
         String itemurl = "";
-        if (mcheckId == null || mcheckId.size() == 0) {
+        if (mcheckIds == null || mcheckIds.size() == 0) {
             showToastReal(getString(R.string.please_select_order));
         } else {
-            itemurl = StringUtils.purUrlCut("itemId", mcheckId).toString();
+            itemurl = StringUtils.purUrlCut("itemId", mcheckIds).toString();
         }
         L.e("word" + word + "   addressId" + addressId + "");
         if (customerID.equals("-1")) {
@@ -771,6 +900,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                baseHideWatLoading();
                 L.e("确定订单" + result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
@@ -782,37 +912,32 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         return;
                     }
                     String id = jsonObject.get("id").getAsString();
-                    waitOrderCount = Integer.valueOf(jsonObject.get("waitOrderCount").getAsString());
+                    Global.waitOrderCount = Integer.valueOf(jsonObject.get("waitOrderCount").getAsString());
+                    int isCheckErpOrder = confirmOrderResult.getData().getIsCheckErpOrder();
                     //是否需要付款  0不需要   1需要
                     int isNeedPay = jsonObject.get("isNeetPay").getAsInt();
                     //是都已经上传到ERP订单  //1 跳转到生产详情页    0跳转到审核页面
                     int isErpOrder = jsonObject.get("isErpOrder").getAsInt();
-                    //intent = new Intent(getActivity(), CustomMadeActivity.class);
-                    // startActivity(intent);
-
-                    Intent intent;
-//                    if (isNeedPay == 0) {
-//                        //支付
-//                        btGoPay.setVisibility(View.GONE);
-//                        idLayOrderDetail.setVisibility(View.VISIBLE);
-//                    }else {
-//                        idLayOrderDetail.setVisibility(View.GONE);
-//                        btGoPay.setVisibility(View.VISIBLE);
-//                    }
-
-                    if (isErpOrder == 1) {
-                        String orderNum = jsonObject.get("orderNum").getAsString();
-                        ProgressDialog progressDialog = new ProgressDialog(ConfirmOrderActivity.this, orderNum, 1);
-                        progressDialog.showAsDropDown(rootView);
-                        // intent.putExtra("pageNumber",1);
-                    } else {
-                        // intent.putExtra("pageNumber",0);  //待审核
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("type", 2);
-                        bundle.putString("itemId", id);
-                        openActivity(ConfirmOrderActivity.class, bundle);
-                    }
-
+                    /**
+                     * 后台分单，直接跳转到历史订单
+                     */
+                    Intent intent = new Intent(ConfirmOrderActivity.this, CustomMadeActivity.class);
+                    intent.putExtra("pageNumber", isCheckErpOrder);
+                    startActivity(intent);
+/**由于分单
+ if (isErpOrder == 1) {
+ String orderNum = jsonObject.get("orderNum").getAsString();
+ ProgressDialog progressDialog = new ProgressDialog(ConfirmOrderActivity.this, orderNum, 1);
+ progressDialog.showAsDropDown(rootView);
+ // intent.putExtra("pageNumber",1);
+ } else {
+ // intent.putExtra("pageNumber",0);  //待审核
+ Bundle bundle = new Bundle();
+ bundle.putInt("type", 2);
+ bundle.putString("itemId", id);
+ openActivity(ConfirmOrderActivity.class, bundle);
+ }
+ **/
                 } else if (error == 2) {
                     loginToServer(ConfirmOrderActivity.class);
                 } else {
@@ -822,7 +947,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
             @Override
             public void onFail(String fail) {
-
+                baseHideWatLoading();
             }
         });
     }
@@ -852,7 +977,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     if (state == 1) {
                         showToastReal("有此客户");
                         isDefaultCustomer = isHaveCustomerResult.getData().getCustomer();
-                        if (type == 2||type==5) {
+                        if (type == 2 || type == 5) {
                             updateCustomorWord(isDefaultCustomer.getCustomerID() + "", idEdWord.getText().toString());
                         } else {
                             idEtSeach.setText(isDefaultCustomer.getCustomerName());
@@ -862,7 +987,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     if (state == 2) {
                         Intent intent = new Intent(ConfirmOrderActivity.this, CustomersListActivity.class);
                         intent.putExtra("keyWord", keyWord);
-                        startActivityForResult(intent, 11);
+                        startActivityForResult(intent, GET_CUSTOMER);
                     }
                 } else if (error == 2) {
                     loginToServer(ConfirmOrderActivity.class);
@@ -914,6 +1039,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     @Override
     public void changeState(Map<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> checked) {
+        int totalAmount = 0;
         List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> checkedGoods = new ArrayList<>();
         if (confirOrderAdapter.isAllSelected()) {
             ckCheckall.setChecked(true);
@@ -929,18 +1055,20 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         Double total = .0;
         for (OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity cartItem : checkedGoods) {
             total += Double.valueOf(cartItem.getPrice()) * Double.valueOf(cartItem.getNumber());
+            totalAmount = Integer.parseInt(cartItem.getNumber()) + totalAmount;
         }
         //价格
         tvTotalPrice.setText(StringUtils.formatedPrice(total));
+        btGoPay.setText("确定(" + totalAmount + ")");
         if (checkedGoods.size() == 0) {
             ischooseEmpty = false;
         } else {
             ischooseEmpty = true;
         }
         if (checkedGoods.size() != 0) {
-            mcheckId = new ArrayList<>();
+            mcheckIds = new ArrayList<>();
             for (int i = 0; i < checkedGoods.size(); i++) {
-                mcheckId.add(checkedGoods.get(i).getId());
+                mcheckIds.add(checkedGoods.get(i).getId());
             }
         }
     }
@@ -966,7 +1094,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         if (data == null) {
             return;
         }
-        if (requestCode == 11) {
+        if(requestCode ==GET_EXCEL_FILE){
+            dealExcel(data);
+
+        }
+        if (requestCode == GET_CUSTOMER) {
             String customerName = data.getStringExtra("CustomerName");
             int customerID = data.getIntExtra("CustomerID", -1);
             idEtSeach.setText(customerName);
@@ -976,7 +1108,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             isDefaultCustomer.setCustomerID(customerID);
             updateCustomorWord(customerID + "", idEdWord.getText().toString());
         }
-        if (requestCode == 12) {
+        if (requestCode == GET_ADDRESS) {
             String phoneNumber = data.getStringExtra("phoneNumber");
             String name = data.getStringExtra("name");
             String address = data.getStringExtra("address");
@@ -1012,6 +1144,161 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             }
         }
     }
+
+    private void dealExcel(Intent data) {
+        Uri uri = data.getData();//得到uri，后面就是将uri转化成file的过程。
+        if(uri==null){
+            return;
+        }
+        String img_path = getPath(uri);
+        File file = new File(img_path);
+        ArrayList arrayList = ExcelUtil.readExcel(file);
+        L.e(arrayList.toString());
+       showToastReal(arrayList.toString());
+
+    }
+
+
+    public String getPath(Uri uri) {
+        String path;
+        if ("file".equalsIgnoreCase(uri.getScheme()==null?"":uri.getScheme())) {//使用第三方应用打开
+            path = uri.getPath();
+            return path;
+        }
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {//4.4以后
+            path = getPath(this, uri);
+        } else {//4.4以下下系统调用方法
+            path = getRealPathFromURI(uri);
+        }
+        return path;
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     */
+    public String getDataColumn(Context context, Uri uri, String selection,
+                                String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+    @SuppressLint("NewApi")
+    public String getPath(final Context context, final Uri uri) {
+
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{split[1]};
+
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = this.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
 
     private void updatAddress() {
         String url = AppURL.URL_ORDER_ADRESS_CHANGE + "tokenKey=" + BaseApplication.getToken() + "&addressId=" + isDefaultAddress.getId() +
@@ -1135,6 +1422,38 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     }
 
 
+    public void gotoEdit(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("itemId", listData.get(position).getId());
+        if (type == 2) {
+            // ModelOrderWaitCheckDetailModifyInfoDo?orderId=10&customerId=2990&tokenKey=10b588002228fa805231a59bb7976bf4
+            bundle.putInt("type", type);
+            bundle.putString("orderId", orderId);
+
+            if (listData.get(position).getShowPageType().equals("1")) {
+                bundle.putInt("type", 5);
+                bundle.putString("orderId", orderId);
+                openActivity(MakingActivity.class, bundle);
+            } else {
+                if (isCustomized) {
+                    openActivity(SimpleStyleInfromationActivity.class, bundle);
+                } else {
+                    openActivity(StyleInfromationActivity.class, bundle);
+                }
+            }
+        } else if (type == 0 || type == 1) {
+            bundle.putInt("type", 1);
+            if (isCustomized) {
+                openActivity(SimpleStyleInfromationActivity.class, bundle);
+            } else {
+                openActivity(StyleInfromationActivity.class, bundle);
+            }
+        } else if (type == 3 || type == 4) {
+            bundle.putInt("type", 4);
+            openActivity(MakingActivity.class, bundle);
+        }
+    }
+
     public class ConfirOrderAdapter extends BaseAdapter {
         private Map<String, OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> checkedState;
 
@@ -1194,10 +1513,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 vh = (ViewHolder) convertView.getTag();
             }
             //个人定制不能删除
-            if(listData.get(position).getShowPageType().equals("1")){
+            if (listData.get(position).getShowPageType().equals("1")) {
                 vh.btnDelete.setVisibility(View.GONE);
-            }else {
+                vh.btnEdit.setVisibility(View.GONE);
+                vh.ckCheckone.setVisibility(View.GONE);
+            } else {
                 vh.btnDelete.setVisibility(View.VISIBLE);
+                vh.btnEdit.setVisibility(View.VISIBLE);
+                vh.ckCheckone.setVisibility(View.VISIBLE);
             }
             if (type == 2) {
                 vh.ckCheckone.setVisibility(View.GONE);
@@ -1229,46 +1552,18 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 vh.productPrice.setText("");
             }
             vh.idTvInformation.setText(listEntity.getInfo());
-            vh.productNorms.setText(listEntity.getBaseInfo());
+            StringBuilder stringBuilder = new StringBuilder();
+            if (StringUtils.isEmpty(listEntity.getPurityName())) {
+                stringBuilder.append(listEntity.getBaseInfo());
+            } else {
+                stringBuilder.append(listEntity.getBaseInfo() + "  成色：" + listEntity.getPurityName());
+            }
+            vh.productNorms.setText(stringBuilder.toString());
             vh.productNumber.setText(listEntity.getNumber());
             vh.btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent();
-//                    intent.putExtra("itemId", listData.get(position).getId());
-//                    setResult(11, intent);
-//                    finish();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("itemId", listData.get(position).getId());
-                    if (type == 2) {
-                        // ModelOrderWaitCheckDetailModifyInfoDo?orderId=10&customerId=2990&tokenKey=10b588002228fa805231a59bb7976bf4
-                        bundle.putInt("type", type);
-                        bundle.putString("orderId", orderId);
-
-                        if(listData.get(position).getShowPageType().equals("1")){
-                            bundle.putInt("type", 5);
-                            bundle.putString("orderId", orderId);
-                            openActivity(MakingActivity.class, bundle);
-                        }else {
-                            if (isCustomized) {
-                                openActivity(SimpleStyleInfromationActivity.class, bundle);
-                            } else {
-                                openActivity(StyleInfromationActivity.class, bundle);
-                            }
-                        }
-                    } else if(type==0||type == 1){
-                        bundle.putInt("type", 1);
-                        if (isCustomized) {
-                            openActivity(SimpleStyleInfromationActivity.class, bundle);
-                        } else {
-                            openActivity(StyleInfromationActivity.class, bundle);
-                        }
-                    }else if(type==3||type == 4){
-                        bundle.putInt("type", 4);
-                        openActivity(MakingActivity.class, bundle);
-                    }
-
-
+                    gotoEdit(position);
                 }
             });
             ImageLoader.getInstance().displayImage(listData.get(position).getPic(), vh.productImg, ImageLoadOptions.getOptions());
@@ -1280,6 +1575,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             });
             return convertView;
         }
+
 
         private AdapterCallBack callBack;
 
@@ -1331,7 +1627,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
          * @version    删除订单
          *
          */
-        public void deleteOrder(String id) {
+        public void deleteOrder(final String id) {
+            baseShowWatLoading();
             String url;
             if (type == 2) {
                 if (listData.size() <= 1) {
@@ -1346,13 +1643,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             VolleyRequestUtils.getInstance().getCookieRequest(ConfirmOrderActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
                 @Override
                 public void onSuccess(String result) {
+                    baseHideWatLoading();
                     L.e(result);
                     int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                     if (error == 0) {
                         ToastManager.showToastReal("删除成功");
                         String strwaitOrderCount = new Gson().fromJson(result, JsonObject.class).get("data").getAsJsonObject().get("waitOrderCount").getAsString();
-                        waitOrderCount = Integer.valueOf(strwaitOrderCount);
-                        loadNetData();
+                        Global.waitOrderCount = Integer.valueOf(strwaitOrderCount);
+                        deleteItem(id);
                     }
                     if (error == 2) {
                         loginToServer(ConfirmOrderActivity.class);
@@ -1366,10 +1664,19 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
                 @Override
                 public void onFail(String fail) {
-
+                    baseHideWatLoading();
                 }
             });
         }
+    }
+
+    private void deleteItem(String id) {
+        for (int i = 0; i < listData.size(); i++) {
+            if (listData.get(i).getId().equals(id)) {
+                listData.remove(listData.get(i));
+            }
+        }
+        confirOrderAdapter.notifyDataSetChanged();
     }
 
     @Override

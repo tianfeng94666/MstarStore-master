@@ -7,6 +7,7 @@ import com.qx.mstarstoreapp.bean.Ring;
  */
 
 public class Global {
+    public static  String REGISTRATION ;
     public static int STONE_POINT_CHANGE = 0;
     public  static int divideAmount = 2;
     public static String APP_ID = "wx303dc6296f3aed55";
@@ -24,4 +25,8 @@ public class Global {
     public static boolean GO_HOEM=false;
     public static String isMainAccount;
     public static int isShowCost;
+    /**
+     * 当前订单数
+     */
+    public static int waitOrderCount;
 }

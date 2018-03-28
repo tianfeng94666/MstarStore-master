@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+    android:id="@+id/root_view"
                 android:background="@android:color/transparent"
                 android:orientation="vertical">
 
@@ -18,7 +19,7 @@
         <ImageView
             android:id="@+id/capture_mask_top"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="60dp"
             android:layout_alignParentTop="true"
             android:background="@drawable/shadow"/>
 
@@ -38,6 +39,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:src="@drawable/scan_line"/>
+
 
         </RelativeLayout>
 
@@ -68,6 +70,16 @@
             android:layout_below="@id/capture_mask_top"
             android:layout_toRightOf="@id/capture_crop_view"
             android:background="@drawable/shadow"/>
+        <EditText
+            android:id="@+id/et_product_code"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:hint="请输入款号"
+            android:layout_below="@+id/capture_crop_view"
+            android:layout_width="250dp"
+            android:padding="@dimen/margin5"
+            android:background="@drawable/border_white_line"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
 </RelativeLayout>

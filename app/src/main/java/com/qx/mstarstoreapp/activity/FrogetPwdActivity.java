@@ -55,9 +55,7 @@ public class FrogetPwdActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_forger_password);
         ButterKnife.bind(this);
         initView();
@@ -133,8 +131,8 @@ public class FrogetPwdActivity extends BaseActivity {
 
     public void netUpdatePwd() {
         pwd = idEdPwd.getText().toString().trim();
-        code = idEdCode.getText().toString();
-        phone = idEPhone.getText().toString();
+        code = idEdCode.getText().toString().trim();
+        phone = idEPhone.getText().toString().trim();
         if (StringUtils.isEmpty(pwd)) {
             return;
         }

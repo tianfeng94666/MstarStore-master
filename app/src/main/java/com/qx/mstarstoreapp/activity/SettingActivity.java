@@ -3,6 +3,7 @@ package com.qx.mstarstoreapp.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,12 +25,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,10 +45,13 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.adapter.BaseViewHolder;
+import com.qx.mstarstoreapp.adapter.CommonAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.Global;
+import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.dialog.ImageInitiDialog;
 import com.qx.mstarstoreapp.json.SettingResult;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
@@ -130,6 +134,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView tvOrder;
     @Bind(R.id.rl_order)
     RelativeLayout rlOrder;
+    @Bind(R.id.tv_aear)
+    TextView tvAear;
+    @Bind(R.id.iv_aear)
+    ImageView ivAear;
+    @Bind(R.id.rl_aear)
+    RelativeLayout rlAear;
 
 
     private LayoutInflater inflater;
@@ -140,14 +150,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private int PRICE_TYPE = 0;
     private SettingResult settingResult;
     private AlertDialog dialog;
+    private String memberAreaId;
+    private List<Type> aearList;
+    private String aearName;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_modifydata);
         titles = new String[]{getString(R.string.updatepwd), getString(R.string.update_phone), getString(R.string.adress_manager)};
         context = this;
@@ -160,7 +171,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     protected void onResume() {
         super.onResume();
         loadNetData();
-        initViews();
+
     }
 
     public void onBack(View view) {
@@ -186,7 +197,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 openActivity(DownloadActivity.class, null);
             }
         });
-
+        rlAear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (aearList != null) {
+                    showChooseAearDialog(aearList);
+                }
+            }
+        });
+        tvAear.setText(aearName);
     }
 
 
@@ -212,9 +231,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                             phone = settingResult.getData().getPhone();
                             headPic = settingResult.getData().getHeadPic();
                             address = settingResult.getData().getAddress();
-
-
+                            aearList = settingResult.getData().getMemberArealist();
+                            aearName = settingResult.getData().getUserArea();
                             L.e("userName:" + userName + "phone" + phone + "address:" + address);
+                            initViews();
                             initContent(userName, headPic, phone, address);
                         }
 
@@ -240,6 +260,99 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         });
 
 
+    }
+
+    /**
+     * 显示选择区域对话框
+     */
+    private void showChooseAearDialog(final List<Type> list) {
+        memberAreaId = null;
+        View view = View.inflate(this, R.layout.list_itme, null);
+        ListView listView = (ListView) view.findViewById(R.id.lv_aear);
+        TextView tvComfirm = (TextView) view.findViewById(R.id.tv_comfirm);
+        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        TextView tvCancle = (TextView) view.findViewById(R.id.tv_cancle);
+        tvCancle.setVisibility(View.VISIBLE);
+        CommonAdapter commonAdapter = new CommonAdapter<Type>(list, R.layout.item_gv_text) {
+            @Override
+            public void convert(int position, BaseViewHolder helper, Type item) {
+                helper.setText(R.id.tv_item_text, list.get(position).getTitle());
+            }
+        };
+        listView.setAdapter(commonAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                memberAreaId = list.get(position).getId();
+                aearName = list.get(position).getTitle();
+            }
+        });
+
+        // 构造对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        tvTitle.setText("请选择该用户所属区域");
+        builder.setView(view);
+        final Dialog noticeDialog = builder.create();
+        tvComfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (commitAear()) {
+                    tvAear.setText(aearName);
+                    noticeDialog.dismiss();
+                }
+            }
+        });
+        tvCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noticeDialog.dismiss();
+            }
+        });
+        noticeDialog.setCanceledOnTouchOutside(false);
+        noticeDialog.show();
+    }
+
+    private boolean commitAear() {
+        boolean isOk = true;
+        if (StringUtils.isEmpty(memberAreaId)) {
+            showToastReal("所属区域未选择");
+            return false;
+        }
+        String url = AppURL.URL_GET_PLACE_CHANGE + "tokenKey=" + BaseApplication.getToken() + "&memberAreaId=" + memberAreaId;
+        L.e(url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                L.e(result);
+                Gson gson = new Gson();
+                int error = gson.fromJson(result, JsonObject.class).get("error").getAsInt();
+                L.e("error" + error);
+                if (error == 0) {
+                    L.e("成功");
+                    showToastReal("所属区域选择成功");
+                }
+                if (error == 1) {
+                    String message = gson.fromJson(result, JsonObject.class).get("message").getAsString();
+                    ToastManager.showToastReal(message);
+                    L.e(message);
+                }
+                if (error == 2) {
+                    L.e("重新登录");
+                }
+                if (error == 3) {
+                    L.e("未审核");
+                } else {
+                    L.e("操作失败");
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+
+            }
+
+        });
+        return true;
     }
 
     private static int LIGHT_MARGIN = UIUtils.convertPxtoDip(1);
@@ -278,7 +391,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
-                Global.ring =null;
+                Global.ring = null;
+                loadExit();
                 openActivity(LoginActivity.class, null);
             }
         });
@@ -317,6 +431,42 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             }
         });
         rlOrder.setOnClickListener(this);
+    }
+
+    private void loadExit() {
+        String url = AppURL.URL_EXIT + "tokenKey=" + BaseApplication.getToken();
+        baseShowWatLoading();
+        L.e("退出" + url);
+        VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                baseHideWatLoading();
+                L.e("loadNetData  " + result);
+                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
+                String error = jsonResult.get("error").getAsString();
+                if (error.equals("0")) {
+
+                    if (jsonResult.get("data") != null) {
+                        showToastReal("成功退出");
+                    }
+
+
+                } else if (error.equals("2")) {
+                    loginToServer(SettingActivity.class);
+
+                } else {
+                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
+                    L.e(message);
+                    ToastManager.showToastReal("数据加载错误！");
+                }
+            }
+
+            @Override
+            public void onFail(String fail) {
+                ToastManager.showToastReal("数据获取失败");
+                baseHideWatLoading();
+            }
+        });
     }
 
     private void showShare() {
@@ -420,7 +570,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 goIntoEncryptionSettings();
                 break;
             case R.id.rl_order:
-               openActivity(OrderExamineActivity.class,null);
+                openActivity(OrderExamineActivity.class, null);
                 break;
         }
     }

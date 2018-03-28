@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -70,27 +71,37 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/id_ig_sao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/margin10"
+                        android:background="@drawable/iocn_qr"
+                        android:onClick="scan"
+                        android:padding="@dimen/margin5" />
 
                     <EditText
                         android:id="@+id/id_store_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="@dimen/margin10"
-                        android:singleLine="true"
+                        android:layout_marginLeft="@dimen/margin5"
+                        android:layout_toRightOf="@id/id_ig_sao"
                         android:selectAllOnFocus="true"
-                        android:textColor="@color/text_color"
+                        android:singleLine="true"
+                        android:text="sssss"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_small_medium" />
 
                     <TextView
                         android:id="@+id/tv_weight"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginRight="10dp"
                         android:singleLine="true"
-                        android:textColor="@color/text_color"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_small_medium" />
 
                 </RelativeLayout>
@@ -129,7 +140,34 @@
                     style="@style/layout_vertical"
                     android:layout_weight="1"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/ll_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dip"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginRight="@dimen/margin10"
+
+                            android:text="类    型"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_small_medium" />
+
+                        <TextView
+                            android:id="@+id/tv_type"
+                            style="@style/layout_horizontal"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginRight="@dimen/margin5"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="男戒"
+                            android:textColor="@color/text_color" />
+
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/ll_color"
                         android:layout_width="match_parent"
@@ -163,34 +201,7 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/ll_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="35dip"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/margin10"
-                            android:layout_marginRight="@dimen/margin10"
-
-                            android:text="类    型"
-                            android:textColor="@color/text_color"
-                            android:textSize="@dimen/text_size_small_medium" />
-
-                        <TextView
-                            android:id="@+id/tv_type"
-                            style="@style/layout_horizontal"
-                            android:layout_marginLeft="@dimen/margin5"
-                            android:layout_marginRight="@dimen/margin10"
-                            android:layout_weight="1"
-                            android:gravity="right|center_vertical"
-                            android:text="男戒"
-                            android:textColor="@color/text_color" />
-
-                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -449,8 +460,8 @@
                             android:id="@+id/id_cus_store_remarkid"
                             style="@style/layout_horizontal"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="3dip"
-                            android:layout_marginRight="@dimen/margin10"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginRight="@dimen/margin5"
                             android:layout_weight="1"
                             app:tv_name="选择备注"
                             app:tv_style="1" />
@@ -514,11 +525,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="8dp"
-                android:layout_toLeftOf="@+id/tv_search"
+                android:layout_toLeftOf="@+id/tv_confirm"
                 android:background="@null">
 
                 <LinearLayout
-                    android:id="@+id/ll_curorder"
+                    android:id="@+id/ll_cancle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -526,7 +537,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/id_tv_curorder"
+                        android:id="@+id/tv_cancle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -571,7 +582,7 @@
                 android:textSize="@dimen/text_size_medium" />
 
             <TextView
-                android:id="@+id/tv_search"
+                android:id="@+id/tv_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

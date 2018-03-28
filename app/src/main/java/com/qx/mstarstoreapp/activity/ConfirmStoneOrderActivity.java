@@ -193,9 +193,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_confirm_stone_order);
         ButterKnife.bind(this);
         getDate();
@@ -236,6 +234,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
     @Override
     public void loadNetData() {
+        baseShowWatLoading();
         String url;
         if (type == 2) {
             url = AppURL.URL_STONE_ORDER_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&orderId=" + orderId;
@@ -246,7 +245,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-
+                baseHideWatLoading();
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
@@ -355,7 +354,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
             @Override
             public void onFail(String fail) {
-
+                baseHideWatLoading();
             }
 
         });
@@ -415,7 +414,14 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
             public void onClick(View view) {
                 boolean isFast = UIUtils.isFastDoubleClick();
                 if (!isFast) {
-                    seachCustom(idEtSeach.getText().toString());
+                    String st = idEtSeach.getText().toString();
+                    if (st.isEmpty()) {
+                        Intent intent = new Intent(ConfirmStoneOrderActivity.this, CustomersListActivity.class);
+                        intent.putExtra("keyWord", st);
+                        startActivityForResult(intent, 11);
+                    } else {
+                        seachCustom(idEtSeach.getText().toString());
+                    }
                 }
             }
         });
@@ -625,6 +631,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
      * @version  提交订单
      */
     public void submitOrder() {
+        baseShowWatLoading();
         String url = AppURL.URL_STONE_COMMIT_ORDER + "&tokenKey=" + BaseApplication.getToken();
 
         String remarks = idEdRemarks.getText().toString();
@@ -659,6 +666,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                baseHideWatLoading();
                 L.e("确定订单" + result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
@@ -686,7 +694,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
             @Override
             public void onFail(String fail) {
-
+                baseHideWatLoading();
             }
         });
     }

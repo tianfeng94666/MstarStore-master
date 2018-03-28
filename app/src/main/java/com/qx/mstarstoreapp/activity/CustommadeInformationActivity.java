@@ -21,6 +21,7 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.json.ModelDetailResult;
+import com.qx.mstarstoreapp.json.PurityEntity;
 import com.qx.mstarstoreapp.json.StoneEntity;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -111,7 +112,7 @@ public class CustommadeInformationActivity extends BaseActivity {
 
     List<ModelDetailResult.DataEntity.StoneColorEntity> stoneColorItme;  //颜色
 
-    List<ModelDetailResult.DataEntity.StonePurityEntity> stonePurityItme; //净度
+    List<PurityEntity> stonePurityItme; //净度
 
     List<ModelDetailResult.DataEntity.StoneSpecEntity> stoneSpecItme;  //规格
 
@@ -129,9 +130,7 @@ public class CustommadeInformationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_custom_information);
         rootView = View.inflate(this,R.layout.activity_custom_information,null);
         ButterKnife.bind(this);

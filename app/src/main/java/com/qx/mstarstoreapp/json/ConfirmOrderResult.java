@@ -65,6 +65,15 @@ public class ConfirmOrderResult {
         private String orderId;
         private String waitOrderCount;
         private int isErpOrder;
+        private int isCheckErpOrder;
+
+        public int getIsCheckErpOrder() {
+            return isCheckErpOrder;
+        }
+
+        public void setIsCheckErpOrder(int isCheckErpOrder) {
+            this.isCheckErpOrder = isCheckErpOrder;
+        }
 
         public String getOrderId() {
             return orderId;

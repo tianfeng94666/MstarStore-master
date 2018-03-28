@@ -64,22 +64,22 @@ public class ModelDetailResult implements Serializable {
          */
         private List<StoneColorEntity> stoneColor;
         private List<StoneSpecEntity> stoneSpec;
-        private List<StonePurityEntity> stonePurity;
+        private List<PurityEntity> stonePurity;
         private List<GoldenPriceEntity> goldenPrice;
         private List<StoneShapeEntity> stoneShape;
         private List<StoneTypeEntity> stoneType;
-        private List<ModelPuritys> modelPuritys;
+        private List<PurityEntity> modelPuritys;
         private ModelEntity model;
         private List<RemarksEntity> remarks;
         private String[] handSizeData;
         private int IsCanSelectStone;
         private JewelStone jewelStone;
 
-        public List<ModelPuritys> getModelPuritys() {
+        public List<PurityEntity> getModelPuritys() {
             return modelPuritys;
         }
 
-        public void setModelPuritys(List<ModelPuritys> modelPuritys) {
+        public void setModelPuritys(List<PurityEntity> modelPuritys) {
             this.modelPuritys = modelPuritys;
         }
 
@@ -115,7 +115,7 @@ public class ModelDetailResult implements Serializable {
             this.stoneSpec = stoneSpec;
         }
 
-        public void setStonePurity(List<StonePurityEntity> stonePurity) {
+        public void setStonePurity(List<PurityEntity> stonePurity) {
             this.stonePurity = stonePurity;
         }
 
@@ -147,7 +147,7 @@ public class ModelDetailResult implements Serializable {
             return stoneSpec;
         }
 
-        public List<StonePurityEntity> getStonePurity() {
+        public List<PurityEntity> getStonePurity() {
             return stonePurity;
         }
 
@@ -171,30 +171,7 @@ public class ModelDetailResult implements Serializable {
             return remarks;
         }
 
-        public class ModelPuritys implements Serializable {
-            /**
-             * id : 1
-             * title : H+
-             */
-            private String id;
-            private String title;
 
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public String getId() {
-                return id;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-        }
 
         public class StoneColorEntity implements Serializable {
             /**
@@ -246,30 +223,7 @@ public class ModelDetailResult implements Serializable {
             }
         }
 
-        public class StonePurityEntity implements Serializable {
-            /**
-             * id : 1
-             * title : SI
-             */
-            private String id;
-            private String title;
 
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public String getId() {
-                return id;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-        }
 
         public class GoldenPriceEntity implements Serializable {
             /**
@@ -390,6 +344,24 @@ public class ModelDetailResult implements Serializable {
             private String remark;
             private String handSize;
             private String weight;
+            private String modelPurityId;
+            private String modelPurityTitle;
+
+            public String getModelPurityId() {
+                return modelPurityId;
+            }
+
+            public void setModelPurityId(String modelPurityId) {
+                this.modelPurityId = modelPurityId;
+            }
+
+            public String getModelPurityTitle() {
+                return modelPurityTitle;
+            }
+
+            public void setModelPurityTitle(String modelPurityTitle) {
+                this.modelPurityTitle = modelPurityTitle;
+            }
 
             public String getWeight() {
                 return weight;

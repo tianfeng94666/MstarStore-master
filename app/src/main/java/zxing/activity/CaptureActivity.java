@@ -27,22 +27,31 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.zxing.Result;
 import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.activity.OrderActivity;
+import com.qx.mstarstoreapp.inter.KeyboardFinish;
+import com.qx.mstarstoreapp.utils.KeyboardUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import zxing.camera.CameraManager;
 import zxing.decode.DecodeThread;
 import zxing.utils.BeepManager;
@@ -58,9 +67,10 @@ import zxing.utils.InactivityTimer;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+public final class CaptureActivity extends Activity implements SurfaceHolder.Callback,KeyboardFinish {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
+
 
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
@@ -70,7 +80,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private SurfaceView scanPreview = null;
     private RelativeLayout scanContainer;
     private RelativeLayout scanCropView;
+    private RelativeLayout rootView;
     private ImageView scanLine;
+    private EditText etProductCode;
 
     private Rect mCropRect = null;
     private boolean isHasSurface = false;
@@ -91,10 +103,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_capture);
 
+        initView();
+
+    }
+
+    private void initView() {
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
         scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
+        etProductCode = (EditText)findViewById(R.id.et_product_code);
+        rootView = (RelativeLayout)findViewById(R.id.root_view) ;
 
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
@@ -106,7 +125,32 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.RESTART);
         scanLine.startAnimation(animation);
+
+        if (android.os.Build.VERSION.SDK_INT <= 10) {//4.0以下 danielinbiti
+            etProductCode.setInputType(InputType.TYPE_NULL);
+        } else {
+            this.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            try {
+                Class<EditText> cls = EditText.class;
+                Method setShowSoftInputOnFocus;
+                setShowSoftInputOnFocus = cls.getMethod("setShowSoftInputOnFocus",
+                        boolean.class);
+                setShowSoftInputOnFocus.setAccessible(true);
+                setShowSoftInputOnFocus.invoke(etProductCode, false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        KeyboardUtil.shared(CaptureActivity.this, etProductCode, rootView).hideKeyboard();
+        etProductCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyboardUtil.shared(CaptureActivity.this, etProductCode, rootView).showKeyboard();
+            }
+        });
     }
+
     private static String[] PERMISSIONS_CAMERA_AND_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -123,6 +167,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             }
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -165,6 +210,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             scanPreview.getHolder().removeCallback(this);
         }
         super.onPause();
+        KeyboardUtil.shared(CaptureActivity.this, etProductCode, rootView).hideKeyboard();
     }
 
     @Override
@@ -321,5 +367,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public void keyboardFinish() {
+        Bundle bundle = new Bundle();
+        Intent resultIntent = new Intent();
+        bundle.putString("result", etProductCode.getText().toString());
+        resultIntent.putExtras(bundle);
+        this.setResult(RESULT_OK, resultIntent);
+        CaptureActivity.this.finish();
     }
 }

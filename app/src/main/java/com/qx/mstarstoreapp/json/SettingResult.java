@@ -1,6 +1,9 @@
 package com.qx.mstarstoreapp.json;
 
+import com.qx.mstarstoreapp.bean.Type;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/4/14 0014.
@@ -68,6 +71,7 @@ public class SettingResult implements Serializable{
         private int isMasterAccount;
         private int isShowOriginalPrice;
         private int isShowPrice;
+        private int memberAreaId;
         private String modelAddtion;
         private String phone;
         private String stoneAddtion;
@@ -75,6 +79,32 @@ public class SettingResult implements Serializable{
         private String stoneAddtion2;
         private String userName;
         private String address;
+        private String userArea;
+        private List<Type> memberArealist;
+
+        public int getMemberAreaId() {
+            return memberAreaId;
+        }
+
+        public void setMemberAreaId(int memberAreaId) {
+            this.memberAreaId = memberAreaId;
+        }
+
+        public String getUserArea() {
+            return userArea;
+        }
+
+        public void setUserArea(String userArea) {
+            this.userArea = userArea;
+        }
+
+        public List<Type> getMemberArealist() {
+            return memberArealist;
+        }
+
+        public void setMemberArealist(List<Type> memberArealist) {
+            this.memberArealist = memberArealist;
+        }
 
         public String getStoneAddtion1() {
             return stoneAddtion1;

@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
@@ -33,6 +33,7 @@ import com.qx.mstarstoreapp.base.MyAction;
 import com.qx.mstarstoreapp.bean.Ring;
 import com.qx.mstarstoreapp.dialog.GridMenuDialog;
 import com.qx.mstarstoreapp.inter.ClassifyOnSeachListener;
+import com.qx.mstarstoreapp.inter.KeyboardFinish;
 import com.qx.mstarstoreapp.json.ClassTypeFilerEntity;
 import com.qx.mstarstoreapp.json.ModeListResult;
 import com.qx.mstarstoreapp.json.SearchValue;
@@ -40,6 +41,7 @@ import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
 import com.qx.mstarstoreapp.json.TypeFiler;
 import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
+import com.qx.mstarstoreapp.utils.KeyboardUtil;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
@@ -55,6 +57,7 @@ import com.qx.mstarstoreapp.viewutils.SideFilterDialog;
 import com.qx.mstarstoreapp.viewutils.SquareImageView;
 import com.qx.mstarstoreapp.viewutils.xListView.XListView;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -70,19 +73,21 @@ import zxing.activity.CaptureActivity;
  * @version    
  *    
  */
-public class OrderActivity extends BaseActivity implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
+public class OrderActivity extends BaseActivity implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener,KeyboardFinish {
 
 
     @Bind(R.id.tv_pager_amount)
     TextView tvPagerAmount;
     @Bind(R.id.ll_show_less)
     LinearLayout llIsshow;
+    @Bind(R.id.iv_search_type)
+    ImageView ivSearchType;
     private LinearLayout idLyAll, idLyFilter, idRel2;
     private GridViewWithHeaderAndFooter idGvMenu;
     private TextView idCurOrder, idTvSelect;
     private Context context;
     private ImageView idIgNor;
-    private RelativeLayout  rootView;
+    private RelativeLayout rootView;
     private SideFilterDialog filterDialog;
     private ListMenuDialog listMenuDialog;
     private PullToRefreshView pullRefreshView;
@@ -116,27 +121,26 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     /*搜索过的单选历史记录*/
     public static List<SearchValue> singleKey = new ArrayList<>();
 
-    private int waitOrderCount;
     private ModeListResult modeListResult;
     private boolean isShowPrice;
     private boolean isCustomized;//是否是用户定制
     private StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
     private String openType;
     private int totalAmount;
-    String mcategory="";   /*下啦筛选关键字*/
-    String myAction="";   /*判断是哪个页面的action*/
+    String mcategory = "";   /*下啦筛选关键字*/
+    String myAction = "";   /*判断是哪个页面的action*/
     BadgeView badge;
     private LeftPopupWindow leftPopupWindow;
+    private boolean isHighSearch;//是否高级搜索
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
+        isHighSearch = SpUtils.getInstace(this).getBoolean("isHighSearch", false);
         context = this;
         addStoneRang();
         getDate();
@@ -151,9 +155,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         openType = getIntent().getStringExtra("openType");
     }
 
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        KeyboardUtil.shared(this,idEtSeach,rootView).hideKeyboard();
     }
 
 
@@ -183,7 +190,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + getCheckBoxUrl()+ getRadioGroupUrl()+ "&pageNum=24";
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + getCheckBoxUrl() + getRadioGroupUrl() + "&pageNum=24";
         return url;
     }
 
@@ -193,15 +200,17 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         addStoneRang();
 
     }
+
     private void addStoneRang() {
-        if(Global.isShowPopup!=0&&Global.ring.getStoneEntity()!=null){
-            for(int i =0 ;i<singleKey.size();i++){
-                if(singleKey.get(i).getName().equals(Global.ring.getStoneEntity().getModelWeightRange().getKey())){
+        if (Global.isShowPopup != 0 && Global.ring.getStoneEntity() != null) {
+            for (int i = 0; i < singleKey.size(); i++) {
+                if (singleKey.get(i).getName().equals(Global.ring.getStoneEntity().getModelWeightRange().getKey())) {
                     singleKey.get(i).setValue(Global.ring.getStoneEntity().getModelWeightRange().getValue());
                 }
             }
         }
     }
+
     private void initListMenuDialog(List<ModeListResult.DataEntity.CustomList> customList) {
         listMenuDialog = new ListMenuDialog(OrderActivity.this, customList);
         listMenuDialog.setOnListMenuSelectCloseClick(new ListMenuDialog.OnListMenuSelectCloseClick() {
@@ -217,16 +226,19 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        multiselectKey.clear();
-                        idTvSelect.setText(StringUtils.idgui(select.getTitle()));
-                        TypeFiler typeFiler = new TypeFiler();
-                        typeFiler.setCheck(true);
-                        typeFiler.setGroupKey("custom");
-                        typeFiler.setName(select.getTitle());
-                        typeFiler.setValue(select.getId());
-                        typeFiler.setId(select.getId());
-                        multiselectKey.add(typeFiler);
-                        curpage =1;
+                        if(multiselectKey!=null){
+                            multiselectKey.clear();
+                            idTvSelect.setText(StringUtils.idgui(select.getTitle()));
+                            TypeFiler typeFiler = new TypeFiler();
+                            typeFiler.setCheck(true);
+                            typeFiler.setGroupKey("custom");
+                            typeFiler.setName(select.getTitle());
+                            typeFiler.setValue(select.getId());
+                            typeFiler.setId(select.getId());
+                            multiselectKey.add(typeFiler);
+                        }
+
+                        curpage = 1;
                         String url = getInitUrl();
                         loadNetData(url);
                     }
@@ -238,9 +250,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     @Override
     protected void onResume() {
         super.onResume();
-       if(leftPopupWindow!=null){
-           leftPopupWindow.initPopupView();
-       }
+        if (leftPopupWindow != null) {
+            leftPopupWindow.initPopupView();
+        }
     }
 
     private void initFilterDialog(List<ClassTypeFilerEntity> typeList) {
@@ -307,45 +319,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                     if (dataEntity == null) {
                         return;
                     }
-                    if (isShowPrice) {
-                        idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color));
-                    } else {
-                        idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color3));
-                    }
-                    totalAmount = Integer.parseInt(modeListResult.getData().getModel().getList_count());
-                    ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
-                    if (curpage == 1) {
-                          /*搜索过的单选历史记录*/
-                        ClassifyActivity.singleKey = dataEntity.getSearchKeyword();
-                        singleKey = dataEntity.getSearchKeyword();
-                        /*搜索过的多选历史记录*/
-                        multiselectKey = dataEntity.getCategoryFiler();
-                        waitOrderCount = Integer.valueOf(dataEntity.getWaitOrderCount());
-                        if (waitOrderCount != 0) {
-                            remind(waitOrderCount);
-                        }
-                    }
-                    //下啦分类筛选
-                    List<ModeListResult.DataEntity.CustomList> customList = dataEntity.getCustomList();
-                    if (customList != null && customList.size() != 0) {
-                        initListMenuDialog(customList);
-                    }
-
-                    List<ClassTypeFilerEntity> typeList = dataEntity.getTypeList();
-                    if (typeList != null && typeList.size() != 0) {
-                        initFilterDialog(typeList);
-                    }
-                    if (pullState != PULL_LOAD) {
-                        data.clear();
-                    }
-                    list_count = Integer.valueOf(modeEntity.getList_count());
-                    if (list_count == 0) {
-                        data.clear();
-                    } else {
-                        List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> modelList = modeEntity.getModelList();
-                        data.addAll(modelList);
-                    }
-                    endNetRequest();
+                    setDate(dataEntity);
                 } else if (error.equals("2")) {
                     L.e("重新登录");
                     ToastManager.showToastReal(jsonResult.get("message").getAsString());
@@ -365,6 +339,50 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         });
 
 
+    }
+
+    private void setDate(ModeListResult.DataEntity dataEntity) {
+        if (isShowPrice) {
+            idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color));
+        } else {
+            idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color3));
+        }
+        totalAmount = Integer.parseInt(modeListResult.getData().getModel().getList_count());
+        ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
+        if (curpage == 1) {
+                          /*搜索过的单选历史记录*/
+            ClassifyActivity.singleKey = dataEntity.getSearchKeyword();
+            singleKey = dataEntity.getSearchKeyword();
+                        /*搜索过的多选历史记录*/
+            multiselectKey = dataEntity.getCategoryFiler();
+            if (dataEntity.getWaitOrderCount() != null) {
+                Global.waitOrderCount = Integer.valueOf(dataEntity.getWaitOrderCount());
+            }
+            if (Global.waitOrderCount != 0) {
+                remind(Global.waitOrderCount);
+            }
+        }
+        //下啦分类筛选
+        List<ModeListResult.DataEntity.CustomList> customList = dataEntity.getCustomList();
+        if (customList != null && customList.size() != 0) {
+            initListMenuDialog(customList);
+        }
+
+        List<ClassTypeFilerEntity> typeList = dataEntity.getTypeList();
+        if (typeList != null && typeList.size() != 0) {
+            initFilterDialog(typeList);
+        }
+        if (pullState != PULL_LOAD) {
+            data.clear();
+        }
+        list_count = Integer.valueOf(modeEntity.getList_count());
+        if (list_count == 0) {
+            data.clear();
+        } else {
+            List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> modelList = modeEntity.getModelList();
+            data.addAll(modelList);
+        }
+        endNetRequest();
     }
 
 
@@ -420,12 +438,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                     firstVisibleItem = 1;
                 }
 
-                tvPagerAmount.setText((int) (Math.ceil((firstVisibleItem +visibleItemCount)/ 24.0)) + "/" + (int) Math.ceil(totalAmount / 24.0)+"页");
+                tvPagerAmount.setText((int) (Math.ceil((firstVisibleItem + visibleItemCount) / 24.0)) + "/" + (int) Math.ceil(totalAmount / 24.0) + "页");
 
             }
         });
         if (isScreenChange()) {
-                idGvMenu.setNumColumns(4);
+            idGvMenu.setNumColumns(4);
         } else {
             idGvMenu.setNumColumns(2);
         }
@@ -440,6 +458,28 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 idEtSeach.setText("");
             }
         });
+        if (android.os.Build.VERSION.SDK_INT <= 10) {//4.0以下 danielinbiti
+            idEtSeach.setInputType(InputType.TYPE_NULL);
+        } else {
+            this.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            try {
+                Class<EditText> cls = EditText.class;
+                Method setShowSoftInputOnFocus;
+                setShowSoftInputOnFocus = cls.getMethod("setShowSoftInputOnFocus",
+                        boolean.class);
+                setShowSoftInputOnFocus.setAccessible(true);
+                setShowSoftInputOnFocus.invoke(idEtSeach, false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        idEtSeach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyboardUtil.shared(OrderActivity.this, idEtSeach, rootView).showKeyboard();
+            }
+        });
         idEtSeach.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
 
@@ -447,27 +487,43 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
                 // TODO Auto-generated method stub
                 if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
-                    curpage = 1;
-                    String url = getInitUrl();
-                    url += getkeyWordUrl();
-                    loadNetData(url);
-                    // search pressed and perform your functionality.
+                    search();
                 }
                 return false;
             }
 
         });
-        if(Global.isShowPopup!=0){
+        if (Global.isShowPopup != 0) {
             llIsshow.setVisibility(View.VISIBLE);
             initPopwindow();
-        }else {
+        } else {
             llIsshow.setVisibility(View.GONE);
         }
 
+        if (!isHighSearch) {
+            ivSearchType.setImageResource(R.drawable.icon_switch_off);
+        } else {
+            ivSearchType.setImageResource(R.drawable.icon_switch_on);
+        }
+        ivSearchType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isHighSearch = !isHighSearch;
+                if (!isHighSearch) {
+                    ivSearchType.setImageResource(R.drawable.icon_switch_off);
+                    showToastReal("必须精确输入款号查找");
+                } else {
+                    ivSearchType.setImageResource(R.drawable.icon_switch_on);
+                    showToastReal("可以不输全款号模糊查找");
+                }
+                SpUtils.getInstace(OrderActivity.this).saveBoolean("isHighSearch", isHighSearch);
+            }
+        });
     }
 
+
     private void initPopwindow() {
-       leftPopupWindow = new LeftPopupWindow(this);
+        leftPopupWindow = new LeftPopupWindow(this);
         llIsshow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -478,7 +534,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
+        KeyboardUtil.shared(this,idEtSeach,rootView).hideKeyboard();
         // 如果是橫屏時候
         try {
             // Checks the orientation of the screen
@@ -497,14 +553,15 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
 
-
-
     public String getCheckBoxUrl() {
         List<TypeFiler> filterList;
         if (myAction.equals(MyAction.classifyActivityAction)) {
             filterList = ClassifyActivity.hisCategoryFilterList;
         } else {
             filterList = OrderActivity.multiselectKey;
+        }
+        if (filterList == null) {
+            return "";
         }
         List<String> list = new ArrayList<>();
         int count = filterList.size();
@@ -638,7 +695,6 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 pBundle.putString("itemId", data.get(position).getId());
                 pBundle.putInt("type", 0);
                 pBundle.putString("openType", openType + "");
-                pBundle.putInt("waitOrderCount", waitOrderCount);
                 if (selectStone != null) {
                     pBundle.putSerializable("stone", selectStone);
                 }
@@ -662,16 +718,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idIgSeach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (idEtSeach.getText().toString().equals("")) {
-                    ToastManager.showToastReal("搜索内容为空！");
-                    return;
-                }
-                curpage = 1;
-                String url = getInitUrl();
-                url += getkeyWordUrl();
-                loadNetData(url);
+                search();
             }
         });
+
 
         /*关键字标签清空*/
         idTvFilter.setOnClickListener(new View.OnClickListener() {
@@ -702,7 +752,6 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             public void onClick(View view) {
                 Intent intent = new Intent(OrderActivity.this, ConfirmOrderActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("waitOrderCount", waitOrderCount);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 10);
                 //openActivity(ConfirmOrderActivity.class,null);
@@ -718,9 +767,26 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     }
 
+    private void search() {
+        if (idEtSeach.getText().toString().equals("")) {
+            ToastManager.showToastReal("搜索内容为空！");
+            return;
+        }
+        curpage = 1;
+        String url;
+        if (isHighSearch == false) {
+            url = AppURL.URL_GET_PRODUCT_BYCODE + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage;
+        } else {
+            url = getInitUrl();
+        }
+
+        url += getkeyWordUrl();
+        loadNetData(url);
+    }
+
     private void setPopupWindowDate(ModeListResult.DataEntity.ModelEntity.ModelListEntity modelListEntity) {
-        if( Global.ring==null){
-            Global.ring= new Ring();
+        if (Global.ring == null) {
+            Global.ring = new Ring();
         }
         Global.ring.setImageUrl(modelListEntity.getPic());
         Global.ring.setItemId(modelListEntity.getId());
@@ -797,11 +863,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
         int ori = mConfiguration.orientation; //获取屏幕方向
         if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
-//横屏
+            //横屏
             return true;
         } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
-
-//竖屏
+            //竖屏
             return false;
         }
         return false;
@@ -845,7 +910,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             Bundle bundle = data.getExtras();
             String result = bundle.getString("result");
             idEtSeach.setText(result);
-            String url = getInitUrl();
+            String url = AppURL.URL_GET_PRODUCT_BYCODE + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage;
             url += getkeyWordUrl();
             loadNetData(url);
             L.e("onActivityResult result" + result);
@@ -853,10 +918,15 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
         if (requestCode == 10 && data != null) {
             Bundle bundle = data.getExtras();
-            waitOrderCount = bundle.getInt("waitOrderCount");
-            remind(waitOrderCount);
+            remind(Global.waitOrderCount);
             L.e("waitOrderCount");
         }
     }
+
+    @Override
+    public void keyboardFinish() {
+        search();
+    }
+
 
 }

@@ -417,7 +417,7 @@
         android:layout_alignParentBottom="true">
 
         <TextView
-            android:id="@+id/tv_search"
+            android:id="@+id/tv_confirm"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

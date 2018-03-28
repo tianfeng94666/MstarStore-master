@@ -31,6 +31,7 @@ import java.util.List;
 import cn.finalteam.okhttpfinal.OkHttpFinal;
 import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 import cn.finalteam.okhttpfinal.Part;
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 
@@ -41,6 +42,7 @@ public class BaseApplication extends Application {
     private static int mMainThreadId;
     private static Thread mMainThread = null;
     private static String token;
+    private static String registrationID;
     public static int mNetWorkState;
     // volley请求队列
     public static RequestQueue requestQueue = null;
@@ -52,20 +54,30 @@ public class BaseApplication extends Application {
         return userPic;
     }
 
-    public static  void setUserPic(String userPic) {
+    public static void setUserPic(String userPic) {
         BaseApplication.userPic = userPic;
     }
 
-    public  static SpUtils spUtils;
+    public static SpUtils spUtils;
 
+    public  String getRegistrationID() {
+        registrationID = JPushInterface.getRegistrationID(this);
+        return registrationID;
+    }
+
+    public  void setRegistrationID(String registrationID) {
+        BaseApplication.registrationID = registrationID;
+    }
 
     // 共享变量
-    public static final int FLUSH_MAIN_ACTIVITY=1;
+    public static final int FLUSH_MAIN_ACTIVITY = 1;
     private Handler main;
-    public void setMainHandler(Handler handler){
-        main=handler;
+
+    public void setMainHandler(Handler handler) {
+        main = handler;
     }
-    public void flushMain(){
+
+    public void flushMain() {
         main.sendEmptyMessage(FLUSH_MAIN_ACTIVITY);
     }
 
@@ -80,11 +92,14 @@ public class BaseApplication extends Application {
         BaseApplication.mMainThreadId = android.os.Process.myTid();
         BaseApplication.mMainThread = Thread.currentThread();
         spUtils = SpUtils.getInstace(this);
-        mAcache=ACache.get(this);
+        mAcache = ACache.get(this);
         initVolley();
         initImageLoder();
         initOkHttpFinal();
         initParams();
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+        Global.REGISTRATION =((BaseApplication)getApplication()).getRegistrationID();
         //初始化分享
 //        ShareSDK.initSDK(this);
     }
@@ -94,6 +109,7 @@ public class BaseApplication extends Application {
     }
 
     public static final int REQ_TIMEOUT = 35000;
+
     private void initOkHttpFinal() {
         List<Part> commomParams = new ArrayList<>();
         Headers commonHeaders = new Headers.Builder().build();
@@ -108,7 +124,6 @@ public class BaseApplication extends Application {
     }
 
 
-
     public void initImageLoder() {
         ImageLoderUtils.initImageLoader(this);
     }
@@ -121,8 +136,8 @@ public class BaseApplication extends Application {
         BaseApplication.token = token;
     }
 
-    private  Context getContext(){
-        return  this.getApplicationContext();
+    private Context getContext() {
+        return this.getApplicationContext();
     }
 
 
@@ -169,7 +184,6 @@ public class BaseApplication extends Application {
     }
 
 
-
 //    public static void loadNetData() {
 //      //  JsonObject jsonResult = new Gson().fromJson(Constants.jsonResult, JsonObject.class);
 //      //  String error=jsonResult.get("error").getAsString();
@@ -185,48 +199,50 @@ public class BaseApplication extends Application {
 
 
     public static void loadNetData1() {
-        Gson gson=new Gson();
+        Gson gson = new Gson();
         String error = new Gson().fromJson(Constants.jsonResult, JsonObject.class).get("error").getAsString();
         if ("0".equals(error)) {
             JsonObject jData = gson.fromJson(Constants.jsonResult, JsonObject.class).get("data").getAsJsonObject();
             JsonArray typeList = gson.fromJson(jData, JsonObject.class).get("typeList").getAsJsonArray();
-            for (int i=0;i<typeList.size();i++){
+            for (int i = 0; i < typeList.size(); i++) {
                 //L.e("typeList  id;"+  typeList.get(i).getAsJsonObject().get("id").getAsString());
-               // L.e("typeList  sort;"+  typeList.get(i).getAsJsonObject().get("sort").getAsString());
-               // L.e("typeList  mulSelect;"+  typeList.get(i).getAsJsonObject().get("mulSelect").getAsString());
+                // L.e("typeList  sort;"+  typeList.get(i).getAsJsonObject().get("sort").getAsString());
+                // L.e("typeList  mulSelect;"+  typeList.get(i).getAsJsonObject().get("mulSelect").getAsString());
             }
             JsonObject model = gson.fromJson(jData, JsonObject.class).get("model").getAsJsonObject();
-           // JsonArray modelList = gson.fromJson(model, JsonObject.class).get("modelList").getAsJsonArray();
-          //  int count=model.get("list_count").getAsInt();
-           // L.e("解析成"+count);
+            // JsonArray modelList = gson.fromJson(model, JsonObject.class).get("modelList").getAsJsonArray();
+            //  int count=model.get("list_count").getAsInt();
+            // L.e("解析成"+count);
         }
     }
 
     public static void loadNetData2() {
         try {
             Gson gson = new Gson();
-            Type type = new TypeToken<ClassTypeFilerEntity[]>() {}.getType();
+            Type type = new TypeToken<ClassTypeFilerEntity[]>() {
+            }.getType();
             JsonObject jData = gson.fromJson(Constants.jsonResult1, JsonObject.class).getAsJsonObject("data");
             JsonArray jTypeList = jData.get("typeList").getAsJsonArray();
             ClassTypeFilerEntity[] ct = gson.fromJson(jTypeList, type);
-            List <ClassTypeFilerEntity> classTypeFilerEntityList = new ArrayList<>();
-            List<ClassTypeFilerEntity.AttributeListEntity> attributeList=new ArrayList<>();
+            List<ClassTypeFilerEntity> classTypeFilerEntityList = new ArrayList<>();
+            List<ClassTypeFilerEntity.AttributeListEntity> attributeList = new ArrayList<>();
             for (ClassTypeFilerEntity entity : ct) {
                 classTypeFilerEntityList.add(entity);
                 List<ClassTypeFilerEntity.AttributeListEntity> attributeList1 = entity.getAttributeList();
-                for (int i=0;i<attributeList1.size();i++){
+                for (int i = 0; i < attributeList1.size(); i++) {
                     ClassTypeFilerEntity.AttributeListEntity attributeListEntity = attributeList1.get(i);
-                    L.e("attributeList1："+attributeListEntity.toString());
+                    L.e("attributeList1：" + attributeListEntity.toString());
                     attributeList.add(attributeListEntity);
                 }
             }
 
-            type = new TypeToken<CustomList[]>() {}.getType();
+            type = new TypeToken<CustomList[]>() {
+            }.getType();
             JsonArray jCustomList = jData.get("customList").getAsJsonArray();
             CustomList[] cl = gson.fromJson(jCustomList, type);
-            List <CustomList> customList = new ArrayList<>();
+            List<CustomList> customList = new ArrayList<>();
             for (CustomList entity : cl) {
-                L.e("customList："+entity.toString());
+                L.e("customList：" + entity.toString());
                 customList.add(entity);
             }
 
@@ -236,16 +252,17 @@ public class BaseApplication extends Application {
             ModelListEntity[] mds = gson.fromJson(jmodelList, ModelListEntity[].class);
             modelList.clear();
             Collections.addAll(modelList, mds);
-            for (int i=0;i<modelList.size();i++){
-                L.e("ModelListEntity:"+modelList.get(i).toString());
+            for (int i = 0; i < modelList.size(); i++) {
+                L.e("ModelListEntity:" + modelList.get(i).toString());
             }
 
-            type = new TypeToken<SearchValue[]>() {}.getType();
+            type = new TypeToken<SearchValue[]>() {
+            }.getType();
             JsonArray jSearchValue = jData.get("searchValue").getAsJsonArray();
             SearchValue[] jsv = gson.fromJson(jSearchValue, type);
-            List <SearchValue> searchValueList = new ArrayList<>();
+            List<SearchValue> searchValueList = new ArrayList<>();
             for (SearchValue entity : jsv) {
-                L.e("searchValueList："+entity.toString());
+                L.e("searchValueList：" + entity.toString());
                 searchValueList.add(entity);
             }
 

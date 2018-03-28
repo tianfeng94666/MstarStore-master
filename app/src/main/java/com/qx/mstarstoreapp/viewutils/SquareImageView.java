@@ -2,6 +2,8 @@ package com.qx.mstarstoreapp.viewutils;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -63,8 +65,31 @@ public class SquareImageView extends ImageView {
         }else {
           divideAmount=2;
         }
+
         int width = (SCREENWIDTH - dp2pix(SPEC)) / divideAmount;
+
         setMeasuredDimension(width, width);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if( isScreenChange()){
+            divideAmount=4;
+        }else {
+            divideAmount=2;
+        }
+
+        int width = (SCREENWIDTH - dp2pix(SPEC)) / divideAmount;
+
+
+
+
+//      canvas.translate(getPaddingLeft()-getPaddingRight(),getPaddingTop()-getPaddingBottom());
+       float heightValue = (width-getPaddingBottom()-getPaddingTop())/width;
+        float widthValue = (width-getPaddingLeft()-getPaddingRight())/width;
+        canvas.scale(widthValue,heightValue);
+
     }
 
     private int getScreenWidth() {

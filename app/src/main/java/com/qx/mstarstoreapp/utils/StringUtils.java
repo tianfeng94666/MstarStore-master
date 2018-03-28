@@ -284,4 +284,12 @@ public class StringUtils {
 		}
 		return true;
 	}
+
+	public static String isEmptyReturnString(String value) {
+		if (value != null && !"".equalsIgnoreCase(value.trim()) && !"null".equalsIgnoreCase(value.trim())) {
+			return value;
+		} else {
+			return "0";
+		}
+	}
 }

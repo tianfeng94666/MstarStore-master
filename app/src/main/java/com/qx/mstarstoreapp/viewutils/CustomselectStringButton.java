@@ -71,7 +71,7 @@ public class CustomselectStringButton extends RelativeLayout {
     public void setTextName(String textName) {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
-            tv.setTextColor(getResources().getColor(R.color.text_color));
+            tv.setTextColor(getResources().getColor(R.color.color_text_can_click));
             tv.setBackgroundResource(backgroundId);
         }
     }
@@ -79,7 +79,7 @@ public class CustomselectStringButton extends RelativeLayout {
     public void setDefaultText(String textName) {
         if (!StringUtils.isEmpty(textName)) {
             this.tv.setText(textName);
-            this.tv.setTextColor(getResources().getColor(R.color.text_color2));
+            this.tv.setTextColor(getResources().getColor(R.color.color_text_can_click));
         }
     }
 

@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -21,16 +18,16 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.bean.Type;
 import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.ModelDetailResult;
+import com.qx.mstarstoreapp.json.PurityEntity;
 import com.qx.mstarstoreapp.json.StoneEntity;
-import com.qx.mstarstoreapp.net.ImageLoadOptions;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
@@ -42,8 +39,7 @@ import com.qx.mstarstoreapp.viewutils.CustomLV;
 import com.qx.mstarstoreapp.viewutils.CustomSelectButton;
 import com.qx.mstarstoreapp.viewutils.CustomSelectInput;
 import com.qx.mstarstoreapp.viewutils.CustomselectStringButton;
-import com.qx.mstarstoreapp.viewutils.SelectDotView;
-import com.recker.flybanner.FlyBanner;
+import com.qx.mstarstoreapp.viewutils.FlyBanner;
 import com.wx.wheelview.widget.WheelView;
 
 import java.util.ArrayList;
@@ -52,8 +48,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static com.qx.mstarstoreapp.R.id.viewPager;
 
 /*
  * 创建人：Yangshao
@@ -72,7 +66,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
 
     List<ModelDetailResult.DataEntity.StoneTypeEntity> stoneTypeItme; //类型
     List<ModelDetailResult.DataEntity.StoneColorEntity> stoneColorItme;  //颜色
-    List<ModelDetailResult.DataEntity.StonePurityEntity> stonePurityItme; //净度
+    List<PurityEntity> stonePurityItme; //净度
     List<ModelDetailResult.DataEntity.StoneSpecEntity> stoneSpecItme;  //规格
     List<ModelDetailResult.DataEntity.StoneShapeEntity> stoneShapeItem;  //形状
     List<ModelDetailResult.DataEntity.ModelEntity.PicsEntity> pics;
@@ -92,7 +86,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     CustomSelectButton idCusStoreType;
     @Bind(R.id.tv_reset)
     TextView tvReset;
-    @Bind(R.id.tv_search)
+    @Bind(R.id.tv_confirm)
     TextView idTvAddOrder;
     @Bind(R.id.et_spot)
     EditText idCusStoreNumber;
@@ -115,12 +109,11 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     TextView tvAdd;
     @Bind(R.id.tv_weight)
     TextView tvWeight;
-    @Bind(R.id.id_tv_curorder)
+    @Bind(R.id.tv_cancle)
     TextView idTvCurorder;
     WheelView mainWheelView;
     int type = 0;
     String orderId;
-    int waitOrderCount;
     String itemId;
     static ConfirmOrderOnUpdate confirmOrderOnUpdate;
     @Bind(R.id.ll_add)
@@ -141,9 +134,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        initWindwoState();
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_style_information);
         rootView = View.inflate(this, R.layout.activity_style_information, null);
         ButterKnife.bind(this);
@@ -168,7 +159,6 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         itemId = extras.getString("itemId");
         type = extras.getInt("type");
         orderId = extras.getString("orderId");
-        waitOrderCount = extras.getInt("waitOrderCount", 0);
 
     }
 
@@ -188,13 +178,12 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         adapter = new ListAdapter(stoneEntities);
         listView.setAdapter(adapter);
         badge = new BadgeView(StyleInfromationActivity.this, idTvCurorder);// 创建一个BadgeView对象，view为你需要显示提醒的控件
-        remind(waitOrderCount);
+        remind( Global.waitOrderCount);
 
         idIgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("waitOrderCount", waitOrderCount);
                 setResult(10, intent);
                 finish();
             }
@@ -228,7 +217,6 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                 } else {
                     /*查看当前订单*/
                     Intent intent = new Intent(StyleInfromationActivity.this, ConfirmOrderActivity.class);
-                    intent.putExtra("waitOrderCount", waitOrderCount);
                     startActivityForResult(intent, 12);
                 }
             }
@@ -559,7 +547,7 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_search:
+            case R.id.tv_confirm:
                 if (!UIUtils.isFastDoubleClick()) {
                     chkeckConfirmOrder();
                 }
@@ -767,10 +755,10 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
                         }
                     } else {
                         String strwaitOrderCount = new Gson().fromJson(result, JsonObject.class).get("data").getAsJsonObject().get("waitOrderCount").getAsString();
-                        waitOrderCount = Integer.valueOf(strwaitOrderCount);
-                        L.e("waitOrderCount" + waitOrderCount);
+                        Global.waitOrderCount = Integer.valueOf(strwaitOrderCount);
+                        L.e("waitOrderCount" +  Global.waitOrderCount);
                         ToastManager.showToastReal("添加成功");
-                        remind(waitOrderCount);
+                        remind( Global.waitOrderCount);
                         idTvAddOrder.setEnabled(true);
                         return;
                     }
@@ -1287,8 +1275,8 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
             if (data == null) {
                 return;
             }
-            waitOrderCount = data.getExtras().getInt("waitOrderCount");
-            remind(waitOrderCount);
+            Global.waitOrderCount = data.getExtras().getInt("waitOrderCount");
+            remind( Global.waitOrderCount);
         }
     }
 
@@ -1369,7 +1357,6 @@ public class StyleInfromationActivity extends BaseActivity implements View.OnCli
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
             Intent intent = new Intent();
-            intent.putExtra("waitOrderCount", waitOrderCount);
             setResult(10, intent);
             finish();
             return true;

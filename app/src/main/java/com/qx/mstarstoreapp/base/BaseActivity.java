@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,6 +48,9 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         context = this;
 //		ViewServer.get(this).addWindow(this);
     }
@@ -57,6 +61,7 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
         } else {
             toast.setText(msg);
         }
+        toast.setGravity(Gravity.CENTER,0,0);
         toast.show();
     }
 
@@ -71,9 +76,11 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
         }
         //SystemClock.sleep(1000);
     }
+
     public void onBack(View v) {
         finish();
     }
+
     public void baseHideWatLoading() {
         if (loadingDialog == null) return;
         if (loadingDialog != null || loadingDialog.isShowing()) {
@@ -220,6 +227,18 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
         //BaseApplication.requestQueue.cancelAll(HTTP_TASK_KEY);
         HttpTaskHandler.getInstance().removeTask(HTTP_TASK_KEY);
 //		ViewServer.get(this).removeWindow(this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && loadingDialog != null) {
+            loadingDialog.cancel();
+            loadingDialog = null;
+            return true;
+        }
+
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

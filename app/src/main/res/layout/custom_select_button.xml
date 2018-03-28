@@ -10,7 +10,7 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/gray"
+        android:textColor="@color/color_text_can_click"
         android:background="@drawable/btn_bg_while"
         android:textSize="10sp"
         />

@@ -20,12 +20,23 @@
         android:onClick="onBack"
         android:padding="10dip"
         android:src="@drawable/icon_return" />
-
+    <ImageView
+        android:gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:button="@null"
+        android:id="@+id/iv_search_type"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignRight="@id/tv_is_show_price"
+        android:layout_alignTop="@id/tv_is_show_price"
+        android:src="@drawable/icon_switch_off"
+        />
     <RelativeLayout
         android:id="@+id/id_rl1"
         style="@style/layout_horizontal"
         android:layout_weight="1"
         android:background="@drawable/frame_bg_while">
+
 
         <EditText
             android:id="@+id/id_et_seach"

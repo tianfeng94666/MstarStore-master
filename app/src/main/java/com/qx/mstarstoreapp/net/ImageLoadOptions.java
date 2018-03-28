@@ -53,7 +53,7 @@ public class ImageLoadOptions {
 				// 设置下载的图片是否缓存在内存中
 				.cacheOnDisc(true)
 				// 设置下载的图片是否缓存在SD卡中
-				.imageScaleType(ImageScaleType.EXACTLY)// 设置图片以如何的编码方式显示
+				.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)// 设置图片以如何的编码方式显示
 				.bitmapConfig(Bitmap.Config.ARGB_8888)// 设置图片的解码类型
 				// .decodingOptions(android.graphics.BitmapFactory.Options
 				// decodingOptions)//设置图片的解码配置

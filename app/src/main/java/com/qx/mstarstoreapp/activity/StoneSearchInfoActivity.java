@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -94,7 +92,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     TextView tvColor;
     @Bind(R.id.tv_quality)
     TextView tvQuality;
-    @Bind(R.id.tv_search)
+    @Bind(R.id.tv_confirm)
     TextView tvSearch;
     @Bind(R.id.tv_reset)
     TextView idTvCurorder;
@@ -143,9 +141,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_stone_storehouse1);
         ButterKnife.bind(this);
         getDate();
@@ -596,7 +592,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
             case R.id.id_ig_back:
                 finish();
                 break;
-            case R.id.tv_search:
+            case R.id.tv_confirm:
                 if (searchStone()) {
                     gotoResult();
                 }

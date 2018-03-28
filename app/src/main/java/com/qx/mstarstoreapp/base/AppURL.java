@@ -12,11 +12,8 @@ public class AppURL {
 //    static String QxVersion = "QxVersion="+ "beta1.2"+"&"+"";
     /*"http://192.168.1.240:9112/api/Aproxy/*/
     private static String baseUrl = "http://appapi1.fanerweb.com/api/aproxy/";
-    //测试 http://appapi1.fanerweb.com/api/Aproxy/
-    private static String baseUrl1 = "http://appapi.fanerweb.com/api/aproxy/";
     // private static String baseUrl="http://192.168.1.240:9112/api/Aproxy/";
     public static String URL_LOGIN = baseUrl + "userLoginDo?"+QxVersion;
-
 
     public static String URL_REGISTER = baseUrl + "userRegisterDo?"+QxVersion;
 
@@ -139,7 +136,7 @@ public class AppURL {
    // GetOrderPricePageList?tokenKey=944df2f27ffce557042887589986c193&cpage=1&purityId=1&qualityId=1
     public static String URL_ORDER_PRICE = baseUrl + "GetOrderPricePageList?"+QxVersion;
 
-    /*定金页价格修改*/
+    /*定金页价格,成色，质量等级修改*/
    // ?purityId=1&qualityId=1&orderId=13&tokenKey=10b588002228fa805231a59bb7976bf4
     public static String URL_WATI_ORDER_PRICE = baseUrl + "ModelOrderWaitCheckModifyGetOrderPricePageListDo?";
     /*订单详情修改地址*/
@@ -402,6 +399,61 @@ public class AppURL {
      待审核页面修改款号确定修改
      */
     public static String URL_PERSON_ORDER_FROM_WAIT_TO_INFOMATION_EDIT= baseUrl+ "CustomDetailPageForWaitCheckEditDo?"+QxVersion;
+    /**
+     * http://appapi1.fanerweb.com/api/aproxy/CustomDetailPageForGetSelectReturnPage?QxVersion=1.8&partSort=1&selectPids=104928,,104923&tokenKey=1258d68f188af7d84ccb6a2c5fb91bd4
+     个人定制单个删除
+     */
+    public static String URL_PERSON_ORDER_SINGLE_DELETE= baseUrl+ "CustomDetailPageForGetSelectReturnPage?"+QxVersion;
+    /**
+     * 退出登入
+     */
+    public static String URL_EXIT= baseUrl+ "userLoginOutDo?"+QxVersion;
+    /**
+     * //注册页面数据区域
+     http://appapi1.fanerweb.com/api/aproxy/userRegisterPage?QxVersion=1.8
+     */
+    public static String URL_GET_PLACE= baseUrl+ "userRegisterPage?"+QxVersion;
+    /**
+     * //我的管理页面修改区域
+     http://appapi1.fanerweb.com/api/aproxy/userModifyuserAreaDo?memberAreaId=7&QxVersion=1.8&tokenKey=992b7545812ae694ffb4e735b22f4e81
+     */
+    public static String URL_GET_PLACE_CHANGE= baseUrl+ "userModifyuserAreaDo?"+QxVersion;
+    /**
+     * //二维码获取产品
+     http://appapi1.fanerweb.com/api/aproxy/modelListPageForScanCode?QxVersion=1.9&tokenKey=992b7545812ae694ffb4e735b22f4e81&keyword=Z-D52286A
+
+     */
+    public static String URL_GET_PRODUCT_BYCODE= baseUrl+ "modelListPageForScanCode?"+QxVersion;
+    /**
+     * //二维码获取订单详情
+     http://appapi1.fanerweb.com/api/aproxy/ModelDetailPageForSCanCode?QxVersion=1.9&tokenKey=992b7545812ae694ffb4e735b22f4e81&keyword=Z-D52286A
+     */
+    public static String URL_GET_PRODUCTINFO_BYCODE= baseUrl+ "ModelDetailPageForSCanCode?"+QxVersion;
+    /**
+     * 扫码界面信息
+     * http://appapi1.fanerweb.com/api/aproxy/ModelDetailSimplify?QxVersion=2.0&tokenKey=992b7545812ae694ffb4e735b22f4e81
+     */
+    public static String URL_GET_MODELDETAIL_FORSCAN= baseUrl+ "ModelDetailSimplify?"+QxVersion;
+    /**
+     * 扫码后获得的信息
+     * http://appapi1.fanerweb.com/api/aproxy/ModelDetailPageGetInfoByModelNumSimplify?QxVersion=2.0&tokenKey=992b7545812ae694ffb4e735b22f4e81&modelNum=A13426A
+     */
+    public static String URL_GET_MODELDETAIL_FORSCAN_INFO= baseUrl+ "ModelDetailPageGetInfoByModelNumSimplify?"+QxVersion;
+    /**
+     * 扫码提交到当前订单
+     * http://appapi1.fanerweb.com/api/aproxy/OrderCurrentDoModelItemForAutoStoneDo?QxVersion=2.0&tokenKey=992b7545812ae694ffb4e735b22f4e81&productId=101164&number=1&modelPurityId=6
+     */
+    public static String URL_GET_MODELDETAIL_FORSCAN_COMMIT_CURRENT_ORDER= baseUrl+ "OrderCurrentDoModelItemForAutoStoneDo?"+QxVersion;
+    /**
+     * 提交生成订单
+     * http://appapi1.fanerweb.com/api/aproxy/OrderCurrentSubmitsDo?QxVersion=2.0&addressId=0&customerID=23651&itemId=15809|15781|15780&purityId=8&qualityId=1&tokenKey=992b7545812ae694ffb4e735b22f4e81
+     */
+    public static String URL_GET_MODELDETAIL_FORSCAN_COMMIT_ORDER= baseUrl+ "OrderCurrentSubmitsDo?"+QxVersion;
+    /**
+     * 当前订单批量修改成色
+     * http://appapi1.fanerweb.com/api/aproxy/BathModifyPurityDo?QxVersion=2.0&itemIds=15809|15780&purityId=4&tokenKey=992b7545812ae694ffb4e735b22f4e81
+     */
+    public static String URL_GET_MODELDETAIL_FORSCAN_MODIFY_PURITY= baseUrl+ "BathModifyPurityDo?"+QxVersion;
 }
 
 

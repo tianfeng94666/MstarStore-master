@@ -23,6 +23,7 @@ import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
+import com.qx.mstarstoreapp.base.Global;
 import com.qx.mstarstoreapp.json.DeliveryTableResult;
 import com.qx.mstarstoreapp.json.UpdataVersionResult;
 import com.qx.mstarstoreapp.json.VersionResult;
@@ -37,6 +38,8 @@ import com.qx.mstarstoreapp.viewutils.CountTimerButton;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.qx.mstarstoreapp.base.BaseApplication.getApplication;
 
 /**
  * Created by Administrator on 2016/9/7.
@@ -67,14 +70,12 @@ public class LoginActivity extends BaseActivity {
             finish();
             return;
         }
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_login_1);
         ButterKnife.bind(this);
         manager = FingerprintManagerCompat.from(this);
         isNeedUpdate();
-        getBackIntent();
+
 
 
     }
@@ -87,18 +88,20 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+
+
     private void initView() {
         token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
         if (!StringUtils.isEmpty(token)) {
             BaseApplication.setToken(token);
             if (!manager.isHardwareDetected()) {
                 //是否支持指纹识别
-//                showToastReal("不支持指纹登入，请验证登入");
-                openActivity(MainActivity.class, null);
+                showToastReal("不支持指纹登入，请验证登入");
+                getBackIntent();
             } else if (!manager.hasEnrolledFingerprints()) {
                 //是否已注册指纹
-//                showToastReal("请录入指纹在手机，方便快速登录");
-                openActivity(MainActivity.class, null);
+                showToastReal("请录入指纹在手机，方便快速登录");
+                getBackIntent();
             } else {
                 try {
                     //这里去新建一个结果的回调，里面回调显示指纹验证的信息
@@ -167,7 +170,12 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult
                                                       result) {
-            openActivity(MainActivity.class, null);
+            if (!StringUtils.isEmpty(token)) {
+                getBackIntent();
+            }else {
+                showToastReal("要验证登录");
+            }
+
         }
     }
 
@@ -176,11 +184,13 @@ public class LoginActivity extends BaseActivity {
         Intent callingIntent = getIntent();
         if (callingIntent != null && callingIntent.getExtras() != null) {
             nextActivity = (Class<?>) callingIntent.getExtras().get(JUMP_TO_ACTIVITY);
+        }else {
+            openActivity(MainActivity.class, null);
         }
     }
 
     private void isNeedUpdate() {
-        String lgUrl = AppURL.URL_GET_UPDATE_VERSION + "device=" + "android" + "&version=" + getResources().getString(R.string.app_version);
+        String lgUrl = AppURL.URL_GET_UPDATE_VERSION + "device=" + "android" + "&version=" + getResources().getString(R.string.app_version_detail);
         L.e("netLogin" + lgUrl);
         VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -237,6 +247,7 @@ public class LoginActivity extends BaseActivity {
 
         Dialog noticeDialog = builder.create();
         noticeDialog.setCanceledOnTouchOutside(isNeed);
+        noticeDialog.setCancelable(isNeed);
         noticeDialog.show();
     }
 
@@ -245,6 +256,7 @@ public class LoginActivity extends BaseActivity {
         name = idEdName.getText().toString().trim();
         pwd = idEdPassword.getText().toString().trim();
         code = idEdCode.getText().toString();
+        Global.REGISTRATION = ((BaseApplication)getApplication()).getRegistrationID();
         if (StringUtils.isEmpty(name)) {
             showToastReal("用户名不能为空！");
             return;
@@ -257,9 +269,13 @@ public class LoginActivity extends BaseActivity {
             showToastReal("验证码不能为空！");
             return;
         }
+        if (StringUtils.isEmpty(  Global.REGISTRATION)) {
+            showToastReal("正在注册推送信息，请稍后登录");
+            return;
+        }
         baseShowWatLoading();
         // 进行登录请求
-        String lgUrl = AppURL.URL_LOGIN + "userName=" + name + "&password=" + pwd + "&phoneCode=" + code;
+        String lgUrl = AppURL.URL_LOGIN + "userName=" + name + "&password=" + pwd + "&phoneCode=" + code+"&jRegid="+Global.REGISTRATION+"&system=android";
         L.e("netLogin" + lgUrl);
         VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -377,8 +393,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        BaseApplication.requestQueue.cancelAll(this);
-        finish();
+//        BaseApplication.requestQueue.cancelAll(this);
+//        finish();
     }
 
     private long exitTime = 0;

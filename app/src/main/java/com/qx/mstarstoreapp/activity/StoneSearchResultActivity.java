@@ -188,7 +188,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
 
     private void init() {
         //来自个人定制type=11
-        if (openType == 1||type==11) {
+        if (openType == 1||type>2) {
             tvQutedPriceAll.setVisibility(View.GONE);
             tvPlaceOrder.setVisibility(View.GONE);
             tvConfirmReback.setVisibility(View.VISIBLE);
@@ -571,7 +571,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         } else if (chooseAmount == 1) {
             Intent intent;
             //判断是否要去个人定制
-            if(type ==11){
+            if(type >2){
                 intent = new Intent(this, MakingActivity.class);
             }else {
                 if (!isCustomized) {

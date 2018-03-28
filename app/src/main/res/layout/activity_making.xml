@@ -13,27 +13,28 @@
         android:orientation="vertical">
 
         <LinearLayout
-
+            android:id="@+id/ll_headview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@color/white"
             android:orientation="vertical">
 
 
-
-            <com.qx.mstarstoreapp.viewutils.FlyBanner
+            <com.qx.mstarstoreapp.viewutils.FlyBanner xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/flybanner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
 
                 />
         </LinearLayout>
 
         <LinearLayout
-
+            android:id="@+id/ll_recyle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1.2">
 
             <android.support.v7.widget.RecyclerView
 
@@ -51,28 +52,30 @@
 
     <LinearLayout
         android:id="@+id/ll_finish"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        >
+        android:layout_alignParentBottom="true">
+
         <TextView
             android:id="@+id/tv_reset"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/gray"
             android:layout_height="40dp"
-            android:textColor="@color/white"
             android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@color/theme_bg"
             android:gravity="center"
-            android:text="重置" />
+            android:text="重置"
+            android:textColor="@color/text_color" />
+
         <TextView
             android:id="@+id/tv_finish"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="完成" />
+            android:text="完成"
+            android:textColor="@color/text_color" />
     </LinearLayout>
 
 
@@ -80,9 +83,9 @@
         android:id="@+id/ll_after_finish"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.qx.mstarstoreapp.viewutils.CustomselectStringButton
             android:id="@+id/tv_choose_handsize"
@@ -102,12 +105,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="购买"
-            android:gravity="center"
             android:background="@color/theme_red"
+            android:gravity="center"
+            android:text="购买"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_small_medium" />
     </LinearLayout>
+
     <ImageView
         android:id="@+id/id_ig_back"
         android:layout_width="wrap_content"
