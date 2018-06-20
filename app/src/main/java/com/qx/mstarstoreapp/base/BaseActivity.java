@@ -61,7 +61,7 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
         } else {
             toast.setText(msg);
         }
-        toast.setGravity(Gravity.CENTER,0,0);
+//        toast.setGravity(Gravity.CENTER,0,0);
         toast.show();
     }
 

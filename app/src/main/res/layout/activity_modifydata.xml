@@ -277,7 +277,66 @@
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rl_golden_price"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:layout_marginTop="1dip"
+                android:background="@color/white"
+                >
+
+                <TextView
+                    android:id="@+id/tv_golden_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="金价查看"
+                    />
+
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/icon_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_set_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:layout_marginTop="1dip"
+                android:background="@color/white"
+                >
+
+                <TextView
+                    android:id="@+id/tv_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="菜单设置"
+                    />
+
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/icon_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+            <RelativeLayout
                 android:id="@+id/rl_aear"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="50dip"
                 android:layout_marginTop="1dip"

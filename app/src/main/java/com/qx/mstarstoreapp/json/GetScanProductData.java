@@ -81,6 +81,15 @@ public class GetScanProductData {
             private String title;
             private String weight;
             private List<PicsBean> pics;
+            private String remarks;
+
+            public String getRemarks() {
+                return remarks;
+            }
+
+            public void setRemarks(String remarks) {
+                this.remarks = remarks;
+            }
 
             public String getId() {
                 return id;

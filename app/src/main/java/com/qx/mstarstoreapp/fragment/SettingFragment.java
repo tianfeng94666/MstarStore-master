@@ -103,9 +103,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     RelativeLayout rlClearMemery;
     @Bind(R.id.tv_share)
     TextView tvShare;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView tvRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.iv_below_menu_ic)
     ImageView ivBelowMenuIc;

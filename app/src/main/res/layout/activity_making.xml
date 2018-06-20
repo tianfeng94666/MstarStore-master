@@ -25,9 +25,7 @@
                 android:id="@+id/flybanner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
-
-                />
+                app:scale_type="CENTER_INSIDE" />
         </LinearLayout>
 
         <LinearLayout

@@ -39,12 +39,13 @@ import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import com.google.zxing.Result;
 import com.qx.mstarstoreapp.R;
-import com.qx.mstarstoreapp.activity.OrderActivity;
 import com.qx.mstarstoreapp.inter.KeyboardFinish;
 import com.qx.mstarstoreapp.utils.KeyboardUtil;
+import com.xw.repo.BubbleSeekBar;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -67,9 +68,31 @@ import zxing.utils.InactivityTimer;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivity extends Activity implements SurfaceHolder.Callback,KeyboardFinish {
+public class CaptureActivity extends Activity implements SurfaceHolder.Callback, KeyboardFinish {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
+    @Bind(R.id.capture_preview)
+    SurfaceView capturePreview;
+    @Bind(R.id.capture_mask_top)
+    ImageView captureMaskTop;
+    @Bind(R.id.capture_scan_line)
+    ImageView captureScanLine;
+    @Bind(R.id.sb_zoom)
+    BubbleSeekBar sbZoom;
+    @Bind(R.id.capture_crop_view)
+    RelativeLayout captureCropView;
+    @Bind(R.id.capture_mask_bottom)
+    ImageView captureMaskBottom;
+    @Bind(R.id.capture_mask_left)
+    ImageView captureMaskLeft;
+    @Bind(R.id.capture_mask_right)
+    ImageView captureMaskRight;
+    @Bind(R.id.et_product_code)
+    EditText etProductCode;
+    @Bind(R.id.capture_container)
+    RelativeLayout captureContainer;
+    @Bind(R.id.root_view)
+    RelativeLayout rootView;
 
 
     private CameraManager cameraManager;
@@ -77,12 +100,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
 
-    private SurfaceView scanPreview = null;
-    private RelativeLayout scanContainer;
-    private RelativeLayout scanCropView;
-    private RelativeLayout rootView;
-    private ImageView scanLine;
-    private EditText etProductCode;
 
     private Rect mCropRect = null;
     private boolean isHasSurface = false;
@@ -102,18 +119,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_capture);
+        ButterKnife.bind(this);
 
         initView();
 
     }
 
     private void initView() {
-        scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
-        scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
-        scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
-        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
-        etProductCode = (EditText)findViewById(R.id.et_product_code);
-        rootView = (RelativeLayout)findViewById(R.id.root_view) ;
+
 
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
@@ -124,9 +137,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         animation.setDuration(4500);
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.RESTART);
-        scanLine.startAnimation(animation);
+        captureScanLine.startAnimation(animation);
 
-        if (android.os.Build.VERSION.SDK_INT <= 10) {//4.0以下 danielinbiti
+        if (Build.VERSION.SDK_INT <= 10) {//4.0以下 danielinbiti
             etProductCode.setInputType(InputType.TYPE_NULL);
         } else {
             this.getWindow().setSoftInputMode(
@@ -187,11 +200,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             // The activity was paused but not stopped, so the surface still
             // exists. Therefore
             // surfaceCreated() won't be called, so init the camera here.
-            initCamera(scanPreview.getHolder());
+            initCamera(capturePreview.getHolder());
         } else {
             // Install the callback and wait for surfaceCreated() to init the
             // camera.
-            scanPreview.getHolder().addCallback(this);
+            capturePreview.getHolder().addCallback(this);
         }
 
         inactivityTimer.onResume();
@@ -207,7 +220,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         beepManager.close();
         cameraManager.closeDriver();
         if (!isHasSurface) {
-            scanPreview.getHolder().removeCallback(this);
+            capturePreview.getHolder().removeCallback(this);
         }
         super.onPause();
         KeyboardUtil.shared(CaptureActivity.this, etProductCode, rootView).hideKeyboard();
@@ -270,6 +283,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
         try {
             cameraManager.openDriver(surfaceHolder);
+            sbZoom.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+                @Override
+                public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                    cameraManager.setZoom(progress/5);
+                }
+
+                @Override
+                public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
+                }
+
+                @Override
+                public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
+                }
+            });
             // Creating the handler starts the preview, which can also throw a
             // RuntimeException.
             if (handler == null) {
@@ -330,17 +359,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         /** 获取布局中扫描框的位置信息 */
         int[] location = new int[2];
-        scanCropView.getLocationInWindow(location);
+        captureCropView.getLocationInWindow(location);
 
         int cropLeft = location[0];
         int cropTop = location[1] - getStatusBarHeight();
 
-        int cropWidth = scanCropView.getWidth();
-        int cropHeight = scanCropView.getHeight();
+        int cropWidth = captureCropView.getWidth();
+        int cropHeight = captureCropView.getHeight();
 
         /** 获取布局容器的宽高 */
-        int containerWidth = scanContainer.getWidth();
-        int containerHeight = scanContainer.getHeight();
+        int containerWidth = captureContainer.getWidth();
+        int containerHeight = captureContainer.getHeight();
 
         /** 计算最终截取的矩形的左上角顶点x坐标 */
         int x = cropLeft * cameraWidth / containerWidth;

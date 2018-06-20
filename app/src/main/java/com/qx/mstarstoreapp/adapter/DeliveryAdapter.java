@@ -123,7 +123,7 @@ public class DeliveryAdapter extends BaseAdapter {
         ImageView ivProduct;
         @Bind(R.id.ll_item_delivery)
         LinearLayout llItemDelivery;
-        @Bind(R.id.lv_stone)
+        @Bind(R.id.ll_stone)
         LinearLayout llStone;
 
         ViewHolder(View view) {

@@ -11,8 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,7 +54,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView ivRight;
     @Bind(R.id.ll_waiting_check)
     LinearLayout llWaitingCheck;
@@ -302,7 +300,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
             case R.id.id_fr3:
                 viewPager.setCurrentItem(2);
                 break;
-            case R.id.tv_right:
+            case R.id.iv_right:
                 search();
                 break;
         }

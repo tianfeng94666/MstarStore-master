@@ -4,8 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.multidex.MultiDex;
 
 import com.android.volley.RequestQueue;
 import com.google.gson.Gson;
@@ -14,6 +16,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.qx.mstarstoreapp.bean.CustomList;
 import com.qx.mstarstoreapp.bean.ModelListEntity;
+import com.qx.mstarstoreapp.greendao.gen.DaoMaster;
+import com.qx.mstarstoreapp.greendao.gen.DaoSession;
 import com.qx.mstarstoreapp.json.ClassTypeFilerEntity;
 import com.qx.mstarstoreapp.json.SearchValue;
 import com.qx.mstarstoreapp.net.ImageLoderUtils;
@@ -22,6 +26,7 @@ import com.qx.mstarstoreapp.utils.ACache;
 import com.qx.mstarstoreapp.utils.Constants;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.SpUtils;
+
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -59,6 +64,10 @@ public class BaseApplication extends Application {
     }
 
     public static SpUtils spUtils;
+    private DaoMaster.DevOpenHelper mHelper;
+    private SQLiteDatabase db;
+    private DaoMaster mDaoMaster;
+    private DaoSession mDaoSession;
 
     public  String getRegistrationID() {
         registrationID = JPushInterface.getRegistrationID(this);
@@ -96,15 +105,46 @@ public class BaseApplication extends Application {
         initVolley();
         initImageLoder();
         initOkHttpFinal();
-        initParams();
+//        initLeakCanary();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         Global.REGISTRATION =((BaseApplication)getApplication()).getRegistrationID();
+        setDatabase();
         //初始化分享
 //        ShareSDK.initSDK(this);
     }
+    private void setDatabase() {
 
-    private void initParams() {
+        // 通过DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的SQLiteOpenHelper 对象。
+        // 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为greenDAO 已经帮你做了。
+        // 注意：默认的DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。
+        // 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。
+        mHelper = new DaoMaster.DevOpenHelper(this,"notes-db", null);
+        db =mHelper.getWritableDatabase();
+        // 注意：该数据库连接属于DaoMaster，所以多个 Session 指的是相同的数据库连接。
+        mDaoMaster = new DaoMaster(db);
+        mDaoSession = mDaoMaster.newSession();
+
+    }
+
+    public DaoSession getDaoSession() {
+        return mDaoSession;
+    }
+
+
+    public SQLiteDatabase getDb() {
+        return db;
+    }
+
+
+    private void initLeakCanary() {
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(this);
+        // Normal app init code...
 
     }
 
@@ -214,6 +254,12 @@ public class BaseApplication extends Application {
             //  int count=model.get("list_count").getAsInt();
             // L.e("解析成"+count);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static void loadNetData2() {

@@ -83,435 +83,451 @@
         android:theme="@style/AppTheme">
 
 
-    <activity
-        android:name=".activity.LoginActivity"
-        android:configChanges="orientation|keyboardHidden"
-        android:singleUser="true"
-        android:theme="@style/SplashTheme"
-        android:windowSoftInputMode="adjustPan|stateHidden">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:singleUser="true"
+            android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-    <!--android:launchMode="singleTask"-->
-    <activity
-        android:name=".activity.OrderActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.RegisterActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--android:launchMode="singleTask"-->
+        <activity
+            android:name=".activity.OrderActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
 
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.UpdatePassWordActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <activity
-        android:name=".activity.CustomMadeActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleTop" />
-    <!--弹出软键盘不会顶起底部-->
-    <activity
-        android:name=".activity.ConfirmOrderActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan">
-        <intent-filter><action android:name="android.intent.action.VIEW" />
-
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="file" />
-            <data android:mimeType="text/plain" />
-            <data android:mimeType="application/msword" />
-            <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-            <data android:mimeType="application/vnd.ms-excel" />
-            <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-            <data android:host="*" />
-            <data android:pathPattern=".*" />
-        </intent-filter>
-
-    </activity>
-    <activity
-        android:name=".activity.CustommadeInformationActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <activity
-        android:name=".activity.MainActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
-        android:launchMode="singleTask" />
-    <activity
-        android:name=".activity.EndProducActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <activity
-        android:name=".activity.SelectCityActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <activity
-        android:name=".activity.AddAddressActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <activity
-        android:name=".activity.SettingActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <activity
-        android:name=".activity.AddressListActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <activity
-        android:name=".activity.UpdatePhoneNumber"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-    <!--弹出软键盘顶起底部-->
-    <activity
-        android:name=".activity.StyleInfromationActivity"
-        android:alwaysRetainTaskState="true"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.ClassifyActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-
-    <activity
-        android:name=".activity.CustomersListActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleTop" />
-    <activity
-        android:name="zxing.activity.CaptureActivity"
-        android:alwaysRetainTaskState="true"
-        android:screenOrientation="portrait"
-        android:theme="@android:style/Theme.Black.NoTitleBar"
-        android:windowSoftInputMode="stateVisible|adjustResize" />
-
-    <activity
-        android:name=".activity.ShopingAddressActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-
-    <activity
-        android:name=".activity.ModeOfPaymentActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-
-    <activity
-        android:name=".activity.PaySuccessActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleTop" />
-
-    <activity
-        android:name=".activity.ProductionListActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden" />
-
-    <activity
-        android:name=".activity.ReceiptActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-
-    <activity
-        android:name=".activity.ImageBrowserActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-
-    <activity
-        android:name=".activity.FrogetPwdActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.DeliveryTableActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.FinishTableMoreActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.DownloadActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.FinishTableLessActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.SearchOrderActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.SearchResultActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.SearchOrderMainActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.StoneSearchInfoActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity android:name=".activity.StoneSearchResultActivity" />
-    <activity
-        android:name=".activity.StoneQuotedPriceActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <!-- 微信支付平台的activity和receiver配置 -->
-    <activity
-        android:name=".wxapi.WXPayEntryActivity"
-        android:exported="true"
-        android:launchMode="singleTop" />
-    <activity
-        android:name="com.alipay.sdk.app.H5PayActivity"
-        android:configChanges="orientation|keyboardHidden|navigation"
-        android:exported="false"
-        android:screenOrientation="behind"></activity>
-    <activity
-        android:name="com.alipay.sdk.auth.AuthActivity"
-        android:configChanges="orientation|keyboardHidden|navigation"
-        android:exported="false"
-        android:screenOrientation="behind"></activity>
-    <activity
-        android:name=".activity.StoneHistoryOrder"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.ConfirmStoneOrderActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name="com.mob.tools.MobUIShell"
-        android:configChanges="keyboardHidden|orientation|screenSize"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar"
-        android:windowSoftInputMode="stateHidden|adjustResize">
-
-        <intent-filter>
-            <data android:scheme="tencent1105719784" />
-            <action android:name="android.intent.action.VIEW" />
-
-            <category android:name="android.intent.category.BROWSABLE" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
-        <!-- 调用新浪原生SDK，需要注册的回调activity -->
-        <intent-filter>
-            <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
-        <!--集成line客户端登录授权，需要添如下格式的过滤器-->
-        <intent-filter>
-            <data android:scheme="line.1477692153" />
-            <action android:name="android.intent.action.VIEW" />
-
-            <category android:name="android.intent.category.BROWSABLE" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-
-    </activity>
-    <activity
-        android:name=".activity.SimpleStyleInfromationActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.StoneChooseMainActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.EncryptionSettingsActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.ChooseCustomerAndAddressActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity android:name=".activity.OrderExamineActivity" />
-    <activity
-        android:name=".activity.MakingActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleInstance"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity
-        android:name=".activity.QuickStyleInfromationActivity"
-        android:alwaysRetainTaskState="true"
-        android:configChanges="orientation|keyboardHidden"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
-
-    <!-- 极光  可配置android:process参数将PushService放在其他进程中 -->
-    <!-- Required SDK 核心功能-->
-    <!-- 可配置android:process参数将PushService放在其他进程中 -->
-    <service
-        android:name="cn.jpush.android.service.PushService"
-        android:enabled="true"
-        android:exported="false">
-        <intent-filter>
-            <action android:name="cn.jpush.android.intent.REGISTER" />
-            <action android:name="cn.jpush.android.intent.REPORT" />
-            <action android:name="cn.jpush.android.intent.PushService" />
-            <action android:name="cn.jpush.android.intent.PUSH_TIME" />
-        </intent-filter>
-    </service>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.UpdatePassWordActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.CustomMadeActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
+            android:launchMode="singleTop" />
+        <!--弹出软键盘不会顶起底部-->
+        <activity
+            android:name=".activity.ConfirmOrderActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan">
 
 
-    <!-- since 3.0.9 Required SDK 核心功能-->
-    <provider
-        android:name="cn.jpush.android.service.DataProvider"
-        android:authorities="com.qx.mstarstoreapp.DataProvider"
-        android:exported="true" />
+        </activity>
+        <activity
+            android:name=".activity.CustommadeInformationActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.EndProducActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.SelectCityActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.AddAddressActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.SettingActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.AddressListActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".activity.UpdatePhoneNumber"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
+        <!--弹出软键盘顶起底部-->
+        <activity
+            android:name=".activity.StyleInfromationActivity"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.ClassifyActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
 
-    <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
-    <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
-    <service
-        android:name="cn.jpush.android.service.DaemonService"
-        android:enabled="true"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="cn.jpush.android.intent.DaemonService" />
-            <category android:name="com.qx.mstarstoreapp" />
-        </intent-filter>
-    </service>
+        <activity
+            android:name=".activity.CustomersListActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTop" />
+        <activity
+            android:name="zxing.activity.CaptureActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
 
-    <!-- Required SDK核心功能-->
-    <receiver
-        android:name="cn.jpush.android.service.PushReceiver"
-        android:enabled="true">
-        <intent-filter android:priority="1000">
-            <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-            <category android:name="com.qx.mstarstoreapp" />
-        </intent-filter>
-        <intent-filter>
-            <action android:name="android.intent.action.USER_PRESENT" />
-            <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-        </intent-filter>
-        <!-- Optional -->
-        <intent-filter>
-            <action android:name="android.intent.action.PACKAGE_ADDED" />
-            <action android:name="android.intent.action.PACKAGE_REMOVED" />
+        <activity
+            android:name=".activity.ShopingAddressActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
 
-            <data android:scheme="package" />
-        </intent-filter>
-    </receiver>
+        <activity
+            android:name=".activity.ModeOfPaymentActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
 
-    <!-- Required SDK核心功能-->
-    <activity
-        android:name="cn.jpush.android.ui.PushActivity"
-        android:configChanges="orientation|keyboardHidden"
-        android:exported="false"
-        android:theme="@android:style/Theme.NoTitleBar">
-        <intent-filter>
-            <action android:name="cn.jpush.android.ui.PushActivity" />
+        <activity
+            android:name=".activity.PaySuccessActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTop" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="com.qx.mstarstoreapp" />
-        </intent-filter>
-    </activity>
-    <!-- SDK核心功能-->
-    <activity
-        android:name="cn.jpush.android.ui.PopWinActivity"
-        android:configChanges="orientation|keyboardHidden"
-        android:exported="false">
-        <intent-filter>
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="com.qx.mstarstoreapp" />
-        </intent-filter>
-    </activity>
+        <activity
+            android:name=".activity.ProductionListActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden" />
 
-    <!-- Required SDK核心功能-->
-    <service
-        android:name="cn.jpush.android.service.DownloadService"
-        android:enabled="true"
-        android:exported="false"></service>
+        <activity
+            android:name=".activity.ReceiptActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
 
-    <!-- Required SDK核心功能-->
-    <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
-    <!-- Required since 3.0.7 -->
-    <!-- 新的tag/alias接口结果返回需要开发者配置一个自定的广播 -->
-    <!-- 该广播需要继承JPush提供的JPushMessageReceiver类, 并如下新增一个 Intent-Filter -->
-    <!--<receiver-->
-    <!--android:name="自定义 Receiver"-->
-    <!--android:enabled="true" >-->
-    <!--<intent-filter>-->
-    <!--<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />-->
-    <!--<category android:name="您应用的包名" />-->
-    <!--</intent-filter>-->
-    <!--</receiver>-->
+        <activity
+            android:name=".activity.ImageBrowserActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
 
-    <!--&lt;!&ndash; User defined. 用户自定义的广播接收器&ndash;&gt;-->
-    <receiver
-        android:name=".receiver.JipushReceiver"
-        android:enabled="true">
-        <intent-filter>
-            <!--Required 用户注册SDK的intent-->
-            <action android:name="cn.jpush.android.intent.REGISTRATION" />
-            <!--Required 用户接收SDK消息的intent-->
-            <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-            <!--Required 用户接收SDK通知栏信息的intent-->
-            <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-            <!--Required 用户打开自定义通知栏的intent-->
-            <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-            <!-- 接收网络变化 连接/断开 since 1.6.3 -->
-            <action android:name="cn.jpush.android.intent.CONNECTION" />
-            <category android:name="com.qx.mstarstoreapp" />
-        </intent-filter>
-    </receiver>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
-    <!-- Required. For publish channel feature -->
-    <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。-->
-    <!-- 例如: -->
-    <!-- 发到 Google Play 的APK可以设置为 google-play; -->
-    <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
-    <meta-data
-        android:name="JPUSH_CHANNEL"
-        android:value="developer-default" />
-    <!-- Required. AppKey copied from Portal -->
-    <meta-data
-        android:name="JPUSH_APPKEY"
-        android:value="c562335006792772769db2a6" />
-</application>
+        <activity
+            android:name=".activity.FrogetPwdActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
 
-    </manifest>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.DeliveryTableActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.FinishTableMoreActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.DownloadActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.FinishTableLessActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.SearchOrderActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.SearchResultActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.SearchOrderMainActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.StoneSearchInfoActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".activity.StoneSearchResultActivity" />
+        <activity
+            android:name=".activity.StoneQuotedPriceActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!-- 微信支付平台的activity和receiver配置 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"></activity>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"></activity>
+        <activity
+            android:name=".activity.StoneHistoryOrder"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.ConfirmStoneOrderActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+            <intent-filter>
+                <data android:scheme="tencent1105719784" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- 调用新浪原生SDK，需要注册的回调activity -->
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!--集成line客户端登录授权，需要添如下格式的过滤器-->
+            <intent-filter>
+                <data android:scheme="line.1477692153" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".activity.SimpleStyleInfromationActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.StoneChooseMainActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <!-- 极光  可配置android:process参数将PushService放在其他进程中 -->
+        <!-- Required SDK 核心功能-->
+        <!-- 可配置android:process参数将PushService放在其他进程中 -->
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER" />
+                <action android:name="cn.jpush.android.intent.REPORT" />
+                <action android:name="cn.jpush.android.intent.PushService" />
+                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+            </intent-filter>
+        </service>
+
+
+        <!-- since 3.0.9 Required SDK 核心功能-->
+        <provider
+            android:name="cn.jpush.android.service.DataProvider"
+            android:authorities="com.qx.mstarstoreapp.DataProvider"
+            android:exported="true" />
+
+        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService" />
+                <category android:name="com.qx.mstarstoreapp" />
+            </intent-filter>
+        </service>
+
+        <!-- Required SDK核心功能-->
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+                <category android:name="com.qx.mstarstoreapp" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Required SDK核心功能-->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.qx.mstarstoreapp" />
+            </intent-filter>
+        </activity>
+        <!-- SDK核心功能-->
+        <activity
+            android:name="cn.jpush.android.ui.PopWinActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.qx.mstarstoreapp" />
+            </intent-filter>
+        </activity>
+
+
+        <!-- Required SDK核心功能-->
+        <service
+            android:name="cn.jpush.android.service.DownloadService"
+            android:enabled="true"
+            android:exported="false"></service>
+
+        <!-- Required SDK核心功能-->
+        <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
+
+        <!-- Required since 3.0.7 -->
+        <!-- 新的tag/alias接口结果返回需要开发者配置一个自定的广播 -->
+        <!-- 该广播需要继承JPush提供的JPushMessageReceiver类, 并如下新增一个 Intent-Filter -->
+        <!--<receiver-->
+        <!--android:name="自定义 Receiver"-->
+        <!--android:enabled="true" >-->
+        <!--<intent-filter>-->
+        <!--<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />-->
+        <!--<category android:name="您应用的包名" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+
+        <!--&lt;!&ndash; User defined. 用户自定义的广播接收器&ndash;&gt;-->
+        <receiver
+            android:name=".receiver.JipushReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <!--Required 用户注册SDK的intent-->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <!--Required 用户接收SDK消息的intent-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!--Required 用户接收SDK通知栏信息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!--Required 用户打开自定义通知栏的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <category android:name="com.qx.mstarstoreapp" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Required. For publish channel feature -->
+        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。-->
+        <!-- 例如: -->
+        <!-- 发到 Google Play 的APK可以设置为 google-play; -->
+        <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" />
+        <!-- Required. AppKey copied from Portal -->
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="c562335006792772769db2a6" />
+
+        <activity
+            android:name=".activity.EncryptionSettingsActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.ChooseCustomerAndAddressActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".activity.OrderReviewActivity" />
+        <activity
+            android:name=".activity.MakingActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.QuickStyleInfromationActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.ExcelOrderDealActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <intent-filter><action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/msword" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                <data android:mimeType="application/vnd.ms-excel" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                <data android:host="*" />
+                <data android:pathPattern=".*" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".activity.ClassifyOrderActivity" />
+        <activity android:name=".activity.StatisticsActivity"/>
+        <activity android:name=".activity.ShowGoldenPriceActivity"/>
+        <activity android:name=".activity.MenuManagerActivity"/>
+        <activity android:name=".activity.MyOrderActivity"/>
+    </application>
+
+</manifest>

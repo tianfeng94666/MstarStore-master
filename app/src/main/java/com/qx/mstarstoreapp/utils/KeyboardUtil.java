@@ -88,6 +88,7 @@ public class KeyboardUtil {
 
         @Override
         public void onPress(int primaryCode) {
+
         }
 
         @Override
@@ -104,9 +105,14 @@ public class KeyboardUtil {
                     }
                 }
             } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {// 大小写切换
-                isUpper = !isUpper;
-                k1.setShifted(isUpper);
-                keyboardView.invalidateAllKeys();
+//                isUpper = !isUpper;
+//                k1.setShifted(isUpper);
+//                keyboardView.invalidateAllKeys();
+                if (editable != null && editable.length() > 0) {
+                    if (start < ed.length()) {
+                        editable.delete(start , start+1);
+                    }
+                }
             } else if (primaryCode == SYMBOL_CODE) {// 符号键盘
                 if (isSymbol) {
                     isSymbol = false;

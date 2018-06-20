@@ -106,7 +106,7 @@ public class RecycleViewPartAdapter extends RecyclerView.Adapter<RecycleViewPart
 
 
     public interface MyItemClickListener {
-        public void onItemClick(View view, int postion);
+        public void onItemClick(View view, int position);
     }
 
 }

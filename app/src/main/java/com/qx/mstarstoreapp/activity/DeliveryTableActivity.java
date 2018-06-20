@@ -1,10 +1,7 @@
 package com.qx.mstarstoreapp.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -14,18 +11,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.DeliveryAdapter;
-import com.qx.mstarstoreapp.adapter.FinishTableLessAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.json.DeliveryTableResult;
-import com.qx.mstarstoreapp.json.FinishTableLessResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -41,7 +35,7 @@ public class DeliveryTableActivity extends BaseActivity {
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.tv_customer_name)
     TextView tvCustomerName;

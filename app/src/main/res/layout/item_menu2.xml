@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white"
+    android:padding="@dimen/margin5">
+
+
+    <TextView
+        android:id="@+id/tv_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+   android:gravity="center_vertical"
+    android:textColor="@color/text_color"
+        android:text="菜单"
+        />
+
+    <ImageView
+        android:id="@+id/iv_is_show"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/tv_is_show_price"
+        android:layout_alignTop="@id/tv_is_show_price"
+        android:button="@null"
+        android:gravity="center_vertical"
+        android:src="@drawable/icon_switch_off" />
+
+
+</RelativeLayout>

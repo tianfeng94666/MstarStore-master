@@ -33,7 +33,7 @@ public class UpdatePassWordActivity extends BaseActivity {
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.id_ed_code)
     EditText idEdCode;

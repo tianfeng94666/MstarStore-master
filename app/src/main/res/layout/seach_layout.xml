@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_rel_title"
+    android:id="@+id/layout_rl_title"
     android:layout_width="match_parent"
     android:layout_height="55dip"
     android:background="@color/white"
@@ -68,7 +68,7 @@
             android:background="@color/color_line"></View>
 
         <ImageView
-            android:id="@+id/ig_btn_seach"
+            android:id="@+id/iv_seach_customer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

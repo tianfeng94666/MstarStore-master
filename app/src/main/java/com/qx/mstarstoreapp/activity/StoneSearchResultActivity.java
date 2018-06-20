@@ -35,6 +35,7 @@ import com.qx.mstarstoreapp.viewutils.LeftPopupWindow;
 import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 import com.qx.mstarstoreapp.viewutils.xListView.XListView;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +51,11 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     TextView tvRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
-    @Bind(R.id.lv_stone)
+    @Bind(R.id.ll_stone)
     XListView lvStone;
     @Bind(R.id.tv_quoted_price_all)
     TextView tvQutedPriceAll;
@@ -277,7 +278,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     public void loadNetData() {
         baseShowWatLoading();
         String url = "";
-        url = AppURL.URL_STONE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + page + "&certAuth=" + stoneSearchInfo.getCerAuth() + "&color=" + stoneSearchInfo.getColor() + "&shape=" + stoneSearchInfo.getShape()
+        url = AppURL.URL_STONE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + page + "&certAuth=" + stoneSearchInfo.getCerAuth() + "&color=" + stoneSearchInfo.getColor() + "&shape=" + URLEncoder.encode(stoneSearchInfo.getShape())
                 + "&purity=" + stoneSearchInfo.getPurity() + "&cut=" + stoneSearchInfo.getCut() + "&polishing=" + stoneSearchInfo.getPolishing() + "&symmetric=" + stoneSearchInfo.getSymmetric() + "&fluorescence=" + stoneSearchInfo.getFluorescence()
                 + "&price=" + stoneSearchInfo.getPrice() + "&weight=" + stoneSearchInfo.getWeight() + "&orderby=" + orderby;
         if (StringUtils.isEmpty(url)) {
@@ -392,7 +393,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_right:
+            case R.id.iv_right:
                 changeOrientation();
                 break;
             case R.id.id_ig_back:

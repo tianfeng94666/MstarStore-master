@@ -9,8 +9,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -34,6 +32,7 @@ import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.bean.OrderSearchBean;
 import com.qx.mstarstoreapp.json.CustomerEntity;
+import com.qx.mstarstoreapp.json.GetDefaultCustomerResult;
 import com.qx.mstarstoreapp.json.SearchOrderResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
@@ -51,8 +50,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static cn.finalteam.toolsfinal.DateUtils.calendar;
 
 /**
  * Created by Administrator on 2017/3/14 0014.
@@ -79,7 +76,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
     ImageView ivSearchType;
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
-    @Bind(R.id.ig_btn_seach)
+    @Bind(R.id.iv_seach_customer)
     ImageView igBtnSeach;
     @Bind(R.id.id_rl1)
     RelativeLayout idRl1;
@@ -184,6 +181,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 判断时间是否正确
+     *
      * @param sDate
      * @param eDate
      * @return
@@ -374,7 +372,7 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
             case R.id.ll_search_type:
                 showPopWindow(view);
                 break;
-            case R.id.ig_btn_seach:
+            case R.id.iv_seach_customer:
                 boolean isFast = UIUtils.isFastDoubleClick();
                 if (!isFast) {
                     seachCustom("");
@@ -415,8 +413,10 @@ public class SearchOrderActivity extends BaseActivity implements View.OnClickLis
                         orderSearchBean.setCustomerID(-1);
                     }
                     if (state == 1) {
-                        ToastManager.showToastReal("有此客户");
-                        orderSearchBean.setCustomerID(isDefaultCustomer.getCustomerID());
+                        ToastManager.showToastReal("只有一个客户");
+                        GetDefaultCustomerResult getDefaultCustomerResult = new Gson().fromJson(result, GetDefaultCustomerResult.class);
+                        orderSearchBean.setCustomerID(getDefaultCustomerResult.getData().getCustomer().getCustomerID());
+                        idEtSeach.setText(getDefaultCustomerResult.getData().getCustomer().getCustomerName());
 
                     }
                     if (state == 2) {

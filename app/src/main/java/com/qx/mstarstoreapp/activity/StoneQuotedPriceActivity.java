@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -17,17 +15,14 @@ import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
-import com.qx.mstarstoreapp.adapter.StoneSearchResultAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.json.QuotedPriceResult;
-import com.qx.mstarstoreapp.json.StoneSearchInfoResult;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
-import com.qx.mstarstoreapp.viewutils.xListView.XListView;
 
 import java.util.List;
 
@@ -43,9 +38,9 @@ public class StoneQuotedPriceActivity extends BaseActivity {
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView tvRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.lv_quoted_price)
     ListView lvQuotedPrice;

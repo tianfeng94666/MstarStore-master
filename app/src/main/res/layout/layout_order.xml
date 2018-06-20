@@ -112,7 +112,7 @@
                         android:id="@+id/product_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
                         android:text="千禧之星裸"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -121,7 +121,6 @@
                         android:id="@+id/product_norms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:lines="1"
                         android:text="规格"
                         android:textColor="@color/black"
                         android:textSize="14sp" />

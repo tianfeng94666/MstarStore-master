@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,7 +49,7 @@ public class CustommadeInformationActivity extends BaseActivity {
     @Bind(R.id.title_text)
     TextView titleText;
     TextView tvCurOrder;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.id_store_type)
     CustomSelectButton idStoreType;

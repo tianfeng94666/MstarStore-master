@@ -7,17 +7,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.base.BaseActivity;
-import com.qx.mstarstoreapp.fragment.InfromationFragment;
 import com.qx.mstarstoreapp.fragment.StoneOrderFragemnt;
-import com.qx.mstarstoreapp.json.StoneSearchInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +34,9 @@ public class StoneHistoryOrder extends BaseActivity {
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView tvRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     private StoneOrderFragemnt waittingPayFrament; //待支付
     private StoneOrderFragemnt payedFragment;//支付

@@ -2,19 +2,13 @@ package com.qx.mstarstoreapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +32,6 @@ import com.qx.mstarstoreapp.inter.ConfirmOrderOnUpdate;
 import com.qx.mstarstoreapp.json.AddressEntity;
 import com.qx.mstarstoreapp.json.ConfirmOrderResult;
 import com.qx.mstarstoreapp.json.CustomerEntity;
-import com.qx.mstarstoreapp.json.CustumerKeySearchResult;
 import com.qx.mstarstoreapp.json.IsHaveCustomerResult;
 import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.json.PriceResult;
@@ -73,13 +66,13 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.id_lay_address)
+    @Bind(R.id.rl_address)
     RelativeLayout layAddress;
     @Bind(R.id.tv_totalPrice)
     TextView tvTotalPrice;
-    @Bind(R.id.bt_go_pay)
+    @Bind(R.id.tv_go_pay)
     Button btGoPay;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.id_tv1)
     TextView idTv1;
@@ -90,7 +83,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     @Bind(R.id.id_receipt)
     TextView idReceipt;
 
-    @Bind(android.R.id.list)
+    @Bind(R.id.list)
     ListView list;
     @Bind(R.id.rel_shopping_car_bottom_action)
     RelativeLayout relShoppingCarBottomAction;
@@ -98,7 +91,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     LinearLayout idLayOrderDetail;
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
-    @Bind(R.id.ig_btn_seach)
+    @Bind(R.id.iv_seach_customer)
     ImageView igBtnSeach;
     @Bind(R.id.id_rl1)
     RelativeLayout idRl1;
@@ -126,7 +119,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     Button tvPay;
 
     protected ListView lv_list;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView tvRight;
     @Bind(R.id.id_no_adress)
     TextView idNoAdress;

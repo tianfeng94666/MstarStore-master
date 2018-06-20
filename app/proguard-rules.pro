@@ -33,3 +33,4 @@
 -keep public class *
 -dontwarn cn.jpush.**
 -keep class cn.jpush.** { *; }
+-ignorewarnings -keep class * { public private *; }

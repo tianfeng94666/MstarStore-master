@@ -7,11 +7,11 @@
               android:background="@drawable/border_white_line"
     >
 
-    <com.qx.mstarstoreapp.viewutils.SquareImageView
+    <ImageView
         android:id="@+id/product_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:background="@color/white"

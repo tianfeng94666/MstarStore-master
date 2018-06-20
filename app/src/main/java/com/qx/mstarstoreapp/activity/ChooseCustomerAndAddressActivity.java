@@ -3,8 +3,6 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,15 +23,9 @@ import com.qx.mstarstoreapp.json.OrderListResult;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
-import com.qx.mstarstoreapp.utils.SpUtils;
-import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 import com.qx.mstarstoreapp.viewutils.LeftPopupWindow;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,7 +48,7 @@ public class ChooseCustomerAndAddressActivity extends BaseActivity {
     TextView idNoAdress;
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
-    @Bind(R.id.id_lay_address)
+    @Bind(R.id.rl_address)
     RelativeLayout idLayAddress;
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
@@ -64,7 +56,7 @@ public class ChooseCustomerAndAddressActivity extends BaseActivity {
     View idViewLine;
     @Bind(R.id.iv_delete)
     ImageView ivDelete;
-    @Bind(R.id.ig_btn_seach)
+    @Bind(R.id.iv_seach_customer)
     ImageView igBtnSeach;
     @Bind(R.id.id_rl1)
     RelativeLayout idRl1;
@@ -72,9 +64,9 @@ public class ChooseCustomerAndAddressActivity extends BaseActivity {
     EditText idEdRemarks;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView tvRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.tv_comfirm)
     TextView tvComfirm;

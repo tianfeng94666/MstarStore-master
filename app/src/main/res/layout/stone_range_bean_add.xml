@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_height="40dp">
+        <TextView
+            android:text="最小重量(≥):"
+            android:textSize="@dimen/text_size_small_medium"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+        <EditText
+
+            android:id="@+id/et_weight_min"
+            android:paddingLeft="4dp"
+            android:textSize="@dimen/text_size_small_medium"
+            android:gravity="center_vertical"
+            android:inputType="number"
+            android:background="@drawable/border_white_line"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_height="40dp">
+        <TextView
+            android:text="最大重量(≤):"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+        <EditText
+            android:id="@+id/et_weight_max"
+            android:paddingLeft="4dp"
+            android:textSize="@dimen/text_size_small_medium"
+            android:inputType="number"
+            android:gravity="center_vertical"
+            android:background="@drawable/border_white_line"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_height="40dp">
+        <TextView
+            android:text="下单数量(≤):"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+        <EditText
+            android:id="@+id/et_amount"
+            android:paddingLeft="4dp"
+            android:textSize="@dimen/text_size_small_medium"
+            android:inputType="number"
+            android:gravity="center_vertical"
+            android:background="@drawable/border_white_line"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</LinearLayout>

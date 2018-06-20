@@ -3,6 +3,7 @@ package com.qx.mstarstoreapp.net;
 import android.content.Context;
 import android.widget.ImageView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
@@ -11,12 +12,16 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -91,7 +96,14 @@ public class VolleyRequestUtils {
 					callback.onFail(error.toString());
 			}
 
-		});
+		}){
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				Map<String, String> headers = new HashMap<>();
+				headers.put("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+				return headers;
+			}
+		};
 		jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
 				2,
 				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -99,36 +111,90 @@ public class VolleyRequestUtils {
 		BaseApplication.requestQueue.add(jsonObjectRequest);
 	}
 
+	//！！！！！！！！get请求为了保证cookie一致  后来不要使用该方法！！！！！！！！！！
+	public void getRequestPost(Context context, String url, final HttpStringRequsetCallBack callback, final Map<String, String> map) {
+		if(!UIUtils.getNetConnecState(context)){
+			ToastManager.showToastReal("请检查网络连接！");
+		}
 
-	public  void getJsonRequest (Context context, String url,final HttpStringRequsetCallBack callBack){
-		CookieStringtRequest jsonObjectRequest=new CookieStringtRequest(Method.POST, url, null, new Listener<String>() {
+		JSONObject jsonObject = new JSONObject(map);
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Method.POST, url, jsonObject, new Listener<JSONObject>() {
 
 			@Override
-			public void onResponse(String response) {
-				if(callBack!=null)
-					callBack.onSuccess(android.text.Html.fromHtml(response).toString());
+			public void onResponse(JSONObject response) {
+
+				if (callback != null)
+					callback.onSuccess(response.toString());
 			}
 		}, new Response.ErrorListener() {
 
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				callBack.onFail(error.toString());
 
-				//使用缓存数据
-//				if(BaseApplication.requestQueue.getCache().get(path)!=null){
-//					callBack.onSuccess(new String(BaseApplication.requestQueue.getCache().get(path).data).toString());
-//				}else{
-//					//callBack.onFail(error.toString());
-//				}
-//				callBack.onSuccess(new String(BaseApplication.requestQueue.getCache().get(path).data).toString());
+				if (callback != null)
+					callback.onFail(error.toString());
 			}
-		});
+
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				Map<String, String> headers = new HashMap<>();
+				headers.put("Accept", "application/json, text/javascript, */*; q=0.01");
+				return headers;
+			}
+
+			@Override
+			protected Map<String, String> getParams() throws AuthFailureError {
+
+				return map;
+			}
+		};
+
 		jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				2,
 				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 		jsonObjectRequest.setTag(context);
-		jsonObjectRequest.setCookie();
 		BaseApplication.requestQueue.add(jsonObjectRequest);
+	}
+
+	public void getStringPostRequest(Context context, String url, final HttpStringRequsetCallBack callback, final Map<String, String> map) {
+		if(!UIUtils.getNetConnecState(context)){
+			ToastManager.showToastReal("请检查网络连接！");
+		}
+
+		StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+				new Response.Listener<String>() {
+					@Override
+					public void onResponse(String response) {
+
+						if (callback != null)
+							callback.onSuccess(response.toString());
+					}
+				}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+
+				if (callback != null)
+					callback.onFail(error.toString());
+			}
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				Map<String, String> headers = new HashMap<>();
+				headers.put("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+				return headers;
+			}
+
+			@Override
+			protected Map<String, String> getParams() {
+				return map;
+			}
+		};
+		stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+		stringRequest.setTag(context);
+		BaseApplication.requestQueue.add(stringRequest);
 	}
 
 

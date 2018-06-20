@@ -6,7 +6,7 @@
 
 
     <RelativeLayout
-        android:background="@drawable/bg_while"
+        android:background="@drawable/border_white_line"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="40dip">
@@ -51,7 +51,7 @@
             android:background="@color/color_line"></View>
 
         <ImageView
-            android:id="@+id/ig_btn_seach"
+            android:id="@+id/iv_seach_customer"
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -38,14 +36,16 @@ import butterknife.ButterKnife;
 public class FinishTableMoreActivity extends BaseActivity {
 
     String recNumber;
-
-
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.id_rel_title)
-    RelativeLayout idRelTitle;
+    @Bind(R.id.iv_right)
+    ImageView ivRight;
+    @Bind(R.id.tv_right)
+    TextView tvRight;
+    @Bind(R.id.layout_rl_title)
+    RelativeLayout layoutRlTitle;
     @Bind(R.id.tv_customer_name)
     TextView tvCustomerName;
     @Bind(R.id.tv_finish_quality)
@@ -98,7 +98,7 @@ public class FinishTableMoreActivity extends BaseActivity {
     TextView tvStoneMoney;
     @Bind(R.id.ll_stone_product_name)
     LinearLayout llStoneProductName;
-    @Bind(R.id.lv_stone)
+    @Bind(R.id.ll_stone)
     LinearLayout llStone;
     @Bind(R.id.tv_amount)
     TextView tvAmount;
@@ -106,6 +106,7 @@ public class FinishTableMoreActivity extends BaseActivity {
     TextView tvMoney;
     @Bind(R.id.tv_member)
     TextView tvMember;
+
 
     private FinishTableMoreResult finishTableMoreResult;
     private String type;

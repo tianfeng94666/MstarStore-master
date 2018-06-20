@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:id="@+id/ll_purty"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <TextView
         android:id="@+id/tv_item_text"
-        android:gravity="center"
-        android:textSize="@dimen/text_size_medium"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:textColor="@color/text_color"
         android:layout_width="match_parent"
-        android:layout_height="35dp" />
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:background="@drawable/btn_bg_while"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size_small_medium" />
 
 </LinearLayout>

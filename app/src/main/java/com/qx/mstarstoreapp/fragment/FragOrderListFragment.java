@@ -61,7 +61,7 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     private int pullStatus;
     private int cpage = 1;
     private int tempCurpage;
-    private int fragType=1;
+    private int fragType = 1;
     private int listCount = 0;
     private boolean isflag;
     LinearLayout spContent;
@@ -89,7 +89,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         View view = inflater.inflate(R.layout.frag_list_layout, null);
         initView(view);
         cpage = 1;
-//        loadNetData();
+        if (fragType == 1) {
+            loadNetData();
+        }
         return view;
     }
 
@@ -99,7 +101,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
         if (isVisibleToUser) {
             //相当于Fragment的onResume
             if (jsonResult == null) {
-                loadNetData();
+                if (this.isAdded()) {
+                    loadNetData();
+                }
             }
         } else {
             //相当于Fragment的onPause
@@ -190,7 +194,10 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
     }
 
     private void loadNetData() {
+
         baseShowWatLoading();
+
+
         String url = "";
         tokenKey = BaseApplication.getToken();
         switch (fragType) {
@@ -302,7 +309,11 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
 
     private void setBadge(OrderWaitResult.DataBean.StatusCountBean statusCountBean) {
         if (statusCountBean != null) {
-            ((CustomMadeActivity) getActivity()).onFragOrderCount(statusCountBean);
+            try {
+                ((CustomMadeActivity) getActivity()).onFragOrderCount(statusCountBean);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -405,10 +416,9 @@ public class FragOrderListFragment extends BaseFragment implements PullToRefresh
             viewHolder.idTvNeed.setText("定金 " + listEntity.getNeedPayPrice());
 
 
-            L.e(listEntity.getPics().size() + "size()");
-
             viewHolder.layImages.removeAllViews();
             if (listEntity.getPics() != null && listEntity.getPics().size() != 0) {
+                L.e(listEntity.getPics().size() + "size()");
                 addMenuLayout(listEntity.getPics(), viewHolder.layImages);
             }
 

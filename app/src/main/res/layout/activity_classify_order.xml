@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/title_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/theme_bg"
+        android:layout_below="@+id/layout_title"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/tv_stone_range"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/table_head"
+            android:gravity="center"
+            android:text="重量范围"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/tv_customer_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/table_head"
+            android:gravity="center"
+            android:text="需下单数量"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/cb_ischoose"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/table_head"
+            android:gravity="center"
+            android:text="是否选用"
+
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_classify"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll_title"
+        android:layout_marginBottom="40dp"></android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/margin5"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/margin5"
+            android:background="@drawable/btn_bg_red"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+
+            android:paddingRight="20dp"
+            android:text="添加"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_comfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/margin5"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="@dimen/margin5"
+            android:background="@drawable/btn_bg_red"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="确定"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+</RelativeLayout>

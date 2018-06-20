@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<include
+    android:id="@+id/ll_title"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    layout="@layout/title_layout"/>
+ <include
+     android:id="@+id/ll_exceltitle"
+     android:layout_below="@+id/ll_title"
+     android:layout_width="match_parent"
+     android:layout_height="35dp"
+     layout="@layout/excel_headlayout" />
+
+    <ListView
+        android:layout_below="@+id/ll_exceltitle"
+        android:id="@+id/gv_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"></ListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/bt_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/margin5"
+            android:background="@drawable/btn_nor_down"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small" />
+    </RelativeLayout>
+
+</RelativeLayout>

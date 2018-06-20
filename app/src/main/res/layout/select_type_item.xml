@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="42dip"
-              android:layout_below="@+id/id_rel_title"
+              android:layout_below="@+id/layout_rl_title"
               android:orientation="horizontal"
     >
 
@@ -102,7 +102,7 @@
         style="@style/layout_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="分类"
+        android:text="布局"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small" />
 

@@ -454,6 +454,41 @@ public class AppURL {
      * http://appapi1.fanerweb.com/api/aproxy/BathModifyPurityDo?QxVersion=2.0&itemIds=15809|15780&purityId=4&tokenKey=992b7545812ae694ffb4e735b22f4e81
      */
     public static String URL_GET_MODELDETAIL_FORSCAN_MODIFY_PURITY= baseUrl+ "BathModifyPurityDo?"+QxVersion;
+    /**
+     * 当前订单批量excel提交
+     * http://appapi1.fanerweb.com/api/aproxy/BathModifyPurityDo?QxVersion=2.0&itemIds=15809|15780&purityId=4&tokenKey=992b7545812ae694ffb4e735b22f4e81
+     */
+    public static String URL_COMMIT_ORDER_BYEXCEL= baseUrl+ "BathOrderInCurrentDo?"+QxVersion;
+    /**
+     * 当前订单批量删除
+     * http://appapi1.fanerweb.com/api/aproxy/OrderCurrentDeleteModelItemsDo?QxVersion=2.1&tokenKey=992b7545812ae694ffb4e735b22f4e81&itemIds=17756,17754
+     */
+    public static String URL_DELETE_BATCH= baseUrl+ "OrderCurrentDeleteModelItemsDo?"+QxVersion;
+    /**
+     * 当前订单清空
+     * http://appapi1.fanerweb.com/api/aproxy/OrderCurrentDeleteModelClear?QxVersion=2.1&tokenKey=992b7545812ae694ffb4e735b22f4e81
+     */
+    public static String URL_CLEAR_ORDER= baseUrl+ "OrderCurrentDeleteModelClear?"+QxVersion;
+    /**
+     * d当前订单统计
+     * http://appapi1.fanerweb.com/api/aproxy/GetUserCurrentModelWeightRangeQrt?tokenKey=992b7545812ae694ffb4e735b22f4e81&Ranges=1~3,1~4,1~0&QxVersion=2.2
+     */
+    public static String URL_ORDER_STATISTIC= baseUrl+ "GetUserCurrentModelWeightRangeQrt?"+QxVersion;
+    /**
+     *获取金价
+     * http://appapi1.fanerweb.com/api/aproxy/GetGoldPrices?tokenKey=992b7545812ae694ffb4e735b22f4e81&sdate=2016-01-18&QxVersion=2.2.1
+     */
+    public static String URL_GET_GOLDEN_PRICE= baseUrl+ "GetGoldPrices?"+QxVersion;
+    /**
+     *获取6个月订单量
+     * http://appapi1.fanerweb.com/api/aproxy/OrderDateScaleCount?QxVersion=2.2.1&tokenKey=fa98c8c0400cfe99c66d6c35a641da5c&date=2018-05-09|2018-05-01,2018-05-30|5555|2018-04-01,2018-05-30|2018-01-01,2018-05-09
+     */
+    public static String URL_GET_ORDERDATE_SCALECOUNT= baseUrl+ "OrderDateScaleCount?"+QxVersion;
+    /**
+     * 按客户进行分类统计
+     * http://appapi1.fanerweb.com/api/Aproxy/ModelOrderSearchGroupByCustomer?sdate=2018-01-01&edate=2018-05-11&scope=0&tokenKey=fa98c8c0400cfe99c66d6c35a641da5c&scope=1&cpage=1&pageNum=30&QxVersion=2.2.1
+     */
+    public static String URL_GET_ORDER_BY_CUSTOMER= baseUrl+ "ModelOrderSearchGroupByCustomer?"+QxVersion;
 }
 
 

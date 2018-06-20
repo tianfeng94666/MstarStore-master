@@ -1,0 +1,390 @@
+package zxing.activity;
+
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Rect;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.InputType;
+import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import com.google.zxing.Result;
+import com.qx.mstarstoreapp.R;
+import com.qx.mstarstoreapp.inter.KeyboardFinish;
+import com.qx.mstarstoreapp.utils.KeyboardUtil;
+import com.xw.repo.BubbleSeekBar;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import zxing.camera.CameraManager;
+import zxing.decode.DecodeThread;
+import zxing.utils.BeepManager;
+import zxing.utils.CaptureActivityHandler;
+
+import zxing.utils.InactivityTimer;
+
+/**
+ * Created by Administrator on 2018/4/11 0011.
+ */
+
+public class CaptureOrderActivity extends CaptureActivity implements SurfaceHolder.Callback, KeyboardFinish {
+
+    private static final String TAG = CaptureOrderActivity.class.getSimpleName();
+    @Bind(R.id.capture_preview)
+    SurfaceView capturePreview;
+    @Bind(R.id.capture_mask_top)
+    ImageView captureMaskTop;
+    @Bind(R.id.capture_scan_line)
+    ImageView captureScanLine;
+    @Bind(R.id.sb_zoom)
+    BubbleSeekBar sbZoom;
+    @Bind(R.id.capture_crop_view)
+    RelativeLayout captureCropView;
+    @Bind(R.id.capture_mask_bottom)
+    ImageView captureMaskBottom;
+    @Bind(R.id.capture_mask_left)
+    ImageView captureMaskLeft;
+    @Bind(R.id.capture_mask_right)
+    ImageView captureMaskRight;
+    @Bind(R.id.et_product_code)
+    EditText etProductCode;
+    @Bind(R.id.capture_container)
+    RelativeLayout captureContainer;
+    @Bind(R.id.root_view)
+    RelativeLayout rootView;
+
+
+    private CameraManager cameraManager;
+    private CaptureActivityHandler handler;
+    private InactivityTimer inactivityTimer;
+    private BeepManager beepManager;
+
+
+    private Rect mCropRect = null;
+    private boolean isHasSurface = false;
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public CameraManager getCameraManager() {
+        return cameraManager;
+    }
+
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        setCameraPermission();
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setContentView(R.layout.activity_capture_order);
+        ButterKnife.bind(this);
+
+        initView();
+
+    }
+
+    private void initView() {
+
+
+        inactivityTimer = new InactivityTimer(this);
+        beepManager = new BeepManager(this);
+
+        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation
+                .RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                0.9f);
+        animation.setDuration(4500);
+        animation.setRepeatCount(-1);
+        animation.setRepeatMode(Animation.RESTART);
+        captureScanLine.startAnimation(animation);
+
+        if (Build.VERSION.SDK_INT <= 10) {//4.0以下 danielinbiti
+            etProductCode.setInputType(InputType.TYPE_NULL);
+        } else {
+            this.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            try {
+                Class<EditText> cls = EditText.class;
+                Method setShowSoftInputOnFocus;
+                setShowSoftInputOnFocus = cls.getMethod("setShowSoftInputOnFocus",
+                        boolean.class);
+                setShowSoftInputOnFocus.setAccessible(true);
+                setShowSoftInputOnFocus.invoke(etProductCode, false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        KeyboardUtil.shared(CaptureOrderActivity.this, etProductCode, rootView).hideKeyboard();
+        etProductCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyboardUtil.shared(CaptureOrderActivity.this, etProductCode, rootView).showKeyboard();
+            }
+        });
+    }
+
+    private static String[] PERMISSIONS_CAMERA_AND_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA};
+
+    public void setCameraPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int storagePermission = this.checkSelfPermission(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+            if (storagePermission != PackageManager.PERMISSION_GRANTED || cameraPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_CAMERA_AND_STORAGE,
+                        0x007);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // CameraManager must be initialized here, not in onCreate(). This is
+        // necessary because we don't
+        // want to open the camera driver and measure the screen size if we're
+        // going to show the help on
+        // first launch. That led to bugs where the scanning rectangle was the
+        // wrong size and partially
+        // off screen.
+        cameraManager = new CameraManager(getApplication());
+
+        handler = null;
+
+        if (isHasSurface) {
+            // The activity was paused but not stopped, so the surface still
+            // exists. Therefore
+            // surfaceCreated() won't be called, so init the camera here.
+            initCamera(capturePreview.getHolder());
+        } else {
+            // Install the callback and wait for surfaceCreated() to init the
+            // camera.
+            capturePreview.getHolder().addCallback(this);
+        }
+
+        inactivityTimer.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if (handler != null) {
+            handler.quitSynchronously();
+            handler = null;
+        }
+        inactivityTimer.onPause();
+        beepManager.close();
+        cameraManager.closeDriver();
+        if (!isHasSurface) {
+            capturePreview.getHolder().removeCallback(this);
+        }
+        super.onPause();
+        KeyboardUtil.shared(CaptureOrderActivity.this, etProductCode, rootView).hideKeyboard();
+    }
+
+    @Override
+    protected void onDestroy() {
+        inactivityTimer.shutdown();
+        super.onDestroy();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (holder == null) {
+            Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
+        }
+        if (!isHasSurface) {
+            isHasSurface = true;
+            initCamera(holder);
+        }
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        isHasSurface = false;
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    /**
+     * A valid barcode has been found, so give an indication of success and show
+     * the results.
+     *
+     * @param rawResult The contents of the barcode.
+     * @param bundle    The extras
+     */
+    public void handleDecode(Result rawResult, Bundle bundle) {
+        inactivityTimer.onActivity();
+        beepManager.playBeepSoundAndVibrate();
+
+        Intent resultIntent = new Intent();
+        bundle.putInt("width", mCropRect.width());
+        bundle.putInt("height", mCropRect.height());
+        bundle.putString("result", rawResult.getText());
+        resultIntent.putExtras(bundle);
+        this.setResult(RESULT_OK, resultIntent);
+        CaptureOrderActivity.this.finish();
+    }
+
+    private void initCamera(SurfaceHolder surfaceHolder) {
+        if (surfaceHolder == null) {
+            throw new IllegalStateException("No SurfaceHolder provided");
+        }
+        if (cameraManager.isOpen()) {
+            Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
+            return;
+        }
+        try {
+            cameraManager.openDriver(surfaceHolder);
+            sbZoom.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+                @Override
+                public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                    cameraManager.setZoom(progress/5);
+                }
+
+                @Override
+                public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
+                }
+
+                @Override
+                public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
+                }
+            });
+            // Creating the handler starts the preview, which can also throw a
+            // RuntimeException.
+            if (handler == null) {
+                handler = new CaptureActivityHandler(this, cameraManager, DecodeThread.ALL_MODE);
+            }
+
+            initCrop();
+        } catch (IOException ioe) {
+            Log.w(TAG, ioe);
+            displayFrameworkBugMessageAndExit();
+        } catch (RuntimeException e) {
+            // Barcode Scanner has seen crashes in the wild of this variety:
+            // java.?lang.?RuntimeException: Fail to connect to camera service
+            Log.w(TAG, "Unexpected error initializing camera", e);
+            displayFrameworkBugMessageAndExit();
+        }
+    }
+
+    private void displayFrameworkBugMessageAndExit() {
+        // camera error
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name));
+        builder.setMessage("Camera error");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
+        builder.show();
+    }
+
+    public void restartPreviewAfterDelay(long delayMS) {
+        if (handler != null) {
+            handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
+        }
+    }
+
+    public Rect getCropRect() {
+        return mCropRect;
+    }
+
+    /**
+     * 初始化截取的矩形区域
+     */
+    private void initCrop() {
+        int cameraWidth = cameraManager.getCameraResolution().y;
+        int cameraHeight = cameraManager.getCameraResolution().x;
+
+        /** 获取布局中扫描框的位置信息 */
+        int[] location = new int[2];
+        captureCropView.getLocationInWindow(location);
+
+        int cropLeft = location[0];
+        int cropTop = location[1] - getStatusBarHeight();
+
+        int cropWidth = captureCropView.getWidth();
+        int cropHeight = captureCropView.getHeight();
+
+        /** 获取布局容器的宽高 */
+        int containerWidth = captureContainer.getWidth();
+        int containerHeight = captureContainer.getHeight();
+
+        /** 计算最终截取的矩形的左上角顶点x坐标 */
+        int x = cropLeft * cameraWidth / containerWidth;
+        /** 计算最终截取的矩形的左上角顶点y坐标 */
+        int y = cropTop * cameraHeight / containerHeight;
+
+        /** 计算最终截取的矩形的宽度 */
+        int width = cropWidth * cameraWidth / containerWidth;
+        /** 计算最终截取的矩形的高度 */
+        int height = cropHeight * cameraHeight / containerHeight;
+
+        /** 生成最终的截取的矩形 */
+        mCropRect = new Rect(x, y, width + x, height + y);
+    }
+
+    private int getStatusBarHeight() {
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            return getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public void keyboardFinish() {
+        Bundle bundle = new Bundle();
+        Intent resultIntent = new Intent();
+        bundle.putString("result", etProductCode.getText().toString());
+        resultIntent.putExtras(bundle);
+        this.setResult(RESULT_OK, resultIntent);
+        CaptureOrderActivity.this.finish();
+    }
+}

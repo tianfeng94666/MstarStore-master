@@ -55,9 +55,9 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     TextView ivRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.ll_certificate_orgnization)
     LinearLayout llCertificateOrgnization;
@@ -523,7 +523,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
                 baseShowWatLoading();
                 loadNetData();
                 break;
-            case R.id.tv_right:
+            case R.id.iv_right:
                 Intent intent = new Intent(getActivity(), StoneHistoryOrder.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);

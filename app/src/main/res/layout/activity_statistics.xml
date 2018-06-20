@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/title_layout"/>
+<RelativeLayout
+    android:paddingLeft="@dimen/margin10"
+    android:paddingRight="@dimen/margin10"
+    android:layout_width="match_parent"
+
+    android:layout_height="35dp">
+    <TextView
+        android:id="@+id/tv_lable"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size_small_medium"
+        android:gravity="center"
+        android:text="主石重量范围(包含等于)"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+    <TextView
+        android:id="@+id/tv_value"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size_small_medium"
+        android:gravity="center"
+        android:text="当前范围数量"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_line"
+        android:layout_marginLeft="@dimen/margin10"
+        android:layout_marginRight="@dimen/margin10"/>
+    <ListView
+        android:id="@+id/lv_order_text"
+        android:paddingRight="@dimen/margin10"
+        android:paddingLeft="@dimen/margin10"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+
+</LinearLayout>

@@ -3,8 +3,6 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -41,9 +39,9 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView ivRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.lv_results)
     ListView lvResults;
@@ -125,7 +123,7 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void loadNetData() {
-        showWatiNetDialog();
+      baseShowWatLoading();
         String url = AppURL.URL_CODE_ORDER_SEARCH_LIST + "tokenKey=" + BaseApplication.getToken() + "&customerID=" + orderSearchBean.getCustomerID() + "&skeyid=" + orderSearchBean.getSkeyid()
                 + "&keyword=" + orderSearchBean.getKeyword() + "&sscopeid=" + orderSearchBean.getSscopeid() + "&sdate=" + orderSearchBean.getSdate() + "&edate=" + orderSearchBean.getEdate()
                 +"&cpage="+page;
@@ -133,7 +131,7 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-                dismissWatiNetDialog();
+                baseHideWatLoading();
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
                 if (error == 0) {
@@ -143,7 +141,9 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
                       return;
                     }
                     List<SearchResultResult.DataBean.OrderListBean> templist = searchResultResult.getData().getOrderList();
-                    list.addAll(templist);
+                    if(templist!=null){
+                        list.addAll(templist);
+                    }
                     if (list.size()!=0) {
                         listcount= searchResultResult.getData().getList_count();
                         searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, list);
@@ -158,7 +158,7 @@ public class SearchResultActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onFail(String fail) {
-                dismissWatiNetDialog();
+                baseHideWatLoading();
             }
         });
     }

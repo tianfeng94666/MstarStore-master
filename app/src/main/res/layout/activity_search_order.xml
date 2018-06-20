@@ -180,7 +180,7 @@
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/ig_btn_seach"
+            android:id="@+id/iv_seach_customer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

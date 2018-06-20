@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,7 +44,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView ivRight;
     private FragOrderListFragment checkingFrament; //待审核
     private FragOrderListFragment productingFragment;//生产中
@@ -209,7 +207,7 @@ public class CustomMadeActivity extends BaseActivity implements ViewPager.OnPage
             case R.id.id_fr3:
                 viewPager.setCurrentItem(3);
                 break;
-            case R.id.tv_right:
+            case R.id.iv_right:
                 search();
                 break;
         }

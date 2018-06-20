@@ -106,9 +106,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     RelativeLayout rlClearMemery;
     @Bind(R.id.tv_share)
     TextView tvShare;
-    @Bind(R.id.tv_right)
-    ImageView tvRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.iv_right)
+    ImageView ivRight;
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.iv_below_menu_ic)
     ImageView ivBelowMenuIc;
@@ -140,6 +140,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     ImageView ivAear;
     @Bind(R.id.rl_aear)
     RelativeLayout rlAear;
+    @Bind(R.id.tv_golden_price)
+    TextView tvGoldenPrice;
+    @Bind(R.id.rl_golden_price)
+    RelativeLayout rlGoldenPrice;
+    @Bind(R.id.tv_right)
+    TextView tvRight;
+    @Bind(R.id.tv_menu)
+    TextView tvMenu;
+    @Bind(R.id.rl_set_menu)
+    RelativeLayout rlSetMenu;
 
 
     private LayoutInflater inflater;
@@ -206,6 +216,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             }
         });
         tvAear.setText(aearName);
+        rlGoldenPrice.setOnClickListener(this);
+        rlSetMenu.setOnClickListener(this);
     }
 
 
@@ -447,6 +459,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 if (error.equals("0")) {
 
                     if (jsonResult.get("data") != null) {
+                        BaseApplication.spUtils.saveString(SpUtils.key_tokenKey, "");
+                        BaseApplication.setToken("");
                         showToastReal("成功退出");
                     }
 
@@ -570,7 +584,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 goIntoEncryptionSettings();
                 break;
             case R.id.rl_order:
-                openActivity(OrderExamineActivity.class, null);
+                openActivity(OrderReviewActivity.class, null);
+                break;
+            case R.id.rl_golden_price:
+                openActivity(ShowGoldenPriceActivity.class, null);
+                break;
+            case R.id.rl_set_menu:
+                openActivity(MenuManagerActivity.class,null);
                 break;
         }
     }

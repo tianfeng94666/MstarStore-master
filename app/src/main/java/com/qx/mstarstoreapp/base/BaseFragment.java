@@ -21,12 +21,17 @@ import cn.finalteam.okhttpfinal.HttpTaskHandler;
  *  @date: 2015/12/29 @time: 9:00
  */
 public class BaseFragment extends Fragment implements HttpCycleContext {
+    private FragmentManager manager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null) {
-            FragmentManager manager = getActivity().getSupportFragmentManager();
-            manager.popBackStackImmediate(null, 1);
+            if (manager == null) {
+                manager = getActivity().getSupportFragmentManager();
+
+//                manager.popBackStackImmediate(null, 1);
+            }
         }
     }
     private LoadingWaitDialog loadingDialog;
@@ -81,5 +86,9 @@ public class BaseFragment extends Fragment implements HttpCycleContext {
     public void onDestroyView() {
         super.onDestroyView();
         HttpTaskHandler.getInstance().removeTask(HTTP_TASK_KEY);
+        if(loadingDialog!=null){
+            loadingDialog.cancel();
+            loadingDialog = null;
+        }
     }
 }

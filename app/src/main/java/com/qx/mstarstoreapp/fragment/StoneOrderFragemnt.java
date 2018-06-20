@@ -22,10 +22,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qx.mstarstoreapp.R;
-import com.qx.mstarstoreapp.activity.ConfirmOrderActivity;
 import com.qx.mstarstoreapp.activity.ConfirmStoneOrderActivity;
 import com.qx.mstarstoreapp.activity.CustomMadeActivity;
-import com.qx.mstarstoreapp.activity.CustomersListActivity;
 import com.qx.mstarstoreapp.activity.ModeOfPaymentActivity;
 import com.qx.mstarstoreapp.activity.OrderActivity;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
@@ -35,7 +33,6 @@ import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.BaseFragment;
 import com.qx.mstarstoreapp.json.CancleStoneOrderResult;
-import com.qx.mstarstoreapp.json.IsHaveCustomerResult;
 import com.qx.mstarstoreapp.json.OrderWaitResult;
 import com.qx.mstarstoreapp.json.SendingResult;
 import com.qx.mstarstoreapp.json.StoneOrderStateResult;
@@ -623,7 +620,7 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
             LinearLayout innerLnyContainer;
             @Bind(R.id.tv_cancle_order)
             TextView tvCancleOrder;
-            @Bind(R.id.tv_amount)
+            @Bind(R.id.tv_customer_name)
             TextView tvAmount;
             @Bind(R.id.tv_money)
             TextView tvMoney;

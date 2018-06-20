@@ -73,7 +73,7 @@ import zxing.activity.CaptureActivity;
  * @version    
  *    
  */
-public class OrderActivity extends BaseActivity implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener,KeyboardFinish {
+public class OrderActivity extends BaseActivity implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener, KeyboardFinish {
 
 
     @Bind(R.id.tv_pager_amount)
@@ -104,7 +104,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private int list_count;
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
-    @Bind(R.id.ig_btn_seach)
+    @Bind(R.id.iv_seach_customer)
     ImageView idIgSeach;
     @Bind(R.id.id_tv_filter)
     TextView idTvFilter;
@@ -132,6 +132,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     BadgeView badge;
     private LeftPopupWindow leftPopupWindow;
     private boolean isHighSearch;//是否高级搜索
+    private int numColumns = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +143,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         isHighSearch = SpUtils.getInstace(this).getBoolean("isHighSearch", false);
         context = this;
+
         addStoneRang();
         getDate();
         initView();
@@ -156,11 +158,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        KeyboardUtil.shared(this,idEtSeach,rootView).hideKeyboard();
+        KeyboardUtil.shared(this, idEtSeach, rootView).hideKeyboard();
     }
 
 
@@ -226,7 +227,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(multiselectKey!=null){
+                        if (multiselectKey != null) {
                             multiselectKey.clear();
                             idTvSelect.setText(StringUtils.idgui(select.getTitle()));
                             TypeFiler typeFiler = new TypeFiler();
@@ -252,6 +253,13 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         super.onResume();
         if (leftPopupWindow != null) {
             leftPopupWindow.initPopupView();
+        }
+        if (isScreenChange()) {
+            Global.divideAmount=4;
+            idGvMenu.setNumColumns(4);
+        } else {
+            Global.divideAmount=2;
+            idGvMenu.setNumColumns(2);
         }
     }
 
@@ -443,8 +451,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
         });
         if (isScreenChange()) {
+            Global.divideAmount=4;
             idGvMenu.setNumColumns(4);
         } else {
+            Global.divideAmount=2;
             idGvMenu.setNumColumns(2);
         }
         idGvMenu.setAdapter(mGvAdapter);
@@ -534,7 +544,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        KeyboardUtil.shared(this,idEtSeach,rootView).hideKeyboard();
+        KeyboardUtil.shared(this, idEtSeach, rootView).hideKeyboard();
         // 如果是橫屏時候
         try {
             // Checks the orientation of the screen
@@ -761,7 +771,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idTvClassify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity(ClassifyActivity.class, null);
+                ++numColumns;
+                idGvMenu.setNumColumns(numColumns % 3 + 2);
+                Global.divideAmount = numColumns % 3 + 2;
+                idGvMenu.setAdapter(mGvAdapter);
             }
         });
 
@@ -821,18 +834,22 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 holder.tv = (TextView) convertView.findViewById(R.id.name);
                 holder.llPrice = (LinearLayout) convertView.findViewById(R.id.ll_price);
                 holder.tvPrice = (TextView) convertView.findViewById(R.id.tv_sum_price);
-                holder.ig = (SquareImageView) convertView.findViewById(R.id.product_img);
+                holder.ig = (ImageView) convertView.findViewById(R.id.product_img);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             // holder.ig.setImageResource(R.drawable.no_image);
+            ViewGroup.LayoutParams layoutParams = holder.ig.getLayoutParams();
+            layoutParams.width=UIUtils.getWindowWidth()/Global.divideAmount;
+            layoutParams.height = UIUtils.getWindowWidth() / Global.divideAmount;
+            holder.ig.setLayoutParams(layoutParams);
             holder.tv.setText(data.get(position).getTitle());
             holder.tvPrice.setText(UIUtils.stringChangeToTwoBitDouble(data.get(position).getPrice()));
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
                 if (UIUtils.isPad(OrderActivity.this)) {
-                    ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
+                    ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptions());
                 } else {
                     ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptions());
                 }
@@ -851,7 +868,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
         class ViewHolder {
             LinearLayout lay;
-            SquareImageView ig;
+            ImageView ig;
             TextView tv;
             TextView tvPrice;
             LinearLayout llPrice;

@@ -483,7 +483,14 @@
         android:layout_alignParentTop="true"
         android:padding="15dip"
         android:src="@drawable/icon_back_white" />
-
+    <ImageView
+        android:id="@+id/iv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:padding="15dip"
+        android:src="@drawable/icon_setting_nor" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dip"

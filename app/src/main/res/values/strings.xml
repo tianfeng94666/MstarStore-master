@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">MS珠宝定制</string>
-    <string name="app_version">2.0</string>
-    <string name="app_version_detail">2.0</string>
-    <string name="version">4</string>
+    <string name="app_version">2.2.2</string>
+    <string name="app_version_detail">2.2.2</string>
+    <string name="version">5</string>
 
     <string name="pull_to_refresh_pull_label">下拉刷新</string>
 
@@ -37,8 +37,8 @@
     <string name="order_detail">订单详情</string>
     <string name="cancle_order">取消订单</string>
     <string name="confirm_order">确认订单</string>
-    <string name="please_write_address">清填写地址</string>
-    <string name="please_write_customer">清选择客户</string>
+    <string name="please_write_address">请填写地址</string>
+    <string name="please_write_customer">请选择客户</string>
     <string name="please_select_order">请选择订单</string>
     <string name="please_select_shape">请选择形状</string>
     <string name="please_select_norm">请选择规格</string>

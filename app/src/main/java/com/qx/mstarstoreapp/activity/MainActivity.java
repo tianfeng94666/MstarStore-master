@@ -3,17 +3,19 @@ package com.qx.mstarstoreapp.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,19 +27,22 @@ import com.google.gson.JsonObject;
 import com.qx.mstarstoreapp.R;
 import com.qx.mstarstoreapp.adapter.BaseViewHolder;
 import com.qx.mstarstoreapp.adapter.CommonAdapter;
+import com.qx.mstarstoreapp.adapter.MenuRecyclerViewAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
 import com.qx.mstarstoreapp.base.Global;
+import com.qx.mstarstoreapp.base.MenuItemBean;
 import com.qx.mstarstoreapp.bean.Ring;
 import com.qx.mstarstoreapp.bean.Type;
+import com.qx.mstarstoreapp.greendao.gen.MenuItemBeanDao;
 import com.qx.mstarstoreapp.json.CustomerEntity;
 import com.qx.mstarstoreapp.json.GetAddressResult;
 import com.qx.mstarstoreapp.json.MainPicResult;
 import com.qx.mstarstoreapp.json.VersionResult;
+import com.qx.mstarstoreapp.manager.FitGridLayoutManager;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
-import com.qx.mstarstoreapp.utils.SpUtils;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
@@ -45,6 +50,7 @@ import com.qx.mstarstoreapp.viewutils.BadgeView;
 import com.qx.mstarstoreapp.viewutils.FlyBanner;
 import com.qx.mstarstoreapp.viewutils.LeftPopupWindow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -75,6 +81,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     LinearLayout llShowLess;
     @Bind(R.id.iv_make)
     TextView ivMake;
+    @Bind(R.id.rv_menu)
+    RecyclerView rvMenu;
 
     private int nowId;
     private String version;
@@ -85,12 +93,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LeftPopupWindow leftPopupWindow;
     private CustomerEntity isDefaultCustomer;
     private String memberAreaId;
+    private MenuItemBeanDao menuItemBeanDao;
+    private List<MenuItemBean> menuList;
+    private ArrayList<MenuItemBean> chooseMenuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setListener();
+    }
+
+    private void addMenu() {
+        menuItemBeanDao = BaseApplication.getApplication().getDaoSession().getMenuItemBeanDao();
+        menuList = menuItemBeanDao.loadAll();
+        getShowMenu(menuList);
+        if (menuList != null) {
+            FitGridLayoutManager mLayoutManager = new FitGridLayoutManager(this, rvMenu, 5, GridLayoutManager.VERTICAL, true);
+            rvMenu.setLayoutManager(mLayoutManager);
+            MenuRecyclerViewAdapter menuRecyclerViewAdapter = new MenuRecyclerViewAdapter(this, chooseMenuList);
+            rvMenu.setAdapter(menuRecyclerViewAdapter);
+        }
+    }
+
+    private void getShowMenu(List<MenuItemBean> menuList) {
+        if (chooseMenuList == null) {
+            chooseMenuList = new ArrayList<MenuItemBean>();
+        } else {
+            chooseMenuList.clear();
+        }
+
+        for (MenuItemBean menuItemBean : menuList) {
+            if (menuItemBean.getIshow() == 1) {
+                chooseMenuList.add(menuItemBean);
+            }
+        }
     }
 
     @Override
@@ -118,9 +156,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     if (Global.ring == null) {
                         Global.ring = new Ring();
                     }
-                    if (getAddressResult.getData().getIsHaveSelectArea() == 0) {
-                        showChooseAearDialog(getAddressResult.getData().getMemberArealist());
-                    }
+//                    if (getAddressResult.getData().getIsHaveSelectArea() == 0) {
+//                        showChooseAearDialog(getAddressResult.getData().getMemberArealist());
+//                    }
                     Global.isMainAccount = getAddressResult.getData().getIsMasterAccount();
                     Global.ring.setAddressEntity(getAddressResult.getData().getAddress());
                     isDefaultCustomer = getAddressResult.getData().getDefaultCustomer();
@@ -152,7 +190,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 显示选择区域对话框
      */
     private void showChooseAearDialog(final List<Type> list) {
-        memberAreaId=null;
+        memberAreaId = null;
         View view = View.inflate(this, R.layout.list_itme, null);
         ListView listView = (ListView) view.findViewById(R.id.lv_aear);
         TextView tvComfirm = (TextView) view.findViewById(R.id.tv_comfirm);
@@ -179,7 +217,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tvComfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(commitAear()){
+                if (commitAear()) {
                     noticeDialog.dismiss();
                 }
             }
@@ -189,7 +227,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private boolean commitAear() {
-         boolean isOk = true;
+        boolean isOk = true;
         if (StringUtils.isEmpty(memberAreaId)) {
             showToastReal("所属区域未选择");
             return false;
@@ -292,6 +330,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
         loadNetData();
         getAddress();
+        addMenu();
         if (Global.isShowPopup != 0) {
             if (leftPopupWindow != null) {
                 leftPopupWindow.initPopupView();
@@ -309,6 +348,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
         flyMain.setImagesUrl(imgesUrl);
+        setListener();
+        addMenu();
+        //设置文字
+//        setMustFill(ivHome);
+//        setMustFill(ivMake);
+//        setMustFill(ivMine);
+//        setMustFill(ivProduct);
+//        setMustFill(ivStone);
+    }
+
+    public void setListener() {
         ivHome.setOnClickListener(this);
         ivMine.setOnClickListener(this);
         ivProduct.setOnClickListener(this);
@@ -320,11 +370,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ivProduct.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Bundle bundle =  new Bundle();
-                openActivity(QuickStyleInfromationActivity.class,bundle);
+                Bundle bundle = new Bundle();
+                openActivity(QuickStyleInfromationActivity.class, bundle);
                 return false;
             }
         });
+    }
+
+    private void setMustFill(TextView tv) {
+
+        SpannableStringBuilder builder = new SpannableStringBuilder(tv.getText().toString());
+        builder.setSpan(new BackgroundColorSpan(R.color.main_text_background),
+                0, (tv.getText().toString()).length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        tv.setText(builder);
     }
 
     public static BadgeView badge1;

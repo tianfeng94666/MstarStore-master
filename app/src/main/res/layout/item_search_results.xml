@@ -125,36 +125,8 @@
                 android:textColor="@color/theme_back"
                 />
             <TextView
-                android:id="@+id/tv_quality_tv"
-                android:layout_marginLeft="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:text="成色："
-                android:textColor="@color/theme_back"
-                />
-
-            <TextView
-                android:id="@+id/tv_quality"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/margin10"
-                android:layout_toRightOf="@+id/tv3"
-                android:text="2016-11-11"
-                android:textColor="@color/theme_back"
-                />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_marginTop="@dimen/margin5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
                 android:id="@+id/tv_gold_price_tv"
+                android:layout_marginLeft="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -173,9 +145,38 @@
                 android:text="207.0元"
                 android:textColor="@color/theme_back"
                 />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_quality_tv"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="成色："
+                android:textColor="@color/theme_back"
+                />
+
+            <TextView
+                android:id="@+id/tv_quality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin10"
+                android:layout_toRightOf="@+id/tv3"
+                android:text="2016-11-11"
+                android:textColor="@color/theme_back" />
+
             <TextView
                 android:id="@+id/tv_amount_tv"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"

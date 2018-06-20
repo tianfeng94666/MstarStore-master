@@ -233,12 +233,43 @@
 
                     </LinearLayout>
 
-                    <ListView
-                        android:id="@+id/lv_color"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rc_color"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dip"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/margin10"
+                            android:layout_marginRight="@dimen/margin10"
+
+                            android:text="备    注"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_small_medium" />
+
+                        <EditText
+                            android:id="@+id/et_remark"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dip"
+
+                            android:background="@color/white"
+                            android:drawablePadding="4dp"
+                            android:gravity="left|center_vertical"
+                            android:hint="备注"
+                            android:paddingLeft="10dp"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_small_medium" />
 
 
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </com.qx.mstarstoreapp.viewutils.MyScrollView>
@@ -256,7 +287,14 @@
         android:layout_alignParentTop="true"
         android:padding="15dip"
         android:src="@drawable/icon_back_white" />
-
+    <ImageView
+        android:id="@+id/iv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:padding="15dip"
+        android:src="@drawable/icon_setting_nor" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dip"
@@ -288,6 +326,22 @@
                 android:paddingRight="16dp"
                 android:paddingTop="5dp"
                 android:text="查     看"
+                android:textColor="@color/text_color" />
+            <TextView
+                android:id="@+id/tv_staticstics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_look"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_bg_while"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="查看统计"
                 android:textColor="@color/text_color" />
             <FrameLayout
                 android:id="@+id/id_fr"

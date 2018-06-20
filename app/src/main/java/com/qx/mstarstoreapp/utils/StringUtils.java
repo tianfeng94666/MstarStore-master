@@ -90,6 +90,18 @@ public class StringUtils {
 		}
 		return sb;
 	}
+	public static StringBuilder purUrlCutByComma(String key,List<String> list){
+		StringBuilder sb = new StringBuilder();
+		sb.append("&"+key+"=");
+		for (int i = 0; i < list.size(); i++) {
+			String id = list.get(i);
+			sb.append(id==null?"":id);
+			if(i!=list.size()-1){
+				sb.append(",");
+			}
+		}
+		return sb;
+	}
 //
 //	public void SET(){
 //		// ="&"+getGroupKey+"="

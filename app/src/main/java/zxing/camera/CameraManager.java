@@ -200,4 +200,10 @@ public class CameraManager {
         }
         return null;
     }
+    public void setZoom(int a){
+        Camera theCamera = camera;
+        Camera.Parameters p = camera.getParameters();
+        p.setZoom(a);
+        camera.setParameters(p);
+    }
 }

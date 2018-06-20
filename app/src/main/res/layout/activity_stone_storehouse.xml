@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/id_rel_title"
+        android:id="@+id/layout_rl_title"
         android:layout_width="match_parent"
         android:layout_height="50dip"
         android:background="@drawable/title_shadow_style"
@@ -34,7 +34,7 @@
             android:gravity="center"
             android:text="" />
         <TextView
-            android:id="@+id/tv_right"
+            android:id="@+id/iv_right"
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dip"
             android:layout_marginTop="5dip"
@@ -49,7 +49,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/id_rel_title"
+        android:layout_below="@id/layout_rl_title"
         android:layout_marginBottom="40dp">
 
         <LinearLayout

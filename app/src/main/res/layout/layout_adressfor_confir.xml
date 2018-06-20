@@ -4,7 +4,7 @@
     android:layout_height="95dip"
     android:orientation="vertical"
     android:background="@color/theme_red"
-    android:id="@+id/id_lay_address"
+    android:id="@+id/rl_address"
     >
 
 

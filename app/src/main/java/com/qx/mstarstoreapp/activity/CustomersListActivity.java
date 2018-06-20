@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -49,7 +47,7 @@ public class CustomersListActivity extends BaseActivity {
     EditText idEtSeach;
     @Bind(R.id.id_view_line)
     View idViewLine;
-    @Bind(R.id.ig_btn_seach)
+    @Bind(R.id.iv_seach_customer)
     ImageView igBtnSeach;
     @Bind(R.id.id_lv_custom)
     ListView idLvCustom;

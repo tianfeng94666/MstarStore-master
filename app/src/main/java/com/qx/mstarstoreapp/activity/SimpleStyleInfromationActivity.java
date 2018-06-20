@@ -190,6 +190,8 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     ImageView idIgSao;
     @Bind(R.id.rl_root_view)
     RelativeLayout rlRootView;
+    @Bind(R.id.iv_right)
+    ImageView ivRight;
 
 
     private View rootView;
@@ -212,7 +214,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     private LeftPopupWindow leftPopupWindow;
     DecimalFormat df = new DecimalFormat("######0.00");
     private String productColorId;
-    private int tabCount  = 1;
+    private int tabCount = 1;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         SimpleStyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -557,10 +559,10 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         idIgSao.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
                 return false;
             }
         });
+        ivRight.setOnClickListener(this);
     }
 
     public String toEmpty(String st) {
@@ -710,7 +712,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     @Override
     protected void onStop() {
         super.onStop();
-        KeyboardUtil.shared(this,idStoreTitle,rootView).hideKeyboard();
+        KeyboardUtil.shared(this, idStoreTitle, rootView).hideKeyboard();
     }
 
     private void dealData(String result) {
@@ -1097,6 +1099,9 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                 break;
             case R.id.iv_yu:
                 etMaking.setText(etMaking.getText().toString() + "&");
+                break;
+            case R.id.iv_right:
+                openActivity(StatisticsActivity.class, null);
                 break;
         }
     }
@@ -1677,21 +1682,21 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_TAB) {
-          switch (tabCount%4){
-              case 0:
-                  idStoreTitle.requestFocus();
-                  break;
-              case 1:
-                  idCusStoreNumber.requestFocus();
-                  break;
-              case 2:
-                  idCusStoreSize.showPopupWindow();
-                  break;
-              case 3:
-                  idTvStoreRemarks.requestFocus();
-                  break;
-          }
-          tabCount++;
+            switch (tabCount % 4) {
+                case 0:
+                    idStoreTitle.requestFocus();
+                    break;
+                case 1:
+                    idCusStoreNumber.requestFocus();
+                    break;
+                case 2:
+                    idCusStoreSize.showPopupWindow();
+                    break;
+                case 3:
+                    idTvStoreRemarks.requestFocus();
+                    break;
+            }
+            tabCount++;
             return true;
         }
         L.e("keycode", keyCode + "  -- " + event.getAction());

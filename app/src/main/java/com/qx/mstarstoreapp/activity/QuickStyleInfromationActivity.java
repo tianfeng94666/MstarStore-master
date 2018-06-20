@@ -3,24 +3,25 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.qx.mstarstoreapp.ItemDecoration.SpaceItemDecoration;
 import com.qx.mstarstoreapp.R;
-import com.qx.mstarstoreapp.adapter.BaseViewHolder;
-import com.qx.mstarstoreapp.adapter.CommonAdapter;
+import com.qx.mstarstoreapp.adapter.PurityRecycleViewAdapter;
+import com.qx.mstarstoreapp.adapter.RecycleViewPartAdapter;
 import com.qx.mstarstoreapp.base.AppURL;
 import com.qx.mstarstoreapp.base.BaseActivity;
 import com.qx.mstarstoreapp.base.BaseApplication;
@@ -28,6 +29,7 @@ import com.qx.mstarstoreapp.json.CommitOrderResult;
 import com.qx.mstarstoreapp.json.GetScanData;
 import com.qx.mstarstoreapp.json.GetScanProductData;
 import com.qx.mstarstoreapp.json.PurityEntity;
+import com.qx.mstarstoreapp.manager.FitGridLayoutManager;
 import com.qx.mstarstoreapp.net.OKHttpRequestUtils;
 import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
@@ -38,6 +40,7 @@ import com.qx.mstarstoreapp.viewutils.CustomselectStringButton;
 import com.qx.mstarstoreapp.viewutils.FlyBanner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -87,8 +90,6 @@ public class QuickStyleInfromationActivity extends BaseActivity {
     TextView tvColor;
     @Bind(R.id.ll_color)
     LinearLayout llColor;
-    @Bind(R.id.lv_color)
-    ListView lvColor;
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
     @Bind(R.id.tv_look)
@@ -105,6 +106,14 @@ public class QuickStyleInfromationActivity extends BaseActivity {
     TextView tipsLoadingMsg;
     @Bind(R.id.lny_loading_layout)
     LinearLayout lnyLoadingLayout;
+    @Bind(R.id.rc_color)
+    RecyclerView rcColor;
+    @Bind(R.id.iv_right)
+    ImageView ivRight;
+    @Bind(R.id.tv_staticstics)
+    TextView tvStaticstics;
+    @Bind(R.id.et_remark)
+    EditText etRemark;
     private GetScanProductData modelDetail;
 
     private List<PurityEntity> modelPuritys;
@@ -112,7 +121,7 @@ public class QuickStyleInfromationActivity extends BaseActivity {
     private ArrayList<String> getPicm;
     private ArrayList<String> getPicB;
     private List<GetScanProductData.DataBean.ModelBean.PicsBean> pics;
-    private CommonAdapter lvColorAdapter;
+    private PurityRecycleViewAdapter rcColorAdapter;
     private String orderId;
     private GetScanData getScanDate;
     private GetScanProductData.DataBean dataEntity;
@@ -121,6 +130,7 @@ public class QuickStyleInfromationActivity extends BaseActivity {
     private String purityId;
     private int orderAmount;
     private QBadgeView badge;
+    private FitGridLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +217,7 @@ public class QuickStyleInfromationActivity extends BaseActivity {
                 return;
             }
             modelEntity = dataEntity.getModel();
+            etRemark.setText(dataEntity.getModel().getRemarks());
             pics = modelEntity.getPics();
             productId = modelEntity.getId();
             idStoreTitle.setText(modelEntity.getTitle());
@@ -324,22 +335,24 @@ public class QuickStyleInfromationActivity extends BaseActivity {
     }
 
     private void initListView() {
-        lvColorAdapter = new CommonAdapter(modelPuritys, R.layout.item_color_tv) {
+        if (rcColorAdapter == null) {
+            rcColorAdapter = new PurityRecycleViewAdapter(modelPuritys, this, new RecycleViewPartAdapter.MyItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    tvColor.setText(modelPuritys.get(position).getTitle());
+                    purityId = modelPuritys.get(position).getId();
+                }
+            });
 
-            @Override
-            public void convert(int position, BaseViewHolder helper, Object item) {
-                helper.setText(R.id.tv_item_text, modelPuritys.get(position).getTitle());
-            }
-        };
-        lvColor.setAdapter(lvColorAdapter);
-        UIUtils.setListViewHeightBasedOnChildren(lvColor);
-        lvColor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                tvColor.setText(modelPuritys.get(position).getTitle());
-                purityId = modelPuritys.get(position).getId();
-            }
-        });
+
+            rcColor.addItemDecoration(new SpaceItemDecoration(UIUtils.dip2px(4)));
+
+            mLayoutManager = new FitGridLayoutManager(this, rcColor, 3, GridLayoutManager.VERTICAL, false);
+            rcColor.setLayoutManager(mLayoutManager);
+            rcColor.setAdapter(rcColorAdapter);
+        }else {
+            rcColorAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -384,17 +397,18 @@ public class QuickStyleInfromationActivity extends BaseActivity {
     }
 
 
-
     /**
      * 添加到当前订单
      */
     private void addOrder() {
-        String url = AppURL.URL_GET_MODELDETAIL_FORSCAN_COMMIT_CURRENT_ORDER + "tokenKey=" + BaseApplication.getToken() + "&productId=" + productId + "&number=" + etRingAmount.getText().toString() + "&modelPurityId=" + purityId;
+        baseShowWatLoading();
+        String url = AppURL.URL_GET_MODELDETAIL_FORSCAN_COMMIT_CURRENT_ORDER + "tokenKey=" + BaseApplication.getToken() + "&productId=" + productId + "&number=" + etRingAmount.getText().toString() + "&modelPurityId=" + purityId+"&remarks="+etRemark.getText().toString();
 
         L.e("add" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
+                baseHideWatLoading();
                 Log.e("success", result);
                 L.e(result);
                 int error = OKHttpRequestUtils.getmInstance().getResultCode(result);
@@ -419,6 +433,7 @@ public class QuickStyleInfromationActivity extends BaseActivity {
 
             @Override
             public void onFail(String fail) {
+                baseHideWatLoading();
                 lnyLoadingLayout.setVisibility(View.GONE);
                 showToastReal(fail);
                 showToastReal("数据获取失败");
@@ -477,7 +492,7 @@ public class QuickStyleInfromationActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.iv_reduce, R.id.iv_add, R.id.id_ig_back, R.id.tv_look, R.id.tv_cancle, R.id.tv_confirm})
+    @OnClick({R.id.iv_reduce, R.id.iv_add, R.id.id_ig_back, R.id.tv_look, R.id.tv_cancle, R.id.tv_confirm, R.id.iv_right, R.id.tv_staticstics})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_reduce:
@@ -494,6 +509,12 @@ public class QuickStyleInfromationActivity extends BaseActivity {
                 break;
             case R.id.tv_cancle:
                 scan();
+                break;
+            case R.id.iv_right:
+                openActivity(ClassifyOrderActivity.class, null);
+                break;
+            case R.id.tv_staticstics:
+                openActivity(StatisticsActivity.class, null);
                 break;
 
         }

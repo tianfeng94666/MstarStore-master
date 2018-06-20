@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/id_rel_title"
+            android:id="@+id/layout_rl_title"
             android:layout_width="match_parent"
             android:layout_height="50dip"
             android:background="@drawable/title_shadow_style"
@@ -40,7 +40,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/tv_right"
+                android:id="@+id/iv_right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
@@ -198,7 +198,7 @@
 
 
                     <com.qx.mstarstoreapp.viewutils.xListView.XListView
-                        android:id="@+id/lv_stone"
+                        android:id="@+id/ll_stone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:divider="@null"

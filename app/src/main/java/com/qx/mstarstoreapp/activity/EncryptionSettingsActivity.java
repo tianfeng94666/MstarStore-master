@@ -68,9 +68,9 @@ public class EncryptionSettingsActivity extends BaseActivity implements View.OnC
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     ImageView tvRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.tv_is_show_stone_price)
     TextView tvIsShowStonePrice;

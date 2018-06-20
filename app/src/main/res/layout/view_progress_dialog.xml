@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-                        android:id="@+id/id_rel_title"
+                        android:id="@+id/layout_rl_title"
                         android:layout_width="match_parent"
                         android:layout_height="50dip"
                         android:background="@drawable/title_shadow_style"

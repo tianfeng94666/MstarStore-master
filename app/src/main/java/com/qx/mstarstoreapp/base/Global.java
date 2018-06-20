@@ -2,6 +2,9 @@ package com.qx.mstarstoreapp.base;
 
 import com.qx.mstarstoreapp.bean.Ring;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/6/9 0009.
  */
@@ -29,4 +32,5 @@ public class Global {
      * 当前订单数
      */
     public static int waitOrderCount;
+
 }

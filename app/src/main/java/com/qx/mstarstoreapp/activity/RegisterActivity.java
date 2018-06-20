@@ -220,10 +220,10 @@ public class RegisterActivity extends BaseActivity {
             showToastReal("验证码未填写");
             return;
         }
-        if (StringUtils.isEmpty(memberAreaId)) {
-            showToastReal("所属区域未选择");
-            return;
-        }
+//        if (StringUtils.isEmpty(memberAreaId)) {
+//            showToastReal("所属区域未选择");
+//            return;
+//        }
         String url = AppURL.URL_REGISTER + "userName=" + userName + "&password=" + pwd + "&trueName=" + truName + "&phone=" + phone + "&phoneCode=" + code + "&userType=1" + "&memberAreaId=" + memberAreaId;
         L.e(url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Stack;
 /**
  **************************************** 
@@ -95,4 +96,18 @@ public class AppManager {
 			android.os.Process.killProcess(android.os.Process.myPid());
 		} catch (Exception e) {	}
 	}
+
+
+
+
+		static ArrayList arrayList = new ArrayList();
+
+		public static void registActivity(Activity activity){
+			arrayList.add(activity);
+		}
+
+		public static void unregistActivity(Activity activity)  {
+			arrayList.remove(activity);
+		}
+
 }

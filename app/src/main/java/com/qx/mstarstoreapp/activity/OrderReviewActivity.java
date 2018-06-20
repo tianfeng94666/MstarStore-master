@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/10/20 0020.
  */
 
-public class OrderExamineActivity extends BaseActivity {
+public class OrderReviewActivity extends BaseActivity {
     @Bind(R.id.webview)
     WebView myWebView;
     @Bind(R.id.id_ig_back)

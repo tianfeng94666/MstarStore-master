@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qx.mstarstoreapp.viewutils.SwipeMenuLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+
+
+            <TextView
+                android:id="@+id/tv_stone_range"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="@color/text_color"
+                android:background="@drawable/table_head"
+                android:gravity="center"
+                android:text="款号" />
+
+            <TextView
+                android:id="@+id/tv_customer_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="@color/text_color"
+                android:background="@drawable/table_head"
+                android:gravity="center"
+                android:text="数量" />
+
+            <CheckBox
+                android:id="@+id/cb_ischoose"
+                android:layout_width="0dp"
+
+                android:textColor="@color/text_color"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/table_head"
+
+                android:text="是否选用" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <Button
+        android:id="@+id/bt_edit"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:text="编辑"
+        android:textColor="@color/text_color"/>
+    <Button
+        android:id="@+id/bt_delete"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:background="@color/theme_red"
+        android:text="删除"
+        android:textColor="@android:color/white"/>
+
+</com.qx.mstarstoreapp.viewutils.SwipeMenuLayout>
+
+
+

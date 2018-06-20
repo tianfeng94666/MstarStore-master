@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_rel_title"
+    android:id="@+id/layout_rl_title"
     android:layout_width="match_parent"
     android:layout_height="40dip"
     android:background="@drawable/title_shadow_style"
@@ -27,7 +27,7 @@
         android:gravity="center"
         android:text="" />
     <ImageView
-        android:id="@+id/tv_right"
+        android:id="@+id/iv_right"
         android:visibility="gone"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dip"
@@ -37,5 +37,16 @@
         android:src="@drawable/icon_search"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
-
+    <TextView
+        android:id="@+id/tv_right"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:padding="5dip"
+        android:textSize="16sp"
+        android:text="编辑"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
 </RelativeLayout>

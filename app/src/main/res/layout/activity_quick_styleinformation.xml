@@ -8,7 +8,7 @@
     <com.qx.mstarstoreapp.viewutils.MyScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="50dip"
+        android:layout_marginBottom="40dip"
         android:background="@color/white"
         android:scrollbars="none">
 
@@ -36,7 +36,6 @@
             </LinearLayout>
 
 
-
             <LinearLayout
                 style="@style/layout_vertical"
                 android:layout_weight="1"
@@ -45,7 +44,7 @@
                 <RelativeLayout
                     android:id="@+id/rl_top"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dip"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
@@ -65,13 +64,13 @@
                         android:id="@+id/id_store_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-
                         android:layout_centerVertical="true"
+
+                        android:layout_marginLeft="10dp"
                         android:singleLine="true"
                         android:text=""
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/text_size_medium" />
+                        android:textSize="@dimen/text_size_small_medium" />
 
                     <TextView
                         android:id="@+id/tv_weight"
@@ -82,9 +81,10 @@
                         android:layout_marginRight="10dp"
                         android:singleLine="true"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_medium" />
+                        android:textSize="@dimen/text_size_small_medium" />
 
                 </RelativeLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
@@ -92,7 +92,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dip"
+                    android:layout_height="40dip"
                     android:layout_marginBottom="@dimen/margin5"
                     android:layout_marginTop="@dimen/margin5"
                     android:gravity="center"
@@ -107,7 +107,7 @@
 
                         android:text="件    数"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/text_size_medium" />
+                        android:textSize="@dimen/text_size_small_medium" />
 
                     <LinearLayout
                         android:id="@+id/ll_amount"
@@ -137,7 +137,7 @@
                             android:inputType="numberDecimal"
                             android:selectAllOnFocus="true"
                             android:text="1"
-                            android:textSize="@dimen/text_size_medium" />
+                            android:textSize="@dimen/text_size_small_medium" />
 
                         <ImageView
                             android:id="@+id/iv_add"
@@ -176,14 +176,13 @@
                         android:layout_width="40dip"
                         android:layout_height="wrap_content"
                         android:text="手 寸"
-                        android:visibility="gone"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/text_size_medium" />
+                        android:textSize="@dimen/text_size_small_medium"
+                        android:visibility="gone" />
 
                     <com.qx.mstarstoreapp.viewutils.CustomselectStringButton
                         android:id="@+id/id_cus_store_size"
                         style="@style/layout_horizontal"
-                        android:visibility="gone"
                         android:layout_marginLeft="@dimen/margin10"
                         android:layout_marginRight="@dimen/margin5"
                         android:layout_weight="1"
@@ -192,17 +191,20 @@
                         android:hint="手寸"
                         android:inputType="numberDecimal"
                         android:textSize="10sp"
+                        android:visibility="gone"
                         app:tv_string_background="@drawable/btn_bg_while" />
                 </LinearLayout>
+
                 <View
                     android:id="@+id/line_making"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@color/color_line" />
+
                 <LinearLayout
                     android:id="@+id/ll_color"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dip"
                     android:orientation="horizontal">
 
                     <TextView
@@ -214,31 +216,63 @@
 
                         android:text="成    色"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/text_size_medium" />
+                        android:textSize="@dimen/text_size_small_medium" />
+
                     <TextView
-                        android:layout_margin="2dip"
                         android:id="@+id/tv_color"
-                        android:paddingRight="10dp"
-                        android:hint="请选择下面的一种成色"
-                        android:textColorHint="@color/color_text_can_click"
-                        android:gravity="right|center_vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@color/color_text_can_click"
+                        android:layout_margin="2dip"
                         android:background="@color/white"
                         android:drawablePadding="4dp"
-                        android:textSize="@dimen/text_size_medium"
-                        />
+                        android:gravity="right|center_vertical"
+                        android:hint="请选择下面的一种成色"
+                        android:paddingRight="10dp"
+                        android:textColor="@color/color_text_can_click"
+                        android:textColorHint="@color/color_text_can_click"
+                        android:textSize="@dimen/text_size_small_medium" />
 
 
                 </LinearLayout>
 
-                <ListView
-                    android:id="@+id/lv_color"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rc_color"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ListView>
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/margin10"
+                        android:layout_marginRight="@dimen/margin10"
+
+                        android:text="备    注"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_small_medium" />
+
+                    <EditText
+                        android:id="@+id/et_remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="2dip"
+
+                        android:background="@color/white"
+                        android:drawablePadding="4dp"
+                        android:gravity="left|center_vertical"
+                        android:hint="备注"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_small_medium" />
+
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </com.qx.mstarstoreapp.viewutils.MyScrollView>
@@ -253,9 +287,18 @@
         android:padding="15dip"
         android:src="@drawable/icon_back_white" />
 
+    <ImageView
+        android:id="@+id/iv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:padding="15dip"
+        android:src="@drawable/icon_setting_nor" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dip"
+        android:layout_height="40dip"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:orientation="vertical">
@@ -267,24 +310,43 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="49dip"
+            android:layout_height="40dip"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/tv_look"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_medium"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/btn_bg_while"
                 android:paddingBottom="5dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:paddingTop="5dp"
                 android:text="查看订单"
-                android:textColor="@color/text_color" />
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size_small_medium" />
+
+            <TextView
+                android:id="@+id/tv_staticstics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/tv_look"
+                android:background="@drawable/btn_bg_while"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="查看统计"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size_small_medium" />
+
             <FrameLayout
                 android:id="@+id/id_fr"
                 android:layout_width="wrap_content"
@@ -306,7 +368,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textSize="@dimen/text_size_medium"
                         android:background="@drawable/btn_bg_while"
                         android:gravity="center"
                         android:paddingBottom="5dp"
@@ -314,10 +375,10 @@
                         android:paddingRight="16dp"
                         android:paddingTop="5dp"
                         android:text="取     消"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_small_medium" />
                 </LinearLayout>
             </FrameLayout>
-
 
 
             <TextView
@@ -330,13 +391,13 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/btn_bg_red"
-                android:textSize="@dimen/text_size_medium"
                 android:paddingBottom="5dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="5dp"
                 android:text="确     定"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_small_medium" />
 
         </RelativeLayout>
 

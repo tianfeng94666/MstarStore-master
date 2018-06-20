@@ -3,8 +3,6 @@ package com.qx.mstarstoreapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,7 +21,6 @@ import com.qx.mstarstoreapp.net.VolleyRequestUtils;
 import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
-import com.qx.mstarstoreapp.viewutils.LoadingWaitDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,7 +37,7 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.id_tv1)
     TextView idTv1;

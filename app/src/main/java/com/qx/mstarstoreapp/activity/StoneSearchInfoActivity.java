@@ -54,9 +54,9 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.tv_right)
+    @Bind(R.id.iv_right)
     TextView ivRight;
-    @Bind(R.id.id_rel_title)
+    @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.ll_certificate_orgnization)
     LinearLayout llCertificateOrgnization;
@@ -601,7 +601,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 reset();
                 loadNetData();
                 break;
-            case R.id.tv_right:
+            case R.id.iv_right:
                 Intent intent = new Intent(this, StoneHistoryOrder.class);
                 startActivity(intent);
                 //设置切换动画，从右边进入，左边退出

@@ -179,7 +179,7 @@
                                 android:src="@drawable/icon_close" />
 
                             <ImageView
-                                android:id="@+id/ig_btn_seach"
+                                android:id="@+id/iv_seach_customer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -448,7 +448,7 @@
 
 
             <ListView
-                android:id="@android:id/list"
+                android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="50dp"
@@ -535,7 +535,7 @@
 
         <!-- button at the right -->
         <Button
-            android:id="@+id/bt_go_pay"
+            android:id="@+id/tv_go_pay"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

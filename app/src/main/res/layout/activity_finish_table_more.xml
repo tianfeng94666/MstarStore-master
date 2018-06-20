@@ -371,7 +371,7 @@
                         android:scrollbars="none">
 
                         <LinearLayout
-                            android:id="@+id/lv_stone"
+                            android:id="@+id/ll_stone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical" />
