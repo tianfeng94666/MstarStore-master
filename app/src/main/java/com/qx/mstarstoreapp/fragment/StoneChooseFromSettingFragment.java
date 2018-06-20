@@ -56,7 +56,7 @@ public class StoneChooseFromSettingFragment extends BaseFragment implements View
     EditText etWeight;
     @Bind(R.id.iv_weight_add)
     ImageView ivWeightAdd;
-    @Bind(R.id.tv_customer_name)
+    @Bind(R.id.tv_total_count)
     TextView tvAmount;
     @Bind(R.id.iv_amount_reduce)
     ImageView ivAmountReduce;

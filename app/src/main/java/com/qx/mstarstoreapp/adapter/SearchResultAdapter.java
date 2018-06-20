@@ -75,7 +75,7 @@ public class SearchResultAdapter extends BaseAdapter {
         TextView tvOrderNumber;
         @Bind(R.id.tv1)
         TextView tv1;
-        @Bind(R.id.tv_customer_name)
+        @Bind(R.id.tv_total_count)
         TextView tvCustomerName;
         @Bind(R.id.tv2)
         TextView tv2;

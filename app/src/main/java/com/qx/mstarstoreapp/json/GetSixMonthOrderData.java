@@ -9,23 +9,23 @@ import java.util.List;
 public class GetSixMonthOrderData {
 
     /**
-     * response :
+     * data : {"dateTableCount":[{"appcount":"570","appmycount":"192","count":"753","mycount":"192"},{"appcount":"120","appmycount":"32","count":"136","mycount":"32"},{"appcount":"920","appmycount":"283","count":"1275","mycount":"283"},{"appcount":"563","appmycount":"170","count":"707","mycount":"170"},{"appcount":"626","appmycount":"217","count":"740","mycount":"217"},{"appcount":"273","appmycount":"86","count":"336","mycount":"86"}]}
      * error : 0
      * message :
-     * data : {"dateTableCount":[{"count":"743","mycount":"0"},{"count":"570","mycount":"0"},{"count":"2000","mycount":"0"},{"count":"920","mycount":"0"},{"count":"960","mycount":"0"},{"count":"397","mycount":"0"}]}
+     * response :
      */
 
-    private String response;
+    private DataBean data;
     private int error;
     private String message;
-    private DataBean data;
+    private String response;
 
-    public String getResponse() {
-        return response;
+    public DataBean getData() {
+        return data;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setData(DataBean data) {
+        this.data = data;
     }
 
     public int getError() {
@@ -44,12 +44,12 @@ public class GetSixMonthOrderData {
         this.message = message;
     }
 
-    public DataBean getData() {
-        return data;
+    public String getResponse() {
+        return response;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setResponse(String response) {
+        this.response = response;
     }
 
     public static class DataBean {
@@ -65,12 +65,32 @@ public class GetSixMonthOrderData {
 
         public static class DateTableCountBean {
             /**
-             * count : 743
-             * mycount : 0
+             * appcount : 570
+             * appmycount : 192
+             * count : 753
+             * mycount : 192
              */
 
+            private String appcount;
+            private String appmycount;
             private String count;
             private String mycount;
+
+            public String getAppcount() {
+                return appcount;
+            }
+
+            public void setAppcount(String appcount) {
+                this.appcount = appcount;
+            }
+
+            public String getAppmycount() {
+                return appmycount;
+            }
+
+            public void setAppmycount(String appmycount) {
+                this.appmycount = appmycount;
+            }
 
             public String getCount() {
                 return count;

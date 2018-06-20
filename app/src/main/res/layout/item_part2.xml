@@ -16,7 +16,7 @@
         />
 
     <TextView
-        android:id="@+id/tv_customer_name"
+        android:id="@+id/tv_total_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/theme_red"

@@ -46,7 +46,7 @@ public class FinishTableMoreActivity extends BaseActivity {
     TextView tvRight;
     @Bind(R.id.layout_rl_title)
     RelativeLayout layoutRlTitle;
-    @Bind(R.id.tv_customer_name)
+    @Bind(R.id.tv_total_count)
     TextView tvCustomerName;
     @Bind(R.id.tv_finish_quality)
     TextView tvFinishQuality;

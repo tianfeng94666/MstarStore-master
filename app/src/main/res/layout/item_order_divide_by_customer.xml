@@ -8,72 +8,63 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_custoemer"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginLeft="10dp"
-
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="客户名称："
-        android:textColor="@color/text_color"
-        android:textSize="@dimen/text_size_small_medium"
-        app:layout_constraintBottom_toTopOf="@+id/tv_order_date_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.518" />
 
     <TextView
         android:id="@+id/tv_amount_tv"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:gravity="center_vertical"
-        android:text="数量："
+        android:text="订单数："
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_order_date_tv" />
 
     <TextView
-        android:id="@+id/tv_customer_name"
+        android:id="@+id/tv_total_count"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_marginBottom="8dp"
-     android:textColor="@color/theme_red"
+        android:layout_marginBottom="4dp"
+    android:textColor="@color/text_color"
+android:visibility="visible"
         android:gravity="center_vertical|right"
         android:text="12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_amount_tv" />
+
     <TextView
         android:id="@+id/tv_order_date_tv"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="4dp"
+
+        android:layout_marginLeft="8dp"
         android:gravity="center_vertical"
-        android:text="下单时间: 2018-05-11 09:08:11"
+        android:text="2018-05-11 09:08:11"
         android:textColor="@color/text_color"
         android:textSize="@dimen/text_size_small_medium"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_order_customer" />
 
     <TextView
         android:id="@+id/tv_order_customer"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
         android:gravity="center_vertical|right"
         android:text="TextView"
-
-        android:textColor="@color/theme_red"
+        android:textColor="@color/text_color"
         android:textSize="@dimen/text_size_small_medium"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_custoemer"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
 
     <ImageView
         android:id="@+id/imageView"
@@ -81,10 +72,33 @@
         android:layout_height="20dp"
         android:layout_marginBottom="8dp"
 
+        android:layout_marginRight="10dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/icon_filter_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="10dp" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_order_count_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="总件数："
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_total_count" />
+
+    <TextView
+        android:id="@+id/tv_order_count"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text="112"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_order_count_tv" />
 </android.support.constraint.ConstraintLayout>

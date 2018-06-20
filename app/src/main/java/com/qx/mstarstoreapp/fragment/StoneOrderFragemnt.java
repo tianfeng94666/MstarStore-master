@@ -620,7 +620,7 @@ public class StoneOrderFragemnt extends BaseFragment implements PullToRefreshVie
             LinearLayout innerLnyContainer;
             @Bind(R.id.tv_cancle_order)
             TextView tvCancleOrder;
-            @Bind(R.id.tv_customer_name)
+            @Bind(R.id.tv_total_count)
             TextView tvAmount;
             @Bind(R.id.tv_money)
             TextView tvMoney;

@@ -524,10 +524,12 @@
 
         </activity>
         <activity android:name=".activity.ClassifyOrderActivity" />
-        <activity android:name=".activity.StatisticsActivity"/>
-        <activity android:name=".activity.ShowGoldenPriceActivity"/>
-        <activity android:name=".activity.MenuManagerActivity"/>
-        <activity android:name=".activity.MyOrderActivity"/>
+        <activity android:name=".activity.StatisticsActivity" />
+        <activity android:name=".activity.ShowGoldenPriceActivity" />
+        <activity android:name=".activity.MenuManagerActivity" />
+        <activity
+            android:name=".activity.MyOrderActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>

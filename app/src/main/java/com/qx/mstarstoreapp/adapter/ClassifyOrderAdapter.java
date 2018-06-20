@@ -85,7 +85,7 @@ public class ClassifyOrderAdapter extends RecyclerView.Adapter<ClassifyOrderAdap
         public ViewHold(View itemView) {
             super(itemView);
             tvStoneRange = (TextView) itemView.findViewById(R.id.tv_stone_range);
-            tvAmount = (TextView) itemView.findViewById(R.id.tv_customer_name);
+            tvAmount = (TextView) itemView.findViewById(R.id.tv_total_count);
             cbIschoose = (CheckBox) itemView.findViewById(R.id.cb_ischoose);
             btDelete = (Button) itemView.findViewById(R.id.bt_delete);
             btEdit = (Button) itemView.findViewById(R.id.bt_edit);

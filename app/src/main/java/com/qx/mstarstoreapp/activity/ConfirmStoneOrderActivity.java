@@ -152,7 +152,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
 
     @Bind(R.id.tv_order_state)
     TextView tvOrderState;
-    @Bind(R.id.tv_customer_name)
+    @Bind(R.id.tv_total_count)
     TextView tvCustomerName;
     @Bind(R.id.tv_order_number)
     TextView tvOrderNumber;

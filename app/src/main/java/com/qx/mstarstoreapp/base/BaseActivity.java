@@ -3,6 +3,7 @@ package com.qx.mstarstoreapp.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
@@ -52,7 +53,18 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         context = this;
-//		ViewServer.get(this).addWindow(this);
+//        initStatusBar();
+    }
+
+    /**
+     * 初始化沉浸式状态栏
+     */
+    private void initStatusBar() {
+        //设置是否沉浸式
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
+        int flag_translucent_status = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        //透明状态栏
+        getWindow().setFlags(flag_translucent_status, flag_translucent_status);
     }
 
     public void showToastReal(String msg) {

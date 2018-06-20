@@ -37,7 +37,7 @@ public class DeliveryTableActivity extends BaseActivity {
     TextView titleText;
     @Bind(R.id.layout_rl_title)
     RelativeLayout idRelTitle;
-    @Bind(R.id.tv_customer_name)
+    @Bind(R.id.tv_total_count)
     TextView tvCustomerName;
     @Bind(R.id.tv_delivery_order_number)
     TextView tvDeliveryOrderNumber;
