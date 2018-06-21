@@ -60,6 +60,7 @@ import com.qx.mstarstoreapp.utils.L;
 import com.qx.mstarstoreapp.utils.StringUtils;
 import com.qx.mstarstoreapp.utils.ToastManager;
 import com.qx.mstarstoreapp.utils.UIUtils;
+import com.qx.mstarstoreapp.viewutils.MyMarkerView;
 import com.qx.mstarstoreapp.viewutils.xListView.XListView;
 
 import java.text.ParseException;
@@ -188,7 +189,10 @@ public class MyOrderActivity extends BaseActivity implements OnChartValueSelecte
         }
         view = View.inflate(this, R.layout.barchart_layout, null);
         barchart = (BarChart) view.findViewById(R.id.barchart);
-        setTwoBarChart(barchart, months, mycount, counts, appmycounts, appcounts, "我的月订单量", "总月订单量","我的app月订单量", "总app月订单量");
+        MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
+        mv.setChartView(barchart); // For bounds control
+        barchart.setMarker(mv);
+        setTwoBarChart(barchart, months, mycount, counts, appmycounts, appcounts, "我的月订单", "总月订单","我的app月订单", "总app月订单");
 
         lvOrderByCustomer.setXListViewListener(this);
         lvOrderByCustomer.setAutoLoadEnable(false);
@@ -394,9 +398,10 @@ public class MyOrderActivity extends BaseActivity implements OnChartValueSelecte
      * 设置柱状图数据源
      */
     private static void setTwoBarChartData(BarChart barChart, List<String> xAxisValue, List<Float> yAxisValue1, List<Float> yAxisValue2,List<Float> yAxisValue3, List<Float> yAxisValue4, String bartilte1, String bartitle2,String bartilte3, String bartitle4) {
-        float groupSpace = 0.04f;
-        float barSpace = 0.03f;
-        float barWidth = 0.225f;
+        float groupSpace = 0.08f;
+        float barSpace = 0.03f; // x4 DataSet
+        float barWidth = 0.2f;
+        int groupCount = 6;
         // (0.45 + 0.03) * 2 + 0.04 = 1，即一个间隔为一组，包含两个柱图 -> interval per "group"
 
         ArrayList<BarEntry> entries1 = new ArrayList<>();
@@ -439,8 +444,8 @@ public class MyOrderActivity extends BaseActivity implements OnChartValueSelecte
             dataSets.add(dataset4);
 
             BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
-            data.setBarWidth(0.9f);
+            data.setValueTextSize(8f);
+            data.setBarWidth(1f);
             data.setValueFormatter(new IValueFormatter() {
                 @Override
                 public String getFormattedValue(float value, Entry entry, int i, ViewPortHandler viewPortHandler) {
