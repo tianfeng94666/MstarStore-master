@@ -41,39 +41,31 @@ import butterknife.ButterKnife;
  */
 public class ProductionListActivity extends BaseActivity implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
 
-    PullToRefreshView pullToRefreshView;
-    ListView listView;
+
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
+    @Bind(R.id.iv_right)
+    ImageView ivRight;
+    @Bind(R.id.tv_right)
+    TextView tvRight;
     @Bind(R.id.layout_rl_title)
-    RelativeLayout idRelTitle;
-    @Bind(R.id.id_order_num)
-    TextView idOrderNum;
-    @Bind(R.id.id_order_date)
-    TextView idOrderDate;
-    @Bind(R.id.id_tv_detail)
-    TextView idTvDetail;
-    @Bind(R.id.id_tv_invo)
-    TextView idTvInvo;
-    @Bind(R.id.tv_remark)
-    TextView idTvPrice;
-
-    @Bind(R.id.id_update_date)
-    TextView idUpdateDate;
+    RelativeLayout layoutRlTitle;
     @Bind(R.id.id_pd_lv)
     ListView idPdLv;
-
-    @Bind(R.id.id_tv_showdialog)
-    TextView idtvShowDialog;
-    @Bind(R.id.root_view)
-    RelativeLayout rootView;
-
-    @Bind(R.id.lny_loading_layout)
-    LinearLayout lnyLoadingLayout;
+    @Bind(R.id.pull_refresh_view)
+    PullToRefreshView pullRefreshView;
     @Bind(R.id.id_tv_confirfilterr)
     TextView idTvConfirfilterr;
+    @Bind(R.id.id_tv_showdialog)
+    TextView idTvShowdialog;
+    @Bind(R.id.tips_loading_msg)
+    TextView tipsLoadingMsg;
+    @Bind(R.id.lny_loading_layout)
+    LinearLayout lnyLoadingLayout;
+    @Bind(R.id.root_view)
+    RelativeLayout rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +87,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
     public void getIntentData() {
         Bundle extras = getIntent().getExtras();
         orderNum = extras.getString("orderNum");
+
     }
 
 
@@ -113,7 +106,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
                 if (error == 0) {
                     lnyLoadingLayout.setVisibility(View.GONE);
                     ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
-                    if(productListResult.getData()==null){
+                    if (productListResult.getData() == null) {
                         return;
                     }
                     ProductListResult.DataEntity productListResultData = productListResult.getData();
@@ -138,6 +131,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
             }
         });
     }
+
     public void loadHistoryNetData() {
         baseShowWatLoading();
         String url = AppURL.URL_PD_ORDER_DETAIL_HISTORY + "orderNum=" + orderNum + "&tokenKey=" + BaseApplication.getToken();
@@ -150,7 +144,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
                 if (error == 0) {
                     lnyLoadingLayout.setVisibility(View.GONE);
                     ProductListResult productListResult = new Gson().fromJson(result, ProductListResult.class);
-                    if(productListResult.getData()==null){
+                    if (productListResult.getData() == null) {
                         return;
                     }
                     ProductListResult.DataEntity productListResultData = productListResult.getData();
@@ -176,13 +170,23 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
             }
         });
     }
+
     private void initViewData(List<ModelListEntity> modelList) {
+        View view = View.inflate(this, R.layout.layout_order_detail, null);
+        TextView idOrderNum = (TextView) view.findViewById(R.id.id_order_num);
+        TextView idOrderDate = (TextView) view.findViewById(R.id.id_order_date);
+        TextView idUpdateDate = (TextView) view.findViewById(R.id.id_update_date);
+        TextView idTvInvo = (TextView) view.findViewById(R.id.id_tv_invo);
+        TextView tvRemark = (TextView) view.findViewById(R.id.tv_remark);
+        TextView idTvDetail = (TextView) view.findViewById(R.id.id_tv_detail);
         idOrderNum.setText("订单编号：" + orderInfo.getOrderNum() + "");
         idOrderDate.setText("下单日期：" + orderInfo.getOrderDate());
         idUpdateDate.setText("审核日期：" + orderInfo.getConfirmDate());
         idTvInvo.setText("发票： " + "类型：" + orderInfo.getInvoiceType() + " 抬头：" + orderInfo.getInvoiceTitle());
-        idTvPrice.setText("备注：" + orderInfo.getOrderNote());
+        tvRemark.setText("备注：" + orderInfo.getOrderNote());
         idTvDetail.setText(orderInfo.getOtherInfo());
+        idPdLv.removeHeaderView(view);
+        idPdLv.addHeaderView(view);
         if (pullStauts != PULL_LOAD) {
             orderlList.clear();
         }
@@ -195,14 +199,14 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
 
     private void initView() {
         titleText.setText("生产中");
-        listView = (ListView) findViewById(R.id.id_pd_lv);
-        pullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_refresh_view);
-        pullToRefreshView.setOnFooterRefreshListener(this);
-        pullToRefreshView.setOnHeaderRefreshListener(this);
+        idPdLv = (ListView) findViewById(R.id.id_pd_lv);
+        pullRefreshView = (PullToRefreshView) findViewById(R.id.pull_refresh_view);
+        pullRefreshView.setOnFooterRefreshListener(this);
+        pullRefreshView.setOnHeaderRefreshListener(this);
         orderlList = new ArrayList<>();
         adapter = new ProductionAdapter(orderlList, R.layout.layout_order);
-        listView.setAdapter(adapter);
-        idtvShowDialog.setOnClickListener(new View.OnClickListener() {
+        idPdLv.setAdapter(adapter);
+        idTvShowdialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ProgressDialog progressDialog = new ProgressDialog(ProductionListActivity.this, orderInfo.getOrderNum(), 1);
@@ -221,10 +225,10 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
     public void endNetRequse() {
         tempCurpage = cupage;
         if (pullStauts == PULL_LOAD) {
-            pullToRefreshView.onFooterRefreshComplete();
+            pullRefreshView.onFooterRefreshComplete();
         }
         if (pullStauts == PULL_REFRESH) {
-            pullToRefreshView.onHeaderRefreshComplete();
+            pullRefreshView.onHeaderRefreshComplete();
         }
         pullStauts = 0;
     }
@@ -245,7 +249,7 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
             loadNetData();
         } else {
             ToastManager.showToastReal("没有更多数据");
-            pullToRefreshView.onFooterRefreshComplete();
+            pullRefreshView.onFooterRefreshComplete();
         }
 
     }
@@ -272,9 +276,9 @@ public class ProductionListActivity extends BaseActivity implements PullToRefres
             helper.setText(R.id.product_name, item.getTitle());
             helper.setText(R.id.product_price, item.getPrice());
             helper.setText(R.id.product_norms, item.getBaseInfo());
-            TextView tvNumber= helper.getView(R.id.product_number);
+            TextView tvNumber = helper.getView(R.id.product_number);
             tvNumber.setTextColor(getResources().getColor(R.color.theme_red));
-            helper.setText(R.id.product_number,"×" +item.getNumber() + "件");
+            helper.setText(R.id.product_number, "×" + item.getNumber() + "件");
             helper.setText(R.id.id_tv_information, item.getInfo());
             ImageLoader.getInstance().displayImage(item.getPic(), productImg, ImageLoadOptions.getOptions());
         }

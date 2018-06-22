@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dip">
+
+
+    <TextView
+        android:id="@+id/id_order_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin5"
+        android:text="订单编号：2013010000"
+        android:textColor="@color/theme_back" />
+
+    <TextView
+        android:id="@+id/id_order_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin5"
+        android:text="下单日期：2016-11-12"
+        android:textColor="@color/theme_back" />
+
+    <TextView
+        android:id="@+id/id_update_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin5"
+        android:text="修改日期：2016-11-12"
+        android:textColor="@color/theme_back" />
+
+    <TextView
+        android:id="@+id/id_tv_invo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin5"
+        android:text="发票："
+        android:textColor="@color/theme_back" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin5">
+
+        <TextView
+            android:id="@+id/id_tv_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="状态：待审核"
+            android:textColor="@color/theme_back" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_remark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="@dimen/margin5"
+        android:text="价格："
+        android:textColor="@color/theme_back"
+        android:visibility="visible" />
+
+</LinearLayout>

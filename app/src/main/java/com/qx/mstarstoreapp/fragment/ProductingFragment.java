@@ -45,29 +45,21 @@ import butterknife.ButterKnife;
  */
 
 public class ProductingFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
+
     @Bind(R.id.id_ig_back)
     ImageView idIgBack;
     @Bind(R.id.title_text)
     TextView titleText;
     @Bind(R.id.iv_right)
     ImageView ivRight;
+    @Bind(R.id.tv_right)
+    TextView tvRight;
     @Bind(R.id.layout_rl_title)
-    RelativeLayout idRelTitle;
-    @Bind(R.id.id_order_num)
-    TextView idOrderNum;
-    @Bind(R.id.id_order_date)
-    TextView idOrderDate;
-    @Bind(R.id.id_update_date)
-    TextView idUpdateDate;
-    @Bind(R.id.id_tv_invo)
-    TextView idTvInvo;
-    @Bind(R.id.id_tv_detail)
-    TextView idTvDetail;
-    @Bind(R.id.tv_remark)
-    TextView tvRemark;
+    RelativeLayout layoutRlTitle;
     @Bind(R.id.id_pd_lv)
     ListView idPdLv;
-
+    @Bind(R.id.pull_refresh_view)
+    PullToRefreshView pullRefreshView;
     @Bind(R.id.id_tv_confirfilterr)
     TextView idTvConfirfilterr;
     @Bind(R.id.id_tv_showdialog)
@@ -78,8 +70,6 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     LinearLayout lnyLoadingLayout;
     @Bind(R.id.root_view)
     RelativeLayout rootView;
-    @Bind(R.id.pull_refresh_view)
-    PullToRefreshView pullRefreshView;
     private SearchOrderMainResult.DataBean.OrderProduceBean bean;
     private OrderInfoEntity orderInfoBean;
     private String orderNum;
@@ -92,7 +82,7 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.activity_production, null);
         ButterKnife.bind(this, view);
-        idRelTitle.setVisibility(View.GONE);
+        layoutRlTitle.setVisibility(View.GONE);
 
         getIntentData();
         initView();
@@ -130,17 +120,28 @@ public class ProductingFragment extends BaseFragment implements PullToRefreshVie
     }
 
     private void initViewData(List<ModelListEntity> modelList, OrderInfoEntity orderInfoBean) {
+        View view = View.inflate(getActivity(),R.layout.layout_order_detail,null);
+        TextView idOrderNum = (TextView) view.findViewById(R.id.id_order_num);
+        TextView idOrderDate = (TextView) view.findViewById(R.id.id_order_date);
+        TextView idUpdateDate = (TextView) view.findViewById(R.id.id_update_date);
+        TextView idTvInvo = (TextView) view.findViewById(R.id.id_tv_invo);
+        TextView tvRemark = (TextView) view.findViewById(R.id.tv_remark);
+        TextView idTvDetail = (TextView) view.findViewById(R.id.id_tv_detail);
         idOrderNum.setText("订单编号：" + isEmpty(orderInfoBean.getOrderNum() + ""));
         idOrderDate.setText("下单日期：" + isEmpty(orderInfoBean.getOrderDate()));
         idUpdateDate.setText("审核日期：" + isEmpty(orderInfoBean.getConfirmDate()));
         idTvInvo.setText("发票： " + "类型：" + isEmpty(orderInfoBean.getInvoiceType() + "") + " 抬头：" + isEmpty(orderInfoBean.getInvoiceTitle() + ""));
         tvRemark.setText("备注：" + isEmpty(orderInfoBean.getOrderNote()));
         idTvDetail.setText(isEmpty(orderInfoBean.getOtherInfo()));
+         idPdLv.removeHeaderView(view);
+
+        idPdLv.addHeaderView(view);
         if (pullStauts != PULL_LOAD) {
             orderlList.clear();
         }
         orderlList.addAll(modelList);
         adapter.setListData(orderlList);
+
         endNetRequse();
     }
 
