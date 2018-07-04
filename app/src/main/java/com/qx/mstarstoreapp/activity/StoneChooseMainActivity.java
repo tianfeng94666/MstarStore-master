@@ -105,13 +105,13 @@ public class StoneChooseMainActivity extends BaseActivity {
         setContentView(R.layout.activity_stone_choose_main);
         ButterKnife.bind(this);
         getDate();
-
+        initView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initView();
+//        initView();
     }
 
     @Override

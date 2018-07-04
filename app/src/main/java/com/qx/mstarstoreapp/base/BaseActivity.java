@@ -1,8 +1,10 @@
 package com.qx.mstarstoreapp.base;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +13,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -56,15 +59,41 @@ public abstract class BaseActivity extends FragmentActivity implements HttpCycle
 //        initStatusBar();
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
+
     /**
      * 初始化沉浸式状态栏
      */
     private void initStatusBar() {
-        //设置是否沉浸式
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
-        int flag_translucent_status = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-        //透明状态栏
-        getWindow().setFlags(flag_translucent_status, flag_translucent_status);
+        //设置 paddingTop
+        ViewGroup rootView = (ViewGroup) this.getWindow().getDecorView().findViewById(android.R.id.content);
+        rootView.setPadding(0, getStatusBarHeight(), 0, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //5.0 以上直接设置状态栏颜色
+//            this.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        } else {
+            //根布局添加占位状态栏
+            ViewGroup decorView = (ViewGroup) this.getWindow().getDecorView();
+            View statusBarView = new View(this);
+            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    getStatusBarHeight());
+//            statusBarView.setBackgroundColor(Color.TRANSPARENT);
+            decorView.addView(statusBarView, lp);
+        }
+
     }
 
     public void showToastReal(String msg) {

@@ -213,6 +213,7 @@ public class MyOrderActivity extends BaseActivity implements OnChartValueSelecte
         btConfirm.setOnClickListener(this);
         llSearchType.setOnClickListener(this);
         ivSeachCustomer.setOnClickListener(this);
+
         //监听radiogroup
         rgOrders.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -321,6 +322,8 @@ public class MyOrderActivity extends BaseActivity implements OnChartValueSelecte
             UIUtils.setListViewHeightBasedOnChildren(lvOrderByCustomer);
             lvOrderByCustomer.setAdapter(adapter);
             lvOrderByCustomer.addHeaderView(view);
+//            View view = View.inflate(this,R.layout.layout_empty,null);
+//            lvOrderByCustomer.setEmptyView(view);
         } else {
             adapter.notifyDataSetChanged();
         }
@@ -510,8 +513,8 @@ public class MyOrderActivity extends BaseActivity implements OnChartValueSelecte
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         StringBuilder stringBuilder = new StringBuilder();
-        calendar.add(Calendar.MONTH, -6);
-        for (int i = 6; i > 0; --i) {
+        calendar.add(Calendar.MONTH, -5);
+        for (int i = 5; i > 0; --i) {
             calendar.add(Calendar.MONTH, 1);
             String lastDate = simpleDateFormat.format(calendar.getTime());
             months.add(lastDate);

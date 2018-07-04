@@ -81,11 +81,14 @@ public class SideFilterDialog extends BaseFilterData {
             @Override
             public void onClick(View view) {
                 /*单选始终有默认值  只需要情况里面的Value*/
-                for (int i = 0; i < OrderActivity.singleKey.size(); i++) {
-                    OrderActivity.singleKey.get(i).setValue("");
+                if(OrderActivity.singleKey!=null){
+                    for (int i = 0; i < OrderActivity.singleKey.size(); i++) {
+                        OrderActivity.singleKey.get(i).setValue("");
+                    }
+                    OrderActivity.multiselectKey.clear();
+                    adapter.isResetGridTextAdapter();
                 }
-                OrderActivity.multiselectKey.clear();
-                adapter.isResetGridTextAdapter();
+
             }
         });
 

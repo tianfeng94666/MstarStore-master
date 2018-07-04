@@ -82,7 +82,7 @@ public class GridCheckBoxAdapter extends BaseAdapter {
         }else {
             /*订单页*/
             checkData=OrderActivity.multiselectKey;
-            if (OrderActivity.multiselectKey.size()!=0){
+            if (OrderActivity.multiselectKey!=null&&OrderActivity.multiselectKey.size()!=0){
                 for (int i=0;i< checkData.size();i++){
                     if ( viewHodler.categoryFiler.getValue().equals(checkData.get(i).getValue())){
                         viewHodler.checkBox.setChecked(true);
